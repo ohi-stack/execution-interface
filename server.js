@@ -1,103 +1,105 @@
 const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
 
-const PORT = 3000;
-const INDEX_PATH = path.join(__dirname, 'index.html');
+const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0';
+const DATABASE_URL = process.env.DATABASE_URL || '';
+const FORCE_REDEPLOY = process.env.FORCE_REDEPLOY || '1';
 
-const createQrSvgDataUri = (qrvid) => {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220" role="img" aria-label="QR Code for ${qrvid}">
-      <rect width="220" height="220" fill="#ffffff" />
-      <rect x="18" y="18" width="54" height="54" fill="#111827" />
-      <rect x="148" y="18" width="54" height="54" fill="#111827" />
-      <rect x="18" y="148" width="54" height="54" fill="#111827" />
-      <rect x="88" y="88" width="18" height="18" fill="#111827" />
-      <rect x="106" y="106" width="18" height="18" fill="#111827" />
-      <rect x="124" y="88" width="18" height="18" fill="#111827" />
-      <rect x="88" y="124" width="18" height="18" fill="#111827" />
-      <rect x="142" y="124" width="18" height="18" fill="#111827" />
-      <rect x="124" y="142" width="18" height="18" fill="#111827" />
-      <text x="110" y="210" font-size="12" text-anchor="middle" font-family="Arial, sans-serif" fill="#111827">${qrvid}</text>
-    </svg>`;
+let db = null;
 
-  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+process.on('uncaughtException', (error) => {
+  console.error('uncaughtException:', error);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('unhandledRejection:', reason);
+});
+
+const initializeDatabase = async () => {
+  try {
+    if (!DATABASE_URL) {
+      console.warn('DATABASE_URL is not set; starting without a database connection.');
+      return null;
+    }
+
+    let Pool;
+
+    try {
+      ({ Pool } = require('pg'));
+    } catch (error) {
+      console.error('Postgres driver (pg) is not installed; starting without database support.', error);
+      return null;
+    }
+
+    const pool = new Pool({
+      connectionString: DATABASE_URL,
+      ssl: process.env.PGSSLMODE === 'disable' ? false : { rejectUnauthorized: false },
+    });
+
+    try {
+      await pool.query('SELECT 1');
+      console.log('Database connection ready.');
+      db = pool;
+      return pool;
+    } catch (error) {
+      console.error('Database connection failed; continuing without database.', error);
+      return null;
+    }
+  } catch (error) {
+    console.error('Unexpected database initialization error; continuing startup.', error);
+    return null;
+  }
 };
 
-const sendJson = (res, statusCode, payload) => {
+const send = (res, statusCode, body, contentType = 'text/plain; charset=utf-8') => {
   res.writeHead(statusCode, {
-    'Content-Type': 'application/json',
+    'Content-Type': contentType,
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   });
-  res.end(JSON.stringify(payload));
+  res.end(body);
 };
 
-const server = http.createServer((req, res) => {
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204, {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    });
-    res.end();
-    return;
+const sendJson = (res, statusCode, payload) => {
+  send(res, statusCode, JSON.stringify(payload), 'application/json; charset=utf-8');
+};
+
+const requestHandler = (req, res) => {
+  try {
+    if (req.method === 'OPTIONS') {
+      send(res, 204, '');
+      return;
+    }
+
+    if (req.method === 'GET' && req.url === '/health') {
+      sendJson(res, 200, {
+        status: 'ok',
+        database: db ? 'connected' : 'offline',
+        forceRedeploy: FORCE_REDEPLOY,
+      });
+      return;
+    }
+
+    if (req.method === 'GET' && req.url === '/') {
+      send(res, 200, 'ONLINE');
+      return;
+    }
+
+    sendJson(res, 404, { error: 'Not found.' });
+  } catch (error) {
+    console.error('Request handling error:', error);
+    sendJson(res, 500, { error: 'Internal server error.' });
   }
+};
 
-  if (req.method === 'GET' && req.url === '/') {
-    fs.readFile(INDEX_PATH, (error, content) => {
-      if (error) {
-        sendJson(res, 500, { error: 'Unable to load index.html.' });
-        return;
-      }
+const app = http.createServer(requestHandler);
 
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(content);
-    });
-    return;
-  }
-
-  if (req.method === 'POST' && req.url === '/registry/create') {
-    let body = '';
-
-    req.on('data', (chunk) => {
-      body += chunk;
-    });
-
-    req.on('end', () => {
-      try {
-        const { assetName, recordType, issuer, description } = JSON.parse(body || '{}');
-
-        if (!assetName || !recordType || !issuer || !description) {
-          sendJson(res, 400, {
-            error: 'assetName, recordType, issuer, and description are required.',
-          });
-          return;
-        }
-
-        const qrvid = `QRV-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
-
-        sendJson(res, 201, {
-          qrvid,
-          qrCode: createQrSvgDataUri(qrvid),
-          assetName,
-          recordType,
-          issuer,
-          description,
-        });
-      } catch (error) {
-        sendJson(res, 400, { error: 'Request body must be valid JSON.' });
-      }
-    });
-
-    return;
-  }
-
-  sendJson(res, 404, { error: 'Not found.' });
+initializeDatabase().catch((error) => {
+  console.error('Database startup promise rejected; server will continue running.', error);
 });
 
-server.listen(PORT, () => {
-  console.log(`Issuer Portal backend listening on port ${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Server listening on http://${HOST}:${PORT}`);
+  console.log(`FORCE_REDEPLOY=${FORCE_REDEPLOY}`);
 });

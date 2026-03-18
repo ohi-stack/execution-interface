@@ -81,7 +81,7 @@ const server = http.createServer((req, res) => {
 
         sendJson(res, 201, {
           qrvid,
-          qrCodeImage: createQrSvgDataUri(qrvid),
+          qrCode: createQrSvgDataUri(qrvid),
           assetName,
           recordType,
           issuer,
@@ -99,5 +99,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Issuer Portal backend listening on http://localhost:${PORT}`);
+  console.log(`Issuer Portal backend listening on port ${PORT}`);
 });

@@ -1,5 +1,5 @@
 import { createApp } from './app.js';
-import { env } from './config/env.js';
+import { env, validateRequiredEnv } from './config/env.js';
 import { logger } from './config/logger.js';
 import { runMigrations } from './db/migrator.js';
 import { closePool } from './db/pool.js';
@@ -7,6 +7,7 @@ import { closePool } from './db/pool.js';
 const app = createApp();
 
 const startServer = async () => {
+  validateRequiredEnv();
   await runMigrations();
 
   const server = app.listen(env.port, () => {
@@ -30,7 +31,7 @@ const startServer = async () => {
 };
 
 startServer().catch(async (error) => {
-  logger.error('Failed to start QR-V registry service.', { error: error.message });
+  logger.error('Failed to start QR-V registry service.', { error: error.message, details: error.details ?? null });
   await closePool();
   process.exit(1);
 });

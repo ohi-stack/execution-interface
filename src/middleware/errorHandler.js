@@ -5,6 +5,7 @@ export const notFoundHandler = (req, res) => {
     error: {
       code: 'ROUTE_NOT_FOUND',
       message: `Route not found: ${req.method} ${req.originalUrl}`,
+      requestId: res.locals.requestId,
     },
   });
 };
@@ -22,6 +23,7 @@ export const errorHandler = (error, _req, res, _next) => {
   const message = mapped?.message ?? error.message ?? 'Internal server error.';
 
   logger.error('Unhandled application error.', {
+    requestId: res.locals.requestId,
     code,
     message,
     details: error.details ?? null,
@@ -32,6 +34,7 @@ export const errorHandler = (error, _req, res, _next) => {
     error: {
       code,
       message,
+      requestId: res.locals.requestId,
       ...(error.details ? { details: error.details } : {}),
     },
   });

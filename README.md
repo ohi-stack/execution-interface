@@ -15,6 +15,10 @@ Issuer Portal → API Layer → Registry Layer → Verification Portal
 - **Primary database:** PostgreSQL
 - **Primary responsibility:** authoritative storage and retrieval of QR-V records, issuer metadata, hashes, and audit events
 
+## Repository Boundary
+
+This repository owns the **registry layer** only. It is the canonical datastore service behind `registry.qrv.network`. It does **not** implement the public verification portal UI or the API-layer resolver contract exposed from other QR-V services. That distinction is intentional and is now documented explicitly to support activation and deployment sequencing.
+
 ## Core Capabilities
 
 - canonical QR-V registry storage in PostgreSQL
@@ -34,6 +38,7 @@ Issuer Portal → API Layer → Registry Layer → Verification Portal
 qrv-registry/
 ├── docs/
 │   ├── api.md
+│   ├── activation-checklist.md
 │   ├── architecture.md
 │   └── data-model.md
 ├── migrations/
@@ -57,6 +62,7 @@ qrv-registry/
 │   ├── middleware/
 │   │   ├── cors.js
 │   │   ├── errorHandler.js
+│   │   ├── requestContext.js
 │   │   ├── requestLogger.js
 │   │   └── validate.js
 │   ├── models/
@@ -78,6 +84,7 @@ qrv-registry/
 │   └── server.js
 ├── tests/
 │   ├── hash.test.js
+│   ├── health-service.test.js
 │   └── qrvid.test.js
 ├── .env.example
 ├── .gitignore
@@ -138,6 +145,8 @@ docker compose up --build
 
 The compose stack provisions PostgreSQL and starts the registry service after migrations are applied.
 
+For activation sequencing across the full QR-V network, see `docs/activation-checklist.md`.
+
 ## Database Migrations
 
 This repository uses SQL migration files in `/migrations` and a lightweight Node-based migration runner.
@@ -170,6 +179,9 @@ The initial schema includes:
 See `docs/data-model.md` and `sql/schema.sql` for details.
 
 ## API Endpoints
+
+### `GET /`
+Returns service identity, role, and endpoint metadata for operational discovery.
 
 ### `GET /health`
 Returns service and database health.

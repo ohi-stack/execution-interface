@@ -6,6 +6,10 @@ All responses are JSON. Success responses return a `data` envelope. Failure resp
 
 ## Endpoints
 
+### `GET /`
+Returns service identity, role, and endpoint metadata for operators and upstream integrations.
+
+
 ### `GET /health`
 Returns service and database readiness.
 

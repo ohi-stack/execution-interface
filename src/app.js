@@ -3,12 +3,14 @@ import healthRoutes from './routes/healthRoutes.js';
 import registryRoutes from './routes/registryRoutes.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { requestContext } from './middleware/requestContext.js';
 import { requestLogger } from './middleware/requestLogger.js';
 
 export const createApp = () => {
   const app = express();
 
   app.use(express.json({ limit: '1mb' }));
+  app.use(requestContext);
   app.use(corsMiddleware);
   app.use(requestLogger);
 

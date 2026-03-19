@@ -26,3 +26,7 @@ The codebase is organized to support production deployment and future growth:
 - write-path audit trail generation
 - modular separation between HTTP, services, models, and database infrastructure
 - extensibility for authentication, multi-tenant issuers, and broader record families
+
+## Scope Boundary
+
+This repository is intentionally limited to the registry layer. Public verification UX, API-edge orchestration, and DNS exposure live outside this repository and should be activated in coordination with the registry service rather than folded into it.

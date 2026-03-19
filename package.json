@@ -1,10 +1,30 @@
 {
-  "name": "execution-interface",
+  "name": "qrv-api",
   "version": "1.0.0",
-  "private": true,
-  "description": "Issuer Portal demo with frontend/backend QR-V integration",
+  "description": "QR-V Verification API backend for creating and verifying QR-based records.",
+  "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "qrv",
+    "qr",
+    "verification",
+    "express",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

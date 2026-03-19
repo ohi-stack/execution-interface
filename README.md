@@ -8,28 +8,32 @@ The service is designed to be deployed at `https://api.qrv.network` and to gener
 
 - Create QR-V verification records with secure crypto-generated IDs
 - Verify stored records through a public lookup endpoint
-- Health monitoring endpoint for uptime checks and deployment probes
+- PostgreSQL-backed registry persistence with managed-SSL support
+- Automatic schema bootstrap for `qr_objects`, `qr_certificates`, and `qr_audit_log`
+- Health monitoring and database probe endpoints for uptime checks and deployment diagnostics
 - Environment-based configuration with `.env`
-- In-memory registry for MVP deployment without database dependencies
 - ESM-based Node.js project structure with separated routes, controllers, services, and utilities
 
 ## Project Structure
 
 ```text
 qrv-api/
-├── server.js
-├── routes/
-│   ├── records.js
-│   └── verify.js
 ├── controllers/
 │   ├── recordsController.js
 │   └── verifyController.js
+├── routes/
+│   ├── records.js
+│   └── verify.js
+├── scripts/
+│   └── init-db.js
 ├── services/
+│   ├── databaseService.js
 │   └── registryService.js
 ├── utils/
 │   └── idGenerator.js
 ├── .env.example
 ├── package.json
+├── server.js
 └── README.md
 ```
 
@@ -37,12 +41,14 @@ qrv-api/
 
 - Node.js 18 or newer
 - npm 9 or newer
+- PostgreSQL 13 or newer
 
 ## Installation
 
 ```bash
 npm install
 cp .env.example .env
+npm run db:init
 npm run dev
 ```
 
@@ -50,6 +56,7 @@ For production:
 
 ```bash
 npm install --omit=dev
+npm run db:init
 npm start
 ```
 
@@ -61,19 +68,52 @@ Create a `.env` file based on `.env.example`.
 PORT=3000
 NODE_ENV=production
 VERIFY_BASE_URL=https://verify.qrv.network
+DATABASE_URL=postgres://username:password@hostname:5432/database
+DATABASE_SSL_ENABLED=true
+DATABASE_SSL_REJECT_UNAUTHORIZED=false
 ```
+
+### Database configuration notes
+
+- Set **one** canonical `DATABASE_URL` value for your Postgres instance.
+- Do **not** append SSL query parameters such as `sslmode` or `sslrootcert` to `DATABASE_URL`; the application strips them so the pool-level SSL config remains authoritative.
+- `DATABASE_SSL_REJECT_UNAUTHORIZED=false` is useful for managed Postgres providers that require SSL but present a certificate chain that is not locally trusted.
 
 ## API Endpoints
 
 ### GET `/health`
 
-Health check endpoint.
+Health check endpoint with database connectivity status.
+
+**Healthy response**
+
+```json
+{
+  "ok": true,
+  "database": "connected",
+  "time": "2026-03-19T00:00:00.000Z"
+}
+```
+
+**Database unavailable response**
+
+```json
+{
+  "ok": false,
+  "database": "unconfigured",
+  "reason": "DATABASE_URL is not configured."
+}
+```
+
+### GET `/test-db`
+
+Runs `SELECT NOW()` against the configured PostgreSQL database.
 
 **Response**
 
 ```json
 {
-  "ok": true
+  "time": "2026-03-19T00:00:00.000Z"
 }
 ```
 
@@ -129,12 +169,41 @@ Verifies whether a record exists.
 }
 ```
 
+**Registry unavailable response**
+
+```json
+{
+  "status": "UNAVAILABLE",
+  "reason": "Registry not reachable. Please try again later."
+}
+```
+
+## Database bootstrap and migrations
+
+Run the schema bootstrap script before the first deployment and whenever you need to ensure the required tables exist:
+
+```bash
+npm run db:init
+```
+
+The bootstrap creates these tables if they do not exist already:
+
+- `qr_objects`
+- `qr_certificates`
+- `qr_audit_log`
+
 ## Example cURL Requests
 
 ### Health Check
 
 ```bash
 curl -X GET http://localhost:3000/health
+```
+
+### Database Probe
+
+```bash
+curl -X GET http://localhost:3000/test-db
 ```
 
 ### Create Record
@@ -155,19 +224,23 @@ curl -X POST http://localhost:3000/records \
 curl -X GET http://localhost:3000/verify/QRV-a1b2c3d4e5f6
 ```
 
-## Deployment Instructions (Hostinger Node Setup)
+## Deployment Instructions (Hostinger / Vercel / managed Node)
 
-1. Create a new Node.js application in Hostinger hPanel.
+1. Create or open your Node.js application in your hosting control panel.
 2. Set the application root to the repository directory.
-3. Upload the project files or connect the GitHub repository.
-4. Set the startup file to `server.js`.
-5. Configure environment variables in Hostinger:
-   - `PORT=3000` or the port assigned by Hostinger
+3. Upload the project files or connect the Git repository.
+4. Configure environment variables in the hosting dashboard:
+   - `PORT=3000` or the provider-assigned port
    - `NODE_ENV=production`
    - `VERIFY_BASE_URL=https://verify.qrv.network`
-6. Run `npm install --omit=dev` on the server.
-7. Start or restart the Node.js application from hPanel.
-8. Confirm the API is live by visiting `https://api.qrv.network/health`.
+   - `DATABASE_URL=postgres://username:password@hostname:5432/database`
+   - `DATABASE_SSL_ENABLED=true`
+   - `DATABASE_SSL_REJECT_UNAUTHORIZED=false` when required by your provider
+5. Run `npm install --omit=dev` on the server.
+6. Run `npm run db:init` to create the required database tables.
+7. Start or restart the Node.js application.
+8. Confirm the API is live by visiting `https://api.qrv.network/health` and `https://api.qrv.network/test-db`.
+9. Scan a QR-V ID and confirm the verification endpoint returns a verification payload instead of a `503`.
 
 ## Domain Mapping
 
@@ -178,9 +251,9 @@ Point `api.qrv.network` to the Hostinger application and ensure reverse proxy or
 
 ## Operational Notes
 
-- Records are stored in memory only for the MVP version.
-- Restarting the Node.js process clears all created verification records.
-- The API does not require any database connection and will run immediately after installation.
+- Records are stored in PostgreSQL instead of process memory.
+- If the database connection is unavailable, the API returns a structured `503` response with `status: "UNAVAILABLE"`.
+- Verification and creation requests append audit events to `qr_audit_log`.
 
 ## License
 

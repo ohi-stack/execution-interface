@@ -1,32 +1,31 @@
 {
-  "name": "qrv-api",
+  "name": "qrv-verify-portal",
   "version": "1.0.0",
-  "description": "QR-V Verification API backend for creating and verifying QR-based records.",
+  "description": "Public-facing QR-V verification resolution portal for verify.qrv.network.",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "db:init": "node scripts/init-db.js"
+    "dev": "NODE_ENV=development nodemon server.js",
+    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/services/verificationService.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js"
   },
   "keywords": [
     "qrv",
-    "qr",
     "verification",
+    "portal",
     "express",
-    "api"
+    "qrvid"
   ],
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.21.2",
-    "pg": "^8.13.3"
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }

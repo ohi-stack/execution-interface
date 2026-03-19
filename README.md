@@ -1,259 +1,184 @@
-# QR-V Verification API
+# qrv-verify-portal
 
-QR-V Verification API is a production-ready Node.js and Express backend for creating QR-based verification records and validating them through a public verification endpoint.
+`qrv-verify-portal` is the public verification resolution interface for the QR-V™ Global Verification Network. It is designed to run at `https://verify.qrv.network` and acts as the public-facing layer between a scanned QR-V identifier and the registry-backed verification API at `https://api.qrv.network`.
 
-The service is designed to be deployed at `https://api.qrv.network` and to generate verification links that resolve through `https://verify.qrv.network`.
+This repository intentionally implements a focused verification portal rather than a generic marketing website. The interface accepts QRVIDs, resolves them against the authoritative API, and renders deterministic verification results for institutional users.
 
-## Features
+## Role in the QR-V System
 
-- Create QR-V verification records with secure crypto-generated IDs
-- Verify stored records through a public lookup endpoint
-- PostgreSQL-backed registry persistence with managed-SSL support
-- Automatic schema bootstrap for `qr_objects`, `qr_certificates`, and `qr_audit_log`
-- Health monitoring and database probe endpoints for uptime checks and deployment diagnostics
-- Environment-based configuration with `.env`
-- ESM-based Node.js project structure with separated routes, controllers, services, and utilities
-
-## Project Structure
+The portal sits in the public verification path:
 
 ```text
-qrv-api/
-├── controllers/
-│   ├── recordsController.js
-│   └── verifyController.js
-├── routes/
-│   ├── records.js
-│   └── verify.js
-├── scripts/
-│   └── init-db.js
-├── services/
-│   ├── databaseService.js
-│   └── registryService.js
-├── utils/
-│   └── idGenerator.js
+QR Scan → verify.qrv.network → api.qrv.network → registry → response → display result
+```
+
+### Service responsibilities
+
+- Accept QR-V identifiers (QRVIDs) through a direct URL or manual entry.
+- Validate and sanitize incoming identifiers before requesting data.
+- Call `GET https://api.qrv.network/verify/:qrvid`.
+- Render structured verification results for `VERIFIED`, `INVALID`, `REVOKED`, `EXPIRED`, and service-unavailable states.
+- Present an authoritative, mobile-friendly interface with minimal client-side logic.
+
+## How verification works
+
+1. A user scans a QR code or opens a verification URL such as `/QRV-123456789`.
+2. The portal sanitizes the QRVID and validates its format server-side.
+3. The verification service requests `https://api.qrv.network/verify/:qrvid`.
+4. The portal normalizes the response payload and status.
+5. The result page displays the verification state, issuer, record type, subject, timestamp, and truncated hash when available.
+6. If the upstream API times out or becomes unreachable, the portal retries once and then renders a deterministic unavailable state.
+
+## Architecture and project structure
+
+```text
+qrv-verify-portal/
+├── docs/
+│   └── architecture.md
+├── public/
+│   ├── assets/
+│   ├── css/
+│   │   └── styles.css
+│   └── js/
+│       └── app.js
+├── src/
+│   ├── controllers/
+│   │   ├── healthController.js
+│   │   └── verificationController.js
+│   ├── routes/
+│   │   ├── index.js
+│   │   └── verificationRoutes.js
+│   ├── services/
+│   │   └── verificationService.js
+│   ├── utils/
+│   │   └── qrvid.js
+│   ├── views/
+│   │   ├── indexView.js
+│   │   ├── layout.js
+│   │   └── resultView.js
+│   └── app.js
 ├── .env.example
+├── Dockerfile
 ├── package.json
 ├── server.js
 └── README.md
 ```
 
-## Requirements
+## Routes
 
-- Node.js 18 or newer
-- npm 9 or newer
-- PostgreSQL 13 or newer
+### `GET /`
+Landing page with a QRVID input and a Verify button.
 
-## Installation
+### `GET /:qrvid`
+Automatically resolves a QRVID and renders the verification result.
+
+### `GET /verify/:qrvid`
+Explicit verification route that performs the same lookup and rendering.
+
+### `POST /verify`
+Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
+
+### `GET /health`
+Returns:
+
+```json
+{
+  "status": "ok",
+  "service": "verify-portal"
+}
+```
+
+## Environment variables
+
+Copy `.env.example` to `.env` and configure as needed:
+
+```env
+PORT=3000
+API_BASE_URL=https://api.qrv.network
+NODE_ENV=development
+```
+
+## Local setup
+
+### Requirements
+
+- Node.js 18+
+- npm 9+
+
+### Install and run
 
 ```bash
 npm install
 cp .env.example .env
-npm run db:init
 npm run dev
 ```
 
-For production:
+For a production-style local run:
 
 ```bash
 npm install --omit=dev
-npm run db:init
 npm start
 ```
 
-## Environment Variables
+Open `http://localhost:3000`.
 
-Create a `.env` file based on `.env.example`.
+## Deployment instructions
 
-```env
-PORT=3000
-NODE_ENV=production
-VERIFY_BASE_URL=https://verify.qrv.network
-DATABASE_URL=postgres://username:password@hostname:5432/database
-DATABASE_SSL_ENABLED=true
-DATABASE_SSL_REJECT_UNAUTHORIZED=false
-```
+### Standard Node deployment
 
-### Database configuration notes
-
-- Set **one** canonical `DATABASE_URL` value for your Postgres instance.
-- Do **not** append SSL query parameters such as `sslmode` or `sslrootcert` to `DATABASE_URL`; the application strips them so the pool-level SSL config remains authoritative.
-- `DATABASE_SSL_REJECT_UNAUTHORIZED=false` is useful for managed Postgres providers that require SSL but present a certificate chain that is not locally trusted.
-
-## API Endpoints
-
-### GET `/health`
-
-Health check endpoint with database connectivity status.
-
-**Healthy response**
-
-```json
-{
-  "ok": true,
-  "database": "connected",
-  "time": "2026-03-19T00:00:00.000Z"
-}
-```
-
-**Database unavailable response**
-
-```json
-{
-  "ok": false,
-  "database": "unconfigured",
-  "reason": "DATABASE_URL is not configured."
-}
-```
-
-### GET `/test-db`
-
-Runs `SELECT NOW()` against the configured PostgreSQL database.
-
-**Response**
-
-```json
-{
-  "time": "2026-03-19T00:00:00.000Z"
-}
-```
-
-### POST `/records`
-
-Creates a verification record.
-
-**Request Body**
-
-```json
-{
-  "assetName": "Certificate of Authenticity",
-  "issuer": "QR-V Network",
-  "description": "Digital verification record for a registered asset"
-}
-```
-
-**Response**
-
-```json
-{
-  "success": true,
-  "id": "QRV-a1b2c3d4e5f6",
-  "verifyUrl": "https://verify.qrv.network/QRV-a1b2c3d4e5f6"
-}
-```
-
-### GET `/verify/:id`
-
-Verifies whether a record exists.
-
-**Verified Response**
-
-```json
-{
-  "status": "VERIFIED",
-  "record": {
-    "id": "QRV-a1b2c3d4e5f6",
-    "assetName": "Certificate of Authenticity",
-    "issuer": "QR-V Network",
-    "description": "Digital verification record for a registered asset",
-    "status": "valid",
-    "createdAt": "2026-03-19T00:00:00.000Z"
-  }
-}
-```
-
-**Not Found Response**
-
-```json
-{
-  "status": "NOT_FOUND"
-}
-```
-
-**Registry unavailable response**
-
-```json
-{
-  "status": "UNAVAILABLE",
-  "reason": "Registry not reachable. Please try again later."
-}
-```
-
-## Database bootstrap and migrations
-
-Run the schema bootstrap script before the first deployment and whenever you need to ensure the required tables exist:
-
-```bash
-npm run db:init
-```
-
-The bootstrap creates these tables if they do not exist already:
-
-- `qr_objects`
-- `qr_certificates`
-- `qr_audit_log`
-
-## Example cURL Requests
-
-### Health Check
-
-```bash
-curl -X GET http://localhost:3000/health
-```
-
-### Database Probe
-
-```bash
-curl -X GET http://localhost:3000/test-db
-```
-
-### Create Record
-
-```bash
-curl -X POST http://localhost:3000/records \
-  -H "Content-Type: application/json" \
-  -d '{
-    "assetName": "Certificate of Authenticity",
-    "issuer": "QR-V Network",
-    "description": "Digital verification record for a registered asset"
-  }'
-```
-
-### Verify Record
-
-```bash
-curl -X GET http://localhost:3000/verify/QRV-a1b2c3d4e5f6
-```
-
-## Deployment Instructions (Hostinger / Vercel / managed Node)
-
-1. Create or open your Node.js application in your hosting control panel.
-2. Set the application root to the repository directory.
-3. Upload the project files or connect the Git repository.
-4. Configure environment variables in the hosting dashboard:
-   - `PORT=3000` or the provider-assigned port
+1. Provision a Node.js 18+ runtime.
+2. Set environment variables:
+   - `PORT`
+   - `API_BASE_URL=https://api.qrv.network`
    - `NODE_ENV=production`
-   - `VERIFY_BASE_URL=https://verify.qrv.network`
-   - `DATABASE_URL=postgres://username:password@hostname:5432/database`
-   - `DATABASE_SSL_ENABLED=true`
-   - `DATABASE_SSL_REJECT_UNAUTHORIZED=false` when required by your provider
-5. Run `npm install --omit=dev` on the server.
-6. Run `npm run db:init` to create the required database tables.
-7. Start or restart the Node.js application.
-8. Confirm the API is live by visiting `https://api.qrv.network/health` and `https://api.qrv.network/test-db`.
-9. Scan a QR-V ID and confirm the verification endpoint returns a verification payload instead of a `503`.
+3. Install dependencies with `npm install --omit=dev`.
+4. Start the service with `npm start`.
+5. Map the public domain `verify.qrv.network` to the running service.
+6. Confirm `/health` responds with the expected JSON payload.
 
-## Domain Mapping
+### Docker deployment
 
-- API domain: `api.qrv.network`
-- Verification base URL: `https://verify.qrv.network`
+Build and run:
 
-Point `api.qrv.network` to the Hostinger application and ensure reverse proxy or Node app routing forwards traffic to the configured `PORT`.
+```bash
+docker build -t qrv-verify-portal .
+docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
+```
 
-## Operational Notes
+## Security and reliability notes
 
-- Records are stored in PostgreSQL instead of process memory.
-- If the database connection is unavailable, the API returns a structured `503` response with `status: "UNAVAILABLE"`.
-- Verification and creation requests append audit events to `qr_audit_log`.
+- Client input is sanitized and validated before use.
+- The portal never connects directly to a database.
+- `api.qrv.network` is the only verification data source.
+- API timeouts trigger a single retry before showing an unavailable state.
+- The service logs verification lookups for simple operational analytics.
+
+## Running checks
+
+```bash
+npm run check
+```
+
+## Git initialization and push commands
+
+If you are starting from a fresh local clone or a new repository, use:
+
+```bash
+git init
+git add .
+git commit -m "Create QR-V verification portal"
+git branch -M main
+git remote add origin <your-repository-url>
+git push -u origin main
+```
+
+If the repository is already initialized, use:
+
+```bash
+git add .
+git commit -m "Create QR-V verification portal"
+git push
+```
 
 ## License
 

@@ -1,105 +1,45 @@
-const http = require('http');
+import dotenv from 'dotenv';
+import express from 'express';
+import recordsRouter from './routes/records.js';
+import verifyRouter from './routes/verify.js';
 
-const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0';
-const DATABASE_URL = process.env.DATABASE_URL || '';
-const FORCE_REDEPLOY = process.env.FORCE_REDEPLOY || '1';
+dotenv.config();
 
-let db = null;
+const app = express();
+const port = Number(process.env.PORT) || 3000;
+const host = '0.0.0.0';
 
-process.on('uncaughtException', (error) => {
-  console.error('uncaughtException:', error);
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
 });
 
-process.on('unhandledRejection', (reason) => {
-  console.error('unhandledRejection:', reason);
+app.get('/health', (_req, res) => {
+  res.status(200).json({ ok: true });
 });
 
-const initializeDatabase = async () => {
-  try {
-    if (!DATABASE_URL) {
-      console.warn('DATABASE_URL is not set; starting without a database connection.');
-      return null;
-    }
+app.use('/records', recordsRouter);
+app.use('/verify', verifyRouter);
 
-    let Pool;
-
-    try {
-      ({ Pool } = require('pg'));
-    } catch (error) {
-      console.error('Postgres driver (pg) is not installed; starting without database support.', error);
-      return null;
-    }
-
-    const pool = new Pool({
-      connectionString: DATABASE_URL,
-      ssl: process.env.PGSSLMODE === 'disable' ? false : { rejectUnauthorized: false },
-    });
-
-    try {
-      await pool.query('SELECT 1');
-      console.log('Database connection ready.');
-      db = pool;
-      return pool;
-    } catch (error) {
-      console.error('Database connection failed; continuing without database.', error);
-      return null;
-    }
-  } catch (error) {
-    console.error('Unexpected database initialization error; continuing startup.', error);
-    return null;
-  }
-};
-
-const send = (res, statusCode, body, contentType = 'text/plain; charset=utf-8') => {
-  res.writeHead(statusCode, {
-    'Content-Type': contentType,
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: `Route not found: ${req.method} ${req.originalUrl}`,
   });
-  res.end(body);
-};
-
-const sendJson = (res, statusCode, payload) => {
-  send(res, statusCode, JSON.stringify(payload), 'application/json; charset=utf-8');
-};
-
-const requestHandler = (req, res) => {
-  try {
-    if (req.method === 'OPTIONS') {
-      send(res, 204, '');
-      return;
-    }
-
-    if (req.method === 'GET' && req.url === '/health') {
-      sendJson(res, 200, {
-        status: 'ok',
-        database: db ? 'connected' : 'offline',
-        forceRedeploy: FORCE_REDEPLOY,
-      });
-      return;
-    }
-
-    if (req.method === 'GET' && req.url === '/') {
-      send(res, 200, 'ONLINE');
-      return;
-    }
-
-    sendJson(res, 404, { error: 'Not found.' });
-  } catch (error) {
-    console.error('Request handling error:', error);
-    sendJson(res, 500, { error: 'Internal server error.' });
-  }
-};
-
-const app = http.createServer(requestHandler);
-
-initializeDatabase().catch((error) => {
-  console.error('Database startup promise rejected; server will continue running.', error);
 });
 
-app.listen(PORT, HOST, () => {
-  console.log(`Server listening on http://${HOST}:${PORT}`);
-  console.log(`FORCE_REDEPLOY=${FORCE_REDEPLOY}`);
+app.use((err, _req, res, _next) => {
+  console.error('Unhandled application error:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error.',
+  });
+});
+
+app.listen(port, host, () => {
+  console.log(`QR-V Verification API listening on http://${host}:${port}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Verify base URL: ${process.env.VERIFY_BASE_URL || 'https://verify.qrv.network'}`);
 });

@@ -1,23 +1,27 @@
 {
-  "name": "qrv-api",
+  "name": "qrv-registry",
   "version": "1.0.0",
-  "description": "QR-V Verification API backend for creating and verifying QR-based records.",
+  "description": "Authoritative PostgreSQL-backed registry service for the QR-V Global Verification Network.",
   "type": "module",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "db:init": "node scripts/init-db.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "node --test",
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js"
   },
   "keywords": [
     "qrv",
-    "qr",
+    "registry",
     "verification",
     "express",
-    "api"
+    "postgresql"
   ],
-  "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
@@ -25,8 +29,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }

@@ -1,260 +1,300 @@
-# QR-V Verification API
+# qrv-registry
 
-QR-V Verification API is a production-ready Node.js and Express backend for creating QR-based verification records and validating them through a public verification endpoint.
+`qrv-registry` is the authoritative PostgreSQL-backed registry layer for `registry.qrv.network`, the canonical datastore service in the QR-V™ Global Verification Network.
 
-The service is designed to be deployed at `https://api.qrv.network` and to generate verification links that resolve through `https://verify.qrv.network`.
+It persists and serves canonical verification records used by the API layer and verification portals. This repository is intentionally backend-first and production-oriented. It is designed to provide deterministic lookup, lifecycle-aware record management, institutional auditability, and a stable datastore foundation for future auth, audit, and multi-tenant issuer controls.
 
-## Features
-
-- Create QR-V verification records with secure crypto-generated IDs
-- Verify stored records through a public lookup endpoint
-- PostgreSQL-backed registry persistence with managed-SSL support
-- Automatic schema bootstrap for `qr_objects`, `qr_certificates`, and `qr_audit_log`
-- Health monitoring and database probe endpoints for uptime checks and deployment diagnostics
-- Environment-based configuration with `.env`
-- ESM-based Node.js project structure with separated routes, controllers, services, and utilities
-
-## Project Structure
+## Architecture Role
 
 ```text
-qrv-api/
-├── controllers/
-│   ├── recordsController.js
-│   └── verifyController.js
-├── routes/
-│   ├── records.js
-│   └── verify.js
+Issuer Portal → API Layer → Registry Layer → Verification Portal
+```
+
+- **Subdomain:** `registry.qrv.network`
+- **Function:** canonical datastore
+- **Primary database:** PostgreSQL
+- **Primary responsibility:** authoritative storage and retrieval of QR-V records, issuer metadata, hashes, and audit events
+
+## Core Capabilities
+
+- canonical QR-V registry storage in PostgreSQL
+- QRVID generation for deterministic lookup
+- SHA-256 canonical hash generation from normalized payload data
+- issuer metadata persistence
+- certificate-oriented record support with extensible metadata
+- lifecycle state transitions including revocation without hard deletes
+- write-path audit logging
+- JSON APIs for downstream verification services
+- migration-based schema management
+- Docker-ready local and deployment workflow
+
+## Repository Structure
+
+```text
+qrv-registry/
+├── docs/
+│   ├── api.md
+│   ├── architecture.md
+│   └── data-model.md
+├── migrations/
+│   └── 001_initial_registry.sql
 ├── scripts/
-│   └── init-db.js
-├── services/
-│   ├── databaseService.js
-│   └── registryService.js
-├── utils/
-│   └── idGenerator.js
+│   ├── migrate.js
+│   └── seed.js
+├── sql/
+│   └── schema.sql
+├── src/
+│   ├── config/
+│   │   ├── env.js
+│   │   └── logger.js
+│   ├── controllers/
+│   │   ├── healthController.js
+│   │   ├── issuerController.js
+│   │   └── registryController.js
+│   ├── db/
+│   │   ├── migrator.js
+│   │   └── pool.js
+│   ├── middleware/
+│   │   ├── cors.js
+│   │   ├── errorHandler.js
+│   │   ├── requestLogger.js
+│   │   └── validate.js
+│   ├── models/
+│   │   ├── auditModel.js
+│   │   ├── issuerModel.js
+│   │   └── registryModel.js
+│   ├── routes/
+│   │   ├── healthRoutes.js
+│   │   └── registryRoutes.js
+│   ├── services/
+│   │   ├── healthService.js
+│   │   ├── issuerService.js
+│   │   └── registryService.js
+│   ├── utils/
+│   │   ├── appError.js
+│   │   ├── hash.js
+│   │   └── qrvid.js
+│   ├── app.js
+│   └── server.js
+├── tests/
+│   ├── hash.test.js
+│   └── qrvid.test.js
 ├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── LICENSE
 ├── package.json
-├── server.js
 └── README.md
-```
-
-## Requirements
-
-- Node.js 18 or newer
-- npm 9 or newer
-- PostgreSQL 13 or newer
-
-## Installation
-
-```bash
-npm install
-cp .env.example .env
-npm run db:init
-npm run dev
-```
-
-For production:
-
-```bash
-npm install --omit=dev
-npm run db:init
-npm start
 ```
 
 ## Environment Variables
 
-Create a `.env` file based on `.env.example`.
+Create a `.env` file from `.env.example`.
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `PORT` | yes | HTTP port for the Express service |
+| `DATABASE_URL` | yes | PostgreSQL connection string for the canonical registry datastore |
+| `NODE_ENV` | yes | Environment name such as `development` or `production` |
+| `REGISTRY_BASE_URL` | yes | Base URL for the registry service |
+| `ALLOWED_ORIGINS` | yes | Comma-delimited list of allowed browser origins |
+
+Example:
 
 ```env
 PORT=3000
-NODE_ENV=production
-VERIFY_BASE_URL=https://verify.qrv.network
-DATABASE_URL=postgres://username:password@hostname:5432/database
-DATABASE_SSL_ENABLED=true
-DATABASE_SSL_REJECT_UNAUTHORIZED=false
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/qrv_registry
+NODE_ENV=development
+REGISTRY_BASE_URL=http://localhost:3000
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 ```
 
-### Database configuration notes
+## Setup
 
-- Set **one** canonical `DATABASE_URL` value for your Postgres instance.
-- Do **not** append SSL query parameters such as `sslmode` or `sslrootcert` to `DATABASE_URL`; the application strips them so the pool-level SSL config remains authoritative.
-- `DATABASE_SSL_REJECT_UNAUTHORIZED=false` is useful for managed Postgres providers that require SSL but present a certificate chain that is not locally trusted.
+### Local development
+
+```bash
+npm install
+cp .env.example .env
+npm run migrate
+npm run seed
+npm run dev
+```
+
+### Production-style startup
+
+```bash
+npm install --omit=dev
+npm run migrate
+npm start
+```
+
+### Docker Compose
+
+```bash
+docker compose up --build
+```
+
+The compose stack provisions PostgreSQL and starts the registry service after migrations are applied.
+
+## Database Migrations
+
+This repository uses SQL migration files in `/migrations` and a lightweight Node-based migration runner.
+
+Apply migrations:
+
+```bash
+npm run migrate
+```
+
+Load sample development data:
+
+```bash
+npm run seed
+```
+
+The canonical bootstrap schema is also mirrored in `sql/schema.sql` for operational review and onboarding.
+
+## Initial Data Model
+
+The initial schema includes:
+
+- `qr_objects`
+- `qr_issuers`
+- `qr_certificates`
+- `qr_hash_registry`
+- `qr_audit_log`
+- `schema_migrations`
+
+See `docs/data-model.md` and `sql/schema.sql` for details.
 
 ## API Endpoints
 
-### GET `/health`
+### `GET /health`
+Returns service and database health.
 
-Health check endpoint with database connectivity status.
+### `GET /registry/:qrvid`
+Returns the canonical registry record for a QRVID.
 
-**Healthy response**
+### `POST /registry/create`
+Creates a canonical QR-V record. On creation, the service generates:
 
-```json
-{
-  "ok": true,
-  "database": "connected",
-  "time": "2026-03-19T00:00:00.000Z"
-}
-```
+- a QRVID
+- a SHA-256 canonical hash
+- lifecycle status
+- timestamps
+- an audit log entry
 
-**Database unavailable response**
-
-```json
-{
-  "ok": false,
-  "database": "unconfigured",
-  "reason": "DATABASE_URL is not configured."
-}
-```
-
-### GET `/test-db`
-
-Runs `SELECT NOW()` against the configured PostgreSQL database.
-
-**Response**
+Example request:
 
 ```json
 {
-  "time": "2026-03-19T00:00:00.000Z"
-}
-```
-
-### POST `/records`
-
-Creates a verification record.
-
-**Request Body**
-
-```json
-{
-  "assetName": "Certificate of Authenticity",
-  "issuer": "QR-V Network",
-  "description": "Digital verification record for a registered asset"
-}
-```
-
-**Response**
-
-```json
-{
-  "success": true,
-  "id": "QRV-a1b2c3d4e5f6",
-  "verifyUrl": "https://verify.qrv.network/QRV-a1b2c3d4e5f6"
-}
-```
-
-### GET `/verify/:id`
-
-Verifies whether a record exists.
-
-**Verified Response**
-
-```json
-{
-  "status": "VERIFIED",
-  "record": {
-    "id": "QRV-a1b2c3d4e5f6",
-    "assetName": "Certificate of Authenticity",
-    "issuer": "QR-V Network",
-    "description": "Digital verification record for a registered asset",
-    "status": "valid",
-    "createdAt": "2026-03-19T00:00:00.000Z"
+  "recordType": "certificate",
+  "issuerId": "3db8d7d5-fb13-4aad-969d-724e53e9d30a",
+  "subjectName": "Jane Citizen",
+  "assetName": "Identity Verification Certificate",
+  "description": "Canonical QR-V certificate record",
+  "actionActor": "issuer-portal",
+  "metadata": {
+    "source": "issuer-portal"
+  },
+  "certificate": {
+    "certificateNumber": "CERT-1001",
+    "issuedTo": "Jane Citizen",
+    "issuedDate": "2026-03-19",
+    "expiryDate": "2027-03-19",
+    "metadata": {
+      "jurisdiction": "global"
+    }
   }
 }
 ```
 
-**Not Found Response**
+### `POST /registry/issuer/create`
+Creates an issuer record.
+
+Example request:
 
 ```json
 {
-  "status": "NOT_FOUND"
+  "issuerName": "QR-V Trust Authority",
+  "issuerCode": "QRV-TA",
+  "websiteUrl": "https://issuer.qrv.network",
+  "contactEmail": "registry@qrv.network",
+  "actionActor": "platform-admin"
 }
 ```
 
-**Registry unavailable response**
+### `GET /registry/issuers/:id`
+Returns issuer metadata by UUID.
+
+### `POST /registry/:qrvid/revoke`
+Transitions a record to `revoked` and appends an audit log entry. Records are never hard-deleted through this API.
+
+Example request:
 
 ```json
 {
-  "status": "UNAVAILABLE",
-  "reason": "Registry not reachable. Please try again later."
+  "actionActor": "platform-admin"
 }
 ```
 
-## Database bootstrap and migrations
+### `GET /registry/:qrvid/audit`
+Returns the audit trail for a QRVID.
 
-Run the schema bootstrap script before the first deployment and whenever you need to ensure the required tables exist:
+## Example cURL Commands
 
 ```bash
-npm run db:init
+curl http://localhost:3000/health
 ```
 
-The bootstrap creates these tables if they do not exist already:
-
-- `qr_objects`
-- `qr_certificates`
-- `qr_audit_log`
-
-## Example cURL Requests
-
-### Health Check
-
 ```bash
-curl -X GET http://localhost:3000/health
+curl http://localhost:3000/registry/QRV-20260319000000-ABCDEF12
 ```
 
-### Database Probe
-
 ```bash
-curl -X GET http://localhost:3000/test-db
-```
-
-### Create Record
-
-```bash
-curl -X POST http://localhost:3000/records \
-  -H "Content-Type: application/json" \
+curl -X POST http://localhost:3000/registry/issuer/create \
+  -H 'Content-Type: application/json' \
   -d '{
-    "assetName": "Certificate of Authenticity",
-    "issuer": "QR-V Network",
-    "description": "Digital verification record for a registered asset"
+    "issuerName": "QR-V Trust Authority",
+    "issuerCode": "QRV-TA",
+    "websiteUrl": "https://issuer.qrv.network",
+    "contactEmail": "registry@qrv.network"
   }'
 ```
 
-### Verify Record
-
 ```bash
-curl -X GET http://localhost:3000/verify/QRV-a1b2c3d4e5f6
+curl -X POST http://localhost:3000/registry/create \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "recordType": "certificate",
+    "subjectName": "Jane Citizen",
+    "assetName": "Identity Verification Certificate"
+  }'
 ```
 
-## Deployment Instructions (Hostinger / Vercel / managed Node)
+## Extensibility Direction
 
-1. Create or open your Node.js application in your hosting control panel.
-2. Set the application root to the repository directory.
-3. Upload the project files or connect the Git repository.
-4. Configure environment variables in the hosting dashboard:
-   - `PORT=3000` or the provider-assigned port
-   - `NODE_ENV=production`
-   - `VERIFY_BASE_URL=https://verify.qrv.network`
-   - `DATABASE_URL=postgres://username:password@hostname:5432/database`
-   - `DATABASE_SSL_ENABLED=true`
-   - `DATABASE_SSL_REJECT_UNAUTHORIZED=false` when required by your provider
-5. Run `npm install --omit=dev` on the server.
-6. Run `npm run db:init` to create the required database tables.
-7. Start or restart the Node.js application.
-8. Confirm the API is live by visiting `https://api.qrv.network/health` and `https://api.qrv.network/test-db`.
-9. Scan a QR-V ID and confirm the verification endpoint returns a verification payload instead of a `503`.
+The codebase is intentionally organized so it can later support:
 
-## Domain Mapping
+- authentication and service-to-service authorization
+- richer audit event capture and compliance workflows
+- multi-tenant issuer partitioning and policy enforcement
+- additional record families such as identity, product, and document registries
+- asynchronous event propagation to other QR-V network components
 
-- API domain: `api.qrv.network`
-- Verification base URL: `https://verify.qrv.network`
+## Git Initialization and GitHub Push Commands
 
-Point `api.qrv.network` to the Hostinger application and ensure reverse proxy or Node app routing forwards traffic to the configured `PORT`.
+If you are creating this as a brand-new repository on your workstation, these are the exact commands to initialize Git, commit, and push:
 
-## Operational Notes
-
-- Records are stored in PostgreSQL instead of process memory.
-- If the database connection is unavailable, the API returns a structured `503` response with `status: "UNAVAILABLE"`.
-- Verification and creation requests append audit events to `qr_audit_log`.
-
-## License
-
-MIT
+```bash
+mkdir qrv-registry
+cd qrv-registry
+git init
+git add .
+git commit -m "feat: initialize qrv-registry service"
+git branch -M main
+git remote add origin git@github.com:<your-org-or-user>/qrv-registry.git
+git push -u origin main
+```

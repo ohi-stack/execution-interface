@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  registry:
+    build: .
+    container_name: qrv-registry
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/qrv_registry
+      REGISTRY_BASE_URL: http://localhost:3000
+      ALLOWED_ORIGINS: http://localhost:3000,http://localhost:3001
+    ports:
+      - '3000:3000'
+    command: sh -c "node scripts/migrate.js && node src/server.js"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: qrv-registry-postgres
+    environment:
+      POSTGRES_DB: qrv_registry
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d qrv_registry"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

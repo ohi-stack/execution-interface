@@ -1,0 +1,61 @@
+/*
+Theme Name: Enterprise Theme Engine v1.1
+Theme URI: https://example.com/enterprise-theme-v1-1
+Author: Platform Engineering
+Description: Modular white-label professional services engine with configurable modes.
+Version: 1.1.0
+Requires at least: 6.4
+Tested up to: 6.5
+Requires PHP: 8.0
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: enterprise-theme-v1-1
+*/
+
+:root {
+  --primary: #0f172a;
+  --accent: #1d4ed8;
+  --radius: 12px;
+  --font-heading: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--primary);
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+.og-container {
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+}
+
+.og-card {
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, #fff);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  background-color: #fff;
+}
+
+.og-button {
+  display: inline-block;
+  border-radius: var(--radius);
+  background-color: var(--accent);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+}

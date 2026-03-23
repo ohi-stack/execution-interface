@@ -8,7 +8,7 @@ export const renderIndexView = ({ pageTitle, qrvid }) => renderLayout({
       <p class="section-label">Verification Resolution Interface</p>
       <h2>Resolve a QRVID</h2>
       <p class="supporting-copy">
-        Enter a QR-V identifier to verify the latest registry-backed status from <code>api.qrv.network</code>.
+        Enter a QR-V identifier to verify the latest registry-backed status from the verification API.
       </p>
     </div>
 

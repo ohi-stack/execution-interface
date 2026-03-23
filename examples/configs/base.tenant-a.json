@@ -1,0 +1,53 @@
+{
+  "tenantId": "tenant-a",
+  "modules": {
+    "keyvault": {
+      "masterSeedHex": "00112233445566778899aabbccddeeff",
+      "defaultDerivationPath": "m/44'/60'/0'/0/0",
+      "signerAlgorithm": "hmac-sha256"
+    },
+    "evmAdapter": {
+      "chainId": 1,
+      "nativeSymbol": "ETH",
+      "defaultGasLimit": "21000"
+    },
+    "registry": {
+      "bundlePath": "./registry.bundle.v1.json"
+    },
+    "verify": {
+      "requiredKeyIds": ["ops-root-2026"]
+    },
+    "rpcRouter": {
+      "requestTimeoutMs": 4000,
+      "providers": [
+        { "id": "primary", "url": "https://rpc-mainnet.example.com", "priority": 1 },
+        { "id": "secondary", "url": "https://rpc-mainnet-backup.example.com", "priority": 2 }
+      ]
+    },
+    "policy": {
+      "defaultOutcome": "REQUIRE_CONFIRMATION",
+      "defaultReasonCode": "POLICY_DEFAULT_CONFIRM",
+      "rules": [
+        {
+          "id": "allow-known-recipient",
+          "outcome": "ALLOW",
+          "reasonCode": "ALLOW_KNOWN_RECIPIENT",
+          "condition": { "chainId": 1, "action": "SEND", "destinationIn": ["0xabc...123"], "maxAmount": "100000000000000000" }
+        }
+      ]
+    },
+    "audit": { "path": "./tenant-a.audit.jsonl" },
+    "telemetry": {
+      "public": {
+        "otlpEndpoint": "https://otel-public.example.com/v1/events",
+        "allowedFields": ["event", "chainId", "status"],
+        "redactedFields": []
+      },
+      "internal": {
+        "otlpEndpoint": "https://otel-internal.example.com/v1/events",
+        "allowedFields": ["event", "chainId", "status", "wallet", "destination"],
+        "redactedFields": ["wallet", "destination"]
+      }
+    }
+  }
+}

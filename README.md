@@ -1,60 +1,56 @@
-# execution-interface
+# Wallet Core Engine (WCE) v0.1
 
-A reusable, auditable execution interface for processing structured intake, applying rules, enforcing refusals, and producing verified outputs across legal, financial, and operational workflows.
+Config-driven, modular TypeScript monorepo for transaction intent evaluation and execution.
 
----
+## Monorepo Layout
 
-## Purpose
+- `packages/keyvault`: deterministic key derivation + signing (no private key export)
+- `packages/chain-adapters-evm`: build/sign/broadcast EVM Send + Approve transactions
+- `packages/registry`: versioned chain/token registry bundle loader
+- `packages/verify`: signature verification for registry/policy bundles
+- `packages/rpc-router`: multi-provider JSON-RPC routing with health and failover
+- `packages/policy`: tx_intent policy evaluation to ALLOW/DENY/REQUIRE_CONFIRMATION with reason codes
+- `packages/audit`: append-only JSONL audit sink with correlation IDs
+- `packages/telemetry`: schema allowlisting + redaction + OTLP export targets
 
-This repository defines a **process-first execution interface**, not a collection of ad-hoc scripts.
+## Design Constraints (Implemented)
 
-The system is designed to:
-- Accept structured intake
-- Validate against explicit schemas
-- Apply deterministic rules
-- Enforce refusal conditions
-- Produce traceable, auditable outputs
+- **Config-driven with tenant overlays** in each module (`tenantOverlays` support)
+- **No client-specific core logic**: all behavior is driven by typed config/rules
+- **Strict telemetry separation**: distinct public and internal telemetry channels/config
 
-All behavior is driven by **configuration and templates**, not hardcoded logic.
+## Quick Start
 
----
+```bash
+npm install
+npm run build
+npm run typecheck
+```
 
-## Design Principles
+## Configuration Assets
 
-- **Interfaces over implementations**
-- **Configuration over customization**
-- **Refusal is a first-class outcome**
-- **Every execution is auditable**
-- **No side effects without explicit authorization**
+- Schema docs: `docs/schemas/wce-config-schema.md`
+- Example base config: `examples/configs/base.tenant-a.json`
+- Example overlay: `examples/configs/tenant-overlay.high-risk.json`
 
-People rotate. Interfaces persist.
+## Package Notes
 
----
+### keyvault
+- Deterministic `keyId` derivation from tenant + derivation path.
+- Signing API only returns signatures and key references.
+- Private key material is never exported by API.
 
-## High-Level Flow
+### chain-adapters-evm
+- Supports two intent types: `SEND` and `APPROVE`.
+- `buildUnsignedTx` composes canonical tx shape.
+- `signTx` and `broadcastTx` are injected integrations.
 
-1. Intake received (structured input)
-2. Schema validation
-3. Rule evaluation
-4. Refusal or approval decision
-5. Output generation
-6. Audit log written
+### policy
+- Evaluates intents against ordered rules.
+- Returns `{decision, reasonCode, matchedRuleId}`.
+- Defaults are explicit to avoid silent allowance.
 
----
-
-## Non-Goals
-
-This repository does **not**:
-- Execute payments
-- Call external services by default
-- Store secrets
-- Contain business-specific logic
-
-Those concerns belong in downstream adapters.
-
----
-
-## Status
-
-This repository is in **interface-definition phase**.
-Structure and contracts are stabilized before behavior is implemented.
+### telemetry
+- Enforces per-channel schema allowlist.
+- Redacts configured fields before export.
+- Uses separate OTLP endpoints for public/internal streams.

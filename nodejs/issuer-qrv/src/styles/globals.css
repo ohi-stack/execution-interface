@@ -1,0 +1,28 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-alt: #eef4ff;
+  --text: #10213a;
+  --muted: #5c6b82;
+  --border: #d5dfef;
+  --primary: #2563eb;
+  --primary-deep: #1d4ed8;
+  --danger: #c2410c;
+  --danger-soft: #fff1eb;
+  --success: #027a48;
+  --success-soft: #ecfdf3;
+  --warning: #b54708;
+  --shadow: 0 18px 45px rgba(16, 33, 58, 0.08);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; display: block; }

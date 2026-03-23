@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "db:init": "node scripts/init-db.js"
+    "db:init": "node scripts/init-db.js",
+    "issuer:dev": "npm --prefix issuer-ui run dev",
+    "issuer:build": "npm --prefix issuer-ui run build",
+    "issuer:start": "npm --prefix issuer-ui run start"
   },
   "keywords": [
     "qrv",

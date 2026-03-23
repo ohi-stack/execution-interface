@@ -65,8 +65,13 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
   };
 };
 
+const getApiBaseUrl = () =>
+  process.env.NEXT_PUBLIC_API_URL
+  || process.env.API_BASE_URL
+  || DEFAULT_API_BASE_URL;
+
 const fetchVerification = async (qrvid) => {
-  const apiBaseUrl = process.env.API_BASE_URL || DEFAULT_API_BASE_URL;
+  const apiBaseUrl = getApiBaseUrl();
   const url = `${apiBaseUrl.replace(/\/$/, '')}/verify/${encodeURIComponent(qrvid)}`;
 
   console.log(`[analytics] verification_lookup qrvid=${qrvid} url=${url}`);

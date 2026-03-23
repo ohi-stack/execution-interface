@@ -24,7 +24,7 @@ QR Scan → verify.qrv.network → api.qrv.network → registry → response →
 
 1. A user scans a QR code or opens a verification URL such as `/QRV-123456789`.
 2. The portal sanitizes the QRVID and validates its format server-side.
-3. The verification service requests `https://api.qrv.network/verify/:qrvid`.
+3. The verification service requests `GET {NEXT_PUBLIC_API_URL}/verify/:qrvid`.
 4. The portal normalizes the response payload and status.
 5. The result page displays the verification state, issuer, record type, subject, timestamp, and truncated hash when available.
 6. If the upstream API times out or becomes unreachable, the portal retries once and then renders a deterministic unavailable state.
@@ -94,7 +94,7 @@ Copy `.env.example` to `.env` and configure as needed:
 
 ```env
 PORT=3000
-API_BASE_URL=https://api.qrv.network
+NEXT_PUBLIC_API_URL=https://api.qrv.network
 NODE_ENV=development
 ```
 
@@ -129,7 +129,7 @@ Open `http://localhost:3000`.
 1. Provision a Node.js 18+ runtime.
 2. Set environment variables:
    - `PORT`
-   - `API_BASE_URL=https://api.qrv.network`
+   - `NEXT_PUBLIC_API_URL=https://api.qrv.network` (or `API_BASE_URL` for legacy compatibility)
    - `NODE_ENV=production`
 3. Install dependencies with `npm install --omit=dev`.
 4. Start the service with `npm start`.
@@ -149,7 +149,7 @@ docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
 
 - Client input is sanitized and validated before use.
 - The portal never connects directly to a database.
-- `api.qrv.network` is the only verification data source.
+- `api.qrv.network` is the verification data source for this portal, configured via `NEXT_PUBLIC_API_URL`.
 - API timeouts trigger a single retry before showing an unavailable state.
 - The service logs verification lookups for simple operational analytics.
 

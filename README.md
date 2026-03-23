@@ -42,6 +42,60 @@ People rotate. Interfaces persist.
 
 ---
 
+## Issuer QR-V portal scaffold
+
+The runnable issuer control plane now lives under `nodejs/issuer-qrv/` so it matches the expected install/start flow.
+
+```text
+nodejs/
+  issuer-qrv/
+    public/
+      assets/
+    src/
+      components/
+      pages/
+      services/
+      styles/
+      utils/
+    package.json
+    server.js
+```
+
+### Portal modules
+
+The front-end is organized around the issuer control plane responsibilities:
+- `dashboard` for KPI and activity monitoring
+- `issue` for record creation and QR generation
+- `records` for issued record management
+- `revoke` for lifecycle control
+- `analytics` for verification trends
+- `api-keys` for integration credentials
+- `settings` for operational configuration
+
+### Local demo endpoints
+
+The included Node server exposes mock issuer APIs for local development:
+- `GET /`
+- `GET /issuer-qrv`
+- `GET /api/records`
+- `POST /api/registry/create`
+- `GET /api/verify/:qrvid`
+- `POST /api/revoke`
+- `GET /api/analytics`
+- `GET /api/api-keys`
+
+Run the app with:
+
+```bash
+cd nodejs/issuer-qrv
+npm install
+node server.js
+```
+
+Then open `http://localhost:3000/`.
+
+---
+
 ## Non-Goals
 
 This repository does **not**:

@@ -1,31 +1,27 @@
 {
-  "name": "qrv-verify-portal",
-  "version": "1.0.0",
-  "description": "Public-facing QR-V verification resolution portal for verify.qrv.network.",
-  "type": "module",
-  "main": "server.js",
+  "name": "execution-interface",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "NODE_ENV=development nodemon server.js",
-    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/services/verificationService.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js"
-  },
-  "keywords": [
-    "qrv",
-    "verification",
-    "portal",
-    "express",
-    "qrvid"
-  ],
-  "author": "",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "next": "16.0.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@eslint/eslintrc": "3.3.1",
+    "@tailwindcss/postcss": "4.1.16",
+    "@types/node": "24.10.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "9.38.0",
+    "eslint-config-next": "16.0.1",
+    "tailwindcss": "4.1.16",
+    "typescript": "5.9.3"
   }
 }

@@ -10,7 +10,7 @@ try {
   }
 
   await initializeRegistrySchema();
-  console.log('Database schema is ready.');
+  console.log('Issuer registry schema is ready.');
 } catch (error) {
   console.error('Failed to initialize database schema:', error);
   process.exitCode = 1;

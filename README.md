@@ -1,260 +1,262 @@
-# QR-V Verification API
+# QR-V Issuer Portal Backend
 
-QR-V Verification API is a production-ready Node.js and Express backend for creating QR-based verification records and validating them through a public verification endpoint.
+A production-oriented QR-V issuer system built around an **Express API**, an optional **Next.js** issuer UI, and **PostgreSQL/Supabase** persistence. It can still run in a combined process for local development, but the recommended deployment topology is split-domain:
 
-The service is designed to be deployed at `https://api.qrv.network` and to generate verification links that resolve through `https://verify.qrv.network`.
+- **issuer.qrv.network** -> Next.js issuer UI
+- **api.qrv.network** -> Express API (`server.js`)
 
-## Features
+For local development, the same codebase can still run in:
 
-- Create QR-V verification records with secure crypto-generated IDs
-- Verify stored records through a public lookup endpoint
-- PostgreSQL-backed registry persistence with managed-SSL support
-- Automatic schema bootstrap for `qr_objects`, `qr_certificates`, and `qr_audit_log`
-- Health monitoring and database probe endpoints for uptime checks and deployment diagnostics
-- Environment-based configuration with `.env`
-- ESM-based Node.js project structure with separated routes, controllers, services, and utilities
+- **API + UI mode** when the Next.js app is installed and enabled.
+- **API-only mode** when you want a hardened backend process or when the UI dependencies are unavailable.
 
-## Project Structure
+This rebuild focuses on the runtime wiring that was previously broken: explicit route modules, restored verification endpoints, health/readiness checks, and startup behavior that no longer depends on the frontend booting successfully.
+
+## Core capabilities
+
+- Issuer authentication with signed, HTTP-only session cookies.
+- Record issuance via `POST /api/create` using QRVID-1 compact IDs like `QRV-CERT-20260318A84F`.
+- Public verification via `POST /api/verify` and `GET /verify/:qrvid`.
+- Record revocation via `POST /api/revoke`.
+- Authenticated record listing via `GET /api/records`.
+- SHA-256 + HMAC integrity envelope for every issued record, including compact and protocol QRVID forms.
+- PostgreSQL/Supabase schema bootstrap on startup.
+- Liveness and readiness endpoints for deployment health checks.
+
+## Runtime architecture
 
 ```text
-qrv-api/
-├── controllers/
-│   ├── recordsController.js
-│   └── verifyController.js
-├── routes/
-│   ├── records.js
-│   └── verify.js
-├── scripts/
-│   └── init-db.js
-├── services/
-│   ├── databaseService.js
-│   └── registryService.js
-├── utils/
-│   └── idGenerator.js
-├── .env.example
-├── package.json
-├── server.js
-└── README.md
+Express server
+├── /health
+├── /health/live
+├── /ping
+├── /health/ready
+├── /health/db
+├── /api/auth/*
+├── /api/records
+├── /api/create
+├── /api/verify
+├── /api/revoke
+└── /verify/:qrvid
+
+Optional:
+└── Next.js UI handler for dashboard/login pages
 ```
 
-## Requirements
+## Project structure
 
-- Node.js 18 or newer
-- npm 9 or newer
-- PostgreSQL 13 or newer
-
-## Installation
-
-```bash
-npm install
-cp .env.example .env
-npm run db:init
-npm run dev
+```text
+app/                  # optional Next.js UI
+controllers/
+  authController.js
+  issuerController.js
+  verifyController.js
+routes/
+  auth.js
+  issuer.js
+  records.js
+  verify.js
+services/
+  authService.js
+  databaseService.js
+  registryService.js
+middleware/
+  auth.js
+utils/
+  crypto.js
+  http.js
+  idGenerator.js
+  api.js
+scripts/
+  init-db.js
+server.js
 ```
 
-For production:
+## Environment variables
 
-```bash
-npm install --omit=dev
-npm run db:init
-npm start
-```
-
-## Environment Variables
-
-Create a `.env` file based on `.env.example`.
+Copy `.env.example` to `.env` and fill in the values:
 
 ```env
 PORT=3000
-NODE_ENV=production
-VERIFY_BASE_URL=https://verify.qrv.network
-DATABASE_URL=postgres://username:password@hostname:5432/database
-DATABASE_SSL_ENABLED=true
+HOST=0.0.0.0
+NODE_ENV=development
+ENABLE_NEXT_UI=true
+APP_BASE_URL=http://localhost:3000
+ISSUER_UI_ORIGIN=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+PUBLIC_VERIFY_BASE_URL=http://localhost:3000/verify
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.efcvziegcqccatnkmwtp.supabase.co:5432/postgres
+DATABASE_SSL_ENABLED=false
 DATABASE_SSL_REJECT_UNAUTHORIZED=false
+ISSUER_ID=issuer-demo
+ISSUER_NAME=QRV Demo Issuer
+ISSUER_EMAIL=issuer@qrv.network
+ISSUER_PASSWORD=change-me-now
+ISSUER_SESSION_SECRET=replace-with-a-long-random-secret
+ISSUER_SIGNING_SECRET=replace-with-a-second-long-random-secret
 ```
 
-### Database configuration notes
+### Notes
 
-- Set **one** canonical `DATABASE_URL` value for your Postgres instance.
-- Do **not** append SSL query parameters such as `sslmode` or `sslrootcert` to `DATABASE_URL`; the application strips them so the pool-level SSL config remains authoritative.
-- `DATABASE_SSL_REJECT_UNAUTHORIZED=false` is useful for managed Postgres providers that require SSL but present a certificate chain that is not locally trusted.
+- Set `ENABLE_NEXT_UI=false` to run a backend-only process.
+- For split deployment, point `issuer.qrv.network` at the Next.js UI and `api.qrv.network` at the Express API, then set `ISSUER_UI_ORIGIN` and `NEXT_PUBLIC_API_BASE_URL` accordingly.
+- For Supabase, use only the project Postgres connection string in `DATABASE_URL`. Keep database access on the server via `pg`; do not add `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or `SUPABASE_SERVICE_KEY` for this backend architecture.
+- The backend starts without a database, but issuance/verification routes return `503` until `DATABASE_URL` is configured.
 
-## API Endpoints
+## Install and run
 
-### GET `/health`
+```bash
+npm config set registry https://registry.npmjs.org/
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
+```
 
-Health check endpoint with database connectivity status.
+### Start the backend
 
-**Healthy response**
+API + UI development mode:
+
+```bash
+npm run dev
+```
+
+API-only mode:
+
+```bash
+ENABLE_NEXT_UI=false node server.js
+```
+
+Production mode:
+
+```bash
+NODE_ENV=production node server.js
+```
+
+## API reference
+
+### `POST /api/auth/login`
+Authenticate the issuer and set the session cookie.
+
+### `POST /api/auth/logout`
+Destroy the current issuer session.
+
+### `GET /api/auth/session`
+Read the current issuer session.
+
+### `GET /api/records`
+Return the most recent issued records. Requires issuer authentication.
+
+### `POST /api/create`
+Create and sign a new record. Requires issuer authentication.
+
+Example body:
 
 ```json
 {
-  "ok": true,
-  "database": "connected",
-  "time": "2026-03-19T00:00:00.000Z"
-}
-```
-
-**Database unavailable response**
-
-```json
-{
-  "ok": false,
-  "database": "unconfigured",
-  "reason": "DATABASE_URL is not configured."
-}
-```
-
-### GET `/test-db`
-
-Runs `SELECT NOW()` against the configured PostgreSQL database.
-
-**Response**
-
-```json
-{
-  "time": "2026-03-19T00:00:00.000Z"
-}
-```
-
-### POST `/records`
-
-Creates a verification record.
-
-**Request Body**
-
-```json
-{
-  "assetName": "Certificate of Authenticity",
-  "issuer": "QR-V Network",
-  "description": "Digital verification record for a registered asset"
-}
-```
-
-**Response**
-
-```json
-{
-  "success": true,
-  "id": "QRV-a1b2c3d4e5f6",
-  "verifyUrl": "https://verify.qrv.network/QRV-a1b2c3d4e5f6"
-}
-```
-
-### GET `/verify/:id`
-
-Verifies whether a record exists.
-
-**Verified Response**
-
-```json
-{
-  "status": "VERIFIED",
-  "record": {
-    "id": "QRV-a1b2c3d4e5f6",
-    "assetName": "Certificate of Authenticity",
-    "issuer": "QR-V Network",
-    "description": "Digital verification record for a registered asset",
-    "status": "valid",
-    "createdAt": "2026-03-19T00:00:00.000Z"
+  "recordType": "certificate",
+  "assetName": "Issuer Portal MVP",
+  "recipientName": "Ada Lovelace",
+  "description": "Completed the issuer.qrv.network pilot.",
+  "metadata": {
+    "program": "MVP"
   }
 }
 ```
 
-**Not Found Response**
+### `POST /api/verify`
+Verify a QRVID and return `VERIFIED`, `REVOKED`, `INVALID`, or `NOT_FOUND`. Compact `QRV-CERT-*` and protocol `QRV://registry/type/objectId` forms are both accepted.
 
 ```json
 {
+  "qrvid": "QRV-CERT-20260318A84F"
+}
+```
+
+### `GET /verify/:qrvid`
+Public verification endpoint suitable for QR destinations.
+
+### `POST /api/revoke`
+Revoke an existing record. Requires issuer authentication.
+
+```json
+{
+  "qrvid": "QRV-CERT-20260318A84F",
+  "reason": "Issued in error"
+}
+```
+
+## Health checks
+
+### `GET /health`
+Overall status. Returns `200` when the API and database are ready; returns `503` when the API is up but the database is not configured or unreachable.
+
+### `GET /health/live`
+Liveness probe. Returns `200` when the process is serving requests.
+
+### `GET /health/ready`
+Readiness probe. Returns `200` only when the database is configured and reachable.
+
+### `GET /health/db`
+Direct database connectivity probe. Returns `200` with `{ "status": "ok", "db_time": ... }` when `SELECT NOW()` succeeds, and `500` with `{ "status": "error", "message": ... }` when the database connection fails.
+
+### `GET /ping`
+Deployment smoke-test route. Returns plain text `pong` without touching the database, which helps distinguish a stale deployment from a real database outage.
+
+## Deployment notes
+
+### Local verification smoke test
+
+Start the server and open:
+
+```text
+http://localhost:3000/verify/QRV-CERT-ABC123
+```
+
+Expected response before issuing a record:
+
+```json
+{
+  "success": false,
   "status": "NOT_FOUND"
 }
 ```
 
-**Registry unavailable response**
+### Reverse proxy example
 
-```json
-{
-  "status": "UNAVAILABLE",
-  "reason": "Registry not reachable. Please try again later."
+If `verify.qrv.network` should terminate at this Node process, proxy it to the backend port:
+
+```nginx
+location / {
+  proxy_pass http://localhost:3000;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
 }
 ```
 
-## Database bootstrap and migrations
+## QRVID-1 standard
 
-Run the schema bootstrap script before the first deployment and whenever you need to ensure the required tables exist:
+Issued records now carry:
+
+- compact public QRVID: `QRV-{TYPECODE}-{OBJECTID}`
+- canonical protocol QRVID: `QRV://{registry}/{type}/{objectId}`
+- verification URL: `https://verify.qrv.network/{compactQrvid}` or the configured local equivalent
+
+The compact validation regex is:
+
+```text
+^QRV-[A-Z]+-(?:[A-Z0-9]+-)?[A-Z0-9]{6,32}$
+```
+
+## Development checks
 
 ```bash
+npm run check
 npm run db:init
+npm run build
 ```
 
-The bootstrap creates these tables if they do not exist already:
-
-- `qr_objects`
-- `qr_certificates`
-- `qr_audit_log`
-
-## Example cURL Requests
-
-### Health Check
-
-```bash
-curl -X GET http://localhost:3000/health
-```
-
-### Database Probe
-
-```bash
-curl -X GET http://localhost:3000/test-db
-```
-
-### Create Record
-
-```bash
-curl -X POST http://localhost:3000/records \
-  -H "Content-Type: application/json" \
-  -d '{
-    "assetName": "Certificate of Authenticity",
-    "issuer": "QR-V Network",
-    "description": "Digital verification record for a registered asset"
-  }'
-```
-
-### Verify Record
-
-```bash
-curl -X GET http://localhost:3000/verify/QRV-a1b2c3d4e5f6
-```
-
-## Deployment Instructions (Hostinger / Vercel / managed Node)
-
-1. Create or open your Node.js application in your hosting control panel.
-2. Set the application root to the repository directory.
-3. Upload the project files or connect the Git repository.
-4. Configure environment variables in the hosting dashboard:
-   - `PORT=3000` or the provider-assigned port
-   - `NODE_ENV=production`
-   - `VERIFY_BASE_URL=https://verify.qrv.network`
-   - `DATABASE_URL=postgres://username:password@hostname:5432/database`
-   - `DATABASE_SSL_ENABLED=true`
-   - `DATABASE_SSL_REJECT_UNAUTHORIZED=false` when required by your provider
-5. Run `npm install --omit=dev` on the server.
-6. Run `npm run db:init` to create the required database tables.
-7. Start or restart the Node.js application.
-8. Confirm the API is live by visiting `https://api.qrv.network/health` and `https://api.qrv.network/test-db`.
-9. Scan a QR-V ID and confirm the verification endpoint returns a verification payload instead of a `503`.
-
-## Domain Mapping
-
-- API domain: `api.qrv.network`
-- Verification base URL: `https://verify.qrv.network`
-
-Point `api.qrv.network` to the Hostinger application and ensure reverse proxy or Node app routing forwards traffic to the configured `PORT`.
-
-## Operational Notes
-
-- Records are stored in PostgreSQL instead of process memory.
-- If the database connection is unavailable, the API returns a structured `503` response with `status: "UNAVAILABLE"`.
-- Verification and creation requests append audit events to `qr_audit_log`.
-
-## License
-
-MIT
+- `npm run check` validates syntax for the server, routes, controllers, and registry service.
+- `npm run db:init` requires a working `DATABASE_URL`.
+- `npm run build` requires the Next.js dependencies when UI mode is enabled.

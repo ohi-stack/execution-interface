@@ -1,8 +1,9 @@
-import { Router } from 'express';
-import { verifyRecordHandler } from '../controllers/verifyController.js';
+import express from 'express';
+import { verifyRecord } from '../controllers/verifyController.js';
 
-const router = Router();
+const router = express.Router();
 
-router.get('/:id', verifyRecordHandler);
+router.get('/:qrvid', verifyRecord);
+router.post('/', verifyRecord);
 
 export default router;

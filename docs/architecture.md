@@ -1,22 +1,30 @@
-# QR-V Verification Portal Architecture
+# Quantum OHI Bridge Architecture
 
-## Purpose
+## System boundaries
+- **WordPress + WooCommerce**: storefront, checkout lifecycle hooks, operator settings UI.
+- **Quantum OHI Bridge plugin**: transport, request signing, idempotency, retry queue, event logging, and verification link rendering.
+- **Node gateway**: execution policies, workflow processing, registry truth, verification truth.
 
-The QR-V™ Verification Portal is the public verification resolution interface for `verify.qrv.network`. It accepts QRVIDs, resolves them through the external verification API configured via `NEXT_PUBLIC_API_URL`, and renders deterministic verification output for end users.
+## Node contract expected by plugin
+- `GET /health`
+- `POST /v1/ohi/execute`
+- `GET /v1/verify?qrv_id=...`
 
-## Request flow
+## Outbound write envelope
+- `workflow`
+- `issued_at_utc`
+- `metadata_hash`
+- `idempotencyKey`
+- `actor.role = wordpress_bridge`
+- `input`
 
-1. User lands on `/` and submits a QRVID, or arrives directly at `/:qrvid`.
-2. Express routes the request to the verification controller.
-3. The controller sanitizes the QRVID and calls `verifyQRVID(qrvid)`.
-4. The verification service performs an upstream API call to `GET /verify/:qrvid` on the configured verification service.
-5. The service normalizes the response into a view-friendly model.
-6. Server-rendered HTML template modules render the final response with status badge and metadata.
+## Signed headers
+- `X-QOHI-Signature`
+- `X-QOHI-Timestamp`
+- `X-QOHI-Actor-Role: wordpress_bridge`
 
-## Design goals
-
-- Deterministic verification results
-- Institutional and minimal user interface
-- Readable and testable Node.js + Express implementation
-- No frontend framework dependency
-- Mobile-friendly rendering
+## Operational resilience
+- DB-backed event logging for all outbound requests.
+- Retry queue with exponential backoff and capped attempts.
+- Circuit breaker to prevent repeated pressure on unavailable gateway.
+- Idempotency guardrails to prevent duplicate order-triggered executions.

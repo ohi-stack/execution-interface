@@ -1,0 +1,58 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "QR-V Verification V1 Enforcement API",
+    "version": "1.0.0",
+    "description": "Runtime-enforced API contracts for issue, verify, and revoke flows."
+  },
+  "servers": [{ "url": "/" }],
+  "paths": {
+    "/api/v1/records": {
+      "post": {
+        "summary": "Create a verification record",
+        "responses": {
+          "201": { "description": "Record created" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "403": { "$ref": "#/components/responses/ErrorResponse" },
+          "409": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    },
+    "/api/v1/verify/{qrvid}": {
+      "get": {
+        "summary": "Verify a record",
+        "responses": {
+          "200": { "description": "Verification result" },
+          "404": { "description": "Record not found" }
+        }
+      }
+    },
+    "/api/v1/records/{qrvid}/revoke": {
+      "post": {
+        "summary": "Revoke a record",
+        "responses": {
+          "200": { "description": "Record revoked" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "403": { "$ref": "#/components/responses/ErrorResponse" },
+          "404": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "ErrorResponse": { "description": "Structured machine-readable error" }
+    },
+    "schemas": {
+      "VerifyResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["VERIFIED", "REVOKED", "EXPIRED", "NOT_FOUND"]
+          }
+        }
+      }
+    }
+  }
+}

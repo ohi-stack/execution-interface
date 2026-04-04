@@ -78,6 +78,16 @@ Explicit verification route that performs the same lookup and rendering.
 ### `POST /verify`
 Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
 
+
+### `POST /api/v1/records`
+Creates a V1 verification record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `issuer` or `admin`.
+
+### `GET /api/v1/verify/:qrvid`
+Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`.
+
+### `POST /api/v1/records/:qrvid/revoke`
+Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.
+
 ### `GET /health`
 Returns:
 
@@ -122,6 +132,21 @@ npm start
 
 Open `http://localhost:3000`.
 
+
+## Activation loop (issue → QR → verify)
+
+Run the activation script to issue a live record, generate a QR PNG, print verification URLs, verify locally, and open the verification page:
+
+```bash
+node scripts/activate-qrv.js
+```
+
+Optional environment overrides:
+
+```bash
+API_BASE=http://localhost:3000 VERIFY_BASE=https://verify.qrv.network node scripts/activate-qrv.js
+```
+
 ## Deployment instructions
 
 ### Standard Node deployment
@@ -157,7 +182,21 @@ docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
 
 ```bash
 npm run check
+npm run validate:enforcement
+npm test
+npm run activate
 ```
+
+
+### One-command enforced activation
+
+```bash
+./scripts/activate.sh
+# or
+npm run activate
+```
+
+The activation command hard-fails on enforcement, test, health, or activation-loop errors.
 
 ## Git initialization and push commands
 
@@ -183,3 +222,49 @@ git push
 ## License
 
 MIT
+
+---
+
+## Quantum OHI Bridge WordPress Plugin (Production Hardening)
+
+### Install (ZIP-installable plugin)
+1. Zip folder: `wp-content/plugins/ohicloud-core/`.
+2. In WordPress Admin: Plugins → Add New → Upload Plugin.
+3. Activate **OHICloud Core**.
+4. Configure settings at **Settings → Quantum OHI Bridge**.
+
+### Required Node endpoints
+- `GET /health`
+- `POST /v1/ohi/execute`
+- `GET /v1/verify?qrv_id=...`
+
+### Required request headers for write calls
+- `Content-Type: application/json`
+- `X-QOHI-Signature: <hex hmac_sha256(timestamp.raw_body)>`
+- `X-QOHI-Timestamp: <unix timestamp>`
+- `X-QOHI-Actor-Role: wordpress_bridge`
+- `Authorization: Bearer <api_key>` (optional, when configured)
+
+### Settings fields
+- `gateway_base_url`
+- `api_key`
+- `api_secret` (masked in admin after save)
+- `environment`
+- `timeout_seconds`
+- `retry_enabled`
+
+### Cron / retry notes
+- Retry worker hook: `qohi_bridge_retry_worker`.
+- Interval: every minute.
+- Retry backoff: `2^attempts` minutes (capped at 60), max attempts 5.
+- Retries apply to network and 5xx pathways.
+
+### Local flow test (issue / verify / revoke)
+1. Start Node gateway with required endpoints.
+2. Place WooCommerce order and complete payment → plugin sends `certificate.issue`.
+3. Confirm order meta contains `_qohi_qrv_id` and/or `_qohi_verify_url`.
+4. Open thank-you page or order admin and verify link rendering.
+5. Refund or cancel order → plugin sends `certificate.revoke`.
+6. Check bridge tables:
+   - `{prefix}qohi_bridge_events`
+   - `{prefix}qohi_retry_queue`

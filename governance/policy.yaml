@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "default": "deny",
+  "actions": {
+    "create_record": {
+      "allow_roles": ["issuer", "admin"],
+      "obligations": ["log_audit_event", "enforce_utc_timestamps"]
+    },
+    "revoke_record": {
+      "allow_roles": ["admin"],
+      "obligations": ["log_audit_event", "capture_revocation_reason"]
+    },
+    "repo_write": {
+      "allow_roles": ["admin"],
+      "obligations": ["change_ticket_required"]
+    },
+    "pr_create_or_merge": {
+      "allow_roles": ["admin", "maintainer"],
+      "obligations": ["ci_must_pass"]
+    },
+    "production_deploy": {
+      "allow_roles": ["release_manager"],
+      "obligations": ["approved_release_window"]
+    },
+    "secret_access": {
+      "allow_roles": ["security_admin"],
+      "obligations": ["audit_reason_required"]
+    },
+    "schema_change": {
+      "allow_roles": ["admin", "db_owner"],
+      "obligations": ["migration_review_required"]
+    }
+  }
+}

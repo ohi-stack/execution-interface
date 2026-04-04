@@ -78,6 +78,16 @@ Explicit verification route that performs the same lookup and rendering.
 ### `POST /verify`
 Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
 
+
+### `POST /api/v1/records`
+Creates a V1 verification record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `issuer` or `admin`.
+
+### `GET /api/v1/verify/:qrvid`
+Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`.
+
+### `POST /api/v1/records/:qrvid/revoke`
+Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.
+
 ### `GET /health`
 Returns:
 
@@ -157,6 +167,8 @@ docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
 
 ```bash
 npm run check
+npm run validate:enforcement
+npm test
 ```
 
 ## Git initialization and push commands

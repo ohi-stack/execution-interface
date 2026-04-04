@@ -31,7 +31,7 @@ export const renderVerificationResult = async (req, res) => {
 
   const statusCode = result.verification.status === 'VERIFIED'
     ? 200
-    : result.verification.status === 'INVALID'
+    : result.verification.status === 'NOT_FOUND'
       ? 404
       : result.verification.status === 'UNAVAILABLE'
         ? 503

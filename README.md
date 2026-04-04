@@ -192,10 +192,11 @@ npm run activate
 
 ```bash
 ./scripts/activate.sh
-# or
+# or (preferred for consistency)
 npm run activate
 ```
 
+Canonical entrypoint for V1 operations is `npm run activate`; direct shell execution is a fallback that runs the same logic path.
 The activation command hard-fails on enforcement, test, health, or activation-loop errors.
 
 ## Git initialization and push commands

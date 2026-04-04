@@ -180,6 +180,16 @@ git commit -m "Create QR-V verification portal"
 git push
 ```
 
+## QuantumOHI portfolio blueprint
+
+For the proposed QuantumOHI multi-repository production layout, see `docs/quantumohi-repo-map.md`.
+
+## Delivery hardening
+
+- CI workflow: `.github/workflows/ci.yml`
+- Branch protection enforcement guide: `docs/branch-protection-enforcement.md`
+- WordPress bridge plugin scaffold: `wp-content/plugins/quantumohi-bridge/`
+
 ## License
 
 MIT

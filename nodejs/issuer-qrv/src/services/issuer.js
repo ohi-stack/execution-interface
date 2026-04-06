@@ -1,5 +1,6 @@
 import { api } from './api.js';
 
-export const createRecord = (payload) => api.post('/api/registry/create', payload);
+export const createRecord = (payload) => api.post('/api/records', payload);
 export const verifyRecord = (qrvid) => api.get(`/api/verify/${encodeURIComponent(qrvid)}`);
-export const revokeRecord = (payload) => api.post('/api/revoke', payload);
+export const revokeRecord = ({ qrvid, ...payload }) =>
+  api.post(`/api/records/${encodeURIComponent(qrvid)}/revoke`, payload);

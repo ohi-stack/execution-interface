@@ -20,10 +20,10 @@ export const RecordsTable = ({ records }) => `
               (record) => `
                 <tr>
                   <td>${record.qrvid}</td>
-                  <td>${record.assetName}</td>
+                  <td>${record.subject || record.assetName}</td>
                   <td>${record.recordType}</td>
-                  <td><span class="status-pill ${record.status === 'revoked' ? 'danger' : 'success'}">${record.status}</span></td>
-                  <td>${formatDateTime(record.createdAt)}</td>
+                  <td><span class="status-pill ${record.status === 'REVOKED' ? 'danger' : 'success'}">${record.status}</span></td>
+                  <td>${formatDateTime(record.issued_at || record.createdAt)}</td>
                 </tr>`,
             )
             .join('')}

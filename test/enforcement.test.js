@@ -16,10 +16,27 @@ const jsonRequest = async ({ method, path, headers = {}, body }) => {
     body: body ? JSON.stringify(body) : undefined,
   });
 
+  const contentType = response.headers.get('content-type') || '';
+  const payload = contentType.includes('application/json')
+    ? await response.json()
+    : await response.text();
+
   return {
     status: response.status,
-    body: await response.json(),
+    body: payload,
   };
+};
+
+const loginAs = async (username, password) => {
+  const response = await jsonRequest({
+    method: 'POST',
+    path: '/auth/login',
+    body: { username, password },
+  });
+
+  assert.equal(response.status, 200);
+  assert.ok(response.body.token);
+  return response.body.token;
 };
 
 test.before(async () => {
@@ -48,11 +65,48 @@ const validRecord = {
   metadata_hash: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
 };
 
-test('invalid create payload is rejected with structured 4xx error', async () => {
+test('auth login, validate, and role endpoints return claims-backed identity data', async () => {
+  const token = await loginAs('issuer', 'issuer123');
+
+  const validate = await jsonRequest({
+    method: 'GET',
+    path: '/auth/validate',
+    headers: { authorization: `Bearer ${token}` },
+  });
+
+  assert.equal(validate.status, 200);
+  assert.equal(validate.body.valid, true);
+  assert.equal(validate.body.claims.role, 'issuer');
+
+  const roles = await jsonRequest({
+    method: 'GET',
+    path: '/auth/roles',
+    headers: { authorization: `Bearer ${token}` },
+  });
+
+  assert.equal(roles.status, 200);
+  assert.equal(roles.body.role, 'issuer');
+  assert.deepEqual(roles.body.roles, ['issuer']);
+});
+
+test('missing token is rejected for protected resource mutation routes', async () => {
   const response = await jsonRequest({
     method: 'POST',
     path: '/api/v1/records',
-    headers: { 'x-actor-role': 'issuer' },
+    body: { qrvid: 'bad' },
+  });
+
+  assert.equal(response.status, 401);
+  assert.equal(response.body.code, 'TOKEN_MISSING');
+});
+
+test('invalid create payload is rejected with structured 4xx error', async () => {
+  const issuerToken = await loginAs('issuer', 'issuer123');
+
+  const response = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/records',
+    headers: { authorization: `Bearer ${issuerToken}` },
     body: { qrvid: 'bad' },
   });
 
@@ -61,17 +115,19 @@ test('invalid create payload is rejected with structured 4xx error', async () =>
 });
 
 test('policy blocks unauthorized revoke', async () => {
+  const issuerToken = await loginAs('issuer', 'issuer123');
+
   await jsonRequest({
     method: 'POST',
     path: '/api/v1/records',
-    headers: { 'x-actor-role': 'issuer' },
+    headers: { authorization: `Bearer ${issuerToken}` },
     body: validRecord,
   });
 
   const response = await jsonRequest({
     method: 'POST',
     path: '/api/v1/records/QRV-ENFORCE-1001/revoke',
-    headers: { 'x-actor-role': 'issuer' },
+    headers: { authorization: `Bearer ${issuerToken}` },
     body: { revoked_at_utc: '2026-04-04T01:00:00Z', reason: 'test revocation' },
   });
 
@@ -80,17 +136,20 @@ test('policy blocks unauthorized revoke', async () => {
 });
 
 test('status logic returns VERIFIED, REVOKED, EXPIRED, and NOT_FOUND deterministically', async () => {
+  const issuerToken = await loginAs('issuer', 'issuer123');
+  const adminToken = await loginAs('admin', 'admin123');
+
   await jsonRequest({
     method: 'POST',
     path: '/api/v1/records',
-    headers: { 'x-actor-role': 'issuer' },
+    headers: { authorization: `Bearer ${issuerToken}` },
     body: { ...validRecord, qrvid: 'QRV-ENFORCE-VERIFIED' },
   });
 
   await jsonRequest({
     method: 'POST',
     path: '/api/v1/records',
-    headers: { 'x-actor-role': 'issuer' },
+    headers: { authorization: `Bearer ${issuerToken}` },
     body: { ...validRecord, qrvid: 'QRV-ENFORCE-EXPIRED', expires_at_utc: '2020-01-01T00:00:00Z' },
   });
 
@@ -101,7 +160,7 @@ test('status logic returns VERIFIED, REVOKED, EXPIRED, and NOT_FOUND determinist
   await jsonRequest({
     method: 'POST',
     path: '/api/v1/records/QRV-ENFORCE-VERIFIED/revoke',
-    headers: { 'x-actor-role': 'admin' },
+    headers: { authorization: `Bearer ${adminToken}` },
     body: { revoked_at_utc: '2026-04-04T01:00:00Z', reason: 'security incident' },
   });
 
@@ -119,17 +178,20 @@ test('status logic returns VERIFIED, REVOKED, EXPIRED, and NOT_FOUND determinist
 });
 
 test('invalid revoke payload is rejected with structured 4xx error', async () => {
+  const issuerToken = await loginAs('issuer', 'issuer123');
+  const adminToken = await loginAs('admin', 'admin123');
+
   await jsonRequest({
     method: 'POST',
     path: '/api/v1/records',
-    headers: { 'x-actor-role': 'issuer' },
+    headers: { authorization: `Bearer ${issuerToken}` },
     body: validRecord,
   });
 
   const response = await jsonRequest({
     method: 'POST',
     path: '/api/v1/records/QRV-ENFORCE-1001/revoke',
-    headers: { 'x-actor-role': 'admin' },
+    headers: { authorization: `Bearer ${adminToken}` },
     body: { reason: 'missing timestamp' },
   });
 

@@ -41,7 +41,7 @@ export const evaluatePolicy = ({ action, actorRole = 'anonymous' }) => {
 };
 
 export const enforcePolicy = (action) => (req, res, next) => {
-  const actor = req.header('x-actor-role') || 'anonymous';
+  const actor = req.auth?.role || req.header('x-actor-role') || 'anonymous';
   const decision = evaluatePolicy({ action, actorRole: actor });
   const validation = validators.policyDecision(decision);
 

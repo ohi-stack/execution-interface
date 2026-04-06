@@ -1,7 +1,7 @@
 import { createRecord, revokeRecord, verifyRecord } from '../../services/recordStore.js';
 import { logAuditEvent } from '../../services/auditLogService.js';
 
-const actorRole = (req) => req.header('x-actor-role') || 'anonymous';
+const actorRole = (req) => req.auth?.role || req.header('x-actor-role') || 'anonymous';
 
 export const postRecord = (req, res) => {
   const result = createRecord(req.body);

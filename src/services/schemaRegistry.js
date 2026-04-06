@@ -25,6 +25,16 @@ const revokeRecord = (payload) => {
   return { isValid: errors.length === 0, errors };
 };
 
+
+const executeRequest = (payload) => {
+  const errors = [];
+  if (!isObject(payload)) errors.push('body must be an object');
+  const allowed = ['workflow'];
+  for (const key of Object.keys(payload || {})) if (!allowed.includes(key)) errors.push(`unexpected property ${key}`);
+  if (!payload?.workflow || typeof payload.workflow !== 'string') errors.push('workflow is required');
+  return { isValid: errors.length === 0, errors };
+};
+
 const verifyResponse = (payload) => {
   const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND']);
   const errors = [];
@@ -92,6 +102,7 @@ const workflow = (payload) => {
 export const validators = {
   createRecord,
   revokeRecord,
+  executeRequest,
   verifyResponse,
   policyDecision,
   auditEvent,

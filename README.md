@@ -80,7 +80,7 @@ Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
 
 
 ### `POST /v1/execute`
-Normalizes execution requests into a standard envelope and returns `202 Accepted` with generated `execution_id`, `status`, and `trace_id`.
+Normalizes execution requests into a standard envelope and returns structured status with generated `executionId` and `traceId` (plus snake_case compatibility fields).
 
 ### `POST /api/v1/records`
 Creates a V1 verification record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `issuer` or `admin`.

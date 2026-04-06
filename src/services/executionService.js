@@ -11,22 +11,29 @@ const normalizeInput = (payload) => {
 export const createExecutionEnvelope = (payload) => {
   const executionId = `exec_${randomUUID()}`;
   const traceId = `trace_${randomUUID()}`;
-  const receivedAtUtc = new Date().toISOString();
+  const timestamp = new Date().toISOString();
+  const normalizedRequest = normalizeInput(payload);
 
   return {
-    statusCode: 202,
+    statusCode: 200,
     response: {
-      status: 'accepted',
+      status: 'ok',
+      traceId,
+      executionId,
       trace_id: traceId,
-      execution: {
-        execution_id: executionId,
-        state: 'queued',
-      },
+      execution_id: executionId,
       envelope: {
         version: 'v1',
-        type: 'execution.response',
-        received_at_utc: receivedAtUtc,
-        request: normalizeInput(payload),
+        type: 'execution',
+        status: 'queued',
+        timestamp,
+        traceId,
+        executionId,
+        request: normalizedRequest,
+      },
+      execution: {
+        state: 'queued',
+        submittedAtUtc: timestamp,
       },
     },
   };

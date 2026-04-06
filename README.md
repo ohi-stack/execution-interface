@@ -1,61 +1,48 @@
-# qrv-verify-portal
+# qrv-execution-interface
 
-`qrv-verify-portal` is the public verification resolution interface for the QR-V™ Global Verification Network. It is designed to run at `https://verify.qrv.network` and acts as the public-facing layer between a scanned QR-V identifier and the registry-backed verification API at `https://api.qrv.network`.
+`qrv-execution-interface` consolidates the QR-V public verification portal and the registry-backed API into one modular Node.js service. This resolves the recent branch-divergence problem by preserving the newer `/src` application layout while restoring the registry routes, Postgres-backed services, and migration/bootstrap workflow that were introduced on the registry branch.
 
-This repository intentionally implements a focused verification portal rather than a generic marketing website. The interface accepts QRVIDs, resolves them against the authoritative API, and renders deterministic verification results for institutional users.
+## What this merge keeps
 
-## Role in the QR-V System
+- Modular `/src` application structure and clean server bootstrap.
+- Public verification portal routes for `verify.qrv.network`.
+- Registry API routes and Postgres-backed services for `api.qrv.network` style workflows.
+- A migration/bootstrap path so the registry schema can be initialized deterministically.
+- Shared deployment configuration for portal, API, and database connectivity.
 
-The portal sits in the public verification path:
-
-```text
-QR Scan → verify.qrv.network → api.qrv.network → registry → response → display result
-```
-
-### Service responsibilities
-
-- Accept QR-V identifiers (QRVIDs) through a direct URL or manual entry.
-- Validate and sanitize incoming identifiers before requesting data.
-- Call `GET https://api.qrv.network/verify/:qrvid`.
-- Render structured verification results for `VERIFIED`, `INVALID`, `REVOKED`, `EXPIRED`, and service-unavailable states.
-- Present an authoritative, mobile-friendly interface with minimal client-side logic.
-
-## How verification works
-
-1. A user scans a QR code or opens a verification URL such as `/QRV-123456789`.
-2. The portal sanitizes the QRVID and validates its format server-side.
-3. The verification service requests `https://api.qrv.network/verify/:qrvid`.
-4. The portal normalizes the response payload and status.
-5. The result page displays the verification state, issuer, record type, subject, timestamp, and truncated hash when available.
-6. If the upstream API times out or becomes unreachable, the portal retries once and then renders a deterministic unavailable state.
-
-## Architecture and project structure
+## Runtime layout
 
 ```text
-qrv-verify-portal/
+qrv-execution-interface/
 ├── docs/
 │   └── architecture.md
+├── migrations/
+│   └── 001_initialize_registry.sql
 ├── public/
-│   ├── assets/
 │   ├── css/
-│   │   └── styles.css
 │   └── js/
-│       └── app.js
+├── scripts/
+│   └── init-db.js
 ├── src/
 │   ├── controllers/
+│   │   ├── apiHealthController.js
 │   │   ├── healthController.js
+│   │   ├── registryController.js
 │   │   └── verificationController.js
 │   ├── routes/
+│   │   ├── apiRoutes.js
+│   │   ├── apiVerificationRoutes.js
 │   │   ├── index.js
+│   │   ├── recordsRoutes.js
 │   │   └── verificationRoutes.js
 │   ├── services/
+│   │   ├── databaseService.js
+│   │   ├── registryService.js
 │   │   └── verificationService.js
 │   ├── utils/
-│   │   └── qrvid.js
+│   │   ├── qrvid.js
+│   │   └── recordId.js
 │   ├── views/
-│   │   ├── indexView.js
-│   │   ├── layout.js
-│   │   └── resultView.js
 │   └── app.js
 ├── .env.example
 ├── Dockerfile
@@ -64,121 +51,74 @@ qrv-verify-portal/
 └── README.md
 ```
 
-## Routes
+## Portal routes
 
-### `GET /`
-Landing page with a QRVID input and a Verify button.
+- `GET /` renders the manual QRVID entry page.
+- `POST /verify` accepts a QRVID and redirects to the result page.
+- `GET /verify/:qrvid` renders a verification result using the configured API base URL.
+- `GET /:qrvid` supports direct QR redirect resolution.
+- `GET /health` returns portal process health.
 
-### `GET /:qrvid`
-Automatically resolves a QRVID and renders the verification result.
+## Registry/API routes
 
-### `GET /verify/:qrvid`
-Explicit verification route that performs the same lookup and rendering.
-
-### `POST /verify`
-Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
-
-### `GET /health`
-Returns:
-
-```json
-{
-  "status": "ok",
-  "service": "verify-portal"
-}
-```
+- `GET /api/health` returns registry health and database status.
+- `GET /api/test-db` runs a database connectivity probe.
+- `POST /api/records` creates a registry record.
+- `GET /api/verify/:qrvid` resolves a QRVID directly from Postgres-backed registry data.
 
 ## Environment variables
 
-Copy `.env.example` to `.env` and configure as needed:
+Copy `.env.example` to `.env` and configure all relevant values:
 
 ```env
 PORT=3000
-API_BASE_URL=https://api.qrv.network
 NODE_ENV=development
+API_BASE_URL=https://api.qrv.network
+VERIFY_BASE_URL=https://verify.qrv.network
+DATABASE_URL=postgres://username:password@hostname:5432/database
+DATABASE_SSL_ENABLED=true
+DATABASE_SSL_REJECT_UNAUTHORIZED=false
 ```
 
-## Local setup
+### Notes
 
-### Requirements
+- `API_BASE_URL` is used by the portal when it calls an upstream verification API.
+- `VERIFY_BASE_URL` is used by the registry API when it returns public verification links.
+- `DATABASE_URL` is required for registry persistence and health probes.
+- SSL query parameters are stripped from `DATABASE_URL` so pool-level SSL settings remain authoritative.
 
-- Node.js 18+
-- npm 9+
-
-### Install and run
+## Local development
 
 ```bash
 npm install
 cp .env.example .env
+npm run db:init
 npm run dev
 ```
 
-For a production-style local run:
+## Production startup
 
 ```bash
 npm install --omit=dev
+npm run db:init
 npm start
 ```
 
-Open `http://localhost:3000`.
-
-## Deployment instructions
-
-### Standard Node deployment
-
-1. Provision a Node.js 18+ runtime.
-2. Set environment variables:
-   - `PORT`
-   - `API_BASE_URL=https://api.qrv.network`
-   - `NODE_ENV=production`
-3. Install dependencies with `npm install --omit=dev`.
-4. Start the service with `npm start`.
-5. Map the public domain `verify.qrv.network` to the running service.
-6. Confirm `/health` responds with the expected JSON payload.
-
-### Docker deployment
-
-Build and run:
-
-```bash
-docker build -t qrv-verify-portal .
-docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
-```
-
-## Security and reliability notes
-
-- Client input is sanitized and validated before use.
-- The portal never connects directly to a database.
-- `api.qrv.network` is the only verification data source.
-- API timeouts trigger a single retry before showing an unavailable state.
-- The service logs verification lookups for simple operational analytics.
-
-## Running checks
+## Checks
 
 ```bash
 npm run check
 ```
 
-## Git initialization and push commands
+## Why this resolves the merge blocker
 
-If you are starting from a fresh local clone or a new repository, use:
+The earlier registry work and the later portal work both changed core entrypoints like `server.js`, `src/app.js`, `.env.example`, `README.md`, and `package.json`. Instead of dropping one side of the conflict, this repository now keeps:
 
-```bash
-git init
-git add .
-git commit -m "Create QR-V verification portal"
-git branch -M main
-git remote add origin <your-repository-url>
-git push -u origin main
-```
+- the portal's modular application shell;
+- the registry branch's database-backed services and schema bootstrap;
+- merged dependency and environment configuration.
 
-If the repository is already initialized, use:
-
-```bash
-git add .
-git commit -m "Create QR-V verification portal"
-git push
-```
+That gives you a controlled consolidation point rather than a destructive conflict resolution.
 
 ## License
 

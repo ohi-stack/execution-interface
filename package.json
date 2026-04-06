@@ -1,13 +1,14 @@
 {
-  "name": "qrv-verify-portal",
+  "name": "qrv-execution-interface",
   "version": "1.0.0",
-  "description": "Public-facing QR-V verification resolution portal for verify.qrv.network.",
+  "description": "Unified QR-V execution interface combining the public verification portal with the registry-backed API.",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
-    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/services/verificationService.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js"
+    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/apiHealthController.js && node --check src/controllers/registryController.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/routes/apiRoutes.js && node --check src/routes/recordsRoutes.js && node --check src/routes/apiVerificationRoutes.js && node --check src/services/verificationService.js && node --check src/services/databaseService.js && node --check src/services/registryService.js && node --check src/utils/qrvid.js && node --check src/utils/recordId.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js && node --check scripts/init-db.js",
+    "db:init": "node scripts/init-db.js"
   },
   "keywords": [
     "qrv",
@@ -23,7 +24,8 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "pg": "^8.13.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

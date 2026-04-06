@@ -1,22 +1,33 @@
-# QR-V Verification Portal Architecture
+# QR-V Execution Interface Architecture
 
-## Purpose
+The execution interface now hosts two coordinated layers:
 
-The QR-V™ Verification Portal is the public verification resolution interface for `verify.qrv.network`. It accepts QRVIDs, resolves them through `api.qrv.network`, and renders deterministic verification output for end users.
+1. **Verification portal layer** for browser-based QRVID resolution.
+2. **Registry API layer** for record creation, verification, and database health.
 
-## Request flow
+## Request flows
 
-1. User lands on `/` and submits a QRVID, or arrives directly at `/:qrvid`.
-2. Express routes the request to the verification controller.
-3. The controller sanitizes the QRVID and calls `verifyQRVID(qrvid)`.
-4. The verification service performs an upstream API call to `GET /verify/:qrvid`.
-5. The service normalizes the response into a view-friendly model.
-6. Server-rendered HTML template modules render the final response with status badge and metadata.
+### Portal flow
 
-## Design goals
+```text
+QR Scan -> /:qrvid or /verify/:qrvid -> verificationService -> API_BASE_URL/api/verify or remote API -> rendered HTML result
+```
 
-- Deterministic verification results
-- Institutional and minimal user interface
-- Readable and testable Node.js + Express implementation
-- No frontend framework dependency
-- Mobile-friendly rendering
+### Registry flow
+
+```text
+POST /api/records -> registryService -> Postgres
+GET /api/verify/:qrvid -> registryService -> Postgres -> JSON verification payload
+```
+
+## Startup behavior
+
+- `server.js` loads environment variables.
+- If `DATABASE_URL` is configured, the service initializes the registry schema using `migrations/001_initialize_registry.sql`.
+- The Express app exposes portal and API routes from the shared `/src` structure.
+
+## Failure behavior
+
+- Portal verification failures render deterministic unavailable states.
+- Registry database configuration failures return structured `503` JSON responses.
+- Invalid JSON payloads return `400` responses.

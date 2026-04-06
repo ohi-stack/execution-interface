@@ -79,6 +79,9 @@ Explicit verification route that performs the same lookup and rendering.
 Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
 
 
+### `POST /v1/execute`
+Normalizes execution requests into a standard envelope and returns `202 Accepted` with generated `execution_id`, `status`, and `trace_id`.
+
 ### `POST /api/v1/records`
 Creates a V1 verification record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `issuer` or `admin`.
 

@@ -1,4 +1,10 @@
-import { createRecord, revokeRecord, verifyRecord } from '../../services/recordStore.js';
+import {
+  createPublicRecord,
+  createRecord,
+  revokeRecord,
+  verifyPublicRecord,
+  verifyRecord,
+} from '../../services/recordStore.js';
 import { logAuditEvent } from '../../services/auditLogService.js';
 
 const actorRole = (req) => req.header('x-actor-role') || 'anonymous';
@@ -41,6 +47,27 @@ export const postRevokeRecord = (req, res) => {
 export const getVerifyRecord = (req, res) => {
   const qrvid = req.params.qrvid;
   const result = verifyRecord(qrvid);
+
+  if (!result.ok) {
+    return res.status(result.statusCode).json(result.error);
+  }
+
+  return res.status(result.statusCode).json(result.verification);
+};
+
+export const postPublicRecord = (req, res) => {
+  const result = createPublicRecord(req.body || {});
+
+  if (!result.ok) {
+    return res.status(result.statusCode).json(result.error);
+  }
+
+  return res.status(result.statusCode).json(result.record);
+};
+
+export const getPublicVerifyRecord = (req, res) => {
+  const qrvid = req.params.qrvid;
+  const result = verifyPublicRecord(qrvid);
 
   if (!result.ok) {
     return res.status(result.statusCode).json(result.error);

@@ -82,8 +82,14 @@ Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
 ### `POST /api/v1/records`
 Creates a V1 verification record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `issuer` or `admin`.
 
+### `POST /v1/records`
+Creates a minimal public V1 record without policy headers for first-live activation loops. Returns `qrv_id`, `status`, `hash`, and `verify_url`.
+
 ### `GET /api/v1/verify/:qrvid`
 Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`.
+
+### `GET /v1/verify/:qrvid`
+Returns public verification JSON for activation/scan loops (including `status`, `issuer`, `recipient`, `certificateTitle`, and hash fields).
 
 ### `POST /api/v1/records/:qrvid/revoke`
 Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.

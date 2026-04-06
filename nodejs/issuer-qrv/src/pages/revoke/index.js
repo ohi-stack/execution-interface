@@ -9,6 +9,6 @@ export const renderRevokePage = (state) => `
   })}
   <section class="content-grid">
     ${RevocationQueue({ records: state.records })}
-    ${RecordsTable({ records: state.records.filter((record) => record.status === 'revoked').length ? state.records.filter((record) => record.status === 'revoked') : state.records.slice(0, 3) })}
+    ${RecordsTable({ records: state.records.filter((record) => record.status === 'REVOKED').length ? state.records.filter((record) => record.status === 'REVOKED') : state.records.slice(0, 3) })}
   </section>
 `;

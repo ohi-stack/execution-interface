@@ -1,5 +1,5 @@
 export const RevocationQueue = ({ records }) => {
-  const activeRecords = records.filter((record) => record.status !== 'revoked');
+  const activeRecords = records.filter((record) => record.status !== 'REVOKED');
 
   return `
     <section class="card span-2">
@@ -9,7 +9,7 @@ export const RevocationQueue = ({ records }) => {
           Record
           <select name="qrvid" required>
             <option value="">Select a record</option>
-            ${activeRecords.map((record) => `<option value="${record.qrvid}">${record.qrvid} · ${record.assetName}</option>`).join('')}
+            ${activeRecords.map((record) => `<option value="${record.qrvid}">${record.qrvid} · ${record.subject || record.assetName}</option>`).join('')}
           </select>
         </label>
         <label>

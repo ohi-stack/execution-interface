@@ -11,39 +11,45 @@ const SRC_DIR = path.join(ROOT_DIR, 'src');
 const records = [
   {
     qrvid: 'QRV-8E21A1',
-    assetName: 'Grid export certificate',
+    subject: 'Grid export certificate',
     recordType: 'certificate',
     issuer: 'Issuer Operations',
     description: 'Baseline issuance for active energy export assets.',
     referenceId: 'CERT-2026-001',
-    status: 'active',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 30).toISOString(),
+    status: 'VERIFIED',
+    issuedAt: new Date(Date.now() - 1000 * 60 * 60 * 30).toISOString(),
+    expiresAt: null,
     revokedAt: null,
     revocationReason: '',
+    metadataHash: crypto.createHash('sha256').update('CERT-2026-001').digest('hex'),
   },
   {
     qrvid: 'QRV-AD921F',
-    assetName: 'Installer credential',
+    subject: 'Installer credential',
     recordType: 'credential',
     issuer: 'Issuer Operations',
     description: 'Credential for approved installation partner.',
     referenceId: 'CRED-2026-014',
-    status: 'active',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
+    status: 'VERIFIED',
+    issuedAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90).toISOString(),
     revokedAt: null,
     revocationReason: '',
+    metadataHash: crypto.createHash('sha256').update('CRED-2026-014').digest('hex'),
   },
   {
     qrvid: 'QRV-2BC77D',
-    assetName: 'Legacy permit',
+    subject: 'Legacy permit',
     recordType: 'license',
     issuer: 'Issuer Operations',
     description: 'Historic permit retained for audit traceability.',
     referenceId: 'LIC-2025-122',
-    status: 'revoked',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 160).toISOString(),
+    status: 'REVOKED',
+    issuedAt: new Date(Date.now() - 1000 * 60 * 60 * 160).toISOString(),
+    expiresAt: null,
     revokedAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
     revocationReason: 'Permit superseded by new issuance.',
+    metadataHash: crypto.createHash('sha256').update('LIC-2025-122').digest('hex'),
   },
 ];
 
@@ -83,7 +89,28 @@ const createQrSvgDataUri = (qrvid) => {
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
 };
 
-const withQrCode = (record) => ({ ...record, qrCode: createQrSvgDataUri(record.qrvid) });
+const resolveRecordStatus = (record) => {
+  if (record.status === 'REVOKED') return 'REVOKED';
+  if (record.expiresAt && new Date(record.expiresAt).getTime() < Date.now()) return 'EXPIRED';
+  return 'VERIFIED';
+};
+
+const toApiRecord = (record) => ({
+  qrvid: record.qrvid,
+  status: resolveRecordStatus(record),
+  issuer: record.issuer,
+  subject: record.subject,
+  recordType: record.recordType,
+  description: record.description,
+  referenceId: record.referenceId,
+  issued_at: record.issuedAt,
+  expires_at: record.expiresAt,
+  revoked_at: record.revokedAt,
+  revocation_reason: record.revocationReason,
+  metadata_hash: record.metadataHash,
+  verification_url: `https://verify.qrv.network/${encodeURIComponent(record.qrvid)}`,
+  qrCode: createQrSvgDataUri(record.qrvid),
+});
 
 const sendJson = (res, statusCode, payload) => {
   res.writeHead(statusCode, {
@@ -127,7 +154,7 @@ const readBody = (req) =>
 
 const getAnalytics = () => {
   const issued = records.length;
-  const revoked = records.filter((record) => record.status === 'revoked').length;
+  const revoked = records.filter((record) => resolveRecordStatus(record) === 'REVOKED').length;
   const active = issued - revoked;
   const verifications = records.reduce((total, record, index) => total + 20 + index * 7, 0);
 
@@ -145,6 +172,57 @@ const getAnalytics = () => {
 const isPathInside = (base, target) => {
   const relative = path.relative(base, target);
   return !relative.startsWith('..') && !path.isAbsolute(relative);
+};
+
+const escapeHtml = (value) =>
+  String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+
+const sendHtml = (res, statusCode, html) => {
+  res.writeHead(statusCode, { 'Content-Type': 'text/html; charset=utf-8' });
+  res.end(html);
+};
+
+const renderVerifyLandingPage = () => `<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QR-V Verify</title></head>
+  <body style="font-family:Arial,sans-serif;max-width:760px;margin:3rem auto;padding:0 1rem;">
+    <h1>QR-V verification</h1>
+    <p>Scan a QR code or open <code>https://verify.qrv.network/{QRVID}</code> to verify a record.</p>
+    <p>Issuer control plane: <a href="/issuer-qrv">/issuer-qrv</a></p>
+  </body>
+</html>`;
+
+const renderVerificationPage = (verification) => {
+  const palette =
+    verification.status === 'VERIFIED'
+      ? '#065f46'
+      : verification.status === 'REVOKED'
+        ? '#991b1b'
+        : verification.status === 'EXPIRED'
+          ? '#92400e'
+          : '#1f2937';
+
+  return `<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(verification.qrvid)} · ${verification.status}</title></head>
+  <body style="font-family:Arial,sans-serif;max-width:760px;margin:3rem auto;padding:0 1rem;">
+    <h1 style="margin-bottom:.5rem;">QR-V verification result</h1>
+    <p style="font-size:1.25rem;font-weight:700;color:${palette};margin-top:0">${verification.status}</p>
+    <dl style="display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1rem;">
+      <dt>QRVID</dt><dd>${escapeHtml(verification.qrvid)}</dd>
+      <dt>Issuer</dt><dd>${escapeHtml(verification.issuer || '-')}</dd>
+      <dt>Subject</dt><dd>${escapeHtml(verification.subject || '-')}</dd>
+      <dt>Issued</dt><dd>${escapeHtml(verification.issued_at || '-')}</dd>
+      <dt>Expires</dt><dd>${escapeHtml(verification.expires_at || '-')}</dd>
+      <dt>Revoked</dt><dd>${escapeHtml(verification.revoked_at || '-')}</dd>
+    </dl>
+  </body>
+</html>`;
 };
 
 const server = http.createServer(async (req, res) => {
@@ -165,6 +243,11 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (req.method === 'GET' && requestUrl.pathname === '/verify') {
+    sendHtml(res, 200, renderVerifyLandingPage());
+    return;
+  }
+
   if (req.method === 'GET' && (requestUrl.pathname.startsWith('/src/') || requestUrl.pathname.startsWith('/assets/'))) {
     const baseDir = requestUrl.pathname.startsWith('/src/') ? SRC_DIR : path.join(PUBLIC_DIR, 'assets');
     const relativePath = requestUrl.pathname.replace(/^\/(src|assets)\/?/, '');
@@ -180,7 +263,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && requestUrl.pathname === '/api/records') {
-    sendJson(res, 200, records.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(withQrCode));
+    sendJson(res, 200, records.slice().sort((a, b) => new Date(b.issuedAt) - new Date(a.issuedAt)).map(toApiRecord));
     return;
   }
 
@@ -199,49 +282,79 @@ const server = http.createServer(async (req, res) => {
     const record = records.find((item) => item.qrvid === qrvid);
 
     if (!record) {
-      sendJson(res, 404, { error: 'Record not found.' });
+      sendJson(res, 404, { qrvid, status: 'NOT_FOUND' });
       return;
     }
 
-    sendJson(res, 200, withQrCode(record));
+    sendJson(res, 200, toApiRecord(record));
     return;
   }
 
-  if (req.method === 'POST' && requestUrl.pathname === '/api/registry/create') {
+  if (req.method === 'GET' && requestUrl.pathname.startsWith('/verify/')) {
+    const qrvid = decodeURIComponent(requestUrl.pathname.replace('/verify/', ''));
+    const record = records.find((item) => item.qrvid === qrvid);
+    const verification = record ? toApiRecord(record) : { qrvid, status: 'NOT_FOUND' };
+    sendHtml(res, record ? 200 : 404, renderVerificationPage(verification));
+    return;
+  }
+
+  if (
+    req.method === 'POST' &&
+    (requestUrl.pathname === '/api/records' || requestUrl.pathname === '/api/registry/create')
+  ) {
     try {
       const payload = await readBody(req);
-      const { assetName, recordType, issuer, description, referenceId = '' } = payload;
+      const {
+        subject,
+        assetName,
+        recordType,
+        issuer,
+        description = '',
+        referenceId = '',
+        expires_at: expiresAt = null,
+        metadata_hash: metadataHash,
+      } = payload;
+      const resolvedSubject = subject || assetName;
 
-      if (!assetName || !recordType || !issuer || !description) {
-        sendJson(res, 400, { error: 'assetName, recordType, issuer, and description are required.' });
+      if (!resolvedSubject || !recordType || !issuer) {
+        sendJson(res, 400, {
+          error: 'subject (or assetName), recordType, and issuer are required.',
+        });
         return;
       }
 
       const record = {
         qrvid: `QRV-${crypto.randomBytes(3).toString('hex').toUpperCase()}`,
-        assetName,
+        subject: resolvedSubject,
         recordType,
         issuer,
         description,
         referenceId,
-        status: 'active',
-        createdAt: new Date().toISOString(),
+        status: 'VERIFIED',
+        issuedAt: new Date().toISOString(),
+        expiresAt,
         revokedAt: null,
         revocationReason: '',
+        metadataHash: metadataHash || crypto.createHash('sha256').update(JSON.stringify(payload)).digest('hex'),
       };
 
       records.unshift(record);
-      sendJson(res, 201, withQrCode(record));
+      sendJson(res, 201, toApiRecord(record));
     } catch (error) {
       sendJson(res, 400, { error: error.message });
     }
     return;
   }
 
-  if (req.method === 'POST' && requestUrl.pathname === '/api/revoke') {
+  if (
+    req.method === 'POST' &&
+    (requestUrl.pathname === '/api/revoke' || /^\/api\/records\/[^/]+\/revoke$/.test(requestUrl.pathname))
+  ) {
     try {
       const payload = await readBody(req);
-      const { qrvid, reason } = payload;
+      const routeMatch = requestUrl.pathname.match(/^\/api\/records\/([^/]+)\/revoke$/);
+      const qrvid = routeMatch ? decodeURIComponent(routeMatch[1]) : payload.qrvid;
+      const { reason } = payload;
       const record = records.find((item) => item.qrvid === qrvid);
 
       if (!record) {
@@ -249,7 +362,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      if (record.status === 'revoked') {
+      if (record.status === 'REVOKED') {
         sendJson(res, 409, { error: 'Record already revoked.' });
         return;
       }
@@ -259,10 +372,10 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      record.status = 'revoked';
+      record.status = 'REVOKED';
       record.revokedAt = new Date().toISOString();
       record.revocationReason = reason;
-      sendJson(res, 200, withQrCode(record));
+      sendJson(res, 200, toApiRecord(record));
     } catch (error) {
       sendJson(res, 400, { error: error.message });
     }

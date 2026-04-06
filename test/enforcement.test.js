@@ -136,3 +136,28 @@ test('invalid revoke payload is rejected with structured 4xx error', async () =>
   assert.equal(response.status, 400);
   assert.equal(response.body.code, 'INVALID_REQUEST');
 });
+
+
+test('execution API returns normalized envelope with status and trace id', async () => {
+  const response = await jsonRequest({
+    method: 'POST',
+    path: '/v1/execute',
+    body: {
+      task: 'verify_record',
+      payload: { qrvid: 'QRV-ENFORCE-1001' },
+    },
+  });
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.status, 'ok');
+  assert.match(response.body.traceId, /^trace_[0-9a-f-]{36}$/);
+  assert.match(response.body.executionId, /^exec_[0-9a-f-]{36}$/);
+  assert.equal(response.body.trace_id, response.body.traceId);
+  assert.equal(response.body.execution_id, response.body.executionId);
+  assert.equal(response.body.execution.state, 'queued');
+  assert.equal(response.body.envelope.version, 'v1');
+  assert.equal(response.body.envelope.type, 'execution');
+  assert.equal(response.body.envelope.traceId, response.body.traceId);
+  assert.equal(response.body.envelope.executionId, response.body.executionId);
+  assert.equal(response.body.envelope.request.task, 'verify_record');
+});

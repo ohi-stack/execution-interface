@@ -4,14 +4,13 @@ import { renderIndexView } from '../views/indexView.js';
 import { renderResultView } from '../views/resultView.js';
 
 const basePageModel = {
-  pageTitle: 'QR-V™ Verification',
+  pageTitle: 'Onegodian Time',
   errorSummary: null,
 };
 
 export const renderLandingPage = (_req, res) => {
   res.status(200).send(renderIndexView({
     ...basePageModel,
-    qrvid: '',
   }));
 };
 

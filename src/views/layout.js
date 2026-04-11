@@ -15,7 +15,7 @@ export const renderLayout = ({ pageTitle, body, pageScript = '' }) => `<!DOCTYPE
     <title>${escapeHtml(pageTitle)}</title>
     <meta
       name="description"
-      content="Registry-backed QR-V™ verification interface for resolving QRVIDs against the QR-V™ Global Verification Network."
+      content="Official Onegodian Time educational and display interface backed by canonical onegodian-api data."
     />
     <link rel="stylesheet" href="/css/styles.css" />
     <script defer src="/js/app.js"></script>
@@ -23,13 +23,13 @@ export const renderLayout = ({ pageTitle, body, pageScript = '' }) => `<!DOCTYPE
   <body>
     <div class="page-shell">
       <header class="page-header">
-        <p class="eyebrow">QR-V™ Global Verification Network</p>
-        <h1>QR-V™ Verification</h1>
-        <p class="subtitle">Deterministic registry-backed verification for QR-V identifiers.</p>
+        <p class="eyebrow">Onegodian Time Initiative</p>
+        <h1>Onegodian Time</h1>
+        <p class="subtitle">Public documentation and display layer using canonical data from onegodian-api.</p>
       </header>
       ${body}
       <footer class="page-footer">
-        <p>Powered by QR-V™ Global Verification Network</p>
+        <p>The public website is documentation and display only. Canonical authority remains onegodian-api.</p>
       </footer>
     </div>
     ${pageScript}

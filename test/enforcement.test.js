@@ -136,3 +136,28 @@ test('invalid revoke payload is rejected with structured 4xx error', async () =>
   assert.equal(response.status, 400);
   assert.equal(response.body.code, 'INVALID_REQUEST');
 });
+
+test('public v1 endpoints create and verify records without policy headers', async () => {
+  const createResponse = await jsonRequest({
+    method: 'POST',
+    path: '/v1/records',
+    body: {
+      issuer: 'QR-V',
+      recordType: 'certificate',
+      recipientName: 'Production Test',
+      certificateTitle: 'System Validation Certificate',
+      description: 'First live end-to-end validation',
+      qrvid: 'QRV-CERT-000001',
+    },
+  });
+
+  assert.equal(createResponse.status, 201);
+  assert.equal(createResponse.body.qrv_id, 'QRV-CERT-000001');
+  assert.equal(createResponse.body.status, 'VERIFIED');
+
+  const verifyResponse = await jsonRequest({ method: 'GET', path: '/v1/verify/QRV-CERT-000001' });
+  assert.equal(verifyResponse.status, 200);
+  assert.equal(verifyResponse.body.status, 'VERIFIED');
+  assert.equal(verifyResponse.body.issuer, 'QR-V');
+  assert.equal(verifyResponse.body.recipient, 'Production Test');
+});

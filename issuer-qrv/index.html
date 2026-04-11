@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Issuer QR-V</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 720px; margin: 2rem auto; }
+      label { display: block; margin-top: 0.8rem; }
+      input, textarea { width: 100%; padding: 0.5rem; }
+      button { margin-top: 1rem; padding: 0.6rem 1rem; }
+      #result { margin-top: 1.2rem; padding: 1rem; border: 1px solid #ddd; }
+      img { max-width: 220px; }
+    </style>
+  </head>
+  <body>
+    <h1>Issue First Live Certificate</h1>
+    <form id="issue-form">
+      <label>Issuer Name <input name="issuer" value="QR-V" required /></label>
+      <label>Record Type <input name="recordType" value="certificate" required /></label>
+      <label>Recipient Name <input name="recipientName" value="Production Test" required /></label>
+      <label>Certificate Title <input name="certificateTitle" value="System Validation Certificate" required /></label>
+      <label>Description <textarea name="description">First live end-to-end validation</textarea></label>
+      <button type="submit">Generate</button>
+    </form>
+
+    <section id="result" hidden>
+      <p><strong>QRVID:</strong> <span id="qrvid"></span></p>
+      <p><strong>Hash:</strong> <span id="hash"></span></p>
+      <p><strong>Verify URL:</strong> <a id="verifyUrl" target="_blank" rel="noreferrer"></a></p>
+      <img id="qrImage" alt="QR code" />
+    </section>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

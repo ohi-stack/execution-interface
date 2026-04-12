@@ -88,6 +88,19 @@ Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`
 ### `POST /api/v1/records/:qrvid/revoke`
 Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.
 
+
+### `POST /api/omos/classify`
+Classifies identity tier using the Seeker → Believer → Onegodian → Elder model.
+
+### `POST /api/omos/align`
+Loads `/alignment/system-prompt.txt` and runs Unity, Truth, and Dignity checks.
+
+### `POST /api/omos/timestamp/convert`
+Converts UTC ↔ OT using OTS-V5 epoch and deterministic rollover rules.
+
+### `POST /api/omos/decision/run`
+Runs the Onegodian decision pipeline: Observe → Distill → Align → Select → Execute → Verify.
+
 ### `GET /health`
 Returns:
 

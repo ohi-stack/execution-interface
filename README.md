@@ -88,6 +88,18 @@ Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`
 ### `POST /api/v1/records/:qrvid/revoke`
 Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.
 
+### `POST /api/v1/history/events`
+Creates a canonical dual-dated historical event. Missing OT fields are derived strictly through `onegodian-api` (or an injected canonical resolver for testing only).
+
+### `POST /api/v1/history/events/migrate`
+Migrates a legacy historical record into the canonical archive contract without modifying the legacy UTC chronology (`timestamp_utc`, `occurred_at_utc`, or `issued_at_utc` is preserved).
+
+### `GET /api/v1/history/events`
+Returns all canonical historical events sorted by UTC timestamp and deterministic event ID.
+
+### `GET /api/v1/history/events/:event_id`
+Returns a specific canonical historical event by deterministic `event_id`.
+
 ### `GET /health`
 Returns:
 
@@ -169,6 +181,27 @@ docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
 npm run check
 npm run validate:enforcement
 npm test
+```
+
+## Canonical historical archive payload example
+
+```json
+{
+  "event_id": "956649b23f80f5f70eef7638643ff6e2926f7737f31d2d8b3f57d99ab2ce0c67",
+  "title": "Council Ledger Entry",
+  "description": "Primary ledger inscription finalized.",
+  "timestamp_utc": "2026-04-04T03:20:00.000Z",
+  "timestamp_local": "2026-04-04T03:20:00",
+  "timezone": "UTC",
+  "gregorian_date": "2026-04-04",
+  "gregorian_weekday": "Saturday",
+  "ot_year": 7026,
+  "ot_month_name": "First Dawn",
+  "ot_day": 4,
+  "ot_day_order_name": "Order of Continuance",
+  "source_authority": "onegodian-api",
+  "version_standard": "onegodian-canonical/v1"
+}
 ```
 
 ## Git initialization and push commands

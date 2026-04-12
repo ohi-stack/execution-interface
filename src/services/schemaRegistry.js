@@ -35,6 +35,45 @@ const verifyResponse = (payload) => {
   return { isValid: errors.length === 0, errors };
 };
 
+const historicalEventCreate = (payload) => {
+  const errors = [];
+  if (!isObject(payload)) errors.push('body must be an object');
+
+  const allowed = [
+    'event_id',
+    'title',
+    'description',
+    'timestamp_utc',
+    'timestamp_local',
+    'timezone',
+    'gregorian_date',
+    'gregorian_weekday',
+    'ot_year',
+    'ot_month_name',
+    'ot_day',
+    'ot_day_order_name',
+    'source_authority',
+    'version_standard',
+  ];
+  for (const key of Object.keys(payload || {})) if (!allowed.includes(key)) errors.push(`unexpected property ${key}`);
+
+  if (!payload?.title) errors.push('title is required');
+  if (!payload?.description) errors.push('description is required');
+  if (!isUtcDate(payload?.timestamp_utc)) errors.push('timestamp_utc must be UTC date-time');
+  if (!payload?.timezone) errors.push('timezone is required');
+
+  return { isValid: errors.length === 0, errors };
+};
+
+const historicalEventMigration = (payload) => {
+  const errors = [];
+  if (!isObject(payload)) errors.push('body must be an object');
+  if (!payload?.timestamp_utc && !payload?.occurred_at_utc && !payload?.issued_at_utc) {
+    errors.push('legacy record must include timestamp_utc, occurred_at_utc, or issued_at_utc');
+  }
+  return { isValid: errors.length === 0, errors };
+};
+
 const policyDecision = (payload) => {
   const errors = [];
   if (!['allow', 'deny', 'escalate'].includes(payload?.decision)) errors.push('decision invalid');
@@ -93,6 +132,8 @@ export const validators = {
   createRecord,
   revokeRecord,
   verifyResponse,
+  historicalEventCreate,
+  historicalEventMigration,
   policyDecision,
   auditEvent,
   task,

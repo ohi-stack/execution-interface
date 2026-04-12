@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import app from '../src/app.js';
 import { resetRecordStore } from '../src/services/recordStore.js';
+import { resetHistoricalEventArchive } from '../src/services/historicalEventArchive.js';
+import { setOtDerivationResolver } from '../src/services/otCanonicalClient.js';
 
 let server;
 let baseUrl;
@@ -38,6 +40,19 @@ test.after(async () => {
 
 test.beforeEach(() => {
   resetRecordStore();
+  resetHistoricalEventArchive();
+  setOtDerivationResolver(async ({ timestamp_utc }) => ({
+    ot_year: 7026,
+    ot_month_name: 'First Dawn',
+    ot_day: Number(timestamp_utc.slice(8, 10)),
+    ot_day_order_name: 'Order of Continuance',
+    source_authority: 'onegodian-api',
+    version_standard: 'onegodian-canonical/v1',
+  }));
+});
+
+test.after(() => {
+  setOtDerivationResolver(null);
 });
 
 const validRecord = {
@@ -135,4 +150,66 @@ test('invalid revoke payload is rejected with structured 4xx error', async () =>
 
   assert.equal(response.status, 400);
   assert.equal(response.body.code, 'INVALID_REQUEST');
+});
+
+test('historical events are archived with canonical dual-date fields', async () => {
+  const createResponse = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/history/events',
+    body: {
+      title: 'Archive event',
+      description: 'Canonical archive test',
+      timestamp_utc: '2026-04-04T03:20:00Z',
+      timezone: 'UTC',
+    },
+  });
+
+  assert.equal(createResponse.status, 201);
+  assert.equal(typeof createResponse.body.event_id, 'string');
+  assert.equal(createResponse.body.gregorian_date, '2026-04-04');
+  assert.equal(createResponse.body.ot_year, 7026);
+  assert.equal(createResponse.body.source_authority, 'onegodian-api');
+
+  const listResponse = await jsonRequest({
+    method: 'GET',
+    path: '/api/v1/history/events',
+  });
+
+  assert.equal(listResponse.status, 200);
+  assert.equal(Array.isArray(listResponse.body.events), true);
+  assert.equal(listResponse.body.events.length, 1);
+});
+
+test('legacy migration helper derives OT fields without changing provided UTC chronology', async () => {
+  const migrateResponse = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/history/events/migrate',
+    body: {
+      event_type: 'legacy.note',
+      message: 'legacy entry',
+      occurred_at_utc: '2022-11-10T10:30:00Z',
+      timezone: 'UTC',
+    },
+  });
+
+  assert.equal(migrateResponse.status, 201);
+  assert.equal(migrateResponse.body.timestamp_utc, '2022-11-10T10:30:00.000Z');
+  assert.equal(migrateResponse.body.title, 'legacy.note');
+  assert.equal(migrateResponse.body.ot_month_name, 'First Dawn');
+});
+
+test('legacy migration rejects mismatched gregorian chronology instead of silently editing', async () => {
+  const migrateResponse = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/history/events/migrate',
+    body: {
+      event_type: 'legacy.note',
+      occurred_at_utc: '2022-11-10T10:30:00Z',
+      timezone: 'UTC',
+      gregorian_date: '2022-11-11',
+    },
+  });
+
+  assert.equal(migrateResponse.status, 400);
+  assert.equal(migrateResponse.body.code, 'MIGRATION_INVALID');
 });

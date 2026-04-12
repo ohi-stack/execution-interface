@@ -37,6 +37,40 @@
           "404": { "$ref": "#/components/responses/ErrorResponse" }
         }
       }
+    },
+    "/api/v1/history/events": {
+      "post": {
+        "summary": "Create canonical historical event",
+        "responses": {
+          "201": { "description": "Historical event created" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "409": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      },
+      "get": {
+        "summary": "List canonical historical events",
+        "responses": {
+          "200": { "description": "Historical event list" }
+        }
+      }
+    },
+    "/api/v1/history/events/migrate": {
+      "post": {
+        "summary": "Migrate legacy historical record into canonical format",
+        "responses": {
+          "201": { "description": "Legacy record migrated" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    },
+    "/api/v1/history/events/{event_id}": {
+      "get": {
+        "summary": "Get canonical historical event by ID",
+        "responses": {
+          "200": { "description": "Historical event" },
+          "404": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
     }
   },
   "components": {

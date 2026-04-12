@@ -195,3 +195,44 @@ git push
 ## License
 
 MIT
+
+---
+
+## Onegodian foundation (current workspace implementation)
+
+Because canonical repositories (`onegodian-org`, `onegodian-api`, `onegodian-llm`) are not present in this workspace, a deployable foundation has been implemented here:
+
+### Onegodian pages
+- `GET /onegodian`
+- `GET /products`
+- `GET /products/:slug`
+- `GET /docs/algorithm`
+- `GET /docs/system-prompt`
+- `GET /docs/positioning`
+
+### Onegodian API
+- `GET /api/products`
+- `GET /api/products/:slug`
+- `POST /api/checkout/session`
+- `POST /api/webhooks/stripe`
+- `GET /api/orders/:id`
+- `GET /api/downloads/:productId?orderId=...`
+
+### Onegodian LLM modules
+- `src/llm/onegodianReferences.js`
+- `src/llm/onegodianPromptService.js`
+- `src/llm/config.js`
+
+### OTS-V5 utility
+- `src/utils/otsDate.js` (UTC canonical, Gregorian-primary, OT supplemental)
+
+### Extra environment variables
+
+```env
+PUBLIC_BASE_URL=http://localhost:3000
+CHECKOUT_SUCCESS_BASE_URL=http://localhost:3000
+CHECKOUT_CANCEL_BASE_URL=http://localhost:3000
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+ONEGODIAN_PROMPT_VERSION=v1.0
+```

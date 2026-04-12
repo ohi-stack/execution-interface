@@ -1,10 +1,13 @@
 PORT=3000
-NEXT_PUBLIC_API_URL=https://api.qrv.network
 NODE_ENV=development
+NEXT_PUBLIC_API_URL=https://api.qrv.network
 
+# Onegodian API
 PUBLIC_BASE_URL=http://localhost:3000
 CHECKOUT_SUCCESS_BASE_URL=http://localhost:3000
 CHECKOUT_CANCEL_BASE_URL=http://localhost:3000
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+
+# Onegodian LLM
 ONEGODIAN_PROMPT_VERSION=v1.0

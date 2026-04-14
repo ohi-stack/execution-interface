@@ -18,6 +18,15 @@ const post = async (path, body) => {
   };
 };
 
+const get = async (path) => {
+  const response = await fetch(`${baseUrl}${path}`);
+
+  return {
+    status: response.status,
+    body: await response.json(),
+  };
+};
+
 test.before(async () => {
   await new Promise((resolve) => {
     server = app.listen(0, () => {
@@ -50,4 +59,14 @@ test('POST /api/omos/classify returns Elder for high score', async () => {
 
   assert.equal(response.status, 200);
   assert.equal(response.body.result.level, 'Elder');
+  assert.equal(response.body.result.canonical_time_standard, 'gregorian_utc');
+});
+
+test('GET /api/omos/identity-definition returns public classification definition', async () => {
+  const response = await get('/api/omos/identity-definition');
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.ok, true);
+  assert.equal(response.body.result.version, '1.0.0');
+  assert.equal(response.body.result.entity_scope.commercial_entity, 'ONEGODIAN, LLC');
 });

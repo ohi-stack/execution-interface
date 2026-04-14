@@ -4,6 +4,15 @@
 
 This repository intentionally implements a focused verification portal rather than a generic marketing website. The interface accepts QRVIDs, resolves them against the authoritative API, and renders deterministic verification results for institutional users.
 
+
+## OneGodian Production Acceleration Assets
+
+- Protocol package: `protocol/README.md`
+- Prompt deployment package: `prompt/DEPLOYMENT.md`
+- OHI pipeline demo module: `pipeline/README.md`
+- Public identity definition endpoint: `GET /api/omos/identity-definition`
+- Production status and scope: `IMPLEMENTATION_STATUS.md`, `CURRENT_SCOPE.md`
+
 ## Role in the QR-V System
 
 The portal sits in the public verification path:
@@ -88,6 +97,9 @@ Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`
 ### `POST /api/v1/records/:qrvid/revoke`
 Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.
 
+
+### `GET /api/omos/identity-definition`
+Returns public-facing OneGodian identity classification definitions and guardrails.
 
 ### `POST /api/omos/classify`
 Classifies identity tier using the Seeker → Believer → Onegodian → Elder model.

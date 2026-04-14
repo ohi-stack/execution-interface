@@ -1,21 +1,44 @@
-import dotenv from 'dotenv';
-import app from './src/app.js';
+const express = require("express");
+const cors = require("cors");
 
-dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const port = Number(process.env.PORT) || 3000;
-const host = '0.0.0.0';
+app.use(cors());
+app.use(express.json());
 
-const server = app.listen(port, host, () => {
-  console.log(`QR-V Verification Portal listening on http://${host}:${port}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`API base URL: ${process.env.NEXT_PUBLIC_API_URL || process.env.API_BASE_URL || 'https://api.qrv.network'}`);
+app.get("/", (req, res) => {
+  res.json({
+    service: "onegodian-api",
+    status: "ok",
+    domain: "api.onegodian.org"
+  });
 });
 
-const shutdown = (signal) => {
-  console.log(`Received ${signal}. Shutting down QR-V Verification Portal.`);
-  server.close(() => process.exit(0));
-};
+app.get("/health", (req, res) => {
+  res.json({
+    ok: true,
+    service: "onegodian-api",
+    timestamp: new Date().toISOString()
+  });
+});
 
-process.on('SIGINT', () => shutdown('SIGINT'));
-process.on('SIGTERM', () => shutdown('SIGTERM'));
+app.get("/v1/status", (req, res) => {
+  res.json({
+    version: "1.0.0",
+    environment: process.env.NODE_ENV || "production",
+    service: "api.onegodian.org"
+  });
+});
+
+app.get("/v1/definition", (req, res) => {
+  res.json({
+    term: "ONEGODIAN",
+    classification: "founder-defined identity framework",
+    note: "Institution-safe public definition endpoint"
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`onegodian-api running on port ${PORT}`);
+});

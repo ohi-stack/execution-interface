@@ -1,35 +1,27 @@
 {
-  "name": "qrv-verify-portal",
+  "name": "onegodian-api",
   "version": "1.0.0",
-  "description": "Public-facing QR-V verification resolution portal for verify.qrv.network.",
-  "type": "module",
-  "main": "server.js",
+  "private": true,
+  "description": "Core API for api.onegodian.org",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "start": "node server.js",
-    "dev": "NODE_ENV=development nodemon server.js",
-    "build": "npm run check",
-    "typecheck": "npm run check",
-    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/routes/api/v1Routes.js && node --check src/services/verificationService.js && node --check src/services/recordStore.js && node --check src/services/policyService.js && node --check src/services/auditLogService.js && node --check src/services/schemaRegistry.js && node --check src/middleware/validateSchema.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js",
-    "validate:enforcement": "node scripts/validate-enforcement.mjs",
-    "test": "node --test"
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
   },
-  "keywords": [
-    "qrv",
-    "verification",
-    "portal",
-    "express",
-    "qrvid"
-  ],
-  "author": "",
-  "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.16.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }

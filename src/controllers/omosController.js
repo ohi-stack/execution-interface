@@ -1,4 +1,4 @@
-import { classifyIdentity } from '../services/omos/identityService.js';
+import { classifyIdentity, getIdentityDefinition } from '../services/omos/identityService.js';
 import { runAlignmentChecks } from '../services/omos/alignmentService.js';
 import { buildTimestampRecord, otToUtc, utcToOt } from '../services/omos/timeService.js';
 import { runOnegodianDecision } from '../services/omos/algorithmService.js';
@@ -17,6 +17,13 @@ export const classifyHandler = (req, res) => {
   } catch (error) {
     handleError(res, error);
   }
+};
+
+export const identityDefinitionHandler = (_req, res) => {
+  res.json({
+    ok: true,
+    result: getIdentityDefinition(),
+  });
 };
 
 export const alignHandler = (req, res) => {

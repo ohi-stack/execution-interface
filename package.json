@@ -1,35 +1,25 @@
 {
-  "name": "qrv-verify-portal",
+  "name": "onegodian-api",
   "version": "1.0.0",
-  "description": "Public-facing QR-V verification resolution portal for verify.qrv.network.",
+  "private": true,
   "type": "module",
+  "description": "Core API for api.onegodian.org",
   "main": "server.js",
   "scripts": {
+    "build": "tsc",
     "start": "node server.js",
-    "dev": "NODE_ENV=development nodemon server.js",
-    "build": "npm run check",
-    "typecheck": "npm run check",
-    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/routes/api/v1Routes.js && node --check src/services/verificationService.js && node --check src/services/recordStore.js && node --check src/services/policyService.js && node --check src/services/auditLogService.js && node --check src/services/schemaRegistry.js && node --check src/middleware/validateSchema.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js",
-    "validate:enforcement": "node scripts/validate-enforcement.mjs",
-    "test": "node --test"
+    "start:with-build": "npm run build && npm start"
   },
-  "keywords": [
-    "qrv",
-    "verification",
-    "portal",
-    "express",
-    "qrvid"
-  ],
-  "author": "",
-  "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "express": "^4.21.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "typescript": "^5.6.3"
   }
 }

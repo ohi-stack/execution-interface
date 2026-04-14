@@ -1,13 +1,13 @@
-const express = require("express");
-const cors = require("cors");
+import cors from "cors";
+import express, { Request, Response } from "express";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT || 3000);
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (_req: Request, res: Response) => {
   res.json({
     service: "onegodian-api",
     status: "ok",
@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/health", (req, res) => {
+app.get("/health", (_req: Request, res: Response) => {
   res.json({
     ok: true,
     service: "onegodian-api",
@@ -23,7 +23,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.get("/v1/status", (req, res) => {
+app.get("/v1/status", (_req: Request, res: Response) => {
   res.json({
     version: "1.0.0",
     environment: process.env.NODE_ENV || "production",
@@ -31,7 +31,7 @@ app.get("/v1/status", (req, res) => {
   });
 });
 
-app.get("/v1/definition", (req, res) => {
+app.get("/v1/definition", (_req: Request, res: Response) => {
   res.json({
     term: "ONEGODIAN",
     classification: "founder-defined identity framework",

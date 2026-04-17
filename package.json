@@ -8,7 +8,10 @@
   "scripts": {
     "build": "tsc",
     "start": "node server.js",
-    "start:with-build": "npm run build && npm start"
+    "start:with-build": "npm run build && npm start",
+    "validate:enforcement": "node scripts/validate-enforcement.mjs",
+    "test": "npm run test --workspaces --if-present",
+    "check": "npm run validate:enforcement && npm run test"
   },
   "engines": {
     "node": ">=20"
@@ -21,5 +24,17 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1",
     "typescript": "^5.6.3"
-  }
+  },
+  "workspaces": [
+    "onegodian-agent",
+    "onegodian-time",
+    "onegodian-algorithm",
+    "onegodian-protocol",
+    "onegodian-experience",
+    "onegodian-community",
+    "onegodian-orientation",
+    "onegodian-core",
+    "onegodian-identity",
+    "onegodian-docs"
+  ]
 }

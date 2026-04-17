@@ -1,0 +1,11 @@
+{
+  "name": "onegodian-protocol",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Build pipeline for onegodian-protocol is scaffolded.'",
+    "dev": "echo 'Dev workflow for onegodian-protocol is scaffolded.'",
+    "test": "echo 'Test workflow for onegodian-protocol is scaffolded.'"
+  }
+}

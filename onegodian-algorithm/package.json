@@ -1,0 +1,11 @@
+{
+  "name": "onegodian-algorithm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Build pipeline for onegodian-algorithm is scaffolded.'",
+    "dev": "echo 'Dev workflow for onegodian-algorithm is scaffolded.'",
+    "test": "echo 'Test workflow for onegodian-algorithm is scaffolded.'"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "onegodian-experience",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Build pipeline for onegodian-experience is scaffolded.'",
+    "dev": "echo 'Dev workflow for onegodian-experience is scaffolded.'",
+    "test": "echo 'Test workflow for onegodian-experience is scaffolded.'"
+  }
+}

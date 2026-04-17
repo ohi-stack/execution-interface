@@ -4,14 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsx src/index.ts",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.3",
-    "tsx": "^4.19.1",
-    "vitest": "^2.1.8",
-    "@types/node": "^22.10.1"
+    "build": "echo 'Build pipeline for onegodian-orientation is scaffolded.'",
+    "dev": "echo 'Dev workflow for onegodian-orientation is scaffolded.'",
+    "test": "echo 'Test workflow for onegodian-orientation is scaffolded.'"
   }
 }

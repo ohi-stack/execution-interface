@@ -233,3 +233,45 @@ Deliverables:
 5. **Mandate UTC contract fields in every P0 repo**; reject PRs missing `*_at_utc` fields.
 6. **Pause P2 repositories for 14 days** to reduce coordination overhead and fragmentation.
 7. **Gate deployment on contract artifacts first** (`openapi.yaml`, schemas, CI validation), not on feature breadth.
+
+---
+
+## 2026-04-17 Repository Scaffold Audit (2026-04-17 11:46:10Z)
+
+### Timestamp
+- 2026-04-17 11:46:10Z
+
+### Repos discovered
+- onegodian-agent
+- onegodian-time
+- omos-core
+- protocol
+- execution-interface (current workspace root)
+
+### Repos created
+- onegodian-algorithm
+- onegodian-protocol
+- onegodian-experience
+- onegodian-community
+- onegodian-orientation
+- onegodian-core
+- onegodian-identity
+- onegodian-docs
+
+### Gaps remaining
+- None in canonical target set (`onegodian-algorithm`, `onegodian-protocol`, `onegodian-experience`, `onegodian-community`, `onegodian-orientation`, `onegodian-core`, `onegodian-identity`, `onegodian-docs`).
+
+### Proposed next build order
+1. onegodian-algorithm
+2. onegodian-protocol
+3. onegodian-core
+4. onegodian-identity
+5. onegodian-experience
+6. onegodian-community
+7. onegodian-orientation
+8. onegodian-docs
+
+### Notes
+- `onegodian-timekeeping` was not found as a top-level directory; `onegodian-time` exists and was preserved as-is.
+- Existing repositories and folders were not renamed or deleted.
+

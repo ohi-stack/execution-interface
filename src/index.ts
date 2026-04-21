@@ -40,7 +40,7 @@ app.get("/v1/definition", (_req, res) => {
   res.json({
     name: "ONEGODIAN",
     classification: "founder-defined identity framework",
-    description: "Core API definition endpoint for the Onegodian system"
+    description: "Core API definition endpoint for the OneGodian system"
   });
 });
 
@@ -85,7 +85,7 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 });
 
 const server = app.listen(PORT, () => {
-  console.log(`Onegodian API running on port ${PORT}`);
+  console.log(`OneGodian API running on port ${PORT}`);
 });
 
 const shutdown = (signal: string) => {

@@ -1,16 +1,26 @@
 import { Router } from 'express';
-import verificationRoutes from './verificationRoutes.js';
 import v1Routes from './api/v1Routes.js';
-import { renderLandingPage, renderVerificationResult } from '../controllers/verificationController.js';
-import { healthHandler } from '../controllers/healthController.js';
 import omosRoutes from './api/omosRoutes.js';
+import verificationRoutes from './verificationRoutes.js';
+import {
+  renderLandingPage,
+  renderSystemArchitecturePage,
+  renderVerificationResult,
+} from '../controllers/verificationController.js';
+import { healthHandler } from '../controllers/healthController.js';
 
 const router = Router();
 
+// 1) auth/system
 router.get('/health', healthHandler);
+
+// 2) API/core
 router.use('/api/v1', v1Routes);
 router.use('/api/omos', omosRoutes);
+
+// 3) pages/ui
 router.get('/', renderLandingPage);
+router.get('/system-architecture', renderSystemArchitecturePage);
 router.use('/verify', verificationRoutes);
 router.get('/:qrvid', renderVerificationResult);
 

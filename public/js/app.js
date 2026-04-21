@@ -33,6 +33,7 @@ if (copyButton) {
     const qrvid = copyButton.getAttribute('data-qrvid');
 
     try {
+      if (!navigator.clipboard || !qrvid) { throw new Error('Clipboard unavailable'); }
       await navigator.clipboard.writeText(qrvid);
       copyButton.textContent = 'Copied';
       setTimeout(() => {

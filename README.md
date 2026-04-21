@@ -195,3 +195,24 @@ git push
 ## License
 
 MIT
+
+
+## Canonical Onegodian Time display
+
+The landing page (`/`) is a public display/documentation layer for Onegodian Time and fetches canonical values from `onegodian-api` through local proxy endpoints.
+
+### Onegodian proxy endpoints
+
+- `GET /api/v1/ot/current` – canonical current Onegodian timestamp payload.
+- `GET /api/v1/ot/convert?iso_utc=2026-04-11T12:00:00Z` – canonical conversion payload.
+
+`iso_utc` must be provided in ISO-8601 UTC format.
+
+### Onegodian runtime configuration
+
+Set the upstream base URL with:
+
+```bash
+ONEGODIAN_API_BASE_URL=https://onegodian-api.onrender.com
+```
+

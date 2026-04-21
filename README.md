@@ -1,222 +1,148 @@
-# qrv-verify-portal
+# onegodian-api
 
-`qrv-verify-portal` is the public verification resolution interface for the QR-V™ Global Verification Network. It is designed to run at `https://verify.qrv.network` and acts as the public-facing layer between a scanned QR-V identifier and the registry-backed verification API at `https://api.qrv.network`.
+Production-ready V1 TypeScript + Express API baseline for deployment on Hostinger Node hosting.
 
-This repository intentionally implements a focused verification portal rather than a generic marketing website. The interface accepts QRVIDs, resolves them against the authoritative API, and renders deterministic verification results for institutional users.
+## API Endpoints
 
+- `GET /`
+- `GET /health`
+- `GET /ready`
+- `GET /v1/status`
+- `GET /v1/definition`
+- `POST /execute`
 
-## OneGodian Production Acceleration Assets
+## Prerequisites
 
-- Protocol package: `protocol/README.md`
-- Prompt deployment package: `prompt/DEPLOYMENT.md`
-- OHI pipeline demo module: `pipeline/README.md`
-- Public identity definition endpoint: `GET /api/omos/identity-definition`
-- Production status and scope: `IMPLEMENTATION_STATUS.md`, `CURRENT_SCOPE.md`
+- Node.js `20.x` (recommended for Hostinger Node deployments)
+- npm `10+`
 
-## Role in the QR-V System
-
-The portal sits in the public verification path:
-
-```text
-QR Scan → verify.qrv.network → api.qrv.network → registry → response → display result
-```
-
-### Service responsibilities
-
-- Accept QR-V identifiers (QRVIDs) through a direct URL or manual entry.
-- Validate and sanitize incoming identifiers before requesting data.
-- Call `GET https://api.qrv.network/verify/:qrvid`.
-- Render structured verification results for `VERIFIED`, `INVALID`, `REVOKED`, `EXPIRED`, and service-unavailable states.
-- Present an authoritative, mobile-friendly interface with minimal client-side logic.
-
-## How verification works
-
-1. A user scans a QR code or opens a verification URL such as `/QRV-123456789`.
-2. The portal sanitizes the QRVID and validates its format server-side.
-3. The verification service requests `GET {NEXT_PUBLIC_API_URL}/verify/:qrvid`.
-4. The portal normalizes the response payload and status.
-5. The result page displays the verification state, issuer, record type, subject, timestamp, and truncated hash when available.
-6. If the upstream API times out or becomes unreachable, the portal retries once and then renders a deterministic unavailable state.
-
-## Architecture and project structure
-
-```text
-qrv-verify-portal/
-├── docs/
-│   └── architecture.md
-├── public/
-│   ├── assets/
-│   ├── css/
-│   │   └── styles.css
-│   └── js/
-│       └── app.js
-├── src/
-│   ├── controllers/
-│   │   ├── healthController.js
-│   │   └── verificationController.js
-│   ├── routes/
-│   │   ├── index.js
-│   │   └── verificationRoutes.js
-│   ├── services/
-│   │   └── verificationService.js
-│   ├── utils/
-│   │   └── qrvid.js
-│   ├── views/
-│   │   ├── indexView.js
-│   │   ├── layout.js
-│   │   └── resultView.js
-│   └── app.js
-├── .env.example
-├── Dockerfile
-├── package.json
-├── server.js
-└── README.md
-```
-
-## Routes
-
-### `GET /`
-Landing page with a QRVID input and a Verify button.
-
-### `GET /:qrvid`
-Automatically resolves a QRVID and renders the verification result.
-
-### `GET /verify/:qrvid`
-Explicit verification route that performs the same lookup and rendering.
-
-### `POST /verify`
-Form handler that accepts a pasted QRVID and redirects to `/verify/:qrvid`.
-
-
-### `POST /api/v1/records`
-Creates a V1 verification record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `issuer` or `admin`.
-
-### `GET /api/v1/verify/:qrvid`
-Returns deterministic V1 statuses: `VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`.
-
-### `POST /api/v1/records/:qrvid/revoke`
-Revokes an existing record with runtime schema validation and policy enforcement. Requires `x-actor-role` of `admin`.
-
-
-### `GET /api/omos/identity-definition`
-Returns public-facing OneGodian identity classification definitions and guardrails.
-
-### `POST /api/omos/classify`
-Classifies identity tier using the Seeker → Believer → Onegodian → Elder model.
-
-### `POST /api/omos/align`
-Loads `/alignment/system-prompt.txt` and runs Unity, Truth, and Dignity checks.
-
-### `POST /api/omos/timestamp/convert`
-Converts UTC ↔ OT using OTS-V5 epoch and deterministic rollover rules.
-
-### `POST /api/omos/decision/run`
-Runs the Onegodian decision pipeline: Observe → Distill → Align → Select → Execute → Verify.
-
-### `GET /health`
-Returns:
-
-```json
-{
-  "status": "ok",
-  "service": "verify-portal"
-}
-```
-
-## Environment variables
-
-Copy `.env.example` to `.env` and configure as needed:
-
-```env
-PORT=3000
-NEXT_PUBLIC_API_URL=https://api.qrv.network
-NODE_ENV=development
-```
-
-## Local setup
-
-### Requirements
-
-- Node.js 18+
-- npm 9+
-
-### Install and run
+## Install
 
 ```bash
 npm install
+```
+
+## Environment Setup
+
+Copy and configure environment variables:
+
+```bash
 cp .env.example .env
+```
+
+`.env.example` values:
+
+```env
+PORT=3000
+NODE_ENV=production
+CORS_ORIGIN=http://localhost:3000
+LOG_LEVEL=info
+```
+
+## Local Development
+
+Run in watch mode:
+
+```bash
 npm run dev
 ```
 
-For a production-style local run:
+## Build
+
+Compile TypeScript to `dist/`:
 
 ```bash
-npm install --omit=dev
+npm run build
+```
+
+## Start (Production Runtime)
+
+Run compiled output:
+
+```bash
 npm start
 ```
 
-Open `http://localhost:3000`.
+The server binds to `process.env.PORT`.
 
-## Deployment instructions
+## `/execute` Contract
 
-### Standard Node deployment
+### Request
 
-1. Provision a Node.js 18+ runtime.
-2. Set environment variables:
-   - `PORT`
-   - `NEXT_PUBLIC_API_URL=https://api.qrv.network` (or `API_BASE_URL` for legacy compatibility)
-   - `NODE_ENV=production`
-3. Install dependencies with `npm install --omit=dev`.
-4. Start the service with `npm start`.
-5. Map the public domain `verify.qrv.network` to the running service.
-6. Confirm `/health` responds with the expected JSON payload.
-
-### Docker deployment
-
-Build and run:
-
-```bash
-docker build -t qrv-verify-portal .
-docker run --rm -p 3000:3000 --env-file .env qrv-verify-portal
+```json
+{
+  "task": "required non-empty string",
+  "agent": "optional",
+  "metadata": {}
+}
 ```
 
-## Security and reliability notes
+### Responses
 
-- Client input is sanitized and validated before use.
-- The portal never connects directly to a database.
-- `api.qrv.network` is the verification data source for this portal, configured via `NEXT_PUBLIC_API_URL`.
-- API timeouts trigger a single retry before showing an unavailable state.
-- The service logs verification lookups for simple operational analytics.
+- `400` when `task` is missing or invalid
+- `200` when `task` is present and valid
 
-## Running checks
+## Hostinger Deployment (Node Hosting)
 
-```bash
-npm run check
-npm run validate:enforcement
-npm test
-```
+Use the following steps as-is for a small production deployment.
 
-## Git initialization and push commands
+### 1) Create Node app in Hostinger hPanel
 
-If you are starting from a fresh local clone or a new repository, use:
+- Go to **Websites → Manage → Advanced → Node.js**
+- Create a Node.js app with:
+  - **Node version:** `20.x`
+  - **Application root:** project folder (for example `onegodian-api`)
+  - **Startup file/command:** `npm start`
 
-```bash
-git init
-git add .
-git commit -m "Create QR-V verification portal"
-git branch -M main
-git remote add origin <your-repository-url>
-git push -u origin main
-```
+### 2) Upload project files
 
-If the repository is already initialized, use:
+Upload the repository contents to your app root (via Git deployment, File Manager, or SFTP).
+
+### 3) Install dependencies on server
+
+In Hostinger terminal (inside app root):
 
 ```bash
-git add .
-git commit -m "Create QR-V verification portal"
-git push
+npm install
 ```
 
-## License
+### 4) Build TypeScript
 
-MIT
+```bash
+npm run build
+```
+
+### 5) Configure environment variables in hPanel
+
+Set the following variables in Node app settings:
+
+- `NODE_ENV=production`
+- `PORT=<Hostinger assigned port>` (or keep Hostinger-managed value)
+- `CORS_ORIGIN=https://your-frontend-domain.com`
+- `LOG_LEVEL=info`
+
+### 6) Start / Restart application
+
+Use the hPanel Node app controls or run:
+
+```bash
+npm start
+```
+
+### 7) Health-check after deploy
+
+Open:
+
+- `https://<your-domain>/health`
+- `https://<your-domain>/ready`
+
+Expected: HTTP `200` JSON responses.
+
+## Operational Notes
+
+- Security headers enabled via `helmet`
+- CORS allowlist is environment-driven via `CORS_ORIGIN` (comma-separated origins supported)
+- Request body limit set with `express.json({ limit: "1mb" })`
+- Centralized 404 and error handlers included
+- Malformed JSON returns structured `400` and does not crash the process
+- Graceful shutdown is implemented for `SIGINT` and `SIGTERM`

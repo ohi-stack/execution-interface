@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getJob } from "../services/jobService";
 import { requireAuth } from "../middleware/auth";
+import { getJob } from "../services/jobService";
 
 const router = Router();
 
-router.get("/:id", requireAuth, (req, res) => {
+router.get("/:id", requireAuth, (req: any, res: any) => {
   const job = getJob(req.params.id);
 
   if (!job) {

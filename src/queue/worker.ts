@@ -5,7 +5,7 @@ import { logger } from "../utils/logger";
 
 const worker = new Worker(
   "verify",
-  async (job) => {
+  async (job: any) => {
     const { jobId, payload } = job.data as {
       jobId: string;
       payload: { subject: string; type: string; metadata?: Record<string, unknown> };
@@ -32,11 +32,11 @@ const worker = new Worker(
   { connection: redis }
 );
 
-worker.on("completed", (job) => {
+worker.on("completed", (job: any) => {
   logger.info(`Worker completed job ${job.id}`);
 });
 
-worker.on("failed", (job, err) => {
+worker.on("failed", (job: any, err: any) => {
   if (job?.data?.jobId) {
     updateJob(job.data.jobId, {
       status: "failed",

@@ -1,8 +1,7 @@
-import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 
-export function requireAuth(req: Request, res: Response, next: NextFunction) {
+export function requireAuth(req: any, res: any, next: any) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
@@ -13,7 +12,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 
   try {
     const decoded = jwt.verify(token, env.jwtSecret);
-    (req as Request & { auth?: unknown }).auth = decoded;
+    req.auth = decoded;
     return next();
   } catch {
     return res.status(401).json({ error: "Invalid token" });

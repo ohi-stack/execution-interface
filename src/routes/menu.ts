@@ -1,11 +1,11 @@
-import { Request, Router } from "express";
+import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { buildMenu, resolveRole } from "../services/menuService";
 
 const router = Router();
 
-function extractRoleFromRequest(req: Request): string | undefined {
+function extractRoleFromRequest(req: any): string | undefined {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
@@ -15,14 +15,14 @@ function extractRoleFromRequest(req: Request): string | undefined {
   const token = authHeader.replace("Bearer ", "").trim();
 
   try {
-    const decoded = jwt.verify(token, env.jwtSecret) as jwt.JwtPayload;
+    const decoded = jwt.verify(token, env.jwtSecret) as any;
     return typeof decoded.role === "string" ? decoded.role : undefined;
   } catch {
     return undefined;
   }
 }
 
-router.get("/", (req, res) => {
+router.get("/", (req: any, res: any) => {
   const tokenRole = extractRoleFromRequest(req);
   const queryRole =
     typeof req.query.role === "string" ? req.query.role : undefined;

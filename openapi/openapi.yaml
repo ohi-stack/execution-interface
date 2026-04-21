@@ -23,13 +23,36 @@
         "summary": "Verify a record",
         "responses": {
           "200": { "description": "Verification result" },
-          "404": { "description": "Record not found" }
+          "404": { "description": "Record not found" },
+          "429": { "$ref": "#/components/responses/ErrorResponse" }
         }
       }
     },
     "/api/v1/records/{qrvid}/revoke": {
       "post": {
         "summary": "Revoke a record",
+        "responses": {
+          "200": { "description": "Record revoked" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "403": { "$ref": "#/components/responses/ErrorResponse" },
+          "404": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    },
+    "/api/v1/registry/create": {
+      "post": {
+        "summary": "Create a verification record (canonical V1 endpoint)",
+        "responses": {
+          "201": { "description": "Record created" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "403": { "$ref": "#/components/responses/ErrorResponse" },
+          "409": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    },
+    "/api/v1/revoke": {
+      "post": {
+        "summary": "Revoke a record by qrvid (canonical V1 endpoint)",
         "responses": {
           "200": { "description": "Record revoked" },
           "400": { "$ref": "#/components/responses/ErrorResponse" },
@@ -49,7 +72,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["VERIFIED", "REVOKED", "EXPIRED", "NOT_FOUND"]
+            "enum": ["VERIFIED", "REVOKED", "EXPIRED", "NOT_FOUND", "INVALID_SIGNATURE"]
           }
         }
       }

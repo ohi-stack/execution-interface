@@ -10,10 +10,10 @@ const router = Router();
 
 router.get('/health', healthHandler);
 router.use('/api/v1', v1Routes);
-router.use('/', onegodianSiteRoutes);
-router.use('/api', onegodianApiRoutes);
 router.get('/', renderLandingPage);
 router.use('/verify', verificationRoutes);
+router.use('/api', onegodianApiRoutes);
+router.use('/', onegodianSiteRoutes);
 router.get('/:qrvid', renderVerificationResult);
 
 export default router;

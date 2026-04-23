@@ -236,3 +236,7 @@ STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 ONEGODIAN_PROMPT_VERSION=v1.0
 ```
+
+
+### Boundary audit
+- `docs/repo-boundary-report.md`

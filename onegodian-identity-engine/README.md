@@ -2,6 +2,8 @@
 
 Revenue-ready identity commerce platform built with Next.js + TypeScript + Tailwind + Stripe + Supabase + Resend.
 
+For production deployment and launch gating, see [`DEPLOYMENT.md`](./DEPLOYMENT.md).
+
 ## Product features
 
 - User auth-ready flows (signup/signin pages + Supabase compatibility)
@@ -39,7 +41,7 @@ Revenue-ready identity commerce platform built with Next.js + TypeScript + Tailw
    npm run dev
    ```
 
-## Deployment guide (Vercel + Supabase)
+## Deployment guide (Vercel + Supabase, quick start)
 
 1. Push folder to repository and import in Vercel as Next.js app.
 2. Add all `.env.example` variables in Vercel project settings.

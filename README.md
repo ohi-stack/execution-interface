@@ -1,8 +1,16 @@
 # onegodian-api
 
-Production-ready V1 TypeScript + Express API baseline for deployment on Hostinger Node hosting.
+Standalone backend API for **api.onegodian.org** built with TypeScript + Express.
 
-## API Endpoints
+This repository is intentionally backend-only. It does not assume Next.js, frontend commerce pages, or verify-portal runtime behavior.
+
+## Runtime Baseline
+
+- Node.js `20.x`
+- npm `10+`
+- TypeScript build output in `dist/`
+
+## Endpoints
 
 - `GET /`
 - `GET /health`
@@ -11,10 +19,26 @@ Production-ready V1 TypeScript + Express API baseline for deployment on Hostinge
 - `GET /v1/definition`
 - `POST /execute`
 
-## Prerequisites
+## Environment Variables
 
-- Node.js `20.x` (recommended for Hostinger Node deployments)
-- npm `10+`
+Copy `.env.example` to `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Variables:
+
+```env
+PORT=3000
+NODE_ENV=production
+CORS_ORIGIN=https://app.onegodian.org
+LOG_LEVEL=info
+JSON_BODY_LIMIT=1mb
+```
+
+- `CORS_ORIGIN` accepts a comma-separated allowlist.
+- If `LOG_LEVEL=silent`, request logging is disabled.
 
 ## Install
 
@@ -22,127 +46,90 @@ Production-ready V1 TypeScript + Express API baseline for deployment on Hostinge
 npm install
 ```
 
-## Environment Setup
-
-Copy and configure environment variables:
-
-```bash
-cp .env.example .env
-```
-
-`.env.example` values:
-
-```env
-PORT=3000
-NODE_ENV=production
-CORS_ORIGIN=http://localhost:3000
-LOG_LEVEL=info
-```
-
 ## Local Development
-
-Run in watch mode:
 
 ```bash
 npm run dev
 ```
 
-## Build
+## Type Check
 
-Compile TypeScript to `dist/`:
+```bash
+npm run typecheck
+```
+
+## Build
 
 ```bash
 npm run build
 ```
 
-## Start (Production Runtime)
-
-Run compiled output:
+## Start (Production)
 
 ```bash
 npm start
 ```
 
-The server binds to `process.env.PORT`.
+Startup runs the compiled file: `node dist/index.js`.
 
-## `/execute` Contract
+## `/execute` Request Contract
 
-### Request
+### Valid request
 
 ```json
 {
-  "task": "required non-empty string",
-  "agent": "optional",
-  "metadata": {}
+  "task": "Run daily sync",
+  "agent": "scheduler",
+  "metadata": { "source": "manual" }
 }
 ```
 
-### Responses
+### Validation rules
 
-- `400` when `task` is missing or invalid
-- `200` when `task` is present and valid
+- Body must be a JSON object.
+- `task` is required and must be a non-empty string.
+
+### Error behavior
+
+- Invalid JSON returns HTTP `400` with structured error JSON.
+- Missing/invalid `task` returns HTTP `400` with structured error JSON.
 
 ## Hostinger Deployment (Node Hosting)
 
-Use the following steps as-is for a small production deployment.
+Use this exact flow for V1 deployment.
 
-### 1) Create Node app in Hostinger hPanel
-
-- Go to **Websites → Manage → Advanced → Node.js**
-- Create a Node.js app with:
-  - **Node version:** `20.x`
-  - **Application root:** project folder (for example `onegodian-api`)
-  - **Startup file/command:** `npm start`
-
-### 2) Upload project files
-
-Upload the repository contents to your app root (via Git deployment, File Manager, or SFTP).
-
-### 3) Install dependencies on server
-
-In Hostinger terminal (inside app root):
+1. In Hostinger hPanel, open **Websites → Manage → Advanced → Node.js**.
+2. Create/update Node app with:
+   - **Node version:** `20.x`
+   - **App root:** your uploaded repo folder
+   - **Startup command:** `npm start`
+3. Upload repository files to app root (Git/SFTP/File Manager).
+4. Open terminal in app root and run:
 
 ```bash
 npm install
-```
-
-### 4) Build TypeScript
-
-```bash
 npm run build
 ```
 
-### 5) Configure environment variables in hPanel
+5. Configure environment variables in Node app settings:
+   - `NODE_ENV=production`
+   - `PORT` (use Hostinger-provided port if applicable)
+   - `CORS_ORIGIN=https://your-allowed-origin.com`
+   - `LOG_LEVEL=info`
+   - `JSON_BODY_LIMIT=1mb`
+6. Start or restart app from hPanel (or run `npm start`).
+7. Verify health checks:
+   - `https://api.onegodian.org/health`
+   - `https://api.onegodian.org/ready`
 
-Set the following variables in Node app settings:
+Expected result: both URLs return HTTP `200` JSON.
 
-- `NODE_ENV=production`
-- `PORT=<Hostinger assigned port>` (or keep Hostinger-managed value)
-- `CORS_ORIGIN=https://your-frontend-domain.com`
-- `LOG_LEVEL=info`
+## Production Behavior Included
 
-### 6) Start / Restart application
-
-Use the hPanel Node app controls or run:
-
-```bash
-npm start
-```
-
-### 7) Health-check after deploy
-
-Open:
-
-- `https://<your-domain>/health`
-- `https://<your-domain>/ready`
-
-Expected: HTTP `200` JSON responses.
-
-## Operational Notes
-
-- Security headers enabled via `helmet`
-- CORS allowlist is environment-driven via `CORS_ORIGIN` (comma-separated origins supported)
-- Request body limit set with `express.json({ limit: "1mb" })`
-- Centralized 404 and error handlers included
-- Malformed JSON returns structured `400` and does not crash the process
-- Graceful shutdown is implemented for `SIGINT` and `SIGTERM`
+- `helmet` security headers
+- `cors` with env-driven allowlist
+- `morgan` request logging
+- JSON body size limit
+- centralized `404` handler
+- centralized error handler
+- graceful shutdown for `SIGINT` / `SIGTERM`

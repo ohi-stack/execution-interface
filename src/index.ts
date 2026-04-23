@@ -1,61 +1,51 @@
 import dotenv from "dotenv";
+import cors, { CorsOptions } from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
-import cors from "cors";
+import morgan from "morgan";
 
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT || 3000);
-const NODE_ENV = process.env.NODE_ENV || "development";
-const LOG_LEVEL = process.env.LOG_LEVEL || "info";
-const APP_VERSION = process.env.npm_package_version || "1.0.0";
+const port = Number(process.env.PORT || 3000);
+const nodeEnv = process.env.NODE_ENV || "development";
+const logLevel = process.env.LOG_LEVEL || "info";
+const jsonBodyLimit = process.env.JSON_BODY_LIMIT || "1mb";
+const appVersion = process.env.npm_package_version || "1.0.0";
 
 const allowedOrigins = (process.env.CORS_ORIGIN || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) => {
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) => {
     if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("CORS origin is not allowed"));
-  }
-};
-
-const requestLogger = (req: Request, res: Response, next: NextFunction) => {
-  const startedAt = Date.now();
-
-  res.on("finish", () => {
-    if (LOG_LEVEL === "silent") {
+      callback(null, true);
       return;
     }
 
-    const durationMs = Date.now() - startedAt;
-    console.log(
-      `${new Date().toISOString()} ${req.method} ${req.originalUrl} ${res.statusCode} ${durationMs}ms`
-    );
-  });
-
-  next();
+    callback(new Error("Origin not allowed by CORS policy"));
+  }
 };
+
+if (logLevel !== "silent") {
+  app.use(morgan(nodeEnv === "production" ? "combined" : "dev"));
+}
 
 app.disable("x-powered-by");
 app.set("trust proxy", true);
 
 app.use(helmet());
 app.use(cors(corsOptions));
-app.use(requestLogger);
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: jsonBodyLimit }));
 
 app.get("/", (_req, res) => {
   res.status(200).json({
     service: "onegodian-api",
     status: "running",
-    version: APP_VERSION,
-    environment: NODE_ENV,
+    version: appVersion,
+    environment: nodeEnv,
     timestamp: new Date().toISOString()
   });
 });
@@ -64,7 +54,7 @@ app.get("/health", (_req, res) => {
   res.status(200).json({
     ok: true,
     service: "onegodian-api",
-    version: APP_VERSION,
+    version: appVersion,
     timestamp: new Date().toISOString()
   });
 });
@@ -73,7 +63,7 @@ app.get("/ready", (_req, res) => {
   res.status(200).json({
     ready: true,
     service: "onegodian-api",
-    version: APP_VERSION,
+    version: appVersion,
     timestamp: new Date().toISOString()
   });
 });
@@ -82,8 +72,8 @@ app.get("/v1/status", (_req, res) => {
   res.status(200).json({
     status: "ok",
     service: "onegodian-api",
-    version: APP_VERSION,
-    environment: NODE_ENV,
+    version: appVersion,
+    environment: nodeEnv,
     timestamp: new Date().toISOString()
   });
 });
@@ -96,24 +86,30 @@ app.get("/v1/definition", (_req, res) => {
   });
 });
 
-app.post("/execute", (req, res) => {
-  const payload = req.body as { task?: unknown; agent?: unknown; metadata?: unknown };
+type ExecuteRequestBody = {
+  task?: unknown;
+  agent?: unknown;
+  metadata?: unknown;
+};
 
-  if (!payload || typeof payload !== "object") {
+app.post("/execute", (req: Request<unknown, unknown, ExecuteRequestBody>, res) => {
+  const payload = req.body;
+
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     return res.status(400).json({
       success: false,
       error: {
-        code: "INVALID_BODY",
+        code: "INVALID_REQUEST_BODY",
         message: "Request body must be a JSON object"
       }
     });
   }
 
-  if (typeof payload.task !== "string" || payload.task.trim() === "") {
+  if (typeof payload.task !== "string" || payload.task.trim().length === 0) {
     return res.status(400).json({
       success: false,
       error: {
-        code: "MISSING_TASK",
+        code: "TASK_REQUIRED",
         message: "Field 'task' is required and must be a non-empty string"
       }
     });
@@ -123,7 +119,7 @@ app.post("/execute", (req, res) => {
     success: true,
     message: "Execution received",
     data: {
-      task: payload.task,
+      task: payload.task.trim(),
       agent: payload.agent ?? null,
       metadata: payload.metadata ?? null
     },
@@ -147,16 +143,16 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
       success: false,
       error: {
         code: "INVALID_JSON",
-        message: "Malformed JSON in request body"
+        message: "Malformed JSON request body"
       }
     });
   }
 
-  if (err.message === "CORS origin is not allowed") {
+  if (err.message === "Origin not allowed by CORS policy") {
     return res.status(403).json({
       success: false,
       error: {
-        code: "CORS_DENIED",
+        code: "CORS_ORIGIN_DENIED",
         message: err.message
       }
     });
@@ -173,16 +169,16 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`onegodian-api listening on port ${PORT}`);
+const server = app.listen(port, () => {
+  console.log(`onegodian-api listening on port ${port}`);
 });
 
-const shutdown = (signal: string) => {
-  console.log(`Received ${signal}. Starting graceful shutdown...`);
+const gracefulShutdown = (signal: string) => {
+  console.log(`Received ${signal}; shutting down gracefully...`);
 
-  server.close((err) => {
-    if (err) {
-      console.error("Error during server shutdown:", err);
+  server.close((closeError) => {
+    if (closeError) {
+      console.error("Failed to close server cleanly:", closeError);
       process.exit(1);
     }
 
@@ -191,10 +187,10 @@ const shutdown = (signal: string) => {
   });
 
   setTimeout(() => {
-    console.error("Forced shutdown after timeout.");
+    console.error("Graceful shutdown timed out; forcing exit.");
     process.exit(1);
-  }, 10_000).unref();
+  }, 10000).unref();
 };
 
-process.on("SIGINT", () => shutdown("SIGINT"));
-process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));

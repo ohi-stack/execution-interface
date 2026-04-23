@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import app from './src/app.js';
-import { env } from './src/config/env.js';
 
 dotenv.config();
+const { env } = await import('./src/config/env.js');
 
 const port = env.PORT;
 const host = '0.0.0.0';

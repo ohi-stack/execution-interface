@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
-    "check": "node --check server.js && node --check src/app.js && node --check src/config/env.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/issuerController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/routes/issuerRoutes.js && node --check src/routes/api/v1Routes.js && node --check src/services/verificationService.js && node --check src/services/recordStore.js && node --check src/services/issuerRegistry.js && node --check src/services/policyService.js && node --check src/services/auditLogService.js && node --check src/services/schemaRegistry.js && node --check src/middleware/validateSchema.js && node --check src/middleware/issuerAuth.js && node --check src/middleware/jwtAuth.js && node --check src/middleware/rateLimit.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/issuerView.js && node --check src/views/resultView.js",
+    "check": "node scripts/check-syntax.mjs",
     "validate:enforcement": "node scripts/validate-enforcement.mjs",
     "test": "node --test"
   },

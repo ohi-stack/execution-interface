@@ -1,0 +1,18 @@
+{
+  "tenantId": "tenant-a",
+  "overrides": {
+    "policy": {
+      "defaultOutcome": "DENY",
+      "defaultReasonCode": "TENANT_LOCKDOWN",
+      "rules": []
+    },
+    "rpcRouter": {
+      "requestTimeoutMs": 2000
+    },
+    "telemetry": {
+      "public": {
+        "redactedFields": ["status"]
+      }
+    }
+  }
+}

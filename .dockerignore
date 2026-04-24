@@ -1,0 +1,9 @@
+.git
+.gitignore
+node_modules
+npm-debug.log
+coverage
+dist
+**/dist
+**/node_modules
+.next

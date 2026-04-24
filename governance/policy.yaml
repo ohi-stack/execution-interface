@@ -63,15 +63,14 @@
         "migration_review_required"
       ]
     },
-    "create_agent_profile": {
+    "execute_workflow": {
       "allow_roles": [
-        "anonymous",
         "admin",
-        "issuer"
+        "maintainer"
       ],
       "obligations": [
-        "log_audit_event",
-        "validate_agent_profile_schema"
+        "execution_id_required",
+        "audit_trace_required"
       ]
     }
   }

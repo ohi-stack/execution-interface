@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import portalRoutes from './routes/index.js';
+import executionV1Routes from './routes/api/executionV1Routes.js';
+import { versionHandler } from './controllers/healthController.js';
 import { renderResultView } from './views/resultView.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +24,8 @@ app.use((req, _res, next) => {
   next();
 });
 
+app.use('/v1', executionV1Routes);
+app.get('/version', versionHandler);
 app.use('/', portalRoutes);
 
 app.use((req, res) => {

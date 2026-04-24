@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validators } from './schemaRegistry.js';
+import { buildErrorResponse } from '../utils/apiError.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,24 +47,22 @@ export const enforcePolicy = (action) => (req, res, next) => {
   const validation = validators.policyDecision(decision);
 
   if (!validation.isValid) {
-    return res.status(500).json({
+    return res.status(500).json(buildErrorResponse({
       error: 'Policy decision validation failed',
       code: 'POLICY_DECISION_INVALID',
       details: validation.errors,
-      timestamp_utc: new Date().toISOString(),
-    });
+    }));
   }
 
   req.policyDecision = decision;
 
   if (decision.decision !== 'allow') {
-    return res.status(403).json({
+    return res.status(403).json(buildErrorResponse({
       error: 'Policy denied action',
       code: 'POLICY_DENY',
       details: [decision.reason],
       obligations: decision.obligations,
-      timestamp_utc: new Date().toISOString(),
-    });
+    }));
   }
 
   return next();

@@ -45,6 +45,26 @@ export const postRevokeRecord = (req, res) => {
   return res.status(200).json(result.record);
 };
 
+
+
+export const postRevokeRecordByBody = (req, res) => {
+  const { qrvid, ...revokePayload } = req.body;
+  const result = revokeRecord(qrvid, revokePayload);
+
+  logAuditEvent({
+    event_type: 'record.revoke',
+    actor: actorRole(req),
+    target: qrvid,
+    decision: req.policyDecision,
+  });
+
+  if (!result.ok) {
+    return res.status(result.statusCode).json(result.error);
+  }
+
+  return res.status(200).json(result.record);
+};
+
 export const getVerifyRecord = (req, res) => {
   const qrvid = req.params.qrvid;
   const result = verifyRecord(qrvid);

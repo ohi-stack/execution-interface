@@ -17,6 +17,8 @@ final class OG_LMS_Plugin
 
         OG_LMS_Course_Renderer::register_shortcodes();
         OG_LMS_Student_Dashboard_Shortcode::register();
+        OG_LMS_Emails::bootstrap();
+        OG_LMS_Migrations::run();
 
         OG_LMS_WooCommerce_Integration::bootstrap();
         OG_LMS_Live_Classes::bootstrap();

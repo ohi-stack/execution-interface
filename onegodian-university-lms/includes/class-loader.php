@@ -13,8 +13,11 @@ require_once OG_LMS_PLUGIN_PATH . 'includes/class-security.php';
 require_once OG_LMS_PLUGIN_PATH . 'includes/class-roles.php';
 require_once OG_LMS_PLUGIN_PATH . 'includes/class-assets.php';
 require_once OG_LMS_PLUGIN_PATH . 'includes/class-helpers.php';
+require_once OG_LMS_PLUGIN_PATH . 'includes/class-emails.php';
+require_once OG_LMS_PLUGIN_PATH . 'includes/class-migrations.php';
 
 require_once OG_LMS_PLUGIN_PATH . 'modules/enrollments/class-enrollment-service.php';
+require_once OG_LMS_PLUGIN_PATH . 'modules/memberships/class-membership-service.php';
 require_once OG_LMS_PLUGIN_PATH . 'modules/courses/class-course-renderer.php';
 require_once OG_LMS_PLUGIN_PATH . 'modules/quizzes/class-quiz-engine.php';
 require_once OG_LMS_PLUGIN_PATH . 'modules/certificates/class-certificate-generator.php';

@@ -8,6 +8,13 @@
                 <?php foreach ($courses as $course) : ?>
                     <li>
                         <a href="<?php echo esc_url($course['url']); ?>"><?php echo esc_html($course['title']); ?></a>
+                        <span> — <?php echo esc_html(number_format((float) $course['progress_percent'], 2)); ?>%</span>
+                        <?php if ((float) $course['progress_percent'] >= 100) : ?>
+                            <button
+                                class="og-lms-issue-certificate"
+                                data-course-id="<?php echo esc_attr((string) $course['id']); ?>"
+                            ><?php echo esc_html__('Issue Certificate', OG_LMS_TEXT_DOMAIN); ?></button>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>

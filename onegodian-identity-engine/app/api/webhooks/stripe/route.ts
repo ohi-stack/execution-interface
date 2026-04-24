@@ -18,20 +18,29 @@ export async function POST(req: Request) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    await supabaseAdmin.from('orders').insert({
-      stripe_session_id: session.id,
-      email: session.customer_details?.email,
-      tier: session.metadata?.tier,
-      artifact_id: session.metadata?.artifactId,
-      referral_code: session.metadata?.referralCode,
-      amount_total: session.amount_total,
-      paid_at: new Date().toISOString()
-    });
 
-    await supabaseAdmin
-      .from('identity_artifacts')
-      .update({ preview_only: false, hd_ready: true })
-      .eq('id', session.metadata?.artifactId);
+    const { data: existing } = await supabaseAdmin
+      .from('orders')
+      .select('id')
+      .eq('stripe_session_id', session.id)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabaseAdmin.from('orders').insert({
+        stripe_session_id: session.id,
+        email: session.customer_details?.email,
+        tier: session.metadata?.tier,
+        artifact_id: session.metadata?.artifactId,
+        referral_code: session.metadata?.referralCode,
+        amount_total: session.amount_total,
+        paid_at: new Date().toISOString()
+      });
+
+      await supabaseAdmin
+        .from('identity_artifacts')
+        .update({ preview_only: false, hd_ready: true })
+        .eq('id', session.metadata?.artifactId);
+    }
   }
 
   return NextResponse.json({ ok: true });

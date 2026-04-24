@@ -8,7 +8,8 @@ const serverSchema = z.object({
   STRIPE_SECRET_KEY: z.string().min(1),
   STRIPE_WEBHOOK_SECRET: z.string().min(1),
   RESEND_API_KEY: z.string().min(1),
-  ADMIN_EMAILS: z.string().min(1)
+  ADMIN_EMAILS: z.string().min(1),
+  ADMIN_API_TOKEN: z.string().min(16)
 });
 
 export function getEnv() {
@@ -20,6 +21,7 @@ export function getEnv() {
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ?? 'sk_test_dev',
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET ?? 'whsec_dev',
     RESEND_API_KEY: process.env.RESEND_API_KEY ?? 're_dev',
-    ADMIN_EMAILS: process.env.ADMIN_EMAILS ?? 'admin@onegodian.org'
+    ADMIN_EMAILS: process.env.ADMIN_EMAILS ?? 'admin@onegodian.org',
+    ADMIN_API_TOKEN: process.env.ADMIN_API_TOKEN ?? 'dev-admin-token-change-me'
   });
 }

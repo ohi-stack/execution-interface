@@ -45,6 +45,7 @@ class OG_LMS_Student_Dashboard_Shortcode
                 'id' => $id,
                 'title' => get_the_title($id),
                 'url' => get_permalink($id),
+                'progress_percent' => OG_LMS_Progress_Service::get_course_progress($user_id, $id),
             ],
             $course_ids
         );

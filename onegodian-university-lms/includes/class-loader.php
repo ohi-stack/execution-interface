@@ -15,6 +15,7 @@ require_once OG_LMS_PLUGIN_PATH . 'includes/class-assets.php';
 require_once OG_LMS_PLUGIN_PATH . 'includes/class-helpers.php';
 
 require_once OG_LMS_PLUGIN_PATH . 'modules/enrollments/class-enrollment-service.php';
+require_once OG_LMS_PLUGIN_PATH . 'modules/progress/class-progress-service.php';
 require_once OG_LMS_PLUGIN_PATH . 'modules/courses/class-course-renderer.php';
 require_once OG_LMS_PLUGIN_PATH . 'modules/quizzes/class-quiz-engine.php';
 require_once OG_LMS_PLUGIN_PATH . 'modules/certificates/class-certificate-generator.php';

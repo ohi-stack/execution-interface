@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 import { PRODUCTS } from '@/lib/pricing';
 import { stripe } from '@/lib/stripe';
+import { checkRateLimit, clientKey } from '@/lib/rate-limit';
 
 export async function POST(req: Request) {
+  if (!checkRateLimit(`checkout:${clientKey(req)}`, 30, 60_000)) {
+    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+  }
+
   const { tier, artifactId, email, referralCode } = await req.json();
   const product = PRODUCTS.find((p) => p.tier === tier);
 

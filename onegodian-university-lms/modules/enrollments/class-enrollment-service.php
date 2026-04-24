@@ -8,6 +8,10 @@ class OG_LMS_Enrollment_Service
 {
     public static function enroll(int $user_id, int $course_id, string $status = 'active'): int
     {
+        if (self::is_enrolled($user_id, $course_id)) {
+            return 0;
+        }
+
         global $wpdb;
         $table = $wpdb->prefix . 'og_enrollments';
 
@@ -24,7 +28,12 @@ class OG_LMS_Enrollment_Service
             ['%d', '%d', '%s', '%s', '%s', '%s']
         );
 
-        return (int) $wpdb->insert_id;
+        $enrollment_id = (int) $wpdb->insert_id;
+        if ($enrollment_id > 0) {
+            OG_LMS_Helpers::log_activity($user_id, 'enrollment_created', 'course', $course_id, ['enrollment_id' => $enrollment_id]);
+        }
+
+        return $enrollment_id;
     }
 
     public static function is_enrolled(int $user_id, int $course_id): bool

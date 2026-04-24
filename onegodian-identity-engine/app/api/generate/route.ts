@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { supabaseAdmin } from '@/lib/supabase';
+import { checkRateLimit, clientKey } from '@/lib/rate-limit';
 
 const schema = z.object({
   fullName: z.string().min(2),
@@ -9,6 +10,10 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
+  if (!checkRateLimit(`generate:${clientKey(req)}`, 50, 60_000)) {
+    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+  }
+
   const parsed = schema.safeParse(await req.json());
 
   if (!parsed.success) {

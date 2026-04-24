@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getUserByBearer } from '@/lib/auth';
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('userId');
+  const user = await getUserByBearer(req.headers.get('authorization'));
 
-  if (!userId) return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
   const { data, error } = await supabaseAdmin
     .from('download_history')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', user.id)
     .order('downloaded_at', { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: acc-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-acc}
+      POSTGRES_USER: ${POSTGRES_USER:-acc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-acc}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - acc_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-acc} -d ${POSTGRES_DB:-acc}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ocp:
+    image: node:20-alpine
+    container_name: acc-ocp
+    working_dir: /app
+    command: ["node", "src/index.js"]
+    volumes:
+      - ${ACC_OCP_PATH:-/workspace/ocp}:/app
+    ports:
+      - "${OCP_PORT:-4100}:4100"
+    restart: unless-stopped
+
+  acc-api:
+    image: node:20-alpine
+    container_name: acc-api
+    working_dir: /app
+    command: ["node", "src/index.js"]
+    volumes:
+      - ${ACC_API_PATH:-/workspace/acc-api}:/app
+    environment:
+      PORT: 4000
+      OCP_URL: http://ocp:4100
+      DATABASE_URL: postgresql://${POSTGRES_USER:-acc}:${POSTGRES_PASSWORD:-acc}@postgres:5432/${POSTGRES_DB:-acc}
+    ports:
+      - "${ACC_API_PORT:-4000}:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ocp:
+        condition: service_started
+    restart: unless-stopped
+
+  acc-runner:
+    image: node:20-alpine
+    container_name: acc-runner
+    working_dir: /app
+    command: ["sh", "-c", "while true; do node src/index.js; sleep ${RUNNER_POLL_SECONDS:-5}; done"]
+    volumes:
+      - ${ACC_RUNNER_PATH:-/workspace/acc-runner}:/app
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-acc}:${POSTGRES_PASSWORD:-acc}@postgres:5432/${POSTGRES_DB:-acc}
+      ACC_API_URL: http://acc-api:4000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      acc-api:
+        condition: service_started
+    restart: unless-stopped
+
+  acc-web:
+    image: node:20-alpine
+    container_name: acc-web
+    working_dir: /app
+    command: ["node", "server.mjs"]
+    volumes:
+      - ${ACC_WEB_PATH:-/workspace/acc-web}:/app
+    environment:
+      PORT: 3000
+      ACC_API_URL: http://acc-api:4000
+    ports:
+      - "${ACC_WEB_PORT:-3000}:3000"
+    depends_on:
+      acc-api:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  acc_postgres_data:

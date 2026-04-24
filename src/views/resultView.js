@@ -30,15 +30,23 @@ export const renderResultView = ({ pageTitle, qrvid, verification, errorSummary,
           <dd>${escapeHtml(verification.recordType || '—')}</dd>
         </div>
         <div>
-          <dt>Subject</dt>
-          <dd>${escapeHtml(verification.subject || '—')}</dd>
+          <dt>Recipient</dt>
+          <dd>${escapeHtml(verification.recipient || verification.subject || '—')}</dd>
+        </div>
+        <div>
+          <dt>Certificate Title</dt>
+          <dd>${escapeHtml(verification.certificateTitle || '—')}</dd>
+        </div>
+        <div>
+          <dt>Issued Date</dt>
+          <dd>${escapeHtml(verification.issuedDate || '—')}</dd>
         </div>
         <div>
           <dt>Timestamp</dt>
           <dd>${escapeHtml(verification.timestamp || '—')}</dd>
         </div>
         <div>
-          <dt>Hash</dt>
+          <dt>Hash Reference</dt>
           <dd>${escapeHtml(verification.hash || '—')}</dd>
         </div>
         <div>

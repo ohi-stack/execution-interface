@@ -2,14 +2,29 @@ import dotenv from 'dotenv';
 import app from './src/app.js';
 
 dotenv.config();
+const { env } = await import('./src/config/env.js');
 
-const port = Number(process.env.PORT) || 3000;
+const port = env.PORT;
 const host = '0.0.0.0';
 
+process.on('uncaughtException', (error) => {
+  console.error('[fatal] uncaughtException', error);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[fatal] unhandledRejection', reason);
+});
+
 const server = app.listen(port, host, () => {
-  console.log(`QR-V Verification Portal listening on http://${host}:${port}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`API base URL: ${process.env.NEXT_PUBLIC_API_URL || process.env.API_BASE_URL || 'https://api.qrv.network'}`);
+  console.log(`[startup] QR-V Verification Portal listening on http://${host}:${port}`);
+  console.log(`[startup] Environment: ${env.NODE_ENV}`);
+  console.log(`[startup] Base URL: ${env.BASE_URL}`);
+  console.log(`[startup] Verify base URL: ${env.VERIFY_BASE_URL}`);
+  if (env.DATABASE_URL) {
+    console.log('[startup] DATABASE_URL detected (connection is lazy and non-blocking)');
+  } else {
+    console.log('[startup] DATABASE_URL not set (using in-memory runtime store)');
+  }
 });
 
 const shutdown = (signal) => {

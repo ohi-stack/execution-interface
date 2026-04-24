@@ -3,11 +3,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import portalRoutes from './routes/index.js';
 import { renderResultView } from './views/resultView.js';
+import { seedDemoRecord } from './services/recordStore.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+seedDemoRecord();
 
 app.disable('x-powered-by');
 

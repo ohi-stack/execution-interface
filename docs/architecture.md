@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The QR-V™ Verification Portal is the public verification resolution interface for `verify.qrv.network`. It accepts QRVIDs, resolves them through the external verification API configured via `NEXT_PUBLIC_API_URL`, and renders deterministic verification output for end users.
+The QR-V™ Verification Portal is the public verification resolution interface for `verify.qrv.network`. It accepts QRVIDs, resolves them through the verification API configured via `VERIFY_BASE_URL`, and renders deterministic verification output for end users.
 
 ## Request flow
 

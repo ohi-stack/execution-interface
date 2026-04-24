@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export async function POST(req: Request) {
   const { userId } = await req.json();
@@ -8,5 +9,5 @@ export async function POST(req: Request) {
   const { error } = await supabaseAdmin.from('referrals').insert({ user_id: userId, code });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ code, referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing?ref=${code}` });
+  return NextResponse.json({ code, referralUrl: `${getSiteUrl()}/pricing?ref=${code}` });
 }

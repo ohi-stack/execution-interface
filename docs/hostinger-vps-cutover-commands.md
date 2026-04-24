@@ -67,12 +67,12 @@ curl -i https://api.qrv.network/healthz
 curl -i https://issuer.qrv.network/healthz
 curl -i https://verify.qrv.network/healthz
 curl -i https://api.quantumohi.com/healthz
-curl -i https://verify.qrv.network/verify/QRV-SAMPLE-1001
-node /var/www/qrv/scripts/smoke-check-qrv.mjs
+SMOKE_API_KEY="<PROD_API_KEY>" node /var/www/qrv/scripts/smoke-check-qrv.mjs
+curl -i https://verify.qrv.network/verify/QRV-SMOKE-<TIMESTAMP>
 ```
 
 ## Acceptance gates
 - all domains return HTTP 200
 - `/healthz` and `/readyz` return ok payloads
 - no 503 responses in smoke-check output
-- verify endpoint resolves a real QRVID (`QRV-SAMPLE-1001` or production-issued ID)
+- verify endpoint resolves a real QRVID created during smoke run (`QRV-SMOKE-*`) or a production-issued ID

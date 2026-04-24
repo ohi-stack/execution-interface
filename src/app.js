@@ -14,7 +14,8 @@ const app = express();
 
 app.disable('x-powered-by');
 
-const corsOrigins = (process.env.CORS_ORIGINS || '')
+const rawCorsOrigins = process.env.CORS_ORIGINS || process.env.CORS_ORIGIN || process.env.ALLOWED_ORIGINS || '';
+const corsOrigins = rawCorsOrigins
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);

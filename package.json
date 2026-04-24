@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "test:root": "node --test test/*.test.js",
     "validate:prod-env": "node scripts/validate-production-env.mjs",
-    "smoke:prod": "node scripts/production-smoke-check.mjs"
+    "smoke:prod": "node scripts/production-smoke-check.mjs",
+    "detect:config-conflicts": "node scripts/detect-config-conflicts.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -79,6 +79,7 @@ npm run test:root
 npm run build
 npm run check
 node scripts/validate-production-env.mjs
+node scripts/detect-config-conflicts.mjs
 node scripts/production-smoke-check.mjs
 ```
 
@@ -141,3 +142,10 @@ See full pilot runbook: `docs/qrv-certificate-pilot-v1.md`.
 - Ensure URL env vars contain no whitespace or newlines.
 - Use comma-separated `CORS_ORIGINS` including all trusted origins.
 - If `issuer.qrv.network` returns `Cannot GET /login%0A...`, verify routing/proxy rules and URL encoding in redirect settings.
+
+
+## Env precedence / conflict handling
+
+- API base URL precedence: `NEXT_PUBLIC_API_URL` -> `API_BASE_URL` -> `QRV_API_BASE_URL`.
+- CORS precedence: `CORS_ORIGINS` -> `CORS_ORIGIN` -> `ALLOWED_ORIGINS`.
+- Run `npm run detect:config-conflicts` before deploy to catch conflicting values.

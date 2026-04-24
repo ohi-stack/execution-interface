@@ -4,6 +4,7 @@ const records = new Map();
 
 const nowUtc = () => new Date().toISOString();
 
+
 const normalizeRecord = (record) => ({
   qrvid: record.qrvid,
   issuer: record.issuer,

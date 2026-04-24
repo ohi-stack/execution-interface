@@ -149,3 +149,14 @@ See full pilot runbook: `docs/qrv-certificate-pilot-v1.md`.
 - API base URL precedence: `NEXT_PUBLIC_API_URL` -> `API_BASE_URL` -> `QRV_API_BASE_URL`.
 - CORS precedence: `CORS_ORIGINS` -> `CORS_ORIGIN` -> `ALLOWED_ORIGINS`.
 - Run `npm run detect:config-conflicts` before deploy to catch conflicting values.
+
+
+## GitHub merge conflict helper
+
+If GitHub shows "This branch has conflicts", use:
+
+```bash
+./scripts/resolve-github-conflicts.sh main
+```
+
+Reference: `docs/github-conflict-resolution.md`.

@@ -1,4 +1,4 @@
-const QRVID_PATTERN = /^QRV-[A-Z0-9-]{6,64}$/i;
+const QRVID_PATTERN = /^QRV-(PROD|TEST|DEMO)-[A-Z0-9]{2,12}-[0-9]{6}$/i;
 
 export const sanitizeQRVID = (value) => {
   if (typeof value !== 'string') {

@@ -1,12 +1,25 @@
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
 const isUtcDate = (value) => typeof value === 'string' && /Z$/.test(value) && !Number.isNaN(new Date(value).getTime());
+const QRVID_PATTERN = /^QRV-(PROD|TEST|DEMO)-[A-Z0-9]{2,12}-[0-9]{6}$/;
 
 const createRecord = (payload) => {
   const errors = [];
   if (!isObject(payload)) errors.push('body must be an object');
-  const allowed = ['qrvid', 'issuer', 'subject', 'issued_at_utc', 'expires_at_utc', 'metadata_hash'];
+  const allowed = [
+    'qrvid',
+    'issuer',
+    'issuer_id',
+    'subject',
+    'recipient',
+    'certificate_title',
+    'record_type',
+    'issued_at_utc',
+    'expires_at_utc',
+    'metadata_hash',
+    'signature',
+  ];
   for (const key of Object.keys(payload || {})) if (!allowed.includes(key)) errors.push(`unexpected property ${key}`);
-  if (!/^QRV-[A-Z0-9-]{6,64}$/.test(payload?.qrvid || '')) errors.push('qrvid must match QRV pattern');
+  if (!QRVID_PATTERN.test(payload?.qrvid || '')) errors.push('qrvid must match QRV-{ENV}-{TYPE}-{ID} pattern');
   if (!payload?.issuer) errors.push('issuer is required');
   if (!payload?.subject) errors.push('subject is required');
   if (!isUtcDate(payload?.issued_at_utc)) errors.push('issued_at_utc must be UTC date-time');
@@ -18,7 +31,8 @@ const createRecord = (payload) => {
 const revokeRecord = (payload) => {
   const errors = [];
   if (!isObject(payload)) errors.push('body must be an object');
-  const allowed = ['revoked_at_utc', 'reason'];
+  const allowed = ['qrvid', 'revoked_at_utc', 'reason'];
+  if (payload?.qrvid && !QRVID_PATTERN.test(payload.qrvid || '')) errors.push('qrvid must match QRV-{ENV}-{TYPE}-{ID} pattern');
   for (const key of Object.keys(payload || {})) if (!allowed.includes(key)) errors.push(`unexpected property ${key}`);
   if (!isUtcDate(payload?.revoked_at_utc)) errors.push('revoked_at_utc must be UTC date-time');
   if (!payload?.reason || payload.reason.length < 3) errors.push('reason must be at least 3 chars');
@@ -26,7 +40,7 @@ const revokeRecord = (payload) => {
 };
 
 const verifyResponse = (payload) => {
-  const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND']);
+  const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND', 'INVALID_SIGNATURE']);
   const errors = [];
   if (!isObject(payload)) errors.push('payload must be object');
   if (!payload?.qrvid) errors.push('qrvid required');

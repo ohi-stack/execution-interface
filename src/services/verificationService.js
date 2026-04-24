@@ -1,6 +1,7 @@
 import { formatDisplayTimestamp, isValidQRVID, sanitizeQRVID, truncateHash } from '../utils/qrvid.js';
+import { env } from '../config/env.js';
 
-const DEFAULT_API_BASE_URL = 'https://api.qrv.network';
+const DEFAULT_API_BASE_URL = env.VERIFY_BASE_URL;
 const REQUEST_TIMEOUT_MS = 4000;
 const RETRYABLE_STATUS_CODES = new Set([502, 503, 504]);
 
@@ -35,6 +36,8 @@ const normalizeStatus = (status) => {
       return 'EXPIRED';
     case 'NOT_FOUND':
       return 'NOT_FOUND';
+    case 'INVALID_SIGNATURE':
+      return 'INVALID_SIGNATURE';
     case 'INVALID':
       return 'NOT_FOUND';
     default:
@@ -56,24 +59,27 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
       NOT_FOUND: 'badge-invalid',
       REVOKED: 'badge-revoked',
       EXPIRED: 'badge-expired',
+      INVALID_SIGNATURE: 'badge-invalid',
     }[normalizedStatus] || 'badge-invalid',
     issuer: payload?.issuer || null,
-    recordType: payload?.recordType || null,
+    recordType: payload?.record_type || payload?.recordType || null,
+    recipient: payload?.recipient || payload?.subject || payload?.issuedTo || null,
+    certificateTitle: payload?.certificate_title || payload?.title || null,
+    issuedDate: formatDisplayTimestamp(payload?.issued_at_utc || payload?.issuedDate),
     subject: payload?.subject || payload?.issuedTo || null,
-    timestamp: formatDisplayTimestamp(payload?.timestamp),
-    hash: truncateHash(payload?.hash),
+    timestamp: formatDisplayTimestamp(payload?.checked_at_utc || payload?.timestamp),
+    hash: truncateHash(payload?.hash || payload?.metadata_hash),
     raw: payload,
   };
 };
 
-const getApiBaseUrl = () =>
-  process.env.NEXT_PUBLIC_API_URL
-  || process.env.API_BASE_URL
-  || DEFAULT_API_BASE_URL;
+const getApiBaseUrl = () => env.VERIFY_BASE_URL || DEFAULT_API_BASE_URL;
 
 const fetchVerification = async (qrvid) => {
   const apiBaseUrl = getApiBaseUrl();
-  const url = `${apiBaseUrl.replace(/\/$/, '')}/verify/${encodeURIComponent(qrvid)}`;
+  const baseUrl = apiBaseUrl.replace(/\/$/, '');
+  const prefixedBaseUrl = /\/api\/v1$/.test(baseUrl) ? baseUrl : `${baseUrl}/api/v1`;
+  const url = `${prefixedBaseUrl}/verify/${encodeURIComponent(qrvid)}`;
 
   console.log(`[analytics] verification_lookup qrvid=${qrvid} url=${url}`);
 

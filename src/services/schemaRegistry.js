@@ -139,14 +139,15 @@ const authorityPolicyFromSchema = fromAccCoreSchema('authority-policy.schema.jso
 const createRecord = (payload) => {
   const errors = [];
   if (!isObject(payload)) errors.push('body must be an object');
-  const allowed = ['qrvid', 'issuer', 'subject', 'issued_at_utc', 'expires_at_utc', 'metadata_hash'];
+  const allowed = ['qrvid', 'recipient', 'title', 'description', 'issuer', 'issueDate', 'expirationDate', 'metadata', 'issued_at_utc', 'expires_at_utc', 'subject', 'metadata_hash'];
   for (const key of Object.keys(payload || {})) if (!allowed.includes(key)) errors.push(`unexpected property ${key}`);
-  if (!/^QRV-[A-Z0-9-]{6,64}$/.test(payload?.qrvid || '')) errors.push('qrvid must match QRV pattern');
+  if (payload?.qrvid && !/^QRV-[A-Z0-9-]{6,64}$/.test(payload.qrvid)) errors.push('qrvid must match QRV pattern when provided');
   if (!payload?.issuer) errors.push('issuer is required');
-  if (!payload?.subject) errors.push('subject is required');
-  if (!isUtcDate(payload?.issued_at_utc)) errors.push('issued_at_utc must be UTC date-time');
-  if (payload?.expires_at_utc && !isUtcDate(payload.expires_at_utc)) errors.push('expires_at_utc must be UTC date-time');
-  if (!/^[A-Fa-f0-9]{32,128}$/.test(payload?.metadata_hash || '')) errors.push('metadata_hash must be hex string');
+  if (!(payload?.recipient || payload?.subject)) errors.push('recipient is required');
+  if (!payload?.title) errors.push('title is required');
+  if (!isUtcDate(payload?.issueDate || payload?.issued_at_utc)) errors.push('issueDate must be UTC date-time');
+  if ((payload?.expirationDate || payload?.expires_at_utc) && !isUtcDate(payload.expirationDate || payload.expires_at_utc)) errors.push('expirationDate must be UTC date-time');
+  if (payload?.metadata && !isObject(payload.metadata)) errors.push('metadata must be an object');
   return { isValid: errors.length === 0, errors };
 };
 
@@ -161,12 +162,17 @@ const revokeRecord = (payload) => {
 };
 
 const verifyResponse = (payload) => {
-  const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND']);
+  const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND', 'INVALID_FORMAT', 'INVALID_SIGNATURE', 'UNAVAILABLE']);
   const errors = [];
   if (!isObject(payload)) errors.push('payload must be object');
   if (!payload?.qrvid) errors.push('qrvid required');
+  if (!validStatuses.has(payload?.verificationState)) errors.push('verificationState invalid');
   if (!validStatuses.has(payload?.status)) errors.push('status invalid');
-  if (!isUtcDate(payload?.checked_at_utc)) errors.push('checked_at_utc must be UTC date-time');
+  if (typeof payload?.recordType !== 'string') errors.push('recordType required');
+  if (typeof payload?.signatureValid !== 'boolean') errors.push('signatureValid must be boolean');
+  if (typeof payload?.canonicalUrl !== 'string') errors.push('canonicalUrl required');
+  if (typeof payload?.apiUrl !== 'string') errors.push('apiUrl required');
+  if (!isUtcDate(payload?.checkedAt)) errors.push('checkedAt must be UTC date-time');
   return { isValid: errors.length === 0, errors };
 };
 

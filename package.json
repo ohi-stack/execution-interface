@@ -20,8 +20,9 @@
     "node": ">=20"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.0",
-    "cors": "^2.8.5"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

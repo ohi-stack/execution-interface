@@ -60,6 +60,8 @@ PORT=3000
 NEXT_PUBLIC_API_URL=https://api.qrv.network
 API_BASE_URL=https://api.qrv.network
 NODE_ENV=development
+CORS_ORIGINS=http://localhost:3000
+EXECUTE_API_KEY=replace_with_random_secret
 ```
 
 ## Quality gates
@@ -100,3 +102,7 @@ docker run --rm -p 3000:3000 --env-file .env onegodian-verify-portal
 - Input is sanitized server-side before outbound requests.
 - No direct database access is exposed in this service.
 - Unavailable upstream responses render deterministic safe defaults.
+
+
+- Execution endpoint (`POST /execute`) requires `x-api-key` matching `EXECUTE_API_KEY`.
+- Configure `CORS_ORIGINS` in production to a comma-separated allowlist.

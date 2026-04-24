@@ -104,12 +104,14 @@ Returns:
 ```json
 {
   "status": "ok",
-  "service": "verify-portal"
+  "service": "verify-portal",
+  "uptime_seconds": 123,
+  "timestamp_utc": "2026-04-23T00:00:00.000Z"
 }
 ```
 
 ### `GET /version`
-Returns service version and runtime environment.
+Returns service version and runtime environment (`version` comes from `APP_VERSION` or `npm_package_version`).
 
 ## Environment variables
 

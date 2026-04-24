@@ -2,6 +2,20 @@ import { createRecord, getRecord, listRecords, revokeRecord, seedDemoRecord, ver
 import { logAuditEvent } from '../../services/auditLogService.js';
 
 const actorRole = (req) => req.header('x-actor-role') || 'anonymous';
+const nowUtc = () => new Date().toISOString();
+
+const revokeByQrvid = ({ qrvid, revokePayload, actor, decision }) => {
+  const result = revokeRecord(qrvid, revokePayload);
+
+  logAuditEvent({
+    event_type: 'record.revoke',
+    actor,
+    target: qrvid,
+    decision,
+  });
+
+  return result;
+};
 
 export const postRecord = (req, res) => {
   const result = createRecord(req.body);
@@ -22,12 +36,10 @@ export const postRecord = (req, res) => {
 
 export const postRevokeRecord = (req, res) => {
   const qrvid = req.params.qrvid;
-  const result = revokeRecord(qrvid, req.body);
-
-  logAuditEvent({
-    event_type: 'record.revoke',
+  const result = revokeByQrvid({
+    qrvid,
+    revokePayload: req.body,
     actor: actorRole(req),
-    target: qrvid,
     decision: req.policyDecision,
   });
 
@@ -50,7 +62,7 @@ export const getVerifyRecord = (req, res) => {
       decision: 'allow',
       reason: 'public verification',
       obligations: [],
-      evaluated_at_utc: new Date().toISOString(),
+      evaluated_at_utc: nowUtc(),
     },
   });
 
@@ -70,12 +82,22 @@ export const postRevoke = (req, res) => {
       error: 'Invalid request',
       code: 'INVALID_REQUEST',
       details: ['qrvid is required in request body'],
-      timestamp_utc: new Date().toISOString(),
+      timestamp_utc: nowUtc(),
     });
   }
 
-  req.params.qrvid = qrvid;
-  return postRevokeRecord(req, res);
+  const result = revokeByQrvid({
+    qrvid,
+    revokePayload: req.body,
+    actor: actorRole(req),
+    decision: req.policyDecision,
+  });
+
+  if (!result.ok) {
+    return res.status(result.statusCode).json(result.error);
+  }
+
+  return res.status(200).json(result.record);
 };
 
 export const getRegistryRecord = (req, res) => {
@@ -86,7 +108,7 @@ export const getRegistryRecord = (req, res) => {
       error: 'Record not found',
       code: 'NOT_FOUND',
       details: [`qrvid ${req.params.qrvid} does not exist`],
-      timestamp_utc: new Date().toISOString(),
+      timestamp_utc: nowUtc(),
     });
   }
 

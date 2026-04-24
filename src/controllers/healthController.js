@@ -1,3 +1,5 @@
+const appVersion = process.env.APP_VERSION || process.env.npm_package_version || '1.0.0';
+
 export const healthHandler = (_req, res) => {
   res.status(200).json({
     status: 'ok',
@@ -10,7 +12,7 @@ export const healthHandler = (_req, res) => {
 export const versionHandler = (_req, res) => {
   res.status(200).json({
     service: 'verify-portal',
-    version: '1.0.0',
+    version: appVersion,
     node_env: process.env.NODE_ENV || 'development',
     timestamp_utc: new Date().toISOString(),
   });

@@ -1,14 +1,25 @@
 import express from "express";
 import cors from "cors";
+import { env } from "./config/env.js";
+import { logger } from "./utils/logger.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const startedAt = new Date();
 
 app.disable("x-powered-by");
 app.set("trust proxy", true);
 
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
+
+app.use((req, _res, next) => {
+  logger.info("Incoming request", {
+    method: req.method,
+    path: req.path,
+    requestId: req.headers["x-request-id"] ?? null
+  });
+  next();
+});
 
 app.get("/", (_req, res) => {
   res.json({
@@ -26,12 +37,31 @@ app.get("/health", (_req, res) => {
   });
 });
 
+app.get("/health/live", (_req, res) => {
+  res.json({
+    ok: true,
+    status: "live",
+    uptimeSeconds: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get("/health/ready", (_req, res) => {
+  res.json({
+    ok: true,
+    status: "ready",
+    environment: env.NODE_ENV,
+    startedAt: startedAt.toISOString(),
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.get("/v1/status", (_req, res) => {
   res.json({
     status: "ok",
     service: "onegodian-api",
     version: "1.0.0",
-    environment: process.env.NODE_ENV || "production",
+    environment: env.NODE_ENV,
     timestamp: new Date().toISOString()
   });
 });
@@ -54,7 +84,7 @@ app.post("/execute", (req, res) => {
     });
   }
 
-  console.log("Execution request:", {
+  logger.info("Execution request", {
     task,
     agent,
     metadata,
@@ -77,19 +107,19 @@ app.use((_req, res) => {
 });
 
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error("Unhandled error:", err);
+  logger.error("Unhandled error", { message: err.message, stack: err.stack });
   res.status(500).json({
     success: false,
     error: "Internal server error"
   });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`OneGodian API running on port ${PORT}`);
+const server = app.listen(env.PORT, () => {
+  logger.info("OneGodian API started", { port: env.PORT, nodeEnv: env.NODE_ENV });
 });
 
 const shutdown = (signal: string) => {
-  console.log(`Received ${signal}. Shutting down gracefully...`);
+  logger.warn("Received shutdown signal", { signal });
   server.close(() => {
     process.exit(0);
   });

@@ -14,7 +14,8 @@
     "check": "npm run validate:enforcement && npm run lint && npm run typecheck && npm run test && npm run test:root && npm run build",
     "lint": "node scripts/lint.mjs",
     "typecheck": "tsc --noEmit",
-    "test:root": "node --test test/*.test.js"
+    "test:root": "node --test test/*.test.js",
+    "dev": "node --watch server.js"
   },
   "engines": {
     "node": ">=20"

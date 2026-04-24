@@ -44,6 +44,27 @@ router.get('/version', (_req, res) => {
   });
 });
 
+const router = Router();
+
+const redirectIssuerLogin = (req, res) => {
+  const issuerUrl = (process.env.ISSUER_APP_URL || 'https://issuer.qrv.network').trim();
+  const signinUrl = new URL('/signin', issuerUrl);
+
+  const redirectParam = req.query?.redirect || req.query?.next || '';
+  if (typeof redirectParam === 'string' && redirectParam.trim()) {
+    const cleaned = redirectParam.replace(/[\r\n]/g, '').trim();
+    signinUrl.searchParams.set('redirect', cleaned);
+  }
+
+  return res.redirect(302, signinUrl.toString());
+};
+
+// 1) auth/system
+router.get('/health', healthHandler);
+router.get('/login*', redirectIssuerLogin);
+router.get('/healthz', healthHandler);
+router.get('/readyz', readyHandler);
+
 // 2) API/core
 router.post('/registry/create', requireIssuerApiKey, enforcePolicy('create_record'), validateBody('createRecord'), postRecord);
 router.post('/api/v1/revoke/:qrvid', requireIssuerApiKey, enforcePolicy('revoke_record'), validateBody('revokeRecord'), postRevokeRecord);

@@ -24,7 +24,7 @@ for (const rel of mustExist) {
 }
 
 const openapi = JSON.parse(fs.readFileSync(path.join(root, 'openapi/openapi.yaml'), 'utf8'));
-const requiredPaths = ['/api/v1/records', '/api/v1/verify/{qrvid}', '/api/v1/records/{qrvid}/revoke'];
+const requiredPaths = ['/registry/create', '/verify/{qrvid}', '/revoke'];
 for (const p of requiredPaths) {
   if (!openapi.paths?.[p]) {
     throw new Error(`OpenAPI missing path: ${p}`);

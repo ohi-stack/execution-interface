@@ -17,10 +17,16 @@ export const logAuditEvent = ({ event_type, actor, target, decision }) => {
 
   const validation = validators.auditEvent(event);
   if (!validation.isValid) {
-    throw new Error(`Audit event validation failed: ${validation.errors.join('; ')}`);
+    console.error(`[audit] validation failed: ${validation.errors.join('; ')}`);
+    return null;
   }
 
-  auditEvents.push(event);
+  try {
+    auditEvents.push(event);
+  } catch (error) {
+    console.error('[audit] failed to persist audit event', error);
+    return null;
+  }
   return event;
 };
 

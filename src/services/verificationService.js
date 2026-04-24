@@ -33,9 +33,10 @@ const normalizeStatus = (status) => {
       return 'REVOKED';
     case 'EXPIRED':
       return 'EXPIRED';
-    case 'INVALID':
     case 'NOT_FOUND':
-      return 'INVALID';
+      return 'NOT_FOUND';
+    case 'INVALID':
+      return 'NOT_FOUND';
     default:
       return 'INVALID';
   }
@@ -52,7 +53,7 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
     statusLabel: normalizedStatus,
     badgeClass: {
       VERIFIED: 'badge-verified',
-      INVALID: 'badge-invalid',
+      NOT_FOUND: 'badge-invalid',
       REVOKED: 'badge-revoked',
       EXPIRED: 'badge-expired',
     }[normalizedStatus] || 'badge-invalid',
@@ -84,7 +85,7 @@ const fetchVerification = async (qrvid) => {
       const payload = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        if ((response.status === 404) || normalizeStatus(payload?.status) === 'INVALID') {
+        if ((response.status === 404) || normalizeStatus(payload?.status) === 'NOT_FOUND') {
           return buildViewModel(qrvid, payload, 'Record not found');
         }
 
@@ -136,7 +137,7 @@ export const verifyQRVID = async (incomingQRVID) => {
       ok: false,
       qrvid,
       error: 'Invalid identifier format',
-      verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'INVALID', message: 'Invalid identifier format' }, 'Invalid identifier format'),
+      verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'NOT_FOUND', message: 'Invalid identifier format' }, 'Invalid identifier format'),
     };
   }
 

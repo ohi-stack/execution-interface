@@ -2,6 +2,7 @@ import { verifyQRVID } from '../services/verificationService.js';
 import { sanitizeQRVID } from '../utils/qrvid.js';
 import { renderIndexView } from '../views/indexView.js';
 import { renderResultView } from '../views/resultView.js';
+import { renderSystemArchitectureView } from '../views/systemArchitectureView.js';
 
 const basePageModel = {
   pageTitle: 'QR-V™ Verification',
@@ -31,7 +32,7 @@ export const renderVerificationResult = async (req, res) => {
 
   const statusCode = result.verification.status === 'VERIFIED'
     ? 200
-    : result.verification.status === 'INVALID'
+    : result.verification.status === 'NOT_FOUND'
       ? 404
       : result.verification.status === 'UNAVAILABLE'
         ? 503
@@ -43,5 +44,11 @@ export const renderVerificationResult = async (req, res) => {
     verification: result.verification,
     errorSummary: result.ok ? null : result.error,
     autoVerify: true,
+  }));
+};
+
+export const renderSystemArchitecturePage = (_req, res) => {
+  res.status(200).send(renderSystemArchitectureView({
+    pageTitle: 'OneGodian System Architecture',
   }));
 };

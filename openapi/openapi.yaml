@@ -2,44 +2,59 @@
   "openapi": "3.0.3",
   "info": {
     "title": "QR-V Verification V1 Enforcement API",
-    "version": "1.0.0",
-    "description": "Runtime-enforced API contracts for issue, verify, and revoke flows."
+    "version": "1.1.0",
+    "description": "Runtime-enforced API contracts for create, verify, and revoke flows."
   },
-  "servers": [{ "url": "/" }],
+  "servers": [{ "url": "/api/v1" }],
   "paths": {
-    "/api/v1/records": {
+    "/registry/create": {
       "post": {
         "summary": "Create a verification record",
+        "security": [{ "ApiKeyAuth": [] }],
         "responses": {
           "201": { "description": "Record created" },
           "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "401": { "$ref": "#/components/responses/ErrorResponse" },
           "403": { "$ref": "#/components/responses/ErrorResponse" },
-          "409": { "$ref": "#/components/responses/ErrorResponse" }
+          "409": { "$ref": "#/components/responses/ErrorResponse" },
+          "429": { "$ref": "#/components/responses/ErrorResponse" }
         }
       }
     },
-    "/api/v1/verify/{qrvid}": {
+    "/verify/{qrvid}": {
       "get": {
         "summary": "Verify a record",
+        "parameters": [{ "name": "qrvid", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "Verification result" },
-          "404": { "description": "Record not found" }
+          "404": { "description": "Record not found" },
+          "429": { "$ref": "#/components/responses/ErrorResponse" }
         }
       }
     },
-    "/api/v1/records/{qrvid}/revoke": {
+    "/revoke": {
       "post": {
         "summary": "Revoke a record",
+        "security": [{ "ApiKeyAuth": [] }],
         "responses": {
           "200": { "description": "Record revoked" },
           "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "401": { "$ref": "#/components/responses/ErrorResponse" },
           "403": { "$ref": "#/components/responses/ErrorResponse" },
-          "404": { "$ref": "#/components/responses/ErrorResponse" }
+          "404": { "$ref": "#/components/responses/ErrorResponse" },
+          "429": { "$ref": "#/components/responses/ErrorResponse" }
         }
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    },
     "responses": {
       "ErrorResponse": { "description": "Structured machine-readable error" }
     },

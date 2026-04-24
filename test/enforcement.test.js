@@ -172,4 +172,34 @@ test('unauthenticated create and revoke are rejected when issuer keys are config
     body: { revoked_at_utc: '2026-04-04T01:00:00Z', reason: 'security incident' },
   });
   assert.equal(revokeRejected.status, 401);
+test('standardized v1 routes support create, verify, and revoke flow', async () => {
+  const create = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/registry/create',
+    headers: { 'x-actor-role': 'issuer' },
+    body: { ...validRecord, qrvid: 'QRV-ENFORCE-STANDARD-01' },
+  });
+
+  assert.equal(create.status, 201);
+
+  const verifyBefore = await jsonRequest({ method: 'GET', path: '/api/v1/verify/QRV-ENFORCE-STANDARD-01' });
+  assert.equal(verifyBefore.status, 200);
+  assert.equal(verifyBefore.body.status, 'VERIFIED');
+
+  const revoke = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/revoke',
+    headers: { 'x-actor-role': 'admin' },
+    body: {
+      qrvid: 'QRV-ENFORCE-STANDARD-01',
+      revoked_at_utc: '2026-04-04T01:00:00Z',
+      reason: 'issuer requested revocation',
+    },
+  });
+
+  assert.equal(revoke.status, 200);
+
+  const verifyAfter = await jsonRequest({ method: 'GET', path: '/api/v1/verify/QRV-ENFORCE-STANDARD-01' });
+  assert.equal(verifyAfter.status, 200);
+  assert.equal(verifyAfter.body.status, 'REVOKED');
 });

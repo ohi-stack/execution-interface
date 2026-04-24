@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getSiteUrl } from '@/lib/siteUrl';
 
 const schema = z.object({
   fullName: z.string().min(2),
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     artifactId: data.id,
     previewText,
-    declaration: `${process.env.NEXT_PUBLIC_SITE_URL}/placeholder/declaration-preview.svg`,
-    seal: `${process.env.NEXT_PUBLIC_SITE_URL}/placeholder/seal-preview.svg`
+    declaration: `${getSiteUrl()}/placeholder/declaration-preview.svg`,
+    seal: `${getSiteUrl()}/placeholder/seal-preview.svg`
   });
 }

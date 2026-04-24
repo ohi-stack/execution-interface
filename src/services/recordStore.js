@@ -12,6 +12,20 @@ const nowUtc = () => new Date().toISOString();
 const resolveSigningSecret = () => {
   if (process.env.QRV_SIGNING_SECRET) {
     return process.env.QRV_SIGNING_SECRET;
+
+const normalizeRecord = (record) => ({
+  qrvid: record.qrvid,
+  issuer: record.issuer,
+  subject: record.subject,
+  issued_at_utc: record.issued_at_utc,
+  expires_at_utc: record.expires_at_utc || null,
+  revoked_at_utc: record.revoked_at_utc || null,
+  metadata_hash: record.metadata_hash,
+});
+
+const getStatus = (record) => {
+  if (!record) {
+    return 'NOT_FOUND';
   }
 
   if (process.env.NODE_ENV === 'production') {

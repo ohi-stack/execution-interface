@@ -1,0 +1,16 @@
+{
+  "name": "onegodian/university-lms",
+  "description": "Proprietary LMS plugin for University of Onegodian",
+  "type": "wordpress-plugin",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "classmap": [
+      "includes/",
+      "modules/",
+      "public/"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OHI Pipeline Audit Event",
+  "type": "object",
+  "required": [
+    "event_type",
+    "request_id",
+    "started_at",
+    "completed_at",
+    "compared_count",
+    "filtered_count",
+    "selected_model_id",
+    "simulated"
+  ],
+  "properties": {
+    "event_type": { "const": "ohi_pipeline_run" },
+    "request_id": { "type": "string" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "compared_count": { "type": "integer", "minimum": 0 },
+    "filtered_count": { "type": "integer", "minimum": 0 },
+    "selected_model_id": { "type": ["string", "null"] },
+    "simulated": { "type": "boolean" }
+  }
+}

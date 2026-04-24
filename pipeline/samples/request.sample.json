@@ -1,0 +1,20 @@
+{
+  "requestId": "req-1001",
+  "filters": {
+    "minConfidence": 0.7
+  },
+  "candidates": [
+    {
+      "model_id": "model-a",
+      "source": "provider-a",
+      "confidence": 0.72,
+      "output_text": "Candidate output A"
+    },
+    {
+      "model_id": "model-b",
+      "source": "provider-b",
+      "confidence": 0.65,
+      "output_text": "Candidate output B"
+    }
+  ]
+}

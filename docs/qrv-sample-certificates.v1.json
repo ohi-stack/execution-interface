@@ -1,0 +1,12 @@
+[
+  {"qrvid":"QRV-SAMPLE-1001","issuer":"issuer-qrv-prod-001","subject":"student-1001","issued_at_utc":"2026-04-24T00:00:00Z","metadata_hash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  {"qrvid":"QRV-SAMPLE-1002","issuer":"issuer-qrv-prod-001","subject":"student-1002","issued_at_utc":"2026-04-24T00:01:00Z","metadata_hash":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  {"qrvid":"QRV-SAMPLE-1003","issuer":"issuer-qrv-prod-001","subject":"student-1003","issued_at_utc":"2026-04-24T00:02:00Z","metadata_hash":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"},
+  {"qrvid":"QRV-SAMPLE-1004","issuer":"issuer-qrv-prod-002","subject":"worker-2001","issued_at_utc":"2026-04-24T00:03:00Z","metadata_hash":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+  {"qrvid":"QRV-SAMPLE-1005","issuer":"issuer-qrv-prod-002","subject":"worker-2002","issued_at_utc":"2026-04-24T00:04:00Z","metadata_hash":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+  {"qrvid":"QRV-SAMPLE-1006","issuer":"issuer-qrv-prod-002","subject":"worker-2003","issued_at_utc":"2026-04-24T00:05:00Z","metadata_hash":"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
+  {"qrvid":"QRV-SAMPLE-1007","issuer":"issuer-qrv-prod-003","subject":"pro-3001","issued_at_utc":"2026-04-24T00:06:00Z","metadata_hash":"1111111111111111111111111111111111111111111111111111111111111111"},
+  {"qrvid":"QRV-SAMPLE-1008","issuer":"issuer-qrv-prod-003","subject":"pro-3002","issued_at_utc":"2026-04-24T00:07:00Z","metadata_hash":"2222222222222222222222222222222222222222222222222222222222222222"},
+  {"qrvid":"QRV-SAMPLE-1009","issuer":"issuer-qrv-prod-003","subject":"pro-3003","issued_at_utc":"2026-04-24T00:08:00Z","metadata_hash":"3333333333333333333333333333333333333333333333333333333333333333"},
+  {"qrvid":"QRV-SAMPLE-1010","issuer":"issuer-qrv-prod-003","subject":"pro-3004","issued_at_utc":"2026-04-24T00:09:00Z","metadata_hash":"4444444444444444444444444444444444444444444444444444444444444444"}
+]

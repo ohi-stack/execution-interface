@@ -1,7 +1,14 @@
 node_modules/
+dist/
 .env
-npm-debug.log*
-.DS_Store
+.env.*
+logs/
+*.log
 coverage/
 
-dist/
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

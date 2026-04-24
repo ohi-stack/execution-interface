@@ -1,102 +1,104 @@
-# OneGodian Verify Portal
+# Onegodian API (Backend Hub)
 
-`onegodian-verify-portal` is the public verification resolution interface for the OneGodian ecosystem and the QR-V™ Global Verification Network. It is designed to run at `https://verify.qrv.network` and resolve QRVID lookups against `https://api.qrv.network`.
+This repository provides the production backend API for **api.Onegodian.org**.
 
-## What this service does
+It is a minimal TypeScript + Express service for ONEGODIAN, LLC, designed for deployment in a standard Node.js hosting environment (including Hostinger).
 
-- Resolves QRVIDs from direct URLs or manual input.
-- Calls the upstream verification API (`GET /verify/:qrvid`).
-- Renders deterministic states (`VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`, `UNAVAILABLE`).
-- Exposes governance APIs under `/api/omos` and verification core APIs under `/api/v1`.
-- Provides operational health and architecture views.
+## What this API does
+
+- Serves system metadata and health endpoints.
+- Exposes status and Onegodian definition endpoints.
+- Accepts execution requests at `/execute` with safe request validation.
+- Returns production-safe JSON errors for unknown routes and server failures.
 
 ## Routes
 
-### Auth/System
-- `GET /health`
+- `GET /` - service metadata
+- `GET /health` - health check
+- `GET /v1/status` - version + environment + timestamp
+- `GET /v1/definition` - Onegodian definition payload
+- `POST /execute` - validated execution request
 
-### API/Core
-- `POST /api/v1/records`
-- `GET /api/v1/verify/:qrvid`
-- `POST /api/v1/records/:qrvid/revoke`
-- `GET /api/omos/identity-definition`
-- `POST /api/omos/classify`
-- `POST /api/omos/align`
-- `POST /api/omos/timestamp/convert`
-- `POST /api/omos/decision/run`
+## Prerequisites
 
-### Pages/UI
-- `GET /`
-- `GET /system-architecture`
-- `POST /verify`
-- `GET /verify/:qrvid`
-- `GET /:qrvid`
-
-## Quickstart
-
-### Requirements
 - Node.js 20+
 - npm 10+
 
-### Setup
+## Local setup
+
 ```bash
 npm install
 cp .env.example .env
 ```
 
-### Run
-```bash
-npm run build
-npm start
-```
-Open `http://localhost:3000`.
+Then update `.env` with your values.
 
 ## Environment variables
 
-Use `.env.example` as your baseline:
+| Variable | Required | Description |
+|---|---|---|
+| `APP_NAME` | Yes | Service name returned by metadata endpoints |
+| `APP_VERSION` | Yes | Service version returned by status endpoints |
+| `NODE_ENV` | No | `development`, `test`, or `production` (defaults to `development`) |
+| `PORT` | No | HTTP port (defaults to `3000` for local dev only) |
+| `CORS_ORIGINS` | No | Comma-separated allowed origins |
+| `TRUST_PROXY` | No | `true` or `false` for reverse proxy trust |
 
-```env
-PORT=3000
-NEXT_PUBLIC_API_URL=https://api.qrv.network
-API_BASE_URL=https://api.qrv.network
-NODE_ENV=development
-```
+## Build and run
 
-## Quality gates
+Build:
 
 ```bash
-npm run lint
-npm run typecheck
-npm test
-npm run test:root
 npm run build
-npm run check
 ```
 
-## Deployment
+Run compiled app:
 
-### Standard Node runtime
-1. Build the app with `npm run build`.
-2. Install production deps with `npm install --omit=dev`.
-3. Set `NODE_ENV=production` and API URL env vars.
-4. Start using `npm start`.
-5. Verify `GET /health`.
-
-### Docker
 ```bash
-docker build -t onegodian-verify-portal .
-docker run --rm -p 3000:3000 --env-file .env onegodian-verify-portal
+npm start
 ```
 
-## Troubleshooting
+Development watch mode:
 
-- **`npm run build` fails with missing type declarations**: run `npm install` to ensure dev dependencies are present.
-- **`/verify/:qrvid` shows unavailable**: validate outbound network access and `NEXT_PUBLIC_API_URL`.
-- **Invalid identifier errors**: ensure values follow `QRV-123456789` format.
-- **Port collision**: set `PORT` to an open port.
+```bash
+npm run dev
+```
 
-## Security notes
+## Hostinger deployment steps
 
-- Input is sanitized server-side before outbound requests.
-- No direct database access is exposed in this service.
-- Unavailable upstream responses render deterministic safe defaults.
+1. Push this repository to your deployment source.
+2. In Hostinger Node.js settings, set runtime to Node.js 20+.
+3. Set environment variables from `.env.example` in Hostinger panel.
+4. Install dependencies:
+   ```bash
+   npm install
+   ```
+5. Build the application:
+   ```bash
+   npm run build
+   ```
+6. Set startup command:
+   ```bash
+   npm start
+   ```
+7. Ensure your `api.Onegodian.org` DNS/host mapping points to this Node app.
+8. Verify health endpoint after deploy.
+
+## Expected health-check URL
+
+- `https://api.onegodian.org/health`
+
+Expected response shape:
+
+```json
+{
+  "ok": true,
+  "timestamp": "2026-01-01T00:00:00.000Z"
+}
+```
+
+## Notes
+
+- The server binds to `process.env.PORT` (with local default fallback only).
+- CORS allowed origins are configured only via environment variable (`CORS_ORIGINS`).
+- Runtime intentionally avoids governance/state-authority claims and remains commercial/private enterprise aligned for ONEGODIAN, LLC.

@@ -38,14 +38,16 @@ test.after(async () => {
 
 test.beforeEach(() => {
   resetRecordStore();
+  delete process.env.QRV_ISSUER_KEYS;
 });
 
 const validRecord = {
   qrvid: 'QRV-ENFORCE-1001',
   issuer: 'issuer-qrv',
-  subject: 'subject-1',
-  issued_at_utc: '2026-04-04T00:00:00Z',
-  metadata_hash: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+  recipient: 'subject-1',
+  title: 'Pilot Certificate',
+  issueDate: '2026-04-04T00:00:00Z',
+  metadata: { cohort: 'test' },
 };
 
 test('invalid create payload is rejected with structured 4xx error', async () => {
@@ -91,7 +93,7 @@ test('status logic returns VERIFIED, REVOKED, EXPIRED, and NOT_FOUND determinist
     method: 'POST',
     path: '/api/v1/records',
     headers: { 'x-actor-role': 'issuer' },
-    body: { ...validRecord, qrvid: 'QRV-ENFORCE-EXPIRED', expires_at_utc: '2020-01-01T00:00:00Z' },
+    body: { ...validRecord, qrvid: 'QRV-ENFORCE-EXPIRED', expirationDate: '2020-01-01T00:00:00Z' },
   });
 
   const verified = await jsonRequest({ method: 'GET', path: '/api/v1/verify/QRV-ENFORCE-VERIFIED' });
@@ -138,6 +140,38 @@ test('invalid revoke payload is rejected with structured 4xx error', async () =>
 });
 
 
+test('invalid qrvid returns INVALID_FORMAT', async () => {
+  const invalid = await jsonRequest({ method: 'GET', path: '/api/v1/verify/not-valid-id' });
+  assert.equal(invalid.status, 400);
+  assert.equal(invalid.body.status, 'INVALID_FORMAT');
+});
+
+test('unauthenticated create and revoke are rejected when issuer keys are configured', async () => {
+  process.env.QRV_ISSUER_KEYS = 'issuer-qrv:secret-key';
+
+  const createRejected = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/records',
+    headers: { 'x-actor-role': 'issuer', 'x-issuer-id': 'issuer-qrv' },
+    body: validRecord,
+  });
+  assert.equal(createRejected.status, 401);
+
+  const createOk = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/records',
+    headers: { 'x-actor-role': 'issuer', 'x-issuer-id': 'issuer-qrv', 'x-issuer-key': 'secret-key' },
+    body: validRecord,
+  });
+  assert.equal(createOk.status, 201);
+
+  const revokeRejected = await jsonRequest({
+    method: 'POST',
+    path: '/api/v1/revoke/QRV-ENFORCE-1001',
+    headers: { 'x-actor-role': 'admin', 'x-issuer-id': 'issuer-qrv' },
+    body: { revoked_at_utc: '2026-04-04T01:00:00Z', reason: 'security incident' },
+  });
+  assert.equal(revokeRejected.status, 401);
 test('standardized v1 routes support create, verify, and revoke flow', async () => {
   const create = await jsonRequest({
     method: 'POST',

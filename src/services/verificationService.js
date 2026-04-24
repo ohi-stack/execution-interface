@@ -37,13 +37,19 @@ const normalizeStatus = (status) => {
       return 'NOT_FOUND';
     case 'INVALID':
       return 'NOT_FOUND';
+    case 'INVALID_FORMAT':
+      return 'INVALID_FORMAT';
+    case 'INVALID_SIGNATURE':
+      return 'INVALID_SIGNATURE';
+    case 'UNAVAILABLE':
+      return 'UNAVAILABLE';
     default:
-      return 'INVALID';
+      return 'UNAVAILABLE';
   }
 };
 
 const buildViewModel = (qrvid, payload, fallbackMessage) => {
-  const normalizedStatus = normalizeStatus(payload?.status);
+  const normalizedStatus = normalizeStatus(payload?.verificationState || payload?.status);
   const message = payload?.message || fallbackMessage;
 
   return {
@@ -56,11 +62,14 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
       NOT_FOUND: 'badge-invalid',
       REVOKED: 'badge-revoked',
       EXPIRED: 'badge-expired',
+      INVALID_FORMAT: 'badge-invalid',
+      INVALID_SIGNATURE: 'badge-invalid',
+      UNAVAILABLE: 'badge-unavailable',
     }[normalizedStatus] || 'badge-invalid',
     issuer: payload?.issuer || null,
     recordType: payload?.recordType || null,
     subject: payload?.subject || payload?.issuedTo || null,
-    timestamp: formatDisplayTimestamp(payload?.timestamp),
+    timestamp: formatDisplayTimestamp(payload?.checkedAt || payload?.timestamp),
     hash: truncateHash(payload?.hash),
     raw: payload,
   };
@@ -69,6 +78,7 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
 const getApiBaseUrl = () =>
   process.env.NEXT_PUBLIC_API_URL
   || process.env.API_BASE_URL
+  || process.env.QRV_API_BASE_URL
   || DEFAULT_API_BASE_URL;
 
 const fetchVerification = async (qrvid) => {
@@ -85,7 +95,7 @@ const fetchVerification = async (qrvid) => {
       const payload = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        if ((response.status === 404) || normalizeStatus(payload?.status) === 'NOT_FOUND') {
+        if ((response.status === 404) || normalizeStatus(payload?.verificationState || payload?.status) === 'NOT_FOUND') {
           return buildViewModel(qrvid, payload, 'Record not found');
         }
 
@@ -94,11 +104,11 @@ const fetchVerification = async (qrvid) => {
           continue;
         }
 
-        if (normalizeStatus(payload?.status) === 'REVOKED') {
+        if (normalizeStatus(payload?.verificationState || payload?.status) === 'REVOKED') {
           return buildViewModel(qrvid, payload, 'Record revoked');
         }
 
-        if (normalizeStatus(payload?.status) === 'EXPIRED') {
+        if (normalizeStatus(payload?.verificationState || payload?.status) === 'EXPIRED') {
           return buildViewModel(qrvid, payload, 'Record expired');
         }
 

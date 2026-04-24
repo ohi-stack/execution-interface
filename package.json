@@ -14,12 +14,18 @@
     "check": "npm run validate:enforcement && npm run lint && npm run typecheck && npm run test && npm run test:root && npm run build",
     "lint": "node scripts/lint.mjs",
     "typecheck": "tsc --noEmit",
-    "test:root": "node --test test/*.test.js"
+    "test:root": "node --test test/*.test.js",
+    "validate:prod-env": "node scripts/validate-production-env.mjs",
+    "smoke:prod": "node scripts/production-smoke-check.mjs",
+    "detect:config-conflicts": "node scripts/detect-config-conflicts.mjs"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "pg": "^8.20.0"
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "zod": "^3.25.76"

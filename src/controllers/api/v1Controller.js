@@ -10,8 +10,8 @@ import {
 
 const actorRole = (req) => req.header('x-actor-role') || 'anonymous';
 
-export const postRecord = (req, res) => {
-  const result = createRecord(req.body);
+export const postRecord = async (req, res) => {
+  const result = await createRecord(req.body);
 
   logAuditEvent({
     event_type: 'record.create',
@@ -27,9 +27,9 @@ export const postRecord = (req, res) => {
   return res.status(201).json(result.record);
 };
 
-export const postRevokeRecord = (req, res) => {
+export const postRevokeRecord = async (req, res) => {
   const qrvid = req.params.qrvid;
-  const result = revokeRecord(qrvid, req.body);
+  const result = await revokeRecord(qrvid, req.body);
 
   logAuditEvent({
     event_type: 'record.revoke',
@@ -45,6 +45,7 @@ export const postRevokeRecord = (req, res) => {
   return res.status(200).json(result.record);
 };
 
+export const getVerifyRecord = async (req, res) => {
 
 
 export const postRevokeRecordByBody = (req, res) => {
@@ -67,7 +68,7 @@ export const postRevokeRecordByBody = (req, res) => {
 
 export const getVerifyRecord = (req, res) => {
   const qrvid = req.params.qrvid;
-  const result = verifyRecord(qrvid);
+  const result = await verifyRecord(qrvid);
 
   if (!result.ok) {
     return res.status(result.statusCode).json(result.error);

@@ -6,7 +6,7 @@
 
 - Resolves QRVIDs from direct URLs or manual input.
 - Calls the upstream verification API (`GET /verify/:qrvid`).
-- Renders deterministic states (`VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`, `UNAVAILABLE`).
+- Renders deterministic states (`VERIFIED`, `REVOKED`, `EXPIRED`, `NOT_FOUND`, `INVALID_FORMAT`, `INVALID_SIGNATURE`, `UNAVAILABLE`).
 - Exposes governance APIs under `/api/omos` and verification core APIs under `/api/v1`.
 - Provides operational health and architecture views.
 
@@ -14,10 +14,15 @@
 
 ### Auth/System
 - `GET /health`
+- `GET /healthz`
+- `GET /readyz`
+- `GET /version`
 
 ### API/Core
+- `POST /registry/create`
 - `POST /api/v1/records`
 - `GET /api/v1/verify/:qrvid`
+- `POST /api/v1/revoke/:qrvid`
 - `POST /api/v1/records/:qrvid/revoke`
 - `GET /api/omos/identity-definition`
 - `POST /api/omos/classify`
@@ -73,6 +78,9 @@ npm test
 npm run test:root
 npm run build
 npm run check
+node scripts/validate-production-env.mjs
+node scripts/detect-config-conflicts.mjs
+node scripts/production-smoke-check.mjs
 ```
 
 ## Deployment
@@ -106,3 +114,49 @@ docker run --rm -p 3000:3000 --env-file .env onegodian-verify-portal
 
 - Execution endpoint (`POST /execute`) requires `x-api-key` matching `EXECUTE_API_KEY`.
 - Configure `CORS_ORIGINS` in production to a comma-separated allowlist.
+
+
+## QR-V pilot activation commands
+
+Migration:
+```bash
+psql "$DATABASE_URL" -f db/migrations/001_v1_enforcement.sql
+psql "$DATABASE_URL" -f db/migrations/002_qrv_certificate_v1.sql
+```
+
+Seed canonical pilot record:
+```bash
+node scripts/qrv-pilot-seed.mjs
+```
+
+Verify canonical pilot record:
+```bash
+curl http://localhost:3000/api/v1/verify/QRV-PROD-CERT-000001
+```
+
+See full pilot runbook: `docs/qrv-certificate-pilot-v1.md`.
+
+
+## Hostinger production notes
+
+- Ensure URL env vars contain no whitespace or newlines.
+- Use comma-separated `CORS_ORIGINS` including all trusted origins.
+- If `issuer.qrv.network` returns `Cannot GET /login%0A...`, verify routing/proxy rules and URL encoding in redirect settings.
+
+
+## Env precedence / conflict handling
+
+- API base URL precedence: `NEXT_PUBLIC_API_URL` -> `API_BASE_URL` -> `QRV_API_BASE_URL`.
+- CORS precedence: `CORS_ORIGINS` -> `CORS_ORIGIN` -> `ALLOWED_ORIGINS`.
+- Run `npm run detect:config-conflicts` before deploy to catch conflicting values.
+
+
+## GitHub merge conflict helper
+
+If GitHub shows "This branch has conflicts", use:
+
+```bash
+./scripts/resolve-github-conflicts.sh main
+```
+
+Reference: `docs/github-conflict-resolution.md`.

@@ -1,16 +1,37 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import portalRoutes from './routes/index.js';
 import { renderResultView } from './views/resultView.js';
+import { validateEnvironment } from './services/envValidation.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const envStatus = validateEnvironment();
 const app = express();
 
 app.disable('x-powered-by');
 
+const corsOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOriginValidator = (origin, callback) => {
+  if (!origin) {
+    return callback(null, true);
+  }
+
+  if (corsOrigins.length === 0) {
+    return callback(process.env.NODE_ENV === 'production' ? new Error('Origin not allowed') : null, process.env.NODE_ENV !== 'production');
+  }
+
+  return callback(corsOrigins.includes(origin) ? null : new Error('Origin not allowed'), corsOrigins.includes(origin));
+};
+
+app.use(cors({ origin: corsOriginValidator }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/css', express.static(path.join(__dirname, '../public/css')));
@@ -18,7 +39,7 @@ app.use('/js', express.static(path.join(__dirname, '../public/js')));
 app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
 
 app.use((req, _res, next) => {
-  console.log(`[portal] ${new Date().toISOString()} ${req.method} ${req.originalUrl}`);
+  console.log(`[portal] ${new Date().toISOString()} ${req.method} ${req.originalUrl} env=${envStatus.nodeEnv}`);
   next();
 });
 
@@ -45,10 +66,19 @@ app.use((req, res) => {
   }));
 });
 
-app.use((error, _req, res, _next) => {
+app.use((error, req, res, _next) => {
   console.error('Unhandled portal error:', error);
 
-  res.status(500).send(renderResultView({
+  if (req.path.startsWith('/api/')) {
+    return res.status(500).json({
+      error: 'Internal server error',
+      code: error.code || 'INTERNAL_ERROR',
+      details: [error.message],
+      timestamp_utc: new Date().toISOString(),
+    });
+  }
+
+  return res.status(500).send(renderResultView({
     pageTitle: 'QR-V™ Verification',
     qrvid: 'Unavailable',
     verification: {

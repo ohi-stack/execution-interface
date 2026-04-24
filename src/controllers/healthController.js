@@ -1,3 +1,7 @@
+const payload = (kind) => ({
+  status: 'ok',
+  check: kind,
+  service: 'onegodian-verify-portal',
 const healthPayload = () => ({
   status: 'ok',
   service: process.env.SERVICE_NAME || 'onegodian-verify-portal',
@@ -7,6 +11,11 @@ const healthPayload = () => ({
 });
 
 export const healthHandler = (_req, res) => {
+  res.status(200).json(payload('health'));
+};
+
+export const readyHandler = (_req, res) => {
+  res.status(200).json(payload('readiness'));
   res.status(200).json(healthPayload());
 };
 

@@ -15,7 +15,7 @@ export const renderLayout = ({ pageTitle, body, pageScript = '' }) => `<!DOCTYPE
     <title>${escapeHtml(pageTitle)}</title>
     <meta
       name="description"
-      content="Registry-backed QR-V™ verification interface for resolving QRVIDs against the QR-V™ Global Verification Network."
+      content="OneGodian registry-backed verification interface for resolving QRVIDs against the QR-V™ Global Verification Network."
     />
     <link rel="stylesheet" href="/css/styles.css" />
     <script defer src="/js/app.js"></script>
@@ -23,13 +23,18 @@ export const renderLayout = ({ pageTitle, body, pageScript = '' }) => `<!DOCTYPE
   <body>
     <div class="page-shell">
       <header class="page-header">
-        <p class="eyebrow">QR-V™ Global Verification Network</p>
-        <h1>QR-V™ Verification</h1>
+        <p class="eyebrow">OneGodian • QR-V™ Global Verification Network</p>
+        <h1>OneGodian Verification Portal</h1>
         <p class="subtitle">Deterministic registry-backed verification for QR-V identifiers.</p>
+        <nav class="top-nav" aria-label="Primary">
+          <a href="/">Homepage</a>
+          <a href="/system-architecture">System Architecture</a>
+          <a href="/health">Health</a>
+        </nav>
       </header>
       ${body}
       <footer class="page-footer">
-        <p>Powered by QR-V™ Global Verification Network</p>
+        <p>Powered by OneGodian infrastructure and the QR-V™ Global Verification Network.</p>
       </footer>
     </div>
     ${pageScript}

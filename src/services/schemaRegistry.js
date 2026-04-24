@@ -1,5 +1,140 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
 const isUtcDate = (value) => typeof value === 'string' && /Z$/.test(value) && !Number.isNaN(new Date(value).getTime());
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const accCoreSchemasDir = path.resolve(__dirname, '../../acc-core/schemas');
+const accCoreSchemas = fs
+  .readdirSync(accCoreSchemasDir)
+  .filter((entry) => entry.endsWith('.schema.json'))
+  .reduce((schemas, entry) => {
+    schemas[entry] = JSON.parse(fs.readFileSync(path.join(accCoreSchemasDir, entry), 'utf-8'));
+    return schemas;
+  }, {});
+
+const schemaDateTime = (value) => typeof value === 'string' && !Number.isNaN(new Date(value).getTime());
+
+const validateAgainstSchema = (schema, payload, pointer = '') => {
+  const errors = [];
+
+  if (!schema) {
+    return ['schema is not configured'];
+  }
+
+  if (schema.$ref) {
+    const refSchema = accCoreSchemas[schema.$ref];
+    return validateAgainstSchema(refSchema, payload, pointer);
+  }
+
+  if (schema.type === 'object') {
+    if (!isObject(payload)) {
+      return [`${pointer || '/'} must be an object`];
+    }
+
+    const required = schema.required || [];
+    for (const key of required) {
+      if (payload[key] === undefined) {
+        errors.push(`${pointer}/${key} is required`);
+      }
+    }
+
+    if (schema.additionalProperties === false && schema.properties) {
+      const allowed = new Set(Object.keys(schema.properties));
+      for (const key of Object.keys(payload)) {
+        if (!allowed.has(key)) {
+          errors.push(`${pointer}/${key} is not allowed`);
+        }
+      }
+    }
+
+    for (const [key, propertySchema] of Object.entries(schema.properties || {})) {
+      if (payload[key] !== undefined) {
+        errors.push(...validateAgainstSchema(propertySchema, payload[key], `${pointer}/${key}`));
+      }
+    }
+
+    return errors;
+  }
+
+  if (schema.type === 'array') {
+    if (!Array.isArray(payload)) {
+      return [`${pointer || '/'} must be an array`];
+    }
+
+    if (schema.minItems && payload.length < schema.minItems) {
+      errors.push(`${pointer || '/'} must contain at least ${schema.minItems} item(s)`);
+    }
+
+    payload.forEach((item, index) => {
+      errors.push(...validateAgainstSchema(schema.items, item, `${pointer}/${index}`));
+    });
+
+    return errors;
+  }
+
+  if (schema.type === 'string') {
+    if (typeof payload !== 'string') {
+      return [`${pointer || '/'} must be a string`];
+    }
+
+    if (schema.minLength !== undefined && payload.length < schema.minLength) {
+      errors.push(`${pointer || '/'} must be at least ${schema.minLength} characters`);
+    }
+
+    if (schema.maxLength !== undefined && payload.length > schema.maxLength) {
+      errors.push(`${pointer || '/'} must be at most ${schema.maxLength} characters`);
+    }
+
+    if (schema.pattern && !new RegExp(schema.pattern).test(payload)) {
+      errors.push(`${pointer || '/'} must match required pattern`);
+    }
+
+    if (schema.format === 'date-time' && !schemaDateTime(payload)) {
+      errors.push(`${pointer || '/'} must be a valid date-time`);
+    }
+
+    if (schema.enum && !schema.enum.includes(payload)) {
+      errors.push(`${pointer || '/'} must be one of ${schema.enum.join(', ')}`);
+    }
+
+    return errors;
+  }
+
+  if (schema.type === 'integer') {
+    if (!Number.isInteger(payload)) {
+      return [`${pointer || '/'} must be an integer`];
+    }
+
+    if (schema.minimum !== undefined && payload < schema.minimum) {
+      errors.push(`${pointer || '/'} must be >= ${schema.minimum}`);
+    }
+
+    if (schema.maximum !== undefined && payload > schema.maximum) {
+      errors.push(`${pointer || '/'} must be <= ${schema.maximum}`);
+    }
+
+    return errors;
+  }
+
+  return errors;
+};
+
+const fromAccCoreSchema = (schemaFileName) => (payload) => {
+  const schema = accCoreSchemas[schemaFileName];
+  const errors = validateAgainstSchema(schema, payload);
+  return { isValid: errors.length === 0, errors };
+};
+
+const createAgentProfile = fromAccCoreSchema('agent-context-profile.schema.json');
+const taskFromSchema = fromAccCoreSchema('task.schema.json');
+const workflowFromSchema = fromAccCoreSchema('workflow.schema.json');
+const authorityPolicyFromSchema = fromAccCoreSchema('authority-policy.schema.json');
 
 const createRecord = (payload) => {
   const errors = [];
@@ -100,7 +235,11 @@ const workflow = (payload) => {
 };
 
 export const validators = {
+  createAgentProfile,
   createRecord,
+  createTask: taskFromSchema,
+  createWorkflow: workflowFromSchema,
+  createAuthorityPolicy: authorityPolicyFromSchema,
   revokeRecord,
   executeRequest,
   verifyResponse,

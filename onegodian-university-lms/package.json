@@ -1,0 +1,9 @@
+{
+  "name": "onegodian-university-lms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Build pipeline placeholder'",
+    "lint": "echo 'Lint placeholder'"
+  }
+}

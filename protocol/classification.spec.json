@@ -1,0 +1,28 @@
+{
+  "protocol": "onegodian_identity_classification",
+  "version": "1.0.0",
+  "canonical_time_standard": "gregorian_utc",
+  "derived_time_overlay": "ot",
+  "entities": {
+    "commercial": "ONEGODIAN, LLC",
+    "institutional": "Indigenous Nation of Onegodia (INO)",
+    "separation_required": true
+  },
+  "recognition_purpose": "Application-level identity classification for product workflows.",
+  "legal_guardrails": [
+    "No governmental or state-conferred status is implied.",
+    "No OT-only legal or financial outputs are allowed."
+  ],
+  "scoring": {
+    "studyHours": { "weight": 1, "min": 0 },
+    "serviceActs": { "weight": 2, "min": 0 },
+    "mentorshipCount": { "weight": 5, "min": 0 }
+  },
+  "classifications": [
+    { "name": "Seeker", "minimumScore": 0 },
+    { "name": "Believer", "minimumScore": 25 },
+    { "name": "Onegodian", "minimumScore": 50 },
+    { "name": "Elder", "minimumScore": 80 }
+  ],
+  "formula": "score = studyHours + (serviceActs*2) + (mentorshipCount*5)"
+}

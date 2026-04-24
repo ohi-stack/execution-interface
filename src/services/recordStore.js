@@ -4,6 +4,28 @@ const records = new Map();
 
 const nowUtc = () => new Date().toISOString();
 
+const seedDefaultRecord = () => {
+  const qrvid = process.env.SMOKE_QRVID || 'QRV-SAMPLE-1001';
+  if (records.has(qrvid)) {
+    return;
+  }
+
+  records.set(qrvid, {
+    qrvid,
+    issuer: 'issuer-qrv-prod-001',
+    subject: 'smoke-subject-1001',
+    issued_at_utc: '2026-04-24T00:00:00Z',
+    expires_at_utc: null,
+    revoked_at_utc: null,
+    metadata_hash: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    status: 'ACTIVE',
+    created_at_utc: nowUtc(),
+    updated_at_utc: nowUtc(),
+  });
+};
+
+seedDefaultRecord();
+
 const normalizeRecord = (record) => ({
   qrvid: record.qrvid,
   issuer: record.issuer,

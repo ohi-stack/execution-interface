@@ -1,6 +1,13 @@
 name: CI
 
 on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+
+jobs:
+  node-checks:
   push:
   pull_request:
 
@@ -15,5 +22,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm test
+
+  php-lint-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint QuantumOHI bridge plugin PHP files
+        run: |
+          php -v
+          find wp-content/plugins/quantumohi-bridge -name '*.php' -print0 | xargs -0 -n1 php -l
       - run: npm run validate:enforcement
       - run: npm test

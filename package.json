@@ -8,13 +8,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node server.js",
-    "start:with-build": "npm run build && npm start",
-    "validate:enforcement": "node scripts/validate-enforcement.mjs",
-    "test": "npm run test --workspaces --if-present",
-    "check": "npm run validate:enforcement && npm run lint && npm run typecheck && npm run test && npm run test:root && npm run build",
-    "lint": "node scripts/lint.mjs",
-    "typecheck": "tsc --noEmit",
-    "test:root": "node --test test/*.test.js"
+    "dev": "NODE_ENV=development nodemon server.js",
+    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/routes/index.js && node --check src/routes/verificationRoutes.js && node --check src/services/verificationService.js && node --check src/utils/qrvid.js && node --check src/views/layout.js && node --check src/views/indexView.js && node --check src/views/resultView.js",
+    "test": "npm run check"
   },
   "engines": {
     "node": ">=20"

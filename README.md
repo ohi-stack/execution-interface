@@ -103,6 +103,17 @@ docker run --rm -p 3000:3000 --env-file .env onegodian-verify-portal
 - No direct database access is exposed in this service.
 - Unavailable upstream responses render deterministic safe defaults.
 
+## QuantumOHI portfolio blueprint
+
+For the proposed QuantumOHI multi-repository production layout, see `docs/quantumohi-repo-map.md`.
+
+## Delivery hardening
+
+- CI workflow: `.github/workflows/ci.yml`
+- Branch protection enforcement guide: `docs/branch-protection-enforcement.md`
+- WordPress bridge plugin scaffold: `wp-content/plugins/quantumohi-bridge/`
+
+## License
 
 - Execution endpoint (`POST /execute`) requires `x-api-key` matching `EXECUTE_API_KEY`.
 - Configure `CORS_ORIGINS` in production to a comma-separated allowlist.

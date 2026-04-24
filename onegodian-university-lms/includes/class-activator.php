@@ -10,7 +10,7 @@ class OG_LMS_Activator
     {
         OG_LMS_Post_Types::register();
         OG_LMS_Roles::register();
-        OG_LMS_DB_Schema::create_tables();
+        OG_LMS_Migrations::run();
         flush_rewrite_rules();
     }
 }

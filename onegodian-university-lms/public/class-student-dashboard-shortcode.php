@@ -20,6 +20,8 @@ class OG_LMS_Student_Dashboard_Shortcode
 
         $user_id = get_current_user_id();
         $courses = self::get_enrolled_courses($user_id);
+        $membership = OG_LMS_Membership_Service::get_active_membership($user_id);
+        $locked_courses = self::get_locked_courses($user_id);
 
         ob_start();
         include OG_LMS_PLUGIN_PATH . 'public/views/student-dashboard.php';
@@ -48,5 +50,31 @@ class OG_LMS_Student_Dashboard_Shortcode
             ],
             $course_ids
         );
+    }
+
+    private static function get_locked_courses(int $user_id): array
+    {
+        $query = new WP_Query([
+            'post_type' => 'og_course',
+            'posts_per_page' => 8,
+            'post_status' => 'publish',
+            'fields' => 'ids',
+        ]);
+
+        $locked = [];
+        foreach ((array) $query->posts as $course_id) {
+            $course_id = (int) $course_id;
+            if (OG_LMS_Membership_Service::can_access_course($user_id, $course_id)) {
+                continue;
+            }
+
+            $locked[] = [
+                'id' => $course_id,
+                'title' => get_the_title($course_id),
+                'required_tier' => OG_LMS_Membership_Service::get_required_tier_for_course($course_id) ?: 'membership',
+            ];
+        }
+
+        return $locked;
     }
 }

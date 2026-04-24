@@ -36,6 +36,20 @@ class OG_LMS_Course_Renderer
         }
 
         $course = get_post($course_id);
+
+        if (! $course || get_post_type($course) !== 'og_course') {
+            return '';
+        }
+
+        if (! is_user_logged_in()) {
+            $login_url = esc_url(OG_LMS_Helpers::public_base_url() . '/login');
+            return '<p>Please <a href="' . $login_url . '">log in</a> to access this course.</p>';
+        }
+
+        if (! OG_LMS_Membership_Service::can_access_course(get_current_user_id(), $course_id)) {
+            $required_tier = OG_LMS_Membership_Service::get_required_tier_for_course($course_id);
+            return '<p>This course requires the <strong>' . esc_html($required_tier ?: 'membership') . '</strong> tier.</p>';
+        }
         ob_start();
         include OG_LMS_PLUGIN_PATH . 'public/views/course-single.php';
         return (string) ob_get_clean();

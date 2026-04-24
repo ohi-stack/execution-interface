@@ -54,6 +54,10 @@ class OG_LMS_Enrollment_Service
             return new WP_REST_Response(['message' => 'Already enrolled'], 200);
         }
 
+        if (! OG_LMS_Membership_Service::can_access_course($user_id, $course_id)) {
+            return new WP_REST_Response(['message' => 'Membership tier required'], 403);
+        }
+
         $enrollment_id = self::enroll($user_id, $course_id);
 
         return new WP_REST_Response([

@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { isAdminRequest } from '@/lib/admin';
 
 export function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.startsWith('/admin')) {
     const adminToken = req.headers.get('x-admin-token');
-    if (!adminToken || adminToken !== process.env.ADMIN_EMAILS) {
+
+    if (!isAdminRequest(adminToken)) {
       return NextResponse.redirect(new URL('/', req.url));
     }
   }

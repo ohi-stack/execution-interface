@@ -4,10 +4,38 @@ import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const corsOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const isOriginAllowed = (origin?: string) => {
+  if (!origin) {
+    return true;
+  }
+
+  if (corsOrigins.length === 0) {
+    return process.env.NODE_ENV !== "production";
+  }
+
+  return corsOrigins.includes(origin);
+};
+
+const corsOriginValidator = (
+  origin: string | undefined,
+  callback: (err: Error | null, allow?: boolean) => void
+) => {
+  if (isOriginAllowed(origin ?? undefined)) {
+    return callback(null, true);
+  }
+
+  return callback(new Error("Not allowed by CORS"));
+};
+
 app.disable("x-powered-by");
 app.set("trust proxy", true);
 
-app.use(cors());
+app.use(cors({ origin: corsOriginValidator }));
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (_req, res) => {
@@ -45,6 +73,23 @@ app.get("/v1/definition", (_req, res) => {
 });
 
 app.post("/execute", (req, res) => {
+  const expectedApiKey = process.env.EXECUTE_API_KEY;
+  const providedApiKey = req.header("x-api-key");
+
+  if (!expectedApiKey) {
+    return res.status(503).json({
+      success: false,
+      error: "Execution endpoint unavailable: missing EXECUTE_API_KEY"
+    });
+  }
+
+  if (!providedApiKey || providedApiKey !== expectedApiKey) {
+    return res.status(401).json({
+      success: false,
+      error: "Unauthorized"
+    });
+  }
+
   const { task, agent, metadata } = req.body || {};
 
   if (!task) {

@@ -1,7 +1,15 @@
+import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { isAdminRequest } from '@/lib/admin';
 
 export async function GET() {
+  const adminToken = headers().get('x-admin-token');
+
+  if (!isAdminRequest(adminToken)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const [ordersRes, previewsRes] = await Promise.all([
     supabaseAdmin.from('orders').select('tier, amount_total', { count: 'exact' }),
     supabaseAdmin.from('identity_artifacts').select('id', { count: 'exact' })

@@ -84,3 +84,9 @@ Run after deploy:
 4. Replace placeholder asset generation with real artifact pipeline.
 5. Add structured error logging/observability for Stripe, Supabase, and Resend failures.
 6. Add idempotency handling for webhook processing to avoid duplicate side effects.
+
+
+## Security hardening
+
+- Set `ADMIN_TOKEN` to a random 32+ character value and send it via `x-admin-token` for `/admin` and `/api/admin/*` access.
+- Do not reuse `ADMIN_EMAILS` as an auth secret; keep it for notification routing only.

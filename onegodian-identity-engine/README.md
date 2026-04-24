@@ -58,3 +58,9 @@ For production deployment and launch gating, see [`DEPLOYMENT.md`](./DEPLOYMENT.
 - Free preview gating before checkout.
 - Fast checkout handoff via pre-built Stripe session URL.
 - Post-purchase instant delivery + dashboard retrieval.
+
+
+## Security hardening
+
+- Set `ADMIN_TOKEN` to a random 32+ character value and send it via `x-admin-token` for `/admin` and `/api/admin/*` access.
+- Do not reuse `ADMIN_EMAILS` as an auth secret; keep it for notification routing only.

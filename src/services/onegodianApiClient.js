@@ -63,7 +63,6 @@ const fetchWithTimeout = async (url, options = {}, timeoutMs = DEFAULT_REQUEST_T
 
 const getApiBaseUrl = () =>
   process.env.ONEGODIAN_API_URL
-  || process.env.API_BASE_URL
   || DEFAULT_ONEGODIAN_API_BASE_URL;
 
 /**

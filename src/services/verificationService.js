@@ -1,4 +1,5 @@
-import { formatDisplayTimestamp, isValidQRVID, sanitizeQRVID, truncateHash } from '../utils/qrvid.js';
+import { isValidQRVID, sanitizeQRVID, truncateHash } from '../utils/qrvid.js';
+import { buildOtPresentationModel } from './onegodianTimeService.js';
 
 const DEFAULT_API_BASE_URL = 'https://api.qrv.network';
 const REQUEST_TIMEOUT_MS = 4000;
@@ -42,9 +43,30 @@ const normalizeStatus = (status) => {
   }
 };
 
-const buildViewModel = (qrvid, payload, fallbackMessage) => {
+const resolveGregorianTimestamp = (payload) => payload?.timestamp_utc || payload?.issued_at_utc || payload?.timestamp || null;
+
+const buildTimestampPresentation = async (payload) => {
+  const gregorianUtcIso = resolveGregorianTimestamp(payload);
+
+  if (!gregorianUtcIso) {
+    return {
+      timestamp: null,
+      temporal: null,
+    };
+  }
+
+  const model = await buildOtPresentationModel(gregorianUtcIso, { allowValidatedFallback: true });
+
+  return {
+    timestamp: model.rendered.legalFirstDualDate,
+    temporal: model,
+  };
+};
+
+const buildViewModel = async (qrvid, payload, fallbackMessage) => {
   const normalizedStatus = normalizeStatus(payload?.status);
   const message = payload?.message || fallbackMessage;
+  const timestampPresentation = await buildTimestampPresentation(payload);
 
   return {
     qrvid,
@@ -60,7 +82,8 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
     issuer: payload?.issuer || null,
     recordType: payload?.recordType || null,
     subject: payload?.subject || payload?.issuedTo || null,
-    timestamp: formatDisplayTimestamp(payload?.timestamp),
+    timestamp: timestampPresentation.timestamp,
+    temporal: timestampPresentation.temporal,
     hash: truncateHash(payload?.hash),
     raw: payload,
   };
@@ -137,7 +160,11 @@ export const verifyQRVID = async (incomingQRVID) => {
       ok: false,
       qrvid,
       error: 'Invalid identifier format',
-      verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'NOT_FOUND', message: 'Invalid identifier format' }, 'Invalid identifier format'),
+      verification: await buildViewModel(
+        qrvid || 'Invalid identifier',
+        { status: 'NOT_FOUND', message: 'Invalid identifier format' },
+        'Invalid identifier format',
+      ),
     };
   }
 
@@ -152,9 +179,7 @@ export const verifyQRVID = async (incomingQRVID) => {
   } catch (error) {
     console.error(`Verification lookup failed for ${qrvid}:`, error);
 
-    const message = error.code === 'TIMEOUT'
-      ? 'Verification service unavailable'
-      : 'Verification service unavailable';
+    const message = 'Verification service unavailable';
 
     return {
       ok: false,
@@ -170,6 +195,7 @@ export const verifyQRVID = async (incomingQRVID) => {
         recordType: null,
         subject: null,
         timestamp: null,
+        temporal: null,
         hash: null,
         raw: {
           status: 'UNAVAILABLE',

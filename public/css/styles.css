@@ -348,3 +348,27 @@ dd {
     grid-template-columns: 1fr;
   }
 }
+
+.backup-banner {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: #fff4e5;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+  font-size: 0.88rem;
+}
+
+.logo-wrap {
+  margin-top: 1rem;
+}
+
+.issuer-logo {
+  max-height: 56px;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+.mobile-first-grid {
+  grid-template-columns: 1fr;
+}

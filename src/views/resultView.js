@@ -1,7 +1,8 @@
 import { escapeHtml, jsonForHtml, renderLayout } from './layout.js';
 
-export const renderResultView = ({ pageTitle, qrvid, verification, errorSummary, autoVerify }) => renderLayout({
+export const renderResultView = ({ pageTitle, qrvid, verification, errorSummary, autoVerify, backupReminder }) => renderLayout({
   pageTitle,
+  backupReminder,
   body: `<main class="content-wrap">
   <section class="card result-card" data-loading-card>
     <div class="result-heading">
@@ -14,37 +15,15 @@ export const renderResultView = ({ pageTitle, qrvid, verification, errorSummary,
 
     ${errorSummary ? `<div class="alert-banner">${escapeHtml(errorSummary)}</div>` : ''}
 
-    <div class="loading-indicator" data-loading-indicator>
-      <span class="spinner" aria-hidden="true"></span>
-      <span>Resolving verification record...</span>
-    </div>
-
     <div class="result-body" data-result-body>
-      <dl class="metadata-grid">
-        <div>
-          <dt>Issuer</dt>
-          <dd>${escapeHtml(verification.issuer || '—')}</dd>
-        </div>
-        <div>
-          <dt>Record Type</dt>
-          <dd>${escapeHtml(verification.recordType || '—')}</dd>
-        </div>
-        <div>
-          <dt>Subject</dt>
-          <dd>${escapeHtml(verification.subject || '—')}</dd>
-        </div>
-        <div>
-          <dt>Timestamp</dt>
-          <dd>${escapeHtml(verification.timestamp || '—')}</dd>
-        </div>
-        <div>
-          <dt>Hash</dt>
-          <dd>${escapeHtml(verification.hash || '—')}</dd>
-        </div>
-        <div>
-          <dt>Message</dt>
-          <dd>${escapeHtml(verification.message || 'Verification result available')}</dd>
-        </div>
+      ${verification.issuerLogoUrl ? `<div class="logo-wrap"><img src="${escapeHtml(verification.issuerLogoUrl)}" alt="Issuer logo" class="issuer-logo" /></div>` : ''}
+      <dl class="metadata-grid mobile-first-grid">
+        <div><dt>Issuer</dt><dd>${escapeHtml(verification.issuer || '—')}</dd></div>
+        <div><dt>Recipient</dt><dd>${escapeHtml(verification.recipient || '—')}</dd></div>
+        <div><dt>Certificate Title</dt><dd>${escapeHtml(verification.certificateTitle || '—')}</dd></div>
+        <div><dt>Issue Date</dt><dd>${escapeHtml(verification.issueDate || '—')}</dd></div>
+        <div><dt>Timestamp</dt><dd>${escapeHtml(verification.timestamp || '—')}</dd></div>
+        <div><dt>Proof Reference</dt><dd>${escapeHtml(verification.proofReference || verification.hash || '—')}</dd></div>
       </dl>
 
       <div class="actions-row">
@@ -56,9 +35,5 @@ export const renderResultView = ({ pageTitle, qrvid, verification, errorSummary,
     </div>
   </section>
 </main>`,
-  pageScript: `<script>
-    window.__QRV_PORTAL__ = {
-      autoVerify: ${autoVerify ? 'true' : 'false'}
-    };
-  </script>`,
+  pageScript: `<script>window.__QRV_PORTAL__={autoVerify:${autoVerify ? 'true' : 'false'}};</script>`,
 });

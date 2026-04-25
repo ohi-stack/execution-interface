@@ -7,7 +7,13 @@ import {
   renderSystemArchitecturePage,
   renderVerificationResult,
 } from '../controllers/verificationController.js';
-import { healthHandler, readyHandler } from '../controllers/healthController.js';
+import {
+  renderBookDemoPage,
+  renderCertificateVerificationPage,
+  renderMembershipVerificationPage,
+  renderPricingPage,
+} from '../controllers/marketingController.js';
+import { healthHandler, metricsHandler, readyHandler, versionHandler } from '../controllers/healthController.js';
 
 const router = Router();
 
@@ -29,6 +35,8 @@ router.get('/health', healthHandler);
 router.get('/login*', redirectIssuerLogin);
 router.get('/healthz', healthHandler);
 router.get('/readyz', readyHandler);
+router.get('/version', versionHandler);
+router.get('/metrics', metricsHandler);
 
 // 2) API/core
 router.use('/api/v1', v1Routes);
@@ -37,6 +45,10 @@ router.use('/api/omos', omosRoutes);
 // 3) pages/ui
 router.get('/', renderLandingPage);
 router.get('/system-architecture', renderSystemArchitecturePage);
+router.get('/pricing', renderPricingPage);
+router.get('/book-demo', renderBookDemoPage);
+router.get('/certificate-verification', renderCertificateVerificationPage);
+router.get('/membership-verification', renderMembershipVerificationPage);
 router.use('/verify', verificationRoutes);
 router.get('/:qrvid', renderVerificationResult);
 

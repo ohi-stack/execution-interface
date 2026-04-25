@@ -1,7 +1,8 @@
 import { escapeHtml, renderLayout } from './layout.js';
 
-export const renderIndexView = ({ pageTitle, qrvid }) => renderLayout({
+export const renderIndexView = ({ pageTitle, qrvid, backupReminder }) => renderLayout({
   pageTitle,
+  backupReminder,
   body: `<main class="content-wrap">
   <section class="card hero-card">
     <div>

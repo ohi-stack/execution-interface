@@ -1,129 +1,207 @@
+import crypto from 'node:crypto';
+import { Pool } from 'pg';
 import { validators } from './schemaRegistry.js';
 
-const records = new Map();
-
+const isProduction = (process.env.NODE_ENV || '').toLowerCase() === 'production';
 const nowUtc = () => new Date().toISOString();
+const signatureSecret = process.env.QRV_SIGNING_SECRET || 'dev-signing-secret';
 
+if (isProduction && !process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is required in production. In-memory fallback is disabled.');
+}
+
+const pool = process.env.DATABASE_URL ? new Pool({ connectionString: process.env.DATABASE_URL }) : null;
+
+const memory = { records: new Map(), issuers: new Map(), apiKeys: new Map() };
+
+const canonicalString = (record) => [record.qrvid, record.issuer, record.subject, record.issued_at_utc, record.expires_at_utc || '', record.metadata_hash].join('|');
+const generateMetadataHash = (payload) => crypto.createHash('sha256').update(JSON.stringify({ issuer: payload.issuer, subject: payload.subject, issued_at_utc: payload.issued_at_utc, expires_at_utc: payload.expires_at_utc || null })).digest('hex');
+const signRecord = (record) => crypto.createHmac('sha256', signatureSecret).update(canonicalString(record)).digest('hex');
 
 const normalizeRecord = (record) => ({
   qrvid: record.qrvid,
   issuer: record.issuer,
   subject: record.subject,
+  certificate_title: record.certificate_title || null,
+  issuer_logo_url: record.issuer_logo_url || null,
+  proof_reference: record.proof_reference || null,
   issued_at_utc: record.issued_at_utc,
   expires_at_utc: record.expires_at_utc || null,
   revoked_at_utc: record.revoked_at_utc || null,
   metadata_hash: record.metadata_hash,
+  signature: record.signature,
 });
 
 const getStatus = (record) => {
-  if (!record) {
-    return 'NOT_FOUND';
-  }
-
-  if (record.revoked_at_utc) {
-    return 'REVOKED';
-  }
-
-  if (record.expires_at_utc && new Date(record.expires_at_utc).getTime() < Date.now()) {
-    return 'EXPIRED';
-  }
-
-  return 'VERIFIED';
+  if (!record) return 'NOT_FOUND';
+  if (record.revoked_at_utc) return 'REVOKED';
+  if (record.expires_at_utc && new Date(record.expires_at_utc).getTime() < Date.now()) return 'EXPIRED';
+  return signRecord(record) === record.signature ? 'VERIFIED' : 'INVALID_SIGNATURE';
 };
 
-export const createRecord = (payload) => {
-  if (records.has(payload.qrvid)) {
-    return {
-      ok: false,
-      statusCode: 409,
-      error: {
-        error: 'Record already exists',
-        code: 'QRVID_CONFLICT',
-        details: [`qrvid ${payload.qrvid} already exists`],
-        timestamp_utc: nowUtc(),
-      },
-    };
+const withError = (statusCode, error, code, details) => ({ ok: false, statusCode, error: { error, code, details, timestamp_utc: nowUtc() } });
+
+const mapDbRecord = (row) => ({
+  qrvid: row.qrvid,
+  issuer: row.issuer,
+  subject: row.subject,
+  certificate_title: row.certificate_title,
+  issuer_logo_url: row.issuer_logo_url,
+  proof_reference: row.proof_reference,
+  issued_at_utc: new Date(row.issued_at_utc).toISOString(),
+  expires_at_utc: row.expires_at_utc ? new Date(row.expires_at_utc).toISOString() : null,
+  revoked_at_utc: row.revoked_at_utc ? new Date(row.revoked_at_utc).toISOString() : null,
+  metadata_hash: row.metadata_hash,
+  signature: row.signature,
+});
+
+const upsertSeedRecord = async () => {
+  const seed = {
+    qrvid: 'QRV-PROD-CERT-000001',
+    issuer: 'issuer-qrv-prod-001',
+    subject: 'pilot-subject-000001',
+    certificate_title: 'QRV Pilot Certificate',
+    issuer_logo_url: 'https://issuer.qrv.network/logo.png',
+    proof_reference: 'proof:qrv:prod:000001',
+    issued_at_utc: '2026-04-24T00:00:00.000Z',
+    expires_at_utc: '2027-04-24T00:00:00.000Z',
+    metadata_hash: 'd9cb6d02dcf5d9b307fce3f19d2ec8c0d76b4ca6f5f35f579f42fd1f91f22d3b',
+  };
+  seed.signature = signRecord(seed);
+
+  if (pool) {
+    await pool.query(
+      `INSERT INTO qrv_records (qrvid, issuer, subject, certificate_title, issuer_logo_url, proof_reference, issued_at_utc, expires_at_utc, status, revoked_at_utc, metadata_hash, signature)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',NULL,$9,$10)
+       ON CONFLICT (qrvid) DO UPDATE SET issuer=EXCLUDED.issuer, subject=EXCLUDED.subject, certificate_title=EXCLUDED.certificate_title, issuer_logo_url=EXCLUDED.issuer_logo_url, proof_reference=EXCLUDED.proof_reference,
+       issued_at_utc=EXCLUDED.issued_at_utc, expires_at_utc=EXCLUDED.expires_at_utc, metadata_hash=EXCLUDED.metadata_hash, signature=EXCLUDED.signature, updated_at_utc=NOW()`,
+      [seed.qrvid, seed.issuer, seed.subject, seed.certificate_title, seed.issuer_logo_url, seed.proof_reference, seed.issued_at_utc, seed.expires_at_utc, seed.metadata_hash, seed.signature],
+    );
+    return;
   }
 
-  const record = {
-    ...payload,
-    status: 'ACTIVE',
-    revoked_at_utc: null,
-    created_at_utc: nowUtc(),
-    updated_at_utc: nowUtc(),
-  };
-
-  records.set(record.qrvid, record);
-  return { ok: true, record: normalizeRecord(record) };
+  if (!isProduction) memory.records.set(seed.qrvid, { ...seed, status: 'ACTIVE', revoked_at_utc: null });
 };
 
-export const revokeRecord = (qrvid, revokePayload) => {
-  const record = records.get(qrvid);
+const initializeMemory = () => {
+  if (isProduction) return;
+  memory.issuers.set('issuer-qrv-prod-001', { issuer_id: 'issuer-qrv-prod-001', issuer_name: 'QRV Demo University', status: 'ACTIVE' });
+  memory.issuers.set('issuer-qrv-prod-002', { issuer_id: 'issuer-qrv-prod-002', issuer_name: 'QRV Workforce Board', status: 'ACTIVE' });
+  memory.issuers.set('issuer-qrv-prod-003', { issuer_id: 'issuer-qrv-prod-003', issuer_name: 'QRV Professional Council', status: 'ACTIVE' });
+  upsertSeedRecord();
+};
+initializeMemory();
 
-  if (!record) {
-    return {
-      ok: false,
-      statusCode: 404,
-      error: {
-        error: 'Record not found',
-        code: 'NOT_FOUND',
-        details: [`qrvid ${qrvid} does not exist`],
-        timestamp_utc: nowUtc(),
-      },
-    };
+export const createRecord = async (payload) => {
+  try {
+    const record = { ...payload, metadata_hash: payload.metadata_hash || generateMetadataHash(payload), revoked_at_utc: null };
+    record.signature = signRecord(record);
+
+    if (pool) {
+      const inserted = await pool.query(
+        `INSERT INTO qrv_records (qrvid, issuer, subject, certificate_title, issuer_logo_url, proof_reference, issued_at_utc, expires_at_utc, status, revoked_at_utc, metadata_hash, signature)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'ACTIVE',NULL,$9,$10)
+         ON CONFLICT (qrvid) DO NOTHING RETURNING *`,
+        [record.qrvid, record.issuer, record.subject, record.certificate_title || null, record.issuer_logo_url || null, record.proof_reference || null, record.issued_at_utc, record.expires_at_utc || null, record.metadata_hash, record.signature],
+      );
+      if (inserted.rows.length === 0) return withError(409, 'Record already exists', 'QRVID_CONFLICT', [`qrvid ${record.qrvid} already exists`]);
+      return { ok: true, record: normalizeRecord(mapDbRecord(inserted.rows[0])) };
+    }
+
+    if (isProduction) return withError(500, 'Repository unavailable', 'ERROR', ['Database required in production']);
+    if (memory.records.has(record.qrvid)) return withError(409, 'Record already exists', 'QRVID_CONFLICT', [`qrvid ${record.qrvid} already exists`]);
+    memory.records.set(record.qrvid, record);
+    return { ok: true, record: normalizeRecord(record) };
+  } catch (error) {
+    return withError(500, 'Create record failed', 'ERROR', [error.message]);
   }
-
-  record.revoked_at_utc = revokePayload.revoked_at_utc;
-  record.revocation_reason = revokePayload.reason;
-  record.status = 'REVOKED';
-  record.updated_at_utc = nowUtc();
-
-  return { ok: true, record: normalizeRecord(record) };
 };
 
-export const verifyRecord = (qrvid) => {
-  const record = records.get(qrvid);
-  const status = getStatus(record);
-
-  const response = {
-    qrvid,
-    status,
-    issuer: record?.issuer || null,
-    subject: record?.subject || null,
-    issued_at_utc: record?.issued_at_utc || null,
-    expires_at_utc: record?.expires_at_utc || null,
-    revoked_at_utc: record?.revoked_at_utc || null,
-    metadata_hash: record?.metadata_hash || null,
-    checked_at_utc: nowUtc(),
-    message: {
-      VERIFIED: 'Record is valid and active',
-      REVOKED: 'Record has been revoked',
-      EXPIRED: 'Record has expired',
-      NOT_FOUND: 'Record not found',
-    }[status],
-  };
-
-  const validation = validators.verifyResponse(response);
-  if (!validation.isValid) {
-    return {
-      ok: false,
-      statusCode: 500,
-      error: {
-        error: 'Verification response invalid',
-        code: 'VERIFY_RESPONSE_INVALID',
-        details: validation.errors,
-        timestamp_utc: nowUtc(),
-      },
-    };
+export const revokeRecord = async (qrvid, revokePayload) => {
+  try {
+    if (pool) {
+      const update = await pool.query(`UPDATE qrv_records SET status='REVOKED', revoked_at_utc=$2, updated_at_utc=NOW(), revocation_reason=$3 WHERE qrvid=$1 RETURNING *`, [qrvid, revokePayload.revoked_at_utc, revokePayload.reason]);
+      if (update.rows.length === 0) return withError(404, 'Record not found', 'NOT_FOUND', [`qrvid ${qrvid} does not exist`]);
+      return { ok: true, record: normalizeRecord(mapDbRecord(update.rows[0])) };
+    }
+    if (isProduction) return withError(500, 'Repository unavailable', 'ERROR', ['Database required in production']);
+    const record = memory.records.get(qrvid);
+    if (!record) return withError(404, 'Record not found', 'NOT_FOUND', [`qrvid ${qrvid} does not exist`]);
+    record.revoked_at_utc = revokePayload.revoked_at_utc;
+    return { ok: true, record: normalizeRecord(record) };
+  } catch (error) {
+    return withError(500, 'Revoke record failed', 'ERROR', [error.message]);
   }
+};
 
-  return {
-    ok: true,
-    statusCode: status === 'NOT_FOUND' ? 404 : 200,
-    verification: response,
-  };
+export const verifyRecord = async (qrvid) => {
+  try {
+    let record = null;
+    if (pool) {
+      const result = await pool.query('SELECT * FROM qrv_records WHERE qrvid=$1 LIMIT 1', [qrvid]);
+      record = result.rows[0] ? mapDbRecord(result.rows[0]) : null;
+    } else if (!isProduction) {
+      record = memory.records.get(qrvid) || null;
+    }
+
+    const status = getStatus(record);
+    const response = {
+      qrvid,
+      status,
+      issuer: record?.issuer || null,
+      subject: record?.subject || null,
+      certificate_title: record?.certificate_title || null,
+      issuer_logo_url: record?.issuer_logo_url || null,
+      proof_reference: record?.proof_reference || record?.signature || null,
+      issued_at_utc: record?.issued_at_utc || null,
+      expires_at_utc: record?.expires_at_utc || null,
+      revoked_at_utc: record?.revoked_at_utc || null,
+      metadata_hash: record?.metadata_hash || null,
+      signature: record?.signature || null,
+      checked_at_utc: nowUtc(),
+      message: { VERIFIED: 'Record is valid and active', REVOKED: 'Record has been revoked', EXPIRED: 'Record has expired', NOT_FOUND: 'Record not found', INVALID_SIGNATURE: 'Record signature mismatch' }[status] || 'Verification failed',
+    };
+
+    const validation = validators.verifyResponse(response);
+    if (!validation.isValid) return withError(500, 'Verification response invalid', 'VERIFY_RESPONSE_INVALID', validation.errors);
+    return { ok: true, statusCode: status === 'NOT_FOUND' ? 404 : 200, verification: response };
+  } catch (_error) {
+    return { ok: true, statusCode: 500, verification: { qrvid, status: 'ERROR', checked_at_utc: nowUtc(), message: 'Internal verification error' } };
+  }
+};
+
+export const provisionIssuer = async ({ issuer_id, issuer_name, status = 'ACTIVE' }) => {
+  if (pool) {
+    const result = await pool.query(`INSERT INTO qrv_issuers (issuer_id, issuer_name, status) VALUES ($1,$2,$3)
+       ON CONFLICT (issuer_id) DO UPDATE SET issuer_name=EXCLUDED.issuer_name,status=EXCLUDED.status,updated_at_utc=NOW() RETURNING *`, [issuer_id, issuer_name, status]);
+    return result.rows[0];
+  }
+  if (isProduction) throw new Error('Database required in production');
+  const issuer = { issuer_id, issuer_name, status };
+  memory.issuers.set(issuer_id, issuer);
+  return issuer;
+};
+
+export const provisionApiKey = async ({ key_id, issuer_id, api_key }) => {
+  const hash = crypto.createHash('sha256').update(api_key).digest('hex');
+  if (pool) {
+    await pool.query(`INSERT INTO qrv_api_keys (key_id, issuer_id, key_hash, status) VALUES ($1,$2,$3,'ACTIVE')
+       ON CONFLICT (key_id) DO UPDATE SET issuer_id=EXCLUDED.issuer_id,key_hash=EXCLUDED.key_hash,status='ACTIVE',updated_at_utc=NOW()`, [key_id, issuer_id, hash]);
+  }
+  if (!isProduction) memory.apiKeys.set(key_id, { key_id, issuer_id, key_hash: hash, status: 'ACTIVE' });
+  return { key_id, issuer_id, status: 'ACTIVE' };
+};
+
+export const getRepositoryHealth = async () => {
+  if (!pool) return { backend: isProduction ? 'unavailable' : 'memory', ready: !isProduction };
+  await pool.query('SELECT 1');
+  return { backend: 'postgres', ready: true };
 };
 
 export const resetRecordStore = () => {
-  records.clear();
+  if (isProduction) return;
+  memory.records.clear();
+  memory.issuers.clear();
+  memory.apiKeys.clear();
+  initializeMemory();
 };

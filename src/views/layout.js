@@ -7,7 +7,7 @@ const escapeHtml = (value) => String(value ?? '')
 
 export const jsonForHtml = (value) => escapeHtml(JSON.stringify(value, null, 2));
 
-export const renderLayout = ({ pageTitle, body, pageScript = '' }) => `<!DOCTYPE html>
+export const renderLayout = ({ pageTitle, body, pageScript = '', backupReminder = null }) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -26,10 +26,13 @@ export const renderLayout = ({ pageTitle, body, pageScript = '' }) => `<!DOCTYPE
         <p class="eyebrow">OneGodian • QR-V™ Global Verification Network</p>
         <h1>OneGodian Verification Portal</h1>
         <p class="subtitle">Deterministic registry-backed verification for QR-V identifiers.</p>
+        ${backupReminder ? `<p class="backup-banner">${escapeHtml(backupReminder)}</p>` : ''}
         <nav class="top-nav" aria-label="Primary">
           <a href="/">Homepage</a>
-          <a href="/system-architecture">System Architecture</a>
-          <a href="/health">Health</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/book-demo">Book Demo</a>
+          <a href="/certificate-verification">Certificate Verification</a>
+          <a href="/membership-verification">Membership Verification</a>
         </nav>
       </header>
       ${body}

@@ -28,7 +28,7 @@ export const verifyResponseSchema = {
   required: ['qrvid', 'status', 'checked_at_utc'],
   properties: {
     qrvid: { type: 'string' },
-    status: { enum: ['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND'] },
+    status: { enum: ['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND', 'INVALID_SIGNATURE', 'ERROR'] },
     issuer: { type: ['string', 'null'] },
     subject: { type: ['string', 'null'] },
     issued_at_utc: { type: ['string', 'null'], format: 'date-time' },

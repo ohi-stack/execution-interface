@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: qrv_acc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+  qrv-api:
+    build: .
+    env_file:
+      - .env.acc.example
+    depends_on:
+      - postgres
+    ports:
+      - '4102:3000'

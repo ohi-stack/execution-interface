@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import portalRoutes from './routes/index.js';
 import executionV1Routes from './routes/api/executionV1Routes.js';
-import { versionHandler } from './controllers/healthController.js';
+import { logError, logInfo } from './utils/logger.js';
 import { renderResultView } from './views/resultView.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,12 +20,11 @@ app.use('/js', express.static(path.join(__dirname, '../public/js')));
 app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
 
 app.use((req, _res, next) => {
-  console.log(`[portal] ${new Date().toISOString()} ${req.method} ${req.originalUrl}`);
+  logInfo('http.request', { method: req.method, path: req.originalUrl, ip: req.ip });
   next();
 });
 
 app.use('/v1', executionV1Routes);
-app.get('/version', versionHandler);
 app.use('/', portalRoutes);
 
 app.use((req, res) => {
@@ -50,22 +49,22 @@ app.use((req, res) => {
 });
 
 app.use((error, _req, res, _next) => {
-  console.error('Unhandled portal error:', error);
+  logError('http.unhandled_error', { error: error?.message || 'unknown' });
 
   res.status(500).send(renderResultView({
     pageTitle: 'QR-V™ Verification',
     qrvid: 'Unavailable',
     verification: {
-      status: 'UNAVAILABLE',
+      status: 'NOT_FOUND',
       message: 'Verification service unavailable',
-      statusLabel: 'SERVICE UNAVAILABLE',
-      badgeClass: 'badge-unavailable',
+      statusLabel: 'NOT_FOUND',
+      badgeClass: 'badge-invalid',
       subject: null,
       issuer: null,
       recordType: null,
       timestamp: null,
       hash: null,
-      raw: { status: 'UNAVAILABLE', message: 'Verification service unavailable' },
+      raw: { status: 'NOT_FOUND', message: 'Verification service unavailable' },
     },
     errorSummary: 'An unexpected error occurred while rendering the verification portal.',
     autoVerify: false,

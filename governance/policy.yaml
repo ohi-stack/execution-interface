@@ -14,7 +14,8 @@
     },
     "revoke_record": {
       "allow_roles": [
-        "admin"
+        "admin",
+        "issuer"
       ],
       "obligations": [
         "log_audit_event",
@@ -71,6 +72,16 @@
       "obligations": [
         "execution_id_required",
         "audit_trace_required"
+      ]
+    },
+    "create_agent_profile": {
+      "allow_roles": [
+        "anonymous",
+        "admin",
+        "maintainer"
+      ],
+      "obligations": [
+        "log_audit_event"
       ]
     }
   }

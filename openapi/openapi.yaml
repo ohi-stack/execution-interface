@@ -1,20 +1,24 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "QR-V Verification V1 Enforcement API",
-    "version": "1.1.0",
-    "description": "Runtime-enforced API contracts for create, verify, and revoke flows."
+    "title": "QRV Certificate Verification API v1",
+    "version": "1.2.0",
+    "description": "Production create/verify/revoke and provisioning endpoints for QRV certificate-first scope."
   },
   "servers": [
     {
-      "url": "/"
+      "url": "/api/v1"
     }
   ],
   "paths": {
     "/registry/create": {
       "post": {
-        "summary": "Create a verification record",
-        "security": [{ "ApiKeyAuth": [] }],
+        "summary": "Create a certificate record",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "responses": {
           "201": {
             "description": "Record created"
@@ -33,25 +37,38 @@
     },
     "/verify/{qrvid}": {
       "get": {
-        "summary": "Verify a record",
-        "parameters": [{ "name": "qrvid", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "summary": "Verify a certificate by QRVID",
+        "parameters": [
+          {
+            "name": "qrvid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Verification result"
           },
           "404": {
             "description": "Record not found"
+          },
+          "429": {
+            "$ref": "#/components/responses/ErrorResponse"
           }
-          "200": { "description": "Verification result" },
-          "404": { "description": "Record not found" },
-          "429": { "$ref": "#/components/responses/ErrorResponse" }
         }
       }
     },
     "/revoke": {
       "post": {
-        "summary": "Revoke a record",
-        "security": [{ "ApiKeyAuth": [] }],
+        "summary": "Revoke a certificate",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Record revoked"
@@ -68,41 +85,93 @@
         }
       }
     },
-    "/v1/execute": {
+    "/admin/issuers": {
       "post": {
-        "summary": "Execute a governed workflow",
+        "summary": "Provision issuer",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
-          "202": {
-            "description": "Execution accepted (pending)"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/ErrorResponse"
-          },
-          "403": {
-            "$ref": "#/components/responses/ErrorResponse"
+          "201": {
+            "description": "Issuer provisioned"
           }
         }
       }
     },
-    "/v1/executions/{id}": {
+    "/admin/api-keys": {
+      "post": {
+        "summary": "Provision issuer API key",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "API key provisioned"
+          }
+        }
+      }
+    },
+    "/billing/plans": {
       "get": {
-        "summary": "Get execution details by ID",
+        "summary": "List subscription plans",
         "responses": {
           "200": {
-            "description": "Execution detail envelope"
-          },
-          "404": {
-            "$ref": "#/components/responses/ErrorResponse"
+            "description": "Plan catalog"
           }
-          "200": { "description": "Record revoked" },
-          "400": { "$ref": "#/components/responses/ErrorResponse" },
-          "401": { "$ref": "#/components/responses/ErrorResponse" },
-          "403": { "$ref": "#/components/responses/ErrorResponse" },
-          "404": { "$ref": "#/components/responses/ErrorResponse" },
-          "429": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    },
+    "/billing/checkout": {
+      "post": {
+        "summary": "Create Stripe checkout session",
+        "responses": {
+          "201": {
+            "description": "Checkout created"
+          }
+        }
+      }
+    },
+    "/billing/{issuer_id}/status": {
+      "get": {
+        "summary": "Get issuer subscription status",
+        "parameters": [
+          {
+            "name": "issuer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription status"
+          }
+        }
+      }
+    },
+    "/onboarding/signup": {
+      "post": {
+        "summary": "Create issuer account",
+        "responses": {
+          "201": {
+            "description": "Issuer created"
+          }
+        }
+      }
+    },
+    "/onboarding/verify-email": {
+      "post": {
+        "summary": "Verify issuer email token",
+        "responses": {
+          "200": {
+            "description": "Verified"
+          }
         }
       }
     }
@@ -113,6 +182,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-api-key"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "responses": {
@@ -130,7 +204,9 @@
               "VERIFIED",
               "REVOKED",
               "EXPIRED",
-              "NOT_FOUND"
+              "NOT_FOUND",
+              "INVALID_SIGNATURE",
+              "ERROR"
             ]
           }
         }

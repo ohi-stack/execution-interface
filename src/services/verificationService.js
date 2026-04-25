@@ -1,6 +1,6 @@
 import { formatDisplayTimestamp, isValidQRVID, sanitizeQRVID, truncateHash } from '../utils/qrvid.js';
 
-const DEFAULT_API_BASE_URL = 'https://api.qrv.network';
+const DEFAULT_API_BASE_URL = 'https://api.qrv.network/api/v1';
 const REQUEST_TIMEOUT_MS = 4000;
 const RETRYABLE_STATUS_CODES = new Set([502, 503, 504]);
 
@@ -26,19 +26,12 @@ const fetchWithTimeout = async (url, options = {}, timeoutMs = REQUEST_TIMEOUT_M
 
 const normalizeStatus = (status) => {
   switch ((status || '').toUpperCase()) {
-    case 'VERIFIED':
-    case 'VALID':
-      return 'VERIFIED';
-    case 'REVOKED':
-      return 'REVOKED';
-    case 'EXPIRED':
-      return 'EXPIRED';
+    case 'VERIFIED': return 'VERIFIED';
+    case 'REVOKED': return 'REVOKED';
+    case 'EXPIRED': return 'EXPIRED';
     case 'NOT_FOUND':
-      return 'NOT_FOUND';
-    case 'INVALID':
-      return 'NOT_FOUND';
     default:
-      return 'INVALID';
+      return 'NOT_FOUND';
   }
 };
 
@@ -58,24 +51,22 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
       EXPIRED: 'badge-expired',
     }[normalizedStatus] || 'badge-invalid',
     issuer: payload?.issuer || null,
-    recordType: payload?.recordType || null,
-    subject: payload?.subject || payload?.issuedTo || null,
-    timestamp: formatDisplayTimestamp(payload?.timestamp),
-    hash: truncateHash(payload?.hash),
+    issuerLogoUrl: payload?.issuer_logo_url || null,
+    certificateTitle: payload?.certificate_title || payload?.recordType || null,
+    recipient: payload?.subject || payload?.issuedTo || null,
+    issueDate: formatDisplayTimestamp(payload?.issued_at_utc),
+    timestamp: formatDisplayTimestamp(payload?.checked_at_utc || payload?.timestamp),
+    proofReference: payload?.proof_reference || payload?.signature || null,
+    hash: truncateHash(payload?.metadata_hash || payload?.hash),
     raw: payload,
   };
 };
 
-const getApiBaseUrl = () =>
-  process.env.NEXT_PUBLIC_API_URL
-  || process.env.API_BASE_URL
-  || DEFAULT_API_BASE_URL;
+const getApiBaseUrl = () => process.env.NEXT_PUBLIC_API_URL || process.env.API_BASE_URL || DEFAULT_API_BASE_URL;
 
 const fetchVerification = async (qrvid) => {
   const apiBaseUrl = getApiBaseUrl();
   const url = `${apiBaseUrl.replace(/\/$/, '')}/verify/${encodeURIComponent(qrvid)}`;
-
-  console.log(`[analytics] verification_lookup qrvid=${qrvid} url=${url}`);
 
   let lastError;
 
@@ -94,35 +85,13 @@ const fetchVerification = async (qrvid) => {
           continue;
         }
 
-        if (normalizeStatus(payload?.status) === 'REVOKED') {
-          return buildViewModel(qrvid, payload, 'Record revoked');
-        }
-
-        if (normalizeStatus(payload?.status) === 'EXPIRED') {
-          return buildViewModel(qrvid, payload, 'Record expired');
-        }
-
-        throw Object.assign(new Error('Verification service unavailable'), {
-          code: 'API_UNAVAILABLE',
-          statusCode: response.status,
-          payload,
-        });
+        throw Object.assign(new Error('Verification service unavailable'), { code: 'API_UNAVAILABLE', statusCode: response.status, payload });
       }
 
       return buildViewModel(qrvid, payload, 'Verification result available');
     } catch (error) {
-      lastError = error;
-
-      if (error.name === 'AbortError') {
-        lastError = Object.assign(new Error('Verification request timed out'), {
-          code: 'TIMEOUT',
-        });
-      }
-
-      if (attempt === 1) {
-        await sleep(250);
-        continue;
-      }
+      lastError = error.name === 'AbortError' ? Object.assign(new Error('Verification request timed out'), { code: 'TIMEOUT' }) : error;
+      if (attempt === 1) await sleep(250);
     }
   }
 
@@ -133,50 +102,13 @@ export const verifyQRVID = async (incomingQRVID) => {
   const qrvid = sanitizeQRVID(incomingQRVID);
 
   if (!isValidQRVID(qrvid)) {
-    return {
-      ok: false,
-      qrvid,
-      error: 'Invalid identifier format',
-      verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'NOT_FOUND', message: 'Invalid identifier format' }, 'Invalid identifier format'),
-    };
+    return { ok: false, qrvid, error: 'Invalid identifier format', verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'NOT_FOUND', message: 'Invalid identifier format' }, 'Invalid identifier format') };
   }
 
   try {
     const verification = await fetchVerification(qrvid);
-
-    return {
-      ok: true,
-      qrvid,
-      verification,
-    };
-  } catch (error) {
-    console.error(`Verification lookup failed for ${qrvid}:`, error);
-
-    const message = error.code === 'TIMEOUT'
-      ? 'Verification service unavailable'
-      : 'Verification service unavailable';
-
-    return {
-      ok: false,
-      qrvid,
-      error: message,
-      verification: {
-        qrvid,
-        status: 'UNAVAILABLE',
-        message,
-        statusLabel: 'SERVICE UNAVAILABLE',
-        badgeClass: 'badge-unavailable',
-        issuer: null,
-        recordType: null,
-        subject: null,
-        timestamp: null,
-        hash: null,
-        raw: {
-          status: 'UNAVAILABLE',
-          message,
-          code: error.code || 'API_UNAVAILABLE',
-        },
-      },
-    };
+    return { ok: true, qrvid, verification };
+  } catch (_error) {
+    return { ok: false, qrvid, error: 'Verification service unavailable', verification: buildViewModel(qrvid, { status: 'NOT_FOUND', message: 'Verification service unavailable' }, 'Verification service unavailable') };
   }
 };

@@ -1,18 +1,4 @@
 {
-  "name": "execution-interface",
-  "version": "1.1.0",
-  "private": true,
-  "type": "module",
-  "description": "QRV certificate verification interface and API",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "NODE_ENV=development node server.js",
-    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/api/v1Routes.js && node --check src/services/recordStore.js",
-    "test": "node --test test/*.js",
-    "validate:enforcement": "node scripts/validate-enforcement.mjs",
-    "validate:prod": "node scripts/validate-prod.mjs",
-    "smoke:prod": "node scripts/smoke-check-qrv.mjs"
   "name": "onegodian-api",
   "version": "1.0.0",
   "private": true,
@@ -22,22 +8,31 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "NODE_ENV=development node --watch src/index.ts"
+    "dev": "NODE_ENV=development node --watch src/index.ts",
+    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/api/v1Routes.js && node --check src/services/recordStore.js",
+    "test": "node --test test/*.js",
+    "validate:enforcement": "node scripts/validate-enforcement.mjs",
+    "validate:prod": "node scripts/validate-prod.mjs",
+    "smoke:prod": "node scripts/smoke-check-qrv.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.0",
+    "helmet": "^7.2.0",
     "pg": "^8.16.3",
-    "zod": "^3.25.76",
-    "stripe": "^17.7.0"
+    "pino": "^9.13.1",
+    "pino-http": "^10.5.0",
+    "stripe": "^17.7.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.23",
-    "@types/node": "^22.10.1",
-    "typescript": "^5.6.3"
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.19.0",
+    "@types/pg": "^8.15.6",
+    "typescript": "^5.9.3"
   }
 }

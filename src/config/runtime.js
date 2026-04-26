@@ -1,5 +1,4 @@
 const requiredProductionVars = [
-  'DATABASE_URL',
   'QRV_API_KEYS',
   'QRV_SIGNING_SECRET',
   'QRV_JWT_SECRET',

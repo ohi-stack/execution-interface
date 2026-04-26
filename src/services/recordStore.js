@@ -6,10 +6,6 @@ const isProduction = (process.env.NODE_ENV || '').toLowerCase() === 'production'
 const nowUtc = () => new Date().toISOString();
 const signatureSecret = process.env.QRV_SIGNING_SECRET || 'dev-signing-secret';
 
-if (isProduction && !process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is required in production. In-memory fallback is disabled.');
-}
-
 const pool = process.env.DATABASE_URL ? new Pool({ connectionString: process.env.DATABASE_URL }) : null;
 
 const memory = { records: new Map(), issuers: new Map(), apiKeys: new Map() };
@@ -35,8 +31,12 @@ const normalizeRecord = (record) => ({
 
 const getStatus = (record) => {
   if (!record) return 'NOT_FOUND';
-  if (record.revoked_at) return 'REVOKED';
+
+  const sourceStatus = (record.source_status || '').toString().toUpperCase();
+  if (sourceStatus === 'REVOKED' || record.revoked_at) return 'REVOKED';
+  if (sourceStatus === 'EXPIRED') return 'EXPIRED';
   if (record.expires_at && new Date(record.expires_at).getTime() < Date.now()) return 'EXPIRED';
+
   return 'VERIFIED';
 };
 
@@ -298,7 +298,7 @@ export const provisionApiKey = async ({ key_id, issuer_id, api_key }) => {
 };
 
 export const getRepositoryHealth = async () => {
-  if (!pool) return { backend: isProduction ? 'unavailable' : 'memory', ready: !isProduction };
+  if (!pool) return { backend: 'unavailable', ready: false };
   await pool.query('SELECT 1');
   return { backend: 'postgres', ready: true };
 };

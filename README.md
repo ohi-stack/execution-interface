@@ -159,6 +159,14 @@ docker run --rm -p 3000:3000 --env-file .env onegodian-verify-portal
 - No direct database access is exposed in this service.
 - Unavailable upstream responses render deterministic safe defaults.
 
+## Canonical QR-V registry dependency
+
+`/api/v1/verify/:qrvid` now reads from the canonical QR-V registry tables, with `qr_objects` as the primary source.
+
+- Required: `qr_objects`, `qr_hash_registry`
+- Optional joins (graceful fallback if missing): `qr_certificates`, `qr_issuers`
+- Reference tables available in the registry schema: `qr_objects`, `qr_hash_registry`, `qr_certificates`, `qr_issuers`, `qr_audit_log`
+
 ## QuantumOHI portfolio blueprint
 
 For the proposed QuantumOHI multi-repository production layout, see `docs/quantumohi-repo-map.md`.

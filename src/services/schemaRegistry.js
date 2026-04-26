@@ -171,7 +171,7 @@ const executeRequest = (payload) => {
 };
 
 const verifyResponse = (payload) => {
-  const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND', 'INVALID_SIGNATURE', 'ERROR']);
+  const validStatuses = new Set(['VERIFIED', 'REVOKED', 'EXPIRED', 'NOT_FOUND', 'INVALID_FORMAT', 'UNAVAILABLE']);
   const errors = [];
   if (!isObject(payload)) errors.push('payload must be object');
   if (!payload?.qrvid) errors.push('qrvid required');

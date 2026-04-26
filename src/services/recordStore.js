@@ -13,6 +13,7 @@ if (isProduction && !process.env.DATABASE_URL) {
 const pool = process.env.DATABASE_URL ? new Pool({ connectionString: process.env.DATABASE_URL }) : null;
 
 const memory = { records: new Map(), issuers: new Map(), apiKeys: new Map() };
+const qrvidPattern = /^QRV-[A-Z0-9-]{6,64}$/i;
 
 const canonicalString = (record) => [record.qrvid, record.issuer, record.subject, record.issued_at_utc, record.expires_at_utc || '', record.metadata_hash].join('|');
 const generateMetadataHash = (payload) => crypto.createHash('sha256').update(JSON.stringify({ issuer: payload.issuer, subject: payload.subject, issued_at_utc: payload.issued_at_utc, expires_at_utc: payload.expires_at_utc || null })).digest('hex');
@@ -34,9 +35,9 @@ const normalizeRecord = (record) => ({
 
 const getStatus = (record) => {
   if (!record) return 'NOT_FOUND';
-  if (record.revoked_at_utc) return 'REVOKED';
-  if (record.expires_at_utc && new Date(record.expires_at_utc).getTime() < Date.now()) return 'EXPIRED';
-  return signRecord(record) === record.signature ? 'VERIFIED' : 'INVALID_SIGNATURE';
+  if (record.revoked_at) return 'REVOKED';
+  if (record.expires_at && new Date(record.expires_at).getTime() < Date.now()) return 'EXPIRED';
+  return 'VERIFIED';
 };
 
 const withError = (statusCode, error, code, details) => ({ ok: false, statusCode, error: { error, code, details, timestamp_utc: nowUtc() } });
@@ -54,6 +55,73 @@ const mapDbRecord = (row) => ({
   metadata_hash: row.metadata_hash,
   signature: row.signature,
 });
+
+const mapCanonicalRecord = (row) => ({
+  qrvid: row.qrvid,
+  title: row.title || null,
+  subject: row.subject || null,
+  issuer: row.issuer || null,
+  issued_at: row.issued_at ? new Date(row.issued_at).toISOString() : null,
+  expires_at: row.expires_at ? new Date(row.expires_at).toISOString() : null,
+  revoked_at: row.revoked_at ? new Date(row.revoked_at).toISOString() : null,
+  hash: row.hash || null,
+  signature: row.signature || null,
+  source_status: row.source_status || null,
+});
+
+const isMissingOptionalJoinTable = (error) =>
+  error?.code === '42P01' && (error.message.includes('qr_certificates') || error.message.includes('qr_issuers'));
+
+const readRecordById = async (qrvid) => {
+  if (!pool) return null;
+
+  const fullQuery = `
+    SELECT
+      o.qrvid,
+      o.subject,
+      o.status AS source_status,
+      o.issued_at,
+      o.expires_at,
+      o.revoked_at,
+      COALESCE(c.title, o.title) AS title,
+      COALESCE(i.issuer_name, o.issuer, o.issuer_id) AS issuer,
+      h.hash,
+      h.signature
+    FROM qr_objects o
+    LEFT JOIN qr_hash_registry h ON h.qrvid = o.qrvid
+    LEFT JOIN qr_certificates c ON c.qrvid = o.qrvid
+    LEFT JOIN qr_issuers i ON i.issuer_id = COALESCE(c.issuer_id, o.issuer_id)
+    WHERE o.qrvid = $1
+    LIMIT 1
+  `;
+
+  const fallbackQuery = `
+    SELECT
+      o.qrvid,
+      o.subject,
+      o.status AS source_status,
+      o.issued_at,
+      o.expires_at,
+      o.revoked_at,
+      o.title AS title,
+      COALESCE(o.issuer, o.issuer_id) AS issuer,
+      h.hash,
+      h.signature
+    FROM qr_objects o
+    LEFT JOIN qr_hash_registry h ON h.qrvid = o.qrvid
+    WHERE o.qrvid = $1
+    LIMIT 1
+  `;
+
+  try {
+    const result = await pool.query(fullQuery, [qrvid]);
+    return result.rows[0] ? mapCanonicalRecord(result.rows[0]) : null;
+  } catch (error) {
+    if (!isMissingOptionalJoinTable(error)) throw error;
+    const result = await pool.query(fallbackQuery, [qrvid]);
+    return result.rows[0] ? mapCanonicalRecord(result.rows[0]) : null;
+  }
+};
 
 const upsertSeedRecord = async () => {
   const seed = {
@@ -135,38 +203,75 @@ export const revokeRecord = async (qrvid, revokePayload) => {
 };
 
 export const verifyRecord = async (qrvid) => {
+  if (!qrvidPattern.test(qrvid || '')) {
+    return {
+      ok: true,
+      statusCode: 400,
+      verification: {
+        qrvid: qrvid || null,
+        status: 'INVALID_FORMAT',
+        checked_at_utc: nowUtc(),
+        message: 'Invalid QRVID format',
+      },
+    };
+  }
+
   try {
     let record = null;
     if (pool) {
-      const result = await pool.query('SELECT * FROM qrv_records WHERE qrvid=$1 LIMIT 1', [qrvid]);
-      record = result.rows[0] ? mapDbRecord(result.rows[0]) : null;
+      record = await readRecordById(qrvid);
     } else if (!isProduction) {
-      record = memory.records.get(qrvid) || null;
+      const memoryRecord = memory.records.get(qrvid) || null;
+      record = memoryRecord
+        ? {
+          qrvid: memoryRecord.qrvid,
+          title: memoryRecord.certificate_title || null,
+          subject: memoryRecord.subject || null,
+          issuer: memoryRecord.issuer || null,
+          issued_at: memoryRecord.issued_at_utc || null,
+          expires_at: memoryRecord.expires_at_utc || null,
+          revoked_at: memoryRecord.revoked_at_utc || null,
+          hash: memoryRecord.metadata_hash || null,
+          signature: memoryRecord.signature || null,
+          source_status: memoryRecord.status || null,
+        }
+        : null;
     }
 
     const status = getStatus(record);
     const response = {
       qrvid,
       status,
+      title: record?.title || null,
       issuer: record?.issuer || null,
       subject: record?.subject || null,
-      certificate_title: record?.certificate_title || null,
-      issuer_logo_url: record?.issuer_logo_url || null,
-      proof_reference: record?.proof_reference || record?.signature || null,
-      issued_at_utc: record?.issued_at_utc || null,
-      expires_at_utc: record?.expires_at_utc || null,
-      revoked_at_utc: record?.revoked_at_utc || null,
-      metadata_hash: record?.metadata_hash || null,
+      issued_at: record?.issued_at || null,
+      expires_at: record?.expires_at || null,
+      revoked_at: record?.revoked_at || null,
+      hash: record?.hash || null,
       signature: record?.signature || null,
+      // Legacy aliases to keep portal compatibility.
+      certificate_title: record?.title || null,
+      issued_at_utc: record?.issued_at || null,
+      expires_at_utc: record?.expires_at || null,
+      revoked_at_utc: record?.revoked_at || null,
+      metadata_hash: record?.hash || null,
       checked_at_utc: nowUtc(),
-      message: { VERIFIED: 'Record is valid and active', REVOKED: 'Record has been revoked', EXPIRED: 'Record has expired', NOT_FOUND: 'Record not found', INVALID_SIGNATURE: 'Record signature mismatch' }[status] || 'Verification failed',
+      message: {
+        VERIFIED: 'Record is valid and active',
+        REVOKED: 'Record has been revoked',
+        EXPIRED: 'Record has expired',
+        NOT_FOUND: 'Record not found',
+        INVALID_FORMAT: 'Invalid QRVID format',
+        UNAVAILABLE: 'Verification repository unavailable',
+      }[status] || 'Verification failed',
     };
 
     const validation = validators.verifyResponse(response);
     if (!validation.isValid) return withError(500, 'Verification response invalid', 'VERIFY_RESPONSE_INVALID', validation.errors);
     return { ok: true, statusCode: status === 'NOT_FOUND' ? 404 : 200, verification: response };
   } catch (_error) {
-    return { ok: true, statusCode: 500, verification: { qrvid, status: 'ERROR', checked_at_utc: nowUtc(), message: 'Internal verification error' } };
+    return { ok: true, statusCode: 503, verification: { qrvid, status: 'UNAVAILABLE', checked_at_utc: nowUtc(), message: 'Verification repository unavailable' } };
   }
 };
 

@@ -54,5 +54,10 @@ test('smoke: GET /, /healthz, /version, /api/v1/verify/QRV-PROD-CERT-000001', as
   assert.equal(verify.body.status, 'VERIFIED');
   assert.equal(typeof verify.body.signature, 'string');
   assert.ok('title' in verify.body);
+  assert.ok('subject' in verify.body);
+  assert.ok('issuer' in verify.body);
+  assert.ok('issued_at' in verify.body);
+  assert.ok('expires_at' in verify.body);
+  assert.ok('revoked_at' in verify.body);
   assert.ok('hash' in verify.body);
 });

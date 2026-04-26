@@ -15,6 +15,9 @@ export const healthHandler = (_req, res) => res.status(200).json(healthPayload()
 export const readyHandler = async (_req, res) => {
   try {
     const repository = await getRepositoryHealth();
+    if (!repository.ready) {
+      return res.status(503).json({ status: 'error', repository, service: 'execution-interface' });
+    }
     return res.status(200).json({ status: 'ok', repository, service: 'execution-interface' });
   } catch (error) {
     return res.status(503).json({ status: 'error', service: 'execution-interface', reason: error.message });

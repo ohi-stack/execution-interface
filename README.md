@@ -166,6 +166,7 @@ docker run --rm -p 3000:3000 --env-file .env onegodian-verify-portal
 - Required: `qr_objects`, `qr_hash_registry`
 - Optional joins (graceful fallback if missing): `qr_certificates`, `qr_issuers`
 - Reference tables available in the registry schema: `qr_objects`, `qr_hash_registry`, `qr_certificates`, `qr_issuers`, `qr_audit_log`
+- `/readyz` performs a PostgreSQL readiness probe using `SELECT 1` and returns `503` when the registry DB is unavailable.
 
 ## QuantumOHI portfolio blueprint
 

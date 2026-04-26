@@ -372,3 +372,201 @@ dd {
 .mobile-first-grid {
   grid-template-columns: 1fr;
 }
+
+.dashboard-body {
+  margin: 0;
+  background: #090f1d;
+  color: #e6edf7;
+}
+
+.dashboard-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.dashboard-sidebar {
+  background: #0f172a;
+  border-right: 1px solid #1d2a44;
+  padding: 1.5rem 1rem;
+}
+
+.dashboard-sidebar h1 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+}
+
+.dashboard-sidebar nav {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dashboard-sidebar a {
+  color: #9fb3d9;
+  text-decoration: none;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+}
+
+.dashboard-sidebar a.active,
+.dashboard-sidebar a:hover {
+  background: #17233b;
+  color: #f8fbff;
+}
+
+.dashboard-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #1d2a44;
+  background: #0b1324;
+  position: sticky;
+  top: 0;
+}
+
+.topnav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.dashboard-content {
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.kpi-card,
+.panel,
+.health-card {
+  background: #111c31;
+  border: 1px solid #1f304f;
+  border-radius: 14px;
+}
+
+.kpi-card {
+  padding: 1rem;
+}
+
+.kpi-label,
+.kpi-delta,
+.health-detail,
+.dash-time {
+  color: #9fb3d9;
+  margin: 0;
+}
+
+.kpi-value {
+  margin: 0.2rem 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.panel {
+  padding: 1rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.health-card {
+  padding: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.health-warn {
+  border-color: #5c3a1b;
+}
+
+.health-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.76rem;
+  border: 1px solid #2f446d;
+}
+
+.pill-ok {
+  background: #143322;
+  color: #8de0b2;
+  border-color: #1d5335;
+}
+
+.pill-warn {
+  background: #402b14;
+  color: #ffd79a;
+  border-color: #5f441f;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 1rem;
+}
+
+.activity-feed {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 580px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid #1f304f;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid #1d2a44;
+  }
+
+  .kpi-grid,
+  .health-grid,
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}

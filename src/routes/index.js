@@ -14,6 +14,7 @@ import {
   renderPricingPage,
 } from '../controllers/marketingController.js';
 import { healthHandler, metricsHandler, readyHandler, versionHandler } from '../controllers/healthController.js';
+import { renderDashboardPage } from '../controllers/dashboardController.js';
 
 const router = Router();
 
@@ -49,6 +50,7 @@ router.get('/pricing', renderPricingPage);
 router.get('/book-demo', renderBookDemoPage);
 router.get('/certificate-verification', renderCertificateVerificationPage);
 router.get('/membership-verification', renderMembershipVerificationPage);
+router.get('/dashboard', renderDashboardPage);
 router.use('/verify', verificationRoutes);
 router.get('/:qrvid', renderVerificationResult);
 

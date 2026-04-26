@@ -2,22 +2,12 @@ name: CI
 
 on:
   push:
-    paths:
-      - 'ohi-stack/onegodian-api/**'
-      - '.github/workflows/ci.yml'
+    branches: ["**"]
   pull_request:
-    paths:
-      - 'ohi-stack/onegodian-api/**'
-      - '.github/workflows/ci.yml'
 
 jobs:
-  build-test:
+  build:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ohi-stack/onegodian-api
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,18 +15,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: 20
+          cache: npm
           cache-dependency-path: ohi-stack/onegodian-api/package-lock.json
 
       - name: Install dependencies
+        working-directory: ohi-stack/onegodian-api
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Type check
+        working-directory: ohi-stack/onegodian-api
+        run: npm run check
 
-      - name: Test
+      - name: Run tests
+        working-directory: ohi-stack/onegodian-api
         run: npm run test
 
       - name: Build
+        working-directory: ohi-stack/onegodian-api
         run: npm run build

@@ -1,32 +1,54 @@
 import request from 'supertest';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
-import app from '../src/app';
+let app: Awaited<typeof import('../src/app')>['default'];
+
+beforeAll(async () => {
+  process.env.NODE_ENV = 'test';
+  process.env.CORS_ORIGINS = 'https://api.onegodian.org';
+  const module = await import('../src/app');
+  app = module.default;
+});
 
 describe('onegodian-api endpoints', () => {
+  it('returns service root payload', async () => {
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.body.ok).toBe(true);
+  });
+
   it('returns health data', async () => {
     const response = await request(app).get('/health');
 
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe('ok');
+    expect(response.body.status).toBe('healthy');
   });
 
-  it('returns v1 status', async () => {
-    const response = await request(app).get('/v1/status');
+  it('returns status payload', async () => {
+    const response = await request(app).get('/api/status');
 
     expect(response.status).toBe(200);
-    expect(response.body.version).toBe('v1');
+    expect(response.body.status).toBe('online');
   });
 
-  it('returns placeholder for identity verify', async () => {
-    const response = await request(app).post('/v1/identity/verify').send({});
+  it('returns version payload', async () => {
+    const response = await request(app).get('/api/version');
+
+    expect(response.status).toBe(200);
+    expect(response.body.ok).toBe(true);
+  });
+
+  it('returns placeholder for agent execute', async () => {
+    const response = await request(app).post('/api/agents/execute').send({ task: 'hello' });
 
     expect(response.status).toBe(501);
   });
 
-  it('returns placeholder for entitlements check', async () => {
-    const response = await request(app).post('/v1/entitlements/check').send({});
+  it('returns 404 for unknown route', async () => {
+    const response = await request(app).get('/missing');
 
-    expect(response.status).toBe(501);
+    expect(response.status).toBe(404);
+    expect(response.body.ok).toBe(false);
   });
 });

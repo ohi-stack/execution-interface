@@ -1,87 +1,34 @@
-import cors, { CorsOptions } from 'cors';
-import dotenv from 'dotenv';
-import express, { NextFunction, Request, Response } from 'express';
-import rateLimit from 'express-rate-limit';
-import helmet from 'helmet';
-import morgan from 'morgan';
+import express from 'express';
 
-dotenv.config();
+import { errorHandler, notFoundHandler } from './middleware/error-handler';
+import { securityMiddleware } from './middleware/security';
+import agentsRouter from './routes/agents.routes';
+import healthRouter from './routes/health.routes';
+import statusRouter from './routes/status.routes';
+import systemRouter from './routes/system.routes';
+import twinRouter from './routes/twin.routes';
+import workflowsRouter from './routes/workflows.routes';
 
 const app = express();
 
-const allowedOrigins = new Set([
-  'https://onegodian.org',
-  'https://u.onegodian.org',
-  'https://api.onegodian.org'
-]);
+app.use(securityMiddleware);
 
-const corsOptions: CorsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.has(origin)) {
-      callback(null, true);
-      return;
-    }
-
-    callback(new Error('CORS origin denied'));
-  },
-  credentials: true
-};
-
-app.use(helmet());
-app.use(cors(corsOptions));
-app.use(express.json({ limit: '1mb' }));
-app.use(
-  rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 100,
-    standardHeaders: true,
-    legacyHeaders: false
-  })
-);
-app.use(morgan('combined'));
-
-app.get('/health', (_req: Request, res: Response) => {
+app.get('/', (_req, res) => {
   res.status(200).json({
-    status: 'ok',
+    ok: true,
     service: 'onegodian-api',
-    timestamp: new Date().toISOString()
+    docs: '/api/system/registry'
   });
 });
 
-app.get('/v1/status', (_req: Request, res: Response) => {
-  res.status(200).json({
-    status: 'online',
-    version: 'v1'
-  });
-});
+app.use(healthRouter);
+app.use('/api', statusRouter);
+app.use('/api/agents', agentsRouter);
+app.use('/api/twin', twinRouter);
+app.use('/api/workflows', workflowsRouter);
+app.use('/api/system', systemRouter);
 
-app.post('/v1/identity/verify', (_req: Request, res: Response) => {
-  res.status(501).json({
-    message: 'Identity verification endpoint placeholder. Implementation pending.'
-  });
-});
-
-app.post('/v1/entitlements/check', (_req: Request, res: Response) => {
-  res.status(501).json({
-    message: 'Entitlements check endpoint placeholder. Implementation pending.'
-  });
-});
-
-app.use((req: Request, _res: Response, next: NextFunction) => {
-  const error = new Error(`Route not found: ${req.method} ${req.originalUrl}`);
-  (error as Error & { status?: number }).status = 404;
-  next(error);
-});
-
-app.use((err: Error & { status?: number }, _req: Request, res: Response, _next: NextFunction) => {
-  const status = err.status ?? 500;
-
-  res.status(status).json({
-    error: {
-      message: err.message || 'Internal Server Error',
-      status
-    }
-  });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;

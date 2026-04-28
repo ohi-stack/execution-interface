@@ -74,6 +74,36 @@ Your runtime pipeline must:
 6. Optionally seed: `npm run prisma:seed`.
 7. Run `npm run check` and `npm test`.
 
+## Deployment + security docs
+
+- [Staging deployment runbook](./STAGING_DEPLOYMENT.md)
+- [Staging acceptance checklist](./STAGING_ACCEPTANCE.md)
+- [Security notes](./SECURITY_NOTES.md)
+
+## Prisma generate reliability (CI + staging)
+
+If `npm run prisma:generate` fails with Prisma engine download errors (for example `403 Forbidden` from `binaries.prisma.sh`), use this checklist:
+
+1. Ensure the CI/deploy environment has outbound network access for Prisma engine downloads.
+2. If direct access is blocked, configure `PRISMA_ENGINES_MIRROR` to an approved internal mirror.
+3. Run installs with network access using `npm ci` before Prisma commands.
+4. Keep secrets out of logs and code; never print or commit `DATABASE_URL` values.
+
+Recommended CI-safe sequence:
+
+```bash
+npm ci
+npx prisma generate
+npm run check
+npm test
+```
+
+For debugging environment readiness without exposing secrets:
+
+```bash
+npm run prisma:doctor
+```
+
 ## API endpoints
 
 ### Core + Ops

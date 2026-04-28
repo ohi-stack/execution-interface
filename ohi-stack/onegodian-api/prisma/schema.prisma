@@ -64,8 +64,6 @@ model Subscription {
   stripeSubscriptionId String?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-
-  @@index([userId])
 }
 
 model Product {

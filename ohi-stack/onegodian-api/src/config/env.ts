@@ -24,7 +24,8 @@ const envSchema = z.object({
   DIRECT_URL: z.string().url('DIRECT_URL must be a valid URL').optional(),
   STRIPE_SECRET_KEY: z.string().min(1, 'STRIPE_SECRET_KEY is required'),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  CORS_ORIGIN: z.string().min(1, 'CORS_ORIGIN is required')
+  CORS_ORIGIN: z.string().optional(),
+  CORS_ORIGINS: z.string().optional()
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -34,7 +35,12 @@ if (!parsed.success) {
   throw new Error(`Invalid environment configuration: ${details}`);
 }
 
-const corsOrigins = parsed.data.CORS_ORIGIN.split(',')
+const corsOriginValue = parsed.data.CORS_ORIGIN ?? parsed.data.CORS_ORIGINS;
+if (!corsOriginValue) {
+  throw new Error('Invalid environment configuration: set CORS_ORIGIN (or legacy CORS_ORIGINS)');
+}
+
+const corsOrigins = corsOriginValue.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 

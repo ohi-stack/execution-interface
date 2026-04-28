@@ -24,6 +24,7 @@ import {
   postVerifyEmail,
 } from '../../controllers/api/launchController.js';
 import { validateBody } from '../../middleware/validateSchema.js';
+import authorityRoutes from './authorityRoutes.js';
 import { enforcePolicy } from '../../services/policyService.js';
 import { validateZodBody, validateZodParams } from '../../middleware/validateZod.js';
 import { requireApiKey } from '../../middleware/apiKeyAuth.js';
@@ -44,6 +45,8 @@ import {
 } from '../../schemas/qrvApiSchemas.js';
 
 const router = Router();
+
+router.use('/', authorityRoutes);
 
 const writeLimiter = simpleRateLimit({ windowMs: 60_000, maxRequests: 60, keyPrefix: 'qrv-write' });
 const readLimiter = simpleRateLimit({ windowMs: 60_000, maxRequests: 120, keyPrefix: 'qrv-read' });

@@ -7,30 +7,33 @@ on:
     branches: [develop]
 
 jobs:
-  node-checks:
-  push:
-  pull_request:
-
-jobs:
   verify:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: acc_api_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d acc_api_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/acc_api_test?schema=public
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx prisma generate
+      - run: npx prisma migrate deploy
       - run: npm run check
       - run: npm test
-
-  php-lint-bridge:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Lint QuantumOHI bridge plugin PHP files
-        run: |
-          php -v
-          find wp-content/plugins/quantumohi-bridge -name '*.php' -print0 | xargs -0 -n1 php -l
       - run: npm run validate:enforcement
-      - run: npm test

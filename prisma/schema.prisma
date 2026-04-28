@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DecisionLog {
+  decisionId     String   @id @default(uuid()) @map("decision_id")
+  executionId    String?  @map("execution_id")
+  workflowId     String?  @map("workflow_id")
+  tenantId       String?  @map("tenant_id")
+  actorType      String   @map("actor_type")
+  actorId        String   @map("actor_id")
+  agentId        String?  @map("agent_id")
+  role           String
+  action         String
+  resource       String?
+  environment    String
+  authorityScope Json     @map("authority_scope")
+  policyId       String?  @map("policy_id")
+  policyHash     String?  @map("policy_hash")
+  inputHash      String?  @map("input_hash")
+  outputHash     String?  @map("output_hash")
+  riskLevel      String   @map("risk_level")
+  decision       String
+  reason         String
+  approvalStatus String   @map("approval_status")
+  approvalLevel  String?  @map("approval_level")
+  requestId      String   @map("request_id")
+  timestampUtc   DateTime @map("timestamp_utc")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("decision_logs")
+  @@index([createdAt])
+}
+
+model KillSwitchState {
+  scopeType String  @map("scope_type")
+  scopeId   String  @map("scope_id")
+  isActive  Boolean @default(false) @map("is_active")
+  reason    String?
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@id([scopeType, scopeId])
+  @@map("kill_switch_state")
+}

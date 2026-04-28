@@ -2,9 +2,9 @@ import { Router } from 'express';
 import { z } from 'zod';
 
 import { env } from '../config/env';
+import { persistence } from '../lib/persistence';
 import { membershipPlans, stripeClient } from '../lib/stripe';
 import { requireAuth } from '../middleware/auth';
-import { store } from '../lib/store';
 
 const router = Router();
 
@@ -66,7 +66,8 @@ router.post('/checkout', requireAuth, async (req, res, next) => {
   }
 });
 
-router.post('/webhook', (req, res, next) => {
+router.post('/webhook', async (req, res, next) => {
+  try {
   const eventSchema = z.object({
     id: z.string(),
     type: z.string(),
@@ -83,7 +84,7 @@ router.post('/webhook', (req, res, next) => {
     return;
   }
 
-  store.billingEvents.push({
+  await persistence.createBillingEvent({
     id: parsed.data.id,
     type: parsed.data.type,
     payload: parsed.data.data.object,
@@ -96,13 +97,12 @@ router.post('/webhook', (req, res, next) => {
     const plan = object.metadata?.plan;
 
     if (userId && (plan === 'monthly' || plan === 'pro' || plan === 'founder')) {
-      const user = store.users.get(userId);
+      const user = await persistence.findUserById(userId);
       if (user) {
-        user.role = plan === 'monthly' ? 'pro' : plan;
-        store.createOrUpdateSubscription({
+        await persistence.activateUserSubscription({
           userId,
-          plan,
-          status: 'active',
+          role: plan === 'monthly' ? 'pro' : plan,
+          plan: plan,
           stripeCustomerId: typeof object.customer === 'string' ? object.customer : undefined,
           stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
         });
@@ -111,9 +111,13 @@ router.post('/webhook', (req, res, next) => {
   }
 
   res.status(200).json({ ok: true, received: true });
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/status', requireAuth, (req, res, next) => {
+router.get('/status', requireAuth, async (req, res, next) => {
+  try {
   if (!req.auth) {
     const error = new Error('Missing auth context') as Error & { status?: number; code?: string };
     error.status = 401;
@@ -122,12 +126,15 @@ router.get('/status', requireAuth, (req, res, next) => {
     return;
   }
 
-  const subscription = Array.from(store.subscriptions.values()).find((entry) => entry.userId === req.auth?.userId);
+  const subscription = await persistence.getSubscriptionByUserId(req.auth.userId);
 
   res.status(200).json({
     ok: true,
     subscription: subscription ?? null
   });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;

@@ -1,9 +1,10 @@
+import compression from 'compression';
 import cors, { CorsOptions } from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import pinoHttp from 'pino-http';
 import pino from 'pino';
+import pinoHttp from 'pino-http';
 
 import { env } from '../config/env';
 
@@ -26,6 +27,7 @@ const logger = pino({
 export const securityMiddleware = [
   helmet(),
   cors(corsOptions),
+  compression(),
   rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 100,
@@ -33,6 +35,7 @@ export const securityMiddleware = [
     legacyHeaders: false
   }),
   express.json({ limit: '1mb' }),
+  express.urlencoded({ extended: false, limit: '1mb' }),
   pinoHttp({ logger })
 ];
 

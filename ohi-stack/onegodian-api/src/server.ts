@@ -14,6 +14,7 @@ server.listen(env.port, () => {
 const gracefulShutdown = async (signal: NodeJS.Signals) => {
   logger.info({ signal }, 'graceful shutdown started');
 
+  server.close(async (error) => {
   await prisma.$disconnect().catch((error: unknown) => {
     logger.error({ err: error }, 'error while disconnecting prisma');
   });
@@ -24,7 +25,8 @@ const gracefulShutdown = async (signal: NodeJS.Signals) => {
       process.exit(1);
     }
 
-    logger.info('server closed');
+    await prisma.$disconnect();
+    logger.info('server closed and prisma disconnected');
     process.exit(0);
   });
 

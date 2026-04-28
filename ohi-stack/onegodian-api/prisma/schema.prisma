@@ -1,4 +1,12 @@
 generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
   provider = "prisma-client-js"
 }
 
@@ -65,6 +73,22 @@ model Subscription {
   stripeSubscriptionId String?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
+}
+
+model Product {
+  id        String      @id
+  name      String
+  type      ProductType
+  priceCents Int
+  orders    Order[]
+}
+
+model Order {
+  id                    String         @id @default(uuid())
+  userId                String
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId             String
+  product               Product        @relation(fields: [productId], references: [id])
 
   @@index([status])
   @@index([stripeCustomerId])
@@ -95,6 +119,16 @@ model Order {
   currency              String
   paymentStatus         PaymentStatus
   stripePaymentIntentId String?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  downloadTokens        DownloadToken[]
+
+  @@index([userId])
+  @@index([productId])
+}
+
+model DownloadToken {
+  token      String    @id @default(uuid())
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
   downloadTokens        DownloadToken[]
@@ -113,6 +147,9 @@ model DownloadToken {
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt  DateTime
   consumedAt DateTime?
+
+  @@index([orderId])
+  @@index([userId])
   createdAt  DateTime  @default(now())
 
   @@index([userId])

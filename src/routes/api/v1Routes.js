@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import {
   getAgentProfile,
+  getAuthorityModelHandler,
+  getDecisionByIdHandler,
   getVerifyRecord,
+  listDecisionsHandler,
   postAgentProfile,
+  postAuthorize,
   postApiKeyProvision,
   postAuthorityPolicy,
   postIssuerProvision,
@@ -77,5 +81,9 @@ router.post('/workflows', validateBody('createWorkflow'), postWorkflow);
 router.post('/policies', validateBody('createAuthorityPolicy'), postAuthorityPolicy);
 router.post('/agents/profile', validateBody('createAgentProfile'), enforcePolicy('create_agent_profile'), postAgentProfile);
 router.get('/agents/profile/:id', getAgentProfile);
+router.get('/authority/model', getAuthorityModelHandler);
+router.post('/authorize', postAuthorize);
+router.get('/decisions/:decisionId', getDecisionByIdHandler);
+router.get('/decisions', listDecisionsHandler);
 
 export default router;

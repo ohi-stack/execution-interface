@@ -13,6 +13,7 @@ Production Node.js + TypeScript backend for **https://api.onegodian.org**.
 - Rate limiting
 - Pino request logging
 - Dotenv + Zod environment validation
+- PostgreSQL persistence via Prisma ORM
 - Centralized structured error handling
 - JWT auth + role guards
 - Stripe checkout + webhook handlers
@@ -66,3 +67,17 @@ Copy `.env.example` to `.env` and edit values:
 - `GET /api/system/registry`
 
 All endpoints return JSON.
+
+## Database (PostgreSQL + Prisma)
+
+- Schema: `prisma/schema.prisma`
+- Migration SQL: `prisma/migrations/202604280001_init/migration.sql`
+- Seed script: `prisma/seed.ts` (upserts default products)
+
+Run in production deploys:
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate:deploy
+npm run prisma:seed
+```

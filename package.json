@@ -9,7 +9,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "NODE_ENV=development node --watch src/index.ts",
-    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/api/v1Routes.js && node --check src/services/recordStore.js",
+    "check": "node --check server.js && node --check src/app.js && node --check src/controllers/healthController.js && node --check src/controllers/verificationController.js && node --check src/controllers/api/v1Controller.js && node --check src/routes/index.js && node --check src/routes/api/v1Routes.js && node --check src/services/recordStore.js && node --check src/services/authorityService.js && node --check src/services/decisionLogRepository.js",
     "test": "node --test test/*.js",
     "validate:enforcement": "node scripts/validate-enforcement.mjs",
     "validate:prod": "node scripts/validate-prod.mjs",
@@ -38,5 +38,7 @@
     "@types/pg": "^8.15.6",
     "typescript": "^5.9.3",
     "prisma": "^6.8.2"
+    "supertest": "^7.2.2",
+    "typescript": "^5.9.3"
   }
 }

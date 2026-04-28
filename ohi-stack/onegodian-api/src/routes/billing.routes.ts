@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { env } from '../config/env';
 import { persistence } from '../lib/persistence';
 import { membershipPlans, stripeClient } from '../lib/stripe';
+import { prisma } from '../lib/prisma';
 import { requireAuth } from '../middleware/auth';
 
 const router = Router();
@@ -84,6 +85,14 @@ router.post('/webhook', async (req, res, next) => {
     return;
   }
 
+  await prisma.billingEvent.upsert({
+    where: { id: parsed.data.id },
+    update: { type: parsed.data.type, payload: parsed.data.data.object },
+    create: {
+      id: parsed.data.id,
+      type: parsed.data.type,
+      payload: parsed.data.data.object
+    }
   await persistence.createBillingEvent({
     id: parsed.data.id,
     type: parsed.data.type,
@@ -97,6 +106,22 @@ router.post('/webhook', async (req, res, next) => {
     const plan = object.metadata?.plan;
 
     if (userId && (plan === 'monthly' || plan === 'pro' || plan === 'founder')) {
+      const role = plan === 'monthly' ? 'pro' : plan;
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: { role }
+      });
+
+      await prisma.subscription.upsert({
+        where: { userId },
+        update: {
+          plan,
+          status: 'active',
+          stripeCustomerId: typeof object.customer === 'string' ? object.customer : undefined,
+          stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
+        },
+        create: {
       const user = await persistence.findUserById(userId);
       if (user) {
         await persistence.activateUserSubscription({
@@ -105,8 +130,8 @@ router.post('/webhook', async (req, res, next) => {
           plan: plan,
           stripeCustomerId: typeof object.customer === 'string' ? object.customer : undefined,
           stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
-        });
-      }
+        }
+      });
     }
   }
 
@@ -126,6 +151,7 @@ router.get('/status', requireAuth, async (req, res, next) => {
     return;
   }
 
+  const subscription = await prisma.subscription.findFirst({ where: { userId: req.auth.userId } });
   const subscription = await persistence.getSubscriptionByUserId(req.auth.userId);
 
   res.status(200).json({

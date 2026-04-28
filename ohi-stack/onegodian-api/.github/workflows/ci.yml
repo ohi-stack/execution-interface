@@ -8,6 +8,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: onegodian
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d onegodian"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      NODE_ENV: test
+      APP_URL: http://localhost:3000
+      JWT_SECRET: abcdefghijklmnopqrstuvwxyz123456
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/onegodian
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/onegodian
+      STRIPE_SECRET_KEY: sk_test_123
+      STRIPE_WEBHOOK_SECRET: whsec_test_123
+      CORS_ORIGIN: http://localhost:3000
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,14 +46,22 @@ jobs:
         working-directory: ohi-stack/onegodian-api
         run: npm ci
 
+      - name: Generate Prisma client
+        working-directory: ohi-stack/onegodian-api
+        run: npx prisma generate
+
+      - name: Apply migrations
+        working-directory: ohi-stack/onegodian-api
+        run: npx prisma migrate deploy
+
+      - name: Seed products
+        working-directory: ohi-stack/onegodian-api
+        run: npm run prisma:seed
+
       - name: Type check
         working-directory: ohi-stack/onegodian-api
         run: npm run check
 
       - name: Run tests
         working-directory: ohi-stack/onegodian-api
-        run: npm run test
-
-      - name: Build
-        working-directory: ohi-stack/onegodian-api
-        run: npm run build
+        run: npm test

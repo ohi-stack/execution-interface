@@ -1,6 +1,7 @@
 import request from 'supertest';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { prisma } from '../src/lib/prisma';
 import { persistence } from '../src/lib/persistence';
 
 let app: Awaited<typeof import('../src/app')>['default'];
@@ -11,14 +12,32 @@ let testUserId = '';
 
 beforeAll(async () => {
   process.env.NODE_ENV = 'test';
-  process.env.CORS_ORIGINS = 'https://api.onegodian.org';
+  process.env.CORS_ORIGIN = 'https://api.onegodian.org';
   process.env.APP_URL = 'https://api.onegodian.org';
   process.env.JWT_SECRET = 'abcdefghijklmnopqrstuvwxyz123456';
-  process.env.DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/onegodian';
+  process.env.DATABASE_URL = process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/onegodian';
+  process.env.DIRECT_URL = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
   process.env.STRIPE_SECRET_KEY = 'sk_test_123';
   process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_123';
   const module = await import('../src/app');
   app = module.default;
+});
+
+beforeEach(async () => {
+  await prisma.downloadToken.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.subscription.deleteMany();
+  await prisma.billingEvent.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.product.deleteMany();
+
+  await prisma.product.createMany({
+    data: [
+      { id: 'product_pdf_foundations', name: 'Onegodian Foundations PDF', type: 'pdf', priceCents: 1900 },
+      { id: 'product_course_alignment', name: 'Alignment Mastery Course', type: 'course', priceCents: 4900 },
+      { id: 'product_toolkit_builder', name: 'Builder Toolkit', type: 'toolkit', priceCents: 9900 }
+    ]
+  });
 });
 
 describe('onegodian-api endpoints', () => {
@@ -56,13 +75,22 @@ describe('onegodian-api endpoints', () => {
     testUserId = me.body.user.id;
   });
 
-  it('returns readiness and metrics payloads', async () => {
-    const ready = await request(app).get('/ready');
-    const metrics = await request(app).get('/metrics');
+  it('returns readiness and metrics payloads based on database state', async () => {
+    const spy = vi.spyOn(prisma, '$queryRaw');
+    spy.mockResolvedValueOnce([{ '?column?': 1 }] as never);
 
-    expect(ready.status).toBe(200);
+    const readyOk = await request(app).get('/ready');
+    expect(readyOk.status).toBe(200);
+
+    spy.mockRejectedValueOnce(new Error('db down'));
+    const readyFail = await request(app).get('/ready');
+    expect(readyFail.status).toBe(503);
+
+    const metrics = await request(app).get('/metrics');
     expect(metrics.status).toBe(200);
     expect(metrics.body.memory).toBeTypeOf('object');
+
+    spy.mockRestore();
   });
 
   it('returns unauthorized for billing status without token', async () => {
@@ -71,6 +99,14 @@ describe('onegodian-api endpoints', () => {
   });
 
   it('processes webhook and exposes billing status', async () => {
+    const signup = await request(app).post('/api/members/signup').send({
+      email: `billing-${Date.now()}@onegodian.org`,
+      password: 'password123',
+      name: 'Billing User'
+    });
+
+    const userId = signup.body.user.id as string;
+    authToken = signup.body.token as string;
     const user = await persistence.findUserByEmail(testEmail);
     const userId = user?.id ?? testUserId;
 
@@ -97,6 +133,14 @@ describe('onegodian-api endpoints', () => {
   });
 
   it('fulfills digital products with 24-hour download token', async () => {
+    const signup = await request(app).post('/api/members/signup').send({
+      email: `product-${Date.now()}@onegodian.org`,
+      password: 'password123',
+      name: 'Product User'
+    });
+
+    authToken = signup.body.token as string;
+
     const products = await request(app)
       .get('/api/products')
       .set('Authorization', `Bearer ${authToken}`);
@@ -121,9 +165,22 @@ describe('onegodian-api endpoints', () => {
   });
 
   it('protects admin metrics endpoint by role', async () => {
+    const signup = await request(app).post('/api/members/signup').send({
+      email: `admin-${Date.now()}@onegodian.org`,
+      password: 'password123',
+      name: 'Admin User'
+    });
+
+    authToken = signup.body.token as string;
+    const userId = signup.body.user.id as string;
+
     const forbidden = await request(app).get('/admin/stats').set('Authorization', `Bearer ${authToken}`);
     expect(forbidden.status).toBe(403);
 
+    await prisma.user.update({ where: { id: userId }, data: { role: 'admin' } });
+
+    const login = await request(app).post('/api/members/login').send({
+      email: signup.body.user.email,
     await persistence.updateUserRole(testUserId, 'admin');
 
     const login = await request(app).post('/api/members/login').send({

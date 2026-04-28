@@ -2,10 +2,16 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import { env } from '../config/env';
-import { MemberRole, User } from '../types/domain';
+import { MemberRole } from '../types/domain';
 
 type AuthTokenPayload = {
   sub: string;
+  email: string;
+  role: MemberRole;
+};
+
+type AuthUser = {
+  id: string;
   email: string;
   role: MemberRole;
 };
@@ -14,7 +20,7 @@ export const hashPassword = async (value: string): Promise<string> => bcrypt.has
 
 export const comparePassword = async (value: string, hash: string): Promise<boolean> => bcrypt.compare(value, hash);
 
-export const createAccessToken = (user: User): string => {
+export const createAccessToken = (user: AuthUser): string => {
   const payload: AuthTokenPayload = {
     sub: user.id,
     email: user.email,

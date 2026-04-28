@@ -13,7 +13,9 @@
     "test": "node --test test/*.js",
     "validate:enforcement": "node scripts/validate-enforcement.mjs",
     "validate:prod": "node scripts/validate-prod.mjs",
-    "smoke:prod": "node scripts/smoke-check-qrv.mjs"
+    "smoke:prod": "node scripts/smoke-check-qrv.mjs",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy"
   },
   "engines": {
     "node": ">=22"
@@ -26,13 +28,16 @@
     "pino": "^9.13.1",
     "pino-http": "^10.5.0",
     "stripe": "^17.7.0",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@prisma/client": "^6.8.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.3",
     "@types/node": "^22.19.0",
     "@types/pg": "^8.15.6",
+    "typescript": "^5.9.3",
+    "prisma": "^6.8.2"
     "supertest": "^7.2.2",
     "typescript": "^5.9.3"
   }

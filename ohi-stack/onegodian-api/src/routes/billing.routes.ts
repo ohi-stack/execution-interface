@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 
 import { env } from '../config/env';
+import { persistence } from '../lib/persistence';
 import { membershipPlans, stripeClient } from '../lib/stripe';
 import { prisma } from '../lib/prisma';
 import { requireAuth } from '../middleware/auth';
@@ -67,6 +68,7 @@ router.post('/checkout', requireAuth, async (req, res, next) => {
 });
 
 router.post('/webhook', async (req, res, next) => {
+  try {
   const eventSchema = z.object({
     id: z.string(),
     type: z.string(),
@@ -91,6 +93,11 @@ router.post('/webhook', async (req, res, next) => {
       type: parsed.data.type,
       payload: parsed.data.data.object
     }
+  await persistence.createBillingEvent({
+    id: parsed.data.id,
+    type: parsed.data.type,
+    payload: parsed.data.data.object,
+    createdAt: new Date().toISOString()
   });
 
   if (parsed.data.type === 'checkout.session.completed') {
@@ -115,9 +122,12 @@ router.post('/webhook', async (req, res, next) => {
           stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
         },
         create: {
+      const user = await persistence.findUserById(userId);
+      if (user) {
+        await persistence.activateUserSubscription({
           userId,
-          plan,
-          status: 'active',
+          role: plan === 'monthly' ? 'pro' : plan,
+          plan: plan,
           stripeCustomerId: typeof object.customer === 'string' ? object.customer : undefined,
           stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
         }
@@ -126,9 +136,13 @@ router.post('/webhook', async (req, res, next) => {
   }
 
   res.status(200).json({ ok: true, received: true });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get('/status', requireAuth, async (req, res, next) => {
+  try {
   if (!req.auth) {
     const error = new Error('Missing auth context') as Error & { status?: number; code?: string };
     error.status = 401;
@@ -138,11 +152,15 @@ router.get('/status', requireAuth, async (req, res, next) => {
   }
 
   const subscription = await prisma.subscription.findFirst({ where: { userId: req.auth.userId } });
+  const subscription = await persistence.getSubscriptionByUserId(req.auth.userId);
 
   res.status(200).json({
     ok: true,
     subscription: subscription ?? null
   });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;

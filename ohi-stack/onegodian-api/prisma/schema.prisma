@@ -7,6 +7,12 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum MemberRole {
@@ -52,6 +58,9 @@ model User {
   subscriptions Subscription[]
   orders        Order[]
   downloadTokens DownloadToken[]
+
+  @@index([role])
+  @@map("users")
 }
 
 model Subscription {
@@ -80,6 +89,32 @@ model Order {
   user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId             String
   product               Product        @relation(fields: [productId], references: [id])
+
+  @@index([status])
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+  @@map("subscriptions")
+}
+
+model Product {
+  id         String      @id
+  name       String
+  type       ProductType
+  priceCents Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orders     Order[]
+
+  @@index([type])
+  @@map("products")
+}
+
+model Order {
+  id                    String        @id @default(uuid())
+  userId                String
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId             String
+  product               Product       @relation(fields: [productId], references: [id])
   amountCents           Int
   currency              String
   paymentStatus         PaymentStatus
@@ -94,6 +129,18 @@ model Order {
 
 model DownloadToken {
   token      String    @id @default(uuid())
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  downloadTokens        DownloadToken[]
+
+  @@index([userId, createdAt])
+  @@index([paymentStatus])
+  @@index([stripePaymentIntentId])
+  @@map("orders")
+}
+
+model DownloadToken {
+  token      String    @id
   orderId    String
   order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   userId     String
@@ -103,6 +150,12 @@ model DownloadToken {
 
   @@index([orderId])
   @@index([userId])
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([orderId])
+  @@index([expiresAt])
+  @@map("download_tokens")
 }
 
 model BillingEvent {
@@ -110,4 +163,7 @@ model BillingEvent {
   type      String
   payload   Json
   createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+  @@map("billing_events")
 }

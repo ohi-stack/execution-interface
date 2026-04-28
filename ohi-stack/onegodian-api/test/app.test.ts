@@ -2,10 +2,13 @@ import request from 'supertest';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { prisma } from '../src/lib/prisma';
+import { persistence } from '../src/lib/persistence';
 
 let app: Awaited<typeof import('../src/app')>['default'];
 let authToken = '';
 let downloadToken = '';
+let testEmail = '';
+let testUserId = '';
 
 beforeAll(async () => {
   process.env.NODE_ENV = 'test';
@@ -47,6 +50,7 @@ describe('onegodian-api endpoints', () => {
 
   it('supports signup/login/me flow with JWT auth', async () => {
     const email = `user-${Date.now()}@onegodian.org`;
+    testEmail = email;
 
     const signup = await request(app).post('/api/members/signup').send({
       email,
@@ -68,6 +72,7 @@ describe('onegodian-api endpoints', () => {
     const me = await request(app).get('/api/members/me').set('Authorization', `Bearer ${authToken}`);
     expect(me.status).toBe(200);
     expect(me.body.user.email).toBe(email);
+    testUserId = me.body.user.id;
   });
 
   it('returns readiness and metrics payloads based on database state', async () => {
@@ -102,6 +107,8 @@ describe('onegodian-api endpoints', () => {
 
     const userId = signup.body.user.id as string;
     authToken = signup.body.token as string;
+    const user = await persistence.findUserByEmail(testEmail);
+    const userId = user?.id ?? testUserId;
 
     const webhook = await request(app).post('/billing/webhook').send({
       id: 'evt_test_123',
@@ -174,6 +181,10 @@ describe('onegodian-api endpoints', () => {
 
     const login = await request(app).post('/api/members/login').send({
       email: signup.body.user.email,
+    await persistence.updateUserRole(testUserId, 'admin');
+
+    const login = await request(app).post('/api/members/login').send({
+      email: testEmail,
       password: 'password123'
     });
 

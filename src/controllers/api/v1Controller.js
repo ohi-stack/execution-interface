@@ -1,5 +1,7 @@
 import { createRecord, provisionApiKey, provisionIssuer, revokeRecord, verifyRecord } from '../../services/recordStore.js';
 import { logAuditEvent } from '../../services/auditLogService.js';
+import { authorize, getAuthorityModel } from '../../services/authorityService.js';
+import { getDecisionById, listDecisions } from '../../services/decisionLogRepository.js';
 import {
   getAgentProfileById,
   saveAgentProfile,
@@ -87,3 +89,31 @@ export const getAgentProfile = (req, res) => {
 export const postTask = (req, res) => res.status(201).json(saveTask(req.body));
 export const postWorkflow = (req, res) => res.status(201).json(saveWorkflow(req.body));
 export const postAuthorityPolicy = (req, res) => res.status(201).json(saveAuthorityPolicy(req.body));
+
+export const getAuthorityModelHandler = (_req, res) => res.status(200).json(getAuthorityModel());
+
+export const postAuthorize = (req, res) => {
+  const result = authorize({ payload: req.body, requestIdHeader: req.header('x-request-id') });
+  if (!result.ok) {
+    return res.status(result.statusCode).json({ ...result.error, decisionId: result.decisionRecord.decisionId });
+  }
+  return res.status(result.statusCode).json(result.decisionRecord);
+};
+
+export const getDecisionByIdHandler = (req, res) => {
+  const record = getDecisionById(req.params.decisionId);
+  if (!record) {
+    return res.status(404).json({
+      error: 'Decision not found',
+      code: 'NOT_FOUND',
+      details: [`decisionId ${req.params.decisionId} does not exist`],
+      timestamp_utc: new Date().toISOString(),
+    });
+  }
+  return res.status(200).json(record);
+};
+
+export const listDecisionsHandler = (req, res) => {
+  const decisions = listDecisions({ limit: req.query.limit });
+  return res.status(200).json({ decisions });
+};

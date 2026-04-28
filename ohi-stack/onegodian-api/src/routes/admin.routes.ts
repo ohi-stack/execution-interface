@@ -1,13 +1,20 @@
 import { Router } from 'express';
 
-import { store } from '../lib/store';
+import { prisma } from '../lib/prisma';
 
 const router = Router();
 
-router.get('/stats', (_req, res) => {
-  const users = Array.from(store.users.values());
-  const subscriptions = Array.from(store.subscriptions.values());
-  const orders = Array.from(store.orders.values());
+router.get('/stats', async (_req, res) => {
+  const [usersRaw, subscriptionsRaw, ordersRaw, billingEvents] = await Promise.all([
+    prisma.user.findMany({ select: { role: true } }),
+    prisma.subscription.findMany({ select: { status: true } }),
+    prisma.order.findMany({ select: { paymentStatus: true, amountCents: true } }),
+    prisma.billingEvent.count()
+  ]);
+
+  const users = usersRaw as Array<{ role: 'free' | 'pro' | 'founder' | 'admin' }>;
+  const subscriptions = subscriptionsRaw as Array<{ status: 'active' | 'past_due' | 'canceled' | 'incomplete' }>;
+  const orders = ordersRaw as Array<{ paymentStatus: 'pending' | 'paid' | 'failed'; amountCents: number }>;
   const paidOrders = orders.filter((order) => order.paymentStatus === 'paid');
 
   res.status(200).json({
@@ -29,7 +36,7 @@ router.get('/stats', (_req, res) => {
         paidOrders: paidOrders.length,
         totalCents: paidOrders.reduce((sum, order) => sum + order.amountCents, 0)
       },
-      billingEvents: store.billingEvents.length,
+      billingEvents,
       generatedAt: new Date().toISOString()
     }
   });

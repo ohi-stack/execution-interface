@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { env } from '../config/env';
+import { isDatabaseReady } from '../lib/prisma';
 
 const healthRouter = Router();
 
@@ -13,10 +14,10 @@ healthRouter.get('/health', (_req, res) => {
   });
 });
 
-healthRouter.get('/ready', (_req, res) => {
+healthRouter.get('/ready', async (_req, res) => {
   const dependencies = {
     configLoaded: true,
-    databaseUrlConfigured: Boolean(env.databaseUrl),
+    databaseReachable: await isDatabaseReady(),
     stripeConfigured: Boolean(env.stripeSecretKey),
     jwtConfigured: Boolean(env.jwtSecret)
   };

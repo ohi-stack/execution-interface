@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { z } from 'zod';
 
 import { comparePassword, createAccessToken, hashPassword } from '../lib/auth';
+import { prisma } from '../lib/prisma';
 import { requireAuth } from '../middleware/auth';
-import { store } from '../lib/store';
 
 const router = Router();
 
@@ -29,7 +29,8 @@ router.post('/signup', async (req, res, next) => {
     return;
   }
 
-  if (store.findUserByEmail(parsed.data.email)) {
+  const existingUser = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
+  if (existingUser) {
     const error = new Error('Email already registered') as Error & { status?: number; code?: string };
     error.status = 409;
     error.code = 'conflict';
@@ -37,11 +38,13 @@ router.post('/signup', async (req, res, next) => {
     return;
   }
 
-  const user = store.createUser({
-    email: parsed.data.email,
-    name: parsed.data.name,
-    passwordHash: await hashPassword(parsed.data.password),
-    role: 'free'
+  const user = await prisma.user.create({
+    data: {
+      email: parsed.data.email.toLowerCase(),
+      name: parsed.data.name,
+      passwordHash: await hashPassword(parsed.data.password),
+      role: 'free'
+    }
   });
 
   const token = createAccessToken(user);
@@ -64,7 +67,8 @@ router.post('/login', async (req, res, next) => {
     return;
   }
 
-  const user = store.findUserByEmail(parsed.data.email);
+  const user = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
+
   if (!user || !(await comparePassword(parsed.data.password, user.passwordHash))) {
     const error = new Error('Invalid credentials') as Error & { status?: number; code?: string };
     error.status = 401;
@@ -82,7 +86,7 @@ router.post('/login', async (req, res, next) => {
   });
 });
 
-router.get('/me', requireAuth, (req, res, next) => {
+router.get('/me', requireAuth, async (req, res, next) => {
   if (!req.auth) {
     const error = new Error('Missing auth context') as Error & { status?: number; code?: string };
     error.status = 401;
@@ -91,7 +95,8 @@ router.get('/me', requireAuth, (req, res, next) => {
     return;
   }
 
-  const user = store.users.get(req.auth.userId);
+  const user = await prisma.user.findUnique({ where: { id: req.auth.userId } });
+
   if (!user) {
     const error = new Error('User not found') as Error & { status?: number; code?: string };
     error.status = 404;

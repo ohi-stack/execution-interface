@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 import { env } from '../config/env';
 import { membershipPlans, stripeClient } from '../lib/stripe';
+import { prisma } from '../lib/prisma';
 import { requireAuth } from '../middleware/auth';
-import { store } from '../lib/store';
 
 const router = Router();
 
@@ -66,7 +66,7 @@ router.post('/checkout', requireAuth, async (req, res, next) => {
   }
 });
 
-router.post('/webhook', (req, res, next) => {
+router.post('/webhook', async (req, res, next) => {
   const eventSchema = z.object({
     id: z.string(),
     type: z.string(),
@@ -83,11 +83,14 @@ router.post('/webhook', (req, res, next) => {
     return;
   }
 
-  store.billingEvents.push({
-    id: parsed.data.id,
-    type: parsed.data.type,
-    payload: parsed.data.data.object,
-    createdAt: new Date().toISOString()
+  await prisma.billingEvent.upsert({
+    where: { id: parsed.data.id },
+    update: { type: parsed.data.type, payload: parsed.data.data.object },
+    create: {
+      id: parsed.data.id,
+      type: parsed.data.type,
+      payload: parsed.data.data.object
+    }
   });
 
   if (parsed.data.type === 'checkout.session.completed') {
@@ -96,24 +99,36 @@ router.post('/webhook', (req, res, next) => {
     const plan = object.metadata?.plan;
 
     if (userId && (plan === 'monthly' || plan === 'pro' || plan === 'founder')) {
-      const user = store.users.get(userId);
-      if (user) {
-        user.role = plan === 'monthly' ? 'pro' : plan;
-        store.createOrUpdateSubscription({
+      const role = plan === 'monthly' ? 'pro' : plan;
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: { role }
+      });
+
+      await prisma.subscription.upsert({
+        where: { userId },
+        update: {
+          plan,
+          status: 'active',
+          stripeCustomerId: typeof object.customer === 'string' ? object.customer : undefined,
+          stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
+        },
+        create: {
           userId,
           plan,
           status: 'active',
           stripeCustomerId: typeof object.customer === 'string' ? object.customer : undefined,
           stripeSubscriptionId: typeof object.subscription === 'string' ? object.subscription : undefined
-        });
-      }
+        }
+      });
     }
   }
 
   res.status(200).json({ ok: true, received: true });
 });
 
-router.get('/status', requireAuth, (req, res, next) => {
+router.get('/status', requireAuth, async (req, res, next) => {
   if (!req.auth) {
     const error = new Error('Missing auth context') as Error & { status?: number; code?: string };
     error.status = 401;
@@ -122,7 +137,7 @@ router.get('/status', requireAuth, (req, res, next) => {
     return;
   }
 
-  const subscription = Array.from(store.subscriptions.values()).find((entry) => entry.userId === req.auth?.userId);
+  const subscription = await prisma.subscription.findFirst({ where: { userId: req.auth.userId } });
 
   res.status(200).json({
     ok: true,

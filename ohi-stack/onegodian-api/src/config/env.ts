@@ -21,11 +21,10 @@ const envSchema = z.object({
   APP_URL: z.string().url('APP_URL must be a valid URL'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL'),
+  DIRECT_URL: z.string().url('DIRECT_URL must be a valid URL').optional(),
   STRIPE_SECRET_KEY: z.string().min(1, 'STRIPE_SECRET_KEY is required'),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  CORS_ORIGINS: z
-    .string()
-    .min(1, 'CORS_ORIGINS is required (comma-separated list of allowed origins)')
+  CORS_ORIGIN: z.string().min(1, 'CORS_ORIGIN is required')
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -35,12 +34,12 @@ if (!parsed.success) {
   throw new Error(`Invalid environment configuration: ${details}`);
 }
 
-const corsOrigins = parsed.data.CORS_ORIGINS.split(',')
+const corsOrigins = parsed.data.CORS_ORIGIN.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
 if (corsOrigins.length === 0) {
-  throw new Error('Invalid environment configuration: CORS_ORIGINS must include at least one valid origin');
+  throw new Error('Invalid environment configuration: CORS_ORIGIN must include at least one valid origin');
 }
 
 export const env = {
@@ -50,6 +49,7 @@ export const env = {
   appUrl: parsed.data.APP_URL,
   jwtSecret: parsed.data.JWT_SECRET,
   databaseUrl: parsed.data.DATABASE_URL,
+  directUrl: parsed.data.DIRECT_URL,
   stripeSecretKey: parsed.data.STRIPE_SECRET_KEY,
   stripeWebhookSecret: parsed.data.STRIPE_WEBHOOK_SECRET,
   corsOrigins,

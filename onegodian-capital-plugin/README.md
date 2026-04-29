@@ -49,3 +49,10 @@ The ONEGODIAN Capital Portal is software infrastructure for managing digital rec
 - Disclosure acceptance must be recorded before an instrument can be issued from a paid order.
 - Paid WooCommerce order items linked with `_onegodian_capital_offering_id` can create instrument, ledger, and certificate records.
 - Issuance records are bookkeeping artifacts; legal review remains required before any public offering use.
+
+## WooCommerce Product Handling (Capital-Linked)
+- Products with `_onegodian_capital_offering_id` are treated as checkout-only items, not ordinary retail catalog listings.
+- Capital-linked product pages display a frontend notice directing buyers to official offering and disclosure pages before checkout.
+- Product edit screens display an admin warning clarifying Capital Portal-first presentation requirements.
+- Capital-linked products have comments/reviews disabled where possible through plugin hooks.
+- Recommended standards and implementation guidance are documented in `docs/WOOCOMMERCE_PRODUCT_STANDARD.md`.

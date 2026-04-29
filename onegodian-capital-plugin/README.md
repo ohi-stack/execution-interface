@@ -43,3 +43,9 @@ The ONEGODIAN Capital Portal is software infrastructure for managing digital rec
 - `onegodian_investor_dashboard`: instruments, certificates, disclosures, ledger history, and account notices.
 - `onegodian_capital_certificate`: certificate metadata and verification placeholders.
 - `onegodian_capital_disclosure`: disclosure consent state table.
+
+## v0.2.0 Purchase Flow Scaffold
+- WooCommerce integration is optional for plugin activation, but required for paid-order issuance flow.
+- Disclosure acceptance must be recorded before an instrument can be issued from a paid order.
+- Paid WooCommerce order items linked with `_onegodian_capital_offering_id` can create instrument, ledger, and certificate records.
+- Issuance records are bookkeeping artifacts; legal review remains required before any public offering use.

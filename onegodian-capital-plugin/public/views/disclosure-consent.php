@@ -6,3 +6,9 @@
         <tbody><tr><td>v0.0.0 placeholder</td><td><span class="og-badge og-badge--pending">Awaiting Acceptance</span></td><td>—</td></tr></tbody>
     </table>
 </div>
+<?php if (!defined('ABSPATH')) { exit; } ?>
+<form method="post">
+    <?php wp_nonce_field('onegodian_accept_disclosure', 'onegodian_accept_disclosure_nonce'); ?>
+    <p><?php echo esc_html__('Disclosure acceptance is required before any paid order can issue an instrument record.', 'onegodian-capital'); ?></p>
+    <button type="submit"><?php echo esc_html__('Accept Disclosure', 'onegodian-capital'); ?></button>
+</form>

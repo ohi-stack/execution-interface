@@ -11,6 +11,8 @@ require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-rest-api.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-certificates.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-ledger.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-disclosures.php';
+require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-instruments.php';
+require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-woocommerce.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-permissions.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-settings.php';
 
@@ -30,6 +32,7 @@ class Onegodian_Capital_Plugin {
         add_action('init', ['Onegodian_Capital_Meta_Boxes', 'register_meta']);
         add_action('admin_init', ['Onegodian_Capital_Settings', 'register']);
         add_action('init', ['Onegodian_Capital_Permissions', 'register_caps']);
+        add_action('init', ['Onegodian_Capital_WooCommerce', 'register']);
         add_action('rest_api_init', ['Onegodian_Capital_REST_API', 'register_routes']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_public_assets']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
@@ -47,5 +50,7 @@ class Onegodian_Capital_Plugin {
             return;
         }
         wp_enqueue_style('onegodian-capital-admin', ONEGODIAN_CAPITAL_URL . 'admin/css/onegodian-capital-admin.css', [], ONEGODIAN_CAPITAL_VERSION);
+        add_action('woocommerce_order_status_completed', ['Onegodian_Capital_Instruments', 'handle_paid_order']);
+        add_action('woocommerce_payment_complete', ['Onegodian_Capital_Instruments', 'handle_paid_order']);
     }
 }

@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "check": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/onegodian DIRECT_URL=postgresql://postgres:postgres@localhost:5432/onegodian npm run prisma:generate && tsx --test test/app.test.ts",
     "audit:prod": "npm audit --omit=dev",
     "prisma:doctor": "node scripts/prisma-doctor.mjs",
     "test:integration": "vitest run test/**/*.test.ts",

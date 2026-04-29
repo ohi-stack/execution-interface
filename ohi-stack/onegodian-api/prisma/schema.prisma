@@ -7,12 +7,6 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum MemberRole {
@@ -48,15 +42,15 @@ enum PaymentStatus {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  name          String?
-  passwordHash  String
-  role          MemberRole     @default(free)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  subscriptions Subscription[]
-  orders        Order[]
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String?
+  passwordHash   String
+  role           MemberRole      @default(free)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  subscriptions  Subscription[]
+  orders         Order[]
   downloadTokens DownloadToken[]
 
   @@index([role])
@@ -73,26 +67,7 @@ model Subscription {
   stripeSubscriptionId String?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-}
 
-model Product {
-  id        String      @id
-  name      String
-  type      ProductType
-  priceCents Int
-  orders    Order[]
-}
-
-model Order {
-  id                    String         @id @default(uuid())
-  userId                String
-  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId             String
-  product               Product        @relation(fields: [productId], references: [id])
-
-  @@index([status])
-  @@index([stripeCustomerId])
-  @@index([stripeSubscriptionId])
   @@map("subscriptions")
 }
 
@@ -110,11 +85,11 @@ model Product {
 }
 
 model Order {
-  id                    String        @id @default(uuid())
+  id                    String         @id @default(uuid())
   userId                String
-  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId             String
-  product               Product       @relation(fields: [productId], references: [id])
+  product               Product        @relation(fields: [productId], references: [id])
   amountCents           Int
   currency              String
   paymentStatus         PaymentStatus
@@ -125,35 +100,23 @@ model Order {
 
   @@index([userId])
   @@index([productId])
-}
-
-model DownloadToken {
-  token      String    @id @default(uuid())
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
-  downloadTokens        DownloadToken[]
-
-  @@index([userId, createdAt])
   @@index([paymentStatus])
   @@index([stripePaymentIntentId])
   @@map("orders")
 }
 
 model DownloadToken {
-  token      String    @id
+  token      String    @id @default(uuid())
   orderId    String
   order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   userId     String
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt  DateTime
   consumedAt DateTime?
-
-  @@index([orderId])
-  @@index([userId])
   createdAt  DateTime  @default(now())
 
-  @@index([userId])
   @@index([orderId])
+  @@index([userId])
   @@index([expiresAt])
   @@map("download_tokens")
 }

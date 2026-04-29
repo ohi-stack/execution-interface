@@ -1,19 +1,20 @@
-import { defineConfig } from 'prisma/config';
-
-export default defineConfig({
-  schema: 'prisma/schema.prisma',
 import 'dotenv/config';
 
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from 'prisma/config';
+
+const databaseUrl = process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/onegodian';
 
 export default defineConfig({
+  experimental: {
+    adapter: true
+  },
   schema: 'prisma/schema.prisma',
   migrations: {
     path: 'prisma/migrations'
   },
-  engine: 'classic',
+  engine: 'js',
   datasource: {
-    url: env('DATABASE_URL')
+    url: databaseUrl
   },
   seed: 'tsx prisma/seed.ts'
 });

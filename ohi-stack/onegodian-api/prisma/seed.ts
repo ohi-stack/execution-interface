@@ -2,31 +2,17 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
-  await prisma.product.createMany({
-    data: [
-      { id: 'product_pdf_foundations', name: 'Onegodian Foundations PDF', type: 'pdf', priceCents: 1900 },
-      { id: 'product_course_alignment', name: 'Alignment Mastery Course', type: 'course', priceCents: 4900 },
-      { id: 'product_toolkit_builder', name: 'Builder Toolkit', type: 'toolkit', priceCents: 9900 }
-    ],
-    skipDuplicates: true
-  });
-}
-
-main()
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
 const products = [
   { id: 'product_pdf_foundations', name: 'Onegodian Foundations PDF', type: 'pdf', priceCents: 1900 },
   { id: 'product_course_alignment', name: 'Alignment Mastery Course', type: 'course', priceCents: 4900 },
   { id: 'product_toolkit_builder', name: 'Builder Toolkit', type: 'toolkit', priceCents: 9900 }
 ] as const;
 
-async function main() {
+const adminEmail = process.env.SEED_ADMIN_EMAIL?.toLowerCase();
+const adminPasswordHash = process.env.SEED_ADMIN_PASSWORD_HASH;
+const adminName = process.env.SEED_ADMIN_NAME ?? 'ONEGODIAN Admin';
+
+async function seedProducts() {
   for (const product of products) {
     await prisma.product.upsert({
       where: { id: product.id },
@@ -38,6 +24,32 @@ async function main() {
       create: product
     });
   }
+}
+
+async function seedAdmin() {
+  if (!adminEmail || !adminPasswordHash) {
+    return;
+  }
+
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      name: adminName,
+      passwordHash: adminPasswordHash,
+      role: 'admin'
+    },
+    create: {
+      email: adminEmail,
+      name: adminName,
+      passwordHash: adminPasswordHash,
+      role: 'admin'
+    }
+  });
+}
+
+async function main() {
+  await seedProducts();
+  await seedAdmin();
 }
 
 main()

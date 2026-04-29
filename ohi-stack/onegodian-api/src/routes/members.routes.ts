@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { z } from 'zod';
 
 import { comparePassword, createAccessToken, hashPassword } from '../lib/auth';
-import { prisma } from '../lib/prisma';
 import { persistence } from '../lib/persistence';
 import { requireAuth } from '../middleware/auth';
 
@@ -20,21 +19,6 @@ const loginSchema = z.object({
 });
 
 router.post('/signup', async (req, res, next) => {
-  const parsed = signupSchema.safeParse(req.body);
-  if (!parsed.success) {
-    const error = new Error('Request validation failed') as Error & { status?: number; code?: string; details?: unknown };
-    error.status = 400;
-    error.code = 'validation_error';
-    error.details = parsed.error.flatten();
-    next(error);
-    return;
-  }
-
-  const existingUser = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
-  if (existingUser) {
-    const error = new Error('Email already registered') as Error & { status?: number; code?: string };
-    error.status = 409;
-    error.code = 'conflict';
   try {
     const parsed = signupSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -71,61 +55,42 @@ router.post('/signup', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
-  const user = await prisma.user.create({
-    data: {
-      email: parsed.data.email.toLowerCase(),
-      name: parsed.data.name,
-      passwordHash: await hashPassword(parsed.data.password),
-      role: 'free'
-    }
-  });
-
-  const token = createAccessToken(user);
-
-  res.status(201).json({
-    ok: true,
-    token,
-    user: { id: user.id, email: user.email, name: user.name, role: user.role }
-  });
 });
 
 router.post('/login', async (req, res, next) => {
-  const parsed = loginSchema.safeParse(req.body);
-  if (!parsed.success) {
-    const error = new Error('Request validation failed') as Error & { status?: number; code?: string; details?: unknown };
-    error.status = 400;
-    error.code = 'validation_error';
-    error.details = parsed.error.flatten();
+  try {
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const error = new Error('Request validation failed') as Error & { status?: number; code?: string; details?: unknown };
+      error.status = 400;
+      error.code = 'validation_error';
+      error.details = parsed.error.flatten();
+      next(error);
+      return;
+    }
+
+    const user = await persistence.findUserByEmail(parsed.data.email);
+    if (!user || !(await comparePassword(parsed.data.password, user.passwordHash))) {
+      const error = new Error('Invalid credentials') as Error & { status?: number; code?: string };
+      error.status = 401;
+      error.code = 'unauthorized';
+      next(error);
+      return;
+    }
+
+    const token = createAccessToken(user);
+
+    res.status(200).json({
+      ok: true,
+      token,
+      user: { id: user.id, email: user.email, name: user.name, role: user.role }
+    });
+  } catch (error) {
     next(error);
-    return;
   }
-
-  const user = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
-
-  const user = await persistence.findUserByEmail(parsed.data.email);
-  if (!user || !(await comparePassword(parsed.data.password, user.passwordHash))) {
-    const error = new Error('Invalid credentials') as Error & { status?: number; code?: string };
-    error.status = 401;
-    error.code = 'unauthorized';
-    next(error);
-    return;
-  }
-
-  const token = createAccessToken(user);
-
-  res.status(200).json({
-    ok: true,
-    token,
-    user: { id: user.id, email: user.email, name: user.name, role: user.role }
-  });
 });
 
 router.get('/me', requireAuth, async (req, res, next) => {
-  if (!req.auth) {
-    const error = new Error('Missing auth context') as Error & { status?: number; code?: string };
-    error.status = 401;
-    error.code = 'unauthorized';
   try {
     if (!req.auth) {
       const error = new Error('Missing auth context') as Error & { status?: number; code?: string };
@@ -151,21 +116,6 @@ router.get('/me', requireAuth, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
-  const user = await prisma.user.findUnique({ where: { id: req.auth.userId } });
-
-  if (!user) {
-    const error = new Error('User not found') as Error & { status?: number; code?: string };
-    error.status = 404;
-    error.code = 'not_found';
-    next(error);
-    return;
-  }
-
-  res.status(200).json({
-    ok: true,
-    user: { id: user.id, email: user.email, name: user.name, role: user.role }
-  });
 });
 
 export default router;

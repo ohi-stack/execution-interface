@@ -1,9 +1,21 @@
 # Onegodian Capital Web
 
-## Hostinger Deployment Settings
+Public Next.js frontend for capital.onegodian.com.
 
-- **Framework:** Next.js
-- **Build command:** `npm run build`
-- **Start command:** `npm run start`
-- **Install command:** `npm ci`
-- **Environment variable:** `NEXT_PUBLIC_API_BASE_URL=https://api.onegodian.org`
+## Deploy (Hostinger)
+
+- Framework: Next.js
+- Node version: 20+
+- Install command: `npm ci`
+- Build command: `npm run build`
+- Start command: `npm run start`
+- Environment variable: `NEXT_PUBLIC_API_BASE_URL=https://api.onegodian.org`
+
+## Development
+
+```bash
+npm ci
+npm run lint
+npm run build
+npm run dev
+```

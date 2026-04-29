@@ -45,3 +45,32 @@ API_BASE_URL=https://api.onegodian.org npm run smoke:live
 ```
 
 > Note: Live smoke testing may fail in restricted environments when outbound network access to the production domain is blocked.
+
+
+## Verification commands
+```bash
+npm ci
+npm run prisma:generate
+npm run check
+npm run build
+npm test
+```
+
+## Required environment variables
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `APP_URL`
+- `NODE_ENV`
+- `PORT`
+
+## Billing verification checklist
+- Checkout session validates requested `plan` and rejects invalid values.
+- Billing status endpoint (`GET /billing/status`) requires authentication.
+- Stripe webhook verifies `stripe-signature` using `STRIPE_WEBHOOK_SECRET`.
+- Webhook events persist in local billing event state and apply subscription activation on `checkout.session.completed`.
+- Stripe secret values are never returned in API responses.
+
+## Known blockers
+- Integration flows that require a live PostgreSQL service and live Stripe signed test fixtures are environment-dependent. In local/offline CI environments without these dependencies, only signature/validation smoke checks can run.

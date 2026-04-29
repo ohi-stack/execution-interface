@@ -34,7 +34,15 @@ export const securityMiddleware = [
     standardHeaders: true,
     legacyHeaders: false
   }),
-  express.json({ limit: '1mb' }),
+  express.json({
+    limit: '1mb',
+    verify: (req, _res, buf) => {
+      const request = req as { url?: string; rawBody?: Buffer };
+      if (request.url?.startsWith('/billing/webhook')) {
+        request.rawBody = Buffer.from(buf);
+      }
+    }
+  }),
   express.urlencoded({ extended: false, limit: '1mb' }),
   pinoHttp({ logger })
 ];

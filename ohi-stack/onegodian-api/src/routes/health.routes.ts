@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
 import { env } from '../config/env';
-import { isDatabaseReady } from '../lib/prisma';
 import { persistence } from '../lib/persistence';
 
 const healthRouter = Router();
@@ -9,16 +8,13 @@ const healthRouter = Router();
 healthRouter.get('/health', (_req, res) => {
   res.status(200).json({
     ok: true,
-    status: 'alive',
-    service: 'onegodian-api',
+    service: env.appName,
+    status: 'healthy',
     timestamp: new Date().toISOString()
   });
 });
 
 healthRouter.get('/ready', async (_req, res) => {
-  const dependencies = {
-    configLoaded: true,
-    databaseReachable: await isDatabaseReady(),
   const databaseReachable = await persistence.healthcheck();
   const dependencies = {
     configLoaded: true,
@@ -32,9 +28,18 @@ healthRouter.get('/ready', async (_req, res) => {
 
   res.status(ready ? 200 : 503).json({
     ok: ready,
+    service: env.appName,
     status: ready ? 'ready' : 'degraded',
     dependencies,
     timestamp: new Date().toISOString()
+  });
+});
+
+healthRouter.get('/version', (_req, res) => {
+  res.status(200).json({
+    service: env.appName,
+    version: env.appVersion,
+    node: process.version
   });
 });
 

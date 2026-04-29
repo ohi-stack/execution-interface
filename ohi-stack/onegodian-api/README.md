@@ -154,3 +154,6 @@ npm run prisma:generate
 npm run prisma:migrate:deploy
 npm run prisma:seed
 ```
+
+## Deployment baseline
+This service provides production readiness endpoints at `/health`, `/ready`, and `/version`. See `DEPLOYMENT.md` for deployment and rollback runbooks, and `SECURITY.md` for operational security policy.

@@ -28,6 +28,7 @@ const normalizeStatus = (status) => {
   switch ((status || '').toUpperCase()) {
     case 'VERIFIED': return 'VERIFIED';
     case 'REVOKED': return 'REVOKED';
+    case 'INVALID_FORMAT': return 'INVALID_FORMAT';
     case 'EXPIRED': return 'EXPIRED';
     case 'NOT_FOUND':
     default:
@@ -46,10 +47,11 @@ const buildViewModel = (qrvid, payload, fallbackMessage) => {
     statusLabel: normalizedStatus,
     badgeClass: {
       VERIFIED: 'badge-verified',
-      NOT_FOUND: 'badge-invalid',
       REVOKED: 'badge-revoked',
+      NOT_FOUND: 'badge-not-found',
+      INVALID_FORMAT: 'badge-invalid-format',
       EXPIRED: 'badge-expired',
-    }[normalizedStatus] || 'badge-invalid',
+    }[normalizedStatus] || 'badge-not-found',
     issuer: payload?.issuer || null,
     issuerLogoUrl: payload?.issuer_logo_url || null,
     certificateTitle: payload?.certificate_title || payload?.recordType || null,
@@ -102,7 +104,7 @@ export const verifyQRVID = async (incomingQRVID) => {
   const qrvid = sanitizeQRVID(incomingQRVID);
 
   if (!isValidQRVID(qrvid)) {
-    return { ok: false, qrvid, error: 'Invalid identifier format', verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'NOT_FOUND', message: 'Invalid identifier format' }, 'Invalid identifier format') };
+    return { ok: false, qrvid, error: 'Invalid identifier format', verification: buildViewModel(qrvid || 'Invalid identifier', { status: 'INVALID_FORMAT', message: 'Invalid identifier format' }, 'Invalid identifier format') };
   }
 
   try {

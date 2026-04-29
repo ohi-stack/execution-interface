@@ -36,7 +36,12 @@ export const renderIndexView = ({ pageTitle, qrvid, backupReminder }) => renderL
         />
         <button type="submit">Verify</button>
       </div>
+      <div class="loading-indicator" data-loading-indicator aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Checking verification status…</span>
+      </div>
       <p id="qrvid-hint" class="field-hint">Accepted format: <span>QRV-123456789</span></p>
+      <p class="scan-cta">📱 Scan a QR code on mobile, then paste the QRVID to verify instantly.</p>
     </form>
   </section>
 

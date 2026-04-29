@@ -2,7 +2,7 @@
 
 Next.js App Router frontend for capital.onegodian.com.
 
-## Hostinger Deployment Settings
+Public Next.js frontend for capital.onegodian.com.
 
 - Framework preset: Next.js
 - Branch: main
@@ -24,3 +24,20 @@ NEXT_PUBLIC_API_BASE_URL=https://api.onegodian.org
 ## App Router Requirement
 
 This repository must include `src/app` (with at minimum `src/app/layout.tsx` and `src/app/page.tsx`) for Next.js App Router detection during build.
+## Deploy (Hostinger)
+
+- Framework: Next.js
+- Node version: 20+
+- Install command: `npm ci`
+- Build command: `npm run build`
+- Start command: `npm run start`
+- Environment variable: `NEXT_PUBLIC_API_BASE_URL=https://api.onegodian.org`
+
+## Development
+
+```bash
+npm ci
+npm run lint
+npm run build
+npm run dev
+```

@@ -20,7 +20,8 @@
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "tsx prisma/seed.ts",
-    "db:reset:dev": "prisma migrate reset --force"
+    "db:reset:dev": "prisma migrate reset --force",
+    "smoke:live": "node scripts/live-smoke-test.js"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",

@@ -1,4 +1,5 @@
 <?php
+
 class Onegodian_Capital_Shortcodes {
     public static function register() {
         add_shortcode('onegodian_capital_offerings', [__CLASS__, 'offerings']);
@@ -7,12 +8,31 @@ class Onegodian_Capital_Shortcodes {
         add_shortcode('onegodian_capital_certificate', [__CLASS__, 'certificate']);
         add_shortcode('onegodian_capital_disclosure', [__CLASS__, 'disclosure']);
     }
-    public static function offerings() { return self::view('public/views/offerings-grid.php'); }
-    public static function offering() { return self::view('public/views/offering-single.php'); }
-    public static function investor_dashboard() { return self::view('public/views/investor-dashboard.php'); }
-    public static function certificate() { return self::view('public/views/certificate-view.php'); }
-    public static function disclosure() { return self::view('public/views/disclosure-consent.php'); }
-    private static function view($rel) {
-        ob_start(); include ONEGODIAN_CAPITAL_PATH . $rel; return ob_get_clean();
+
+    public static function offerings($atts = []) {
+        return self::view('public/views/offerings-grid.php', ['atts' => $atts]);
+    }
+
+    public static function offering($atts = []) {
+        return self::view('public/views/offering-single.php', ['atts' => $atts]);
+    }
+
+    public static function investor_dashboard($atts = []) {
+        return self::view('public/views/investor-dashboard.php', ['atts' => $atts]);
+    }
+
+    public static function certificate($atts = []) {
+        return self::view('public/views/certificate-view.php', ['atts' => $atts]);
+    }
+
+    public static function disclosure($atts = []) {
+        return self::view('public/views/disclosure-consent.php', ['atts' => $atts]);
+    }
+
+    private static function view($rel, $context = []) {
+        ob_start();
+        extract($context, EXTR_SKIP);
+        include ONEGODIAN_CAPITAL_PATH . $rel;
+        return ob_get_clean();
     }
 }

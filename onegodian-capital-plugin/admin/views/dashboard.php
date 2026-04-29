@@ -1,8 +1,9 @@
-<?php
-/**
- * Admin dashboard disclaimer view.
- */
-?>
-<div class="notice notice-warning">
-    <p><strong>Legal Review Required:</strong> The ONEGODIAN Capital Portal is software infrastructure for managing digital records related to private capital instruments. It does not itself create, approve, or validate any securities offering. All notes, bonds, repayment terms, investor eligibility rules, disclosures, exemptions, and offering documents must be reviewed by qualified legal counsel before public use.</p>
+<div class="wrap onegodian-admin-wrap">
+    <h1>ONEGODIAN Capital Portal Dashboard</h1>
+    <div class="og-admin-warning"><strong>Compliance warning:</strong> Recordkeeping and disclosure UX only. Public offering deployment requires legal review.</div>
+    <div class="og-admin-grid">
+        <article class="og-admin-card"><h3>Offerings</h3><p>Maintain configurable offering records and lifecycle status.</p></article>
+        <article class="og-admin-card"><h3>Disclosures</h3><p>Track disclosure packet versions and acceptance obligations.</p></article>
+        <article class="og-admin-card"><h3>Certificates</h3><p>View certificate metadata and verification placeholders.</p></article>
+    </div>
 </div>

@@ -1,0 +1,2 @@
+const items = ['Legal review of offering terms','Disclosure packet approval','Investor eligibility rules','Stripe live-mode review','Refund/cancellation policy','Data retention policy','Backup/export testing','Admin permissions testing','Certificate verification testing','Tax/accounting review'];
+export default function ComplianceChecklist(){return <ul className="space-y-2">{items.map((i)=> <li key={i} className="rounded border bg-white p-3 text-sm">☐ {i}</li>)}</ul>;}

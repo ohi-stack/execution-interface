@@ -1,0 +1,1 @@
+export default function LegalNoticeBox({ title }: { title: string }) {return <div className="rounded-lg border border-gold bg-white p-4"><h3 className="font-semibold">{title}</h3><p className="text-sm text-slate-700">For informational and recordkeeping UI only. Not legal advice.</p></div>;}

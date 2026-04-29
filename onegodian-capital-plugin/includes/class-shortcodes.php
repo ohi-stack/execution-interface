@@ -34,17 +34,6 @@ class Onegodian_Capital_Shortcodes {
         return self::view('public/views/disclosure-consent.php', ['atts' => $atts]);
     }
 
-    private static function view($rel, $context = []) {
-        ob_start();
-        extract($context, EXTR_SKIP);
-        include ONEGODIAN_CAPITAL_PATH . $rel;
-        return ob_get_clean();
-    public static function offerings() { return self::view('public/views/offerings-grid.php'); }
-    public static function offering() { return self::view('public/views/offering-single.php'); }
-    public static function investor_dashboard() { return self::view('public/views/investor-dashboard.php'); }
-    public static function certificate() { return self::view('public/views/certificate-view.php'); }
-    public static function disclosure() { return self::view('public/views/disclosure-consent.php'); }
-
     public static function accept_disclosure($atts = []) {
         $atts = shortcode_atts(['offering_id' => 0], $atts, 'onegodian_capital_accept_disclosure');
         $offering_id = absint($atts['offering_id']);
@@ -68,6 +57,9 @@ class Onegodian_Capital_Shortcodes {
         if (!empty($vars)) {
             extract($vars, EXTR_SKIP);
         }
-        ob_start(); include ONEGODIAN_CAPITAL_PATH . $rel; return ob_get_clean();
+
+        ob_start();
+        include ONEGODIAN_CAPITAL_PATH . $rel;
+        return ob_get_clean();
     }
 }

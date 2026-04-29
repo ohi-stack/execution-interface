@@ -29,8 +29,9 @@ The ONEGODIAN Capital Portal is software infrastructure for managing digital rec
 ## Version Roadmap
 - v0.1.0: Initial scaffold.
 - v0.2.0: Purchase flow integration (order -> disclosure acceptance -> instrument -> ledger -> certificate -> dashboard).
+- v0.2.2: WooCommerce capital-linked product handling hardening, shortcode parse-error fix, and mobile/contrast polish.
 
-## UI Layer (v0.2.1)
+## UI Layer (v0.2.2)
 - Adds public and admin interface styling for institutional portal presentation.
 - Public shortcodes render structured sections for offerings, offering detail, investor dashboard, certificates, and disclosure consent.
 - Investor dashboard sections include My Capital Instruments, Certificates, Disclosure Acceptances, Ledger History, and Account Notices.

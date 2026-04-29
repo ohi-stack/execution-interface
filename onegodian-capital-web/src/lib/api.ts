@@ -1,16 +1,32 @@
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.onegodian.org';
 import { publicEnv } from './env';
 
 const API_BASE_URL = publicEnv.NEXT_PUBLIC_API_BASE_URL;
 
 async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, { cache: 'no-store' });
-  if (!response.ok) throw new Error(`API error ${response.status}`);
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
   return response.json() as Promise<T>;
 }
 
-export const getCapitalOfferings = () => apiGet('/api/capital/offerings');
-export const getCapitalOfferingById = (id: string) => apiGet(`/api/capital/offerings/${id}`);
-export const getCurrentInvestor = () => apiGet('/api/capital/investors/me');
-export const getCertificateById = (id: string) => apiGet(`/api/capital/certificates/${id}`);
-export const getDisclosureById = (id: string) => apiGet(`/api/capital/disclosures/${id}`);
-export const getCapitalLedger = () => apiGet('/api/capital/ledger');
+export async function getOfferings() {
+  return apiGet('/api/capital/offerings');
+}
+
+export async function getOfferingBySlug(slug: string) {
+  return apiGet(`/api/capital/offerings/${slug}`);
+}
+
+export async function getCertificateById(id: string) {
+  return apiGet(`/api/capital/certificates/${id}`);
+}
+
+export async function getInvestorDashboard() {
+  return apiGet('/api/capital/investors/me');
+}
+
+export async function getLedgerRecords() {
+  return apiGet('/api/capital/ledger');
+}

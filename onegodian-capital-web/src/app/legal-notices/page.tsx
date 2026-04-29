@@ -1,2 +1,11 @@
-import LegalNoticeBox from '@/components/LegalNoticeBox';
-export default function Page(){return <div className="space-y-4"><h1 className="text-2xl font-bold">legal notices</h1><LegalNoticeBox title="legal notices" /></div>;}
+export default function Page() {
+  return (
+    <main>
+      <h1>legal notices</h1>
+      <p>
+        This section is provided for recordkeeping, disclosure review, and platform infrastructure workflows.
+      </p>
+      <p>Test-mode environment. Legal review required.</p>
+    </main>
+  );
+}

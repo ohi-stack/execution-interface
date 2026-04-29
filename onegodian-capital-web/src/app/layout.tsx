@@ -1,20 +1,16 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Footer from '@/components/Footer';
-import PageShell from '@/components/PageShell';
 
 export const metadata: Metadata = {
   title: 'ONEGODIAN Capital Portal',
-  description: 'Disclosure-first capital portal UI and recordkeeping infrastructure.',
+  description:
+    'Platform infrastructure for capital offering records, disclosure review, investor dashboard previews, ledgers, and certificate verification in test-mode workflows.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <PageShell>{children}</PageShell>
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,2 +1,11 @@
-import DisclosureNotice from '@/components/DisclosureNotice';
-export default function Disclosures(){return <div className="space-y-4"><h1 className="text-2xl font-bold">Disclosures</h1><DisclosureNotice /></div>;}
+export default function Page() {
+  return (
+    <main>
+      <h1>disclosures</h1>
+      <p>
+        This section is provided for recordkeeping, disclosure review, and platform infrastructure workflows.
+      </p>
+      <p>Test-mode environment. Legal review required.</p>
+    </main>
+  );
+}

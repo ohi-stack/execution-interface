@@ -31,13 +31,17 @@ npm start
 - `GET /ready`
 - `GET /version`
 
-## Production status
-- Production deployment is live on Hostinger at `https://api.onegodian.org`.
-- Current verified API release: `v0.3.0`.
+## Production Status
+- Current version: `0.3.0`
+- Live API: `https://api.onegodian.org`
+- Deployment host: `Hostinger`
+- Acceptance status: `Pending external live smoke verification`
 - See [PRODUCTION_STATUS.md](./PRODUCTION_STATUS.md) for current live status and verification details.
 - See [LIVE_ACCEPTANCE_TESTS.md](./LIVE_ACCEPTANCE_TESTS.md) for copy-paste live endpoint checks.
 
 ### Live smoke test
 ```bash
-API_BASE_URL="https://api.onegodian.org" npm run smoke:live
+API_BASE_URL=https://api.onegodian.org npm run smoke:live
 ```
+
+> Note: Live smoke testing may fail in restricted environments when outbound network access to the production domain is blocked.

@@ -1,7 +1,7 @@
 export default function Page() {
   return (
     <main>
-      <h1>certificates</h1>
+      <h1>status</h1>
       <p>
         This section is provided for recordkeeping, disclosure review, and platform infrastructure workflows.
       </p>

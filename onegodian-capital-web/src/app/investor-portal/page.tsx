@@ -1,2 +1,11 @@
-import InvestorDashboardPreview from '@/components/InvestorDashboardPreview';
-export default function InvestorPortal(){return <div className="space-y-4"><h1 className="text-2xl font-bold">Investor Portal</h1><InvestorDashboardPreview /></div>;}
+export default function Page() {
+  return (
+    <main>
+      <h1>investor portal</h1>
+      <p>
+        This section is provided for recordkeeping, disclosure review, and platform infrastructure workflows.
+      </p>
+      <p>Test-mode environment. Legal review required.</p>
+    </main>
+  );
+}

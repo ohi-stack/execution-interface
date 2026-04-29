@@ -2,10 +2,27 @@ import Stripe from 'stripe';
 
 import { env } from '../config/env';
 
-export const stripeClient = new Stripe(env.stripeSecretKey);
-
 export const membershipPlans = {
-  monthly: { amountCents: 1900, name: 'Monthly Membership' },
-  pro: { amountCents: 4900, name: 'Pro Membership' },
-  founder: { amountCents: 9900, name: 'Founder Membership' }
+  monthly: { name: 'Monthly Membership' },
+  pro: { name: 'Pro Membership' },
+  founder: { name: 'Founder Membership' }
 } as const;
+
+export type MembershipPlan = keyof typeof membershipPlans;
+
+export const stripeClient = env.stripeSecretKey
+  ? new Stripe(env.stripeSecretKey)
+  : null;
+
+export const stripeReady = Boolean(
+  stripeClient
+  && env.stripePrices.monthly
+  && env.stripePrices.pro
+  && env.stripePrices.founder
+);
+
+export const stripePlanPrices: Record<MembershipPlan, string | undefined> = {
+  monthly: env.stripePrices.monthly,
+  pro: env.stripePrices.pro,
+  founder: env.stripePrices.founder
+};

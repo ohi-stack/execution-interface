@@ -14,18 +14,16 @@ server.listen(env.port, () => {
 const gracefulShutdown = async (signal: NodeJS.Signals) => {
   logger.info({ signal }, 'graceful shutdown started');
 
-  server.close(async (error) => {
-  await prisma.$disconnect().catch((error: unknown) => {
-    logger.error({ err: error }, 'error while disconnecting prisma');
-  });
-
-  server.close((error?: Error) => {
+  server.close(async (error?: Error) => {
     if (error) {
       logger.error({ err: error }, 'error while closing server');
       process.exit(1);
     }
 
-    await prisma.$disconnect();
+    await prisma.$disconnect().catch((disconnectError: unknown) => {
+      logger.error({ err: disconnectError }, 'error while disconnecting prisma');
+    });
+
     logger.info('server closed and prisma disconnected');
     process.exit(0);
   });
@@ -36,7 +34,11 @@ const gracefulShutdown = async (signal: NodeJS.Signals) => {
   }, 10000).unref();
 };
 
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => {
+  void gracefulShutdown('SIGINT');
+});
+process.on('SIGTERM', () => {
+  void gracefulShutdown('SIGTERM');
+});
 
 export default server;

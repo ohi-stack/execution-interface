@@ -18,6 +18,7 @@ const envSchema = z.object({
     .refine((value) => Number.isInteger(value) && value > 0 && value < 65536, {
       message: 'PORT must be a valid TCP port number'
     }),
+  APP_NAME: z.string().default('onegodian-service'),
   APP_URL: z.string().url('APP_URL must be a valid URL'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL'),
@@ -52,6 +53,7 @@ export const env = {
   nodeEnv: parsed.data.NODE_ENV,
   isProduction: parsed.data.NODE_ENV === 'production',
   port: parsed.data.PORT,
+  appName: parsed.data.APP_NAME,
   appUrl: parsed.data.APP_URL,
   jwtSecret: parsed.data.JWT_SECRET,
   databaseUrl: parsed.data.DATABASE_URL,

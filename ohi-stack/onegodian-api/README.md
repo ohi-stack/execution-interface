@@ -2,75 +2,71 @@
 
 Production Node.js + TypeScript backend for ONEGODIAN, LLC API services.
 
+## Production
+- Production URL: `https://api.onegodian.org`
+- Stripe webhook endpoint: `https://api.onegodian.org/billing/webhook`
+
 ## Stack
 - Express + TypeScript
-- Prisma + PostgreSQL
+- Prisma + PostgreSQL (optional while mock billing mode is used)
+- Stripe Checkout + Webhooks
 - Helmet, CORS allowlist, compression
 - `express-rate-limit` for global throttling
 - `pino-http` structured request logging
 - JWT auth + role guards
 
-## Quick start
+## Install, check, test, start
 ```bash
-cp .env.example .env
 npm ci
-npm run prisma:generate
-npm run prisma:migrate:deploy
-npm run prisma:seed
 npm run check
 npm test
+npm run build
 npm start
+```
+
+## Required environment variables
+- `PORT`
+- `NODE_ENV`
+- `APP_URL`
+- `CORS_ORIGIN`
+- `JWT_SECRET`
+- `STRIPE_SECRET_KEY` (required for live Stripe mode)
+- `STRIPE_WEBHOOK_SECRET` (required for signed Stripe webhooks)
+- `STRIPE_PRICE_MONTHLY`
+- `STRIPE_PRICE_PRO`
+- `STRIPE_PRICE_FOUNDER`
+- `DATABASE_URL` (optional)
+
+## Billing modes
+- **Stripe mode**: enabled only when `STRIPE_SECRET_KEY` and all `STRIPE_PRICE_*` values are configured.
+- **Mock mode**: automatic fallback when Stripe keys/prices are missing (safe for local/dev).
+
+## Stripe dashboard setup
+1. Create 3 recurring prices in Stripe for monthly/pro/founder plans.
+2. Copy each `price_...` ID to:
+   - `STRIPE_PRICE_MONTHLY`
+   - `STRIPE_PRICE_PRO`
+   - `STRIPE_PRICE_FOUNDER`
+3. Copy API secret key to `STRIPE_SECRET_KEY`.
+4. Add webhook endpoint in Stripe Dashboard:
+   - URL: `https://api.onegodian.org/billing/webhook`
+   - Events:
+     - `checkout.session.completed`
+     - `customer.subscription.created`
+     - `customer.subscription.updated`
+     - `customer.subscription.deleted`
+     - `invoice.payment_succeeded`
+     - `invoice.payment_failed`
+5. Copy webhook signing secret to `STRIPE_WEBHOOK_SECRET`.
+
+## Post-deploy smoke tests
+```bash
+curl -i https://api.onegodian.org/health
+curl -i https://api.onegodian.org/version
+curl -i -X POST https://api.onegodian.org/billing/checkout -H 'content-type: application/json' -d '{"plan":"monthly"}'
+API_BASE_URL=https://api.onegodian.org npm run smoke:live
 ```
 
 ## Deployment
 - See [DEPLOYMENT.md](./DEPLOYMENT.md) for Render, Railway, VPS, and Docker workflows.
 - Use `.env.production.postgres.example` as production env template.
-
-## Health endpoints
-- `GET /health`
-- `GET /ready`
-- `GET /version`
-
-## Production Status
-- Current version: `0.3.0`
-- Live API: `https://api.onegodian.org`
-- Deployment host: `Hostinger`
-- Acceptance status: `Pending external live smoke verification`
-- See [PRODUCTION_STATUS.md](./PRODUCTION_STATUS.md) for current live status and verification details.
-- See [LIVE_ACCEPTANCE_TESTS.md](./LIVE_ACCEPTANCE_TESTS.md) for copy-paste live endpoint checks.
-
-### Live smoke test
-```bash
-API_BASE_URL=https://api.onegodian.org npm run smoke:live
-```
-
-> Note: Live smoke testing may fail in restricted environments when outbound network access to the production domain is blocked.
-
-
-## Verification commands
-```bash
-npm ci
-npm run prisma:generate
-npm run check
-npm run build
-npm test
-```
-
-## Required environment variables
-- `DATABASE_URL`
-- `JWT_SECRET`
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-- `APP_URL`
-- `NODE_ENV`
-- `PORT`
-
-## Billing verification checklist
-- Checkout session validates requested `plan` and rejects invalid values.
-- Billing status endpoint (`GET /billing/status`) requires authentication.
-- Stripe webhook verifies `stripe-signature` using `STRIPE_WEBHOOK_SECRET`.
-- Webhook events persist in local billing event state and apply subscription activation on `checkout.session.completed`.
-- Stripe secret values are never returned in API responses.
-
-## Known blockers
-- Integration flows that require a live PostgreSQL service and live Stripe signed test fixtures are environment-dependent. In local/offline CI environments without these dependencies, only signature/validation smoke checks can run.

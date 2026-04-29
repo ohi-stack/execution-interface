@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 dotenv.config();
 
+const optionalNonEmpty = z.string().trim().min(1).optional();
+
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z
@@ -21,10 +23,13 @@ const envSchema = z.object({
   APP_NAME: z.string().default('onegodian-service'),
   APP_URL: z.string().url('APP_URL must be a valid URL'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
-  DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL'),
+  DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL').optional(),
   DIRECT_URL: z.string().url('DIRECT_URL must be a valid URL').optional(),
-  STRIPE_SECRET_KEY: z.string().min(1, 'STRIPE_SECRET_KEY is required'),
-  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_SECRET_KEY: optionalNonEmpty,
+  STRIPE_WEBHOOK_SECRET: optionalNonEmpty,
+  STRIPE_PRICE_MONTHLY: optionalNonEmpty,
+  STRIPE_PRICE_PRO: optionalNonEmpty,
+  STRIPE_PRICE_FOUNDER: optionalNonEmpty,
   CORS_ORIGIN: z.string().optional(),
   CORS_ORIGINS: z.string().optional()
 });
@@ -60,6 +65,11 @@ export const env = {
   directUrl: parsed.data.DIRECT_URL,
   stripeSecretKey: parsed.data.STRIPE_SECRET_KEY,
   stripeWebhookSecret: parsed.data.STRIPE_WEBHOOK_SECRET,
+  stripePrices: {
+    monthly: parsed.data.STRIPE_PRICE_MONTHLY,
+    pro: parsed.data.STRIPE_PRICE_PRO,
+    founder: parsed.data.STRIPE_PRICE_FOUNDER
+  },
   corsOrigins,
   appVersion: process.env.npm_package_version ?? '1.0.0'
 } as const;

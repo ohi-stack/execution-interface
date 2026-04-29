@@ -17,9 +17,9 @@ For production deployment and launch gating, see [`DEPLOYMENT.md`](./DEPLOYMENT.
 
 ## Folder structure
 
-- `app/` UI routes + API route handlers
-- `components/` reusable marketing + pricing components
-- `lib/` stripe/supabase/env/auth helpers
+- `src/app/` UI routes + API route handlers
+- `src/components/` reusable marketing + pricing components
+- `src/lib/` stripe/supabase/env/auth helpers
 - `db/schema.sql` Supabase/Postgres schema
 - `.env.example` required environment variables
 
@@ -64,3 +64,14 @@ For production deployment and launch gating, see [`DEPLOYMENT.md`](./DEPLOYMENT.
 
 - Set `ADMIN_TOKEN` to a random 32+ character value and send it via `x-admin-token` for `/admin` and `/api/admin/*` access.
 - Do not reuse `ADMIN_EMAILS` as an auth secret; keep it for notification routing only.
+
+
+## Hostinger deployment settings
+
+- Framework: Next.js
+- Install command: `npm ci`
+- Build command: `npm run build`
+- Start command: `npm run start`
+- Node version: 20+
+- Environment variable:
+  - `NEXT_PUBLIC_API_BASE_URL=https://api.onegodian.org`

@@ -29,3 +29,10 @@ The ONEGODIAN Capital Portal is software infrastructure for managing digital rec
 ## Version Roadmap
 - v0.1.0: Initial scaffold.
 - v0.2.0: Purchase flow integration (order -> disclosure acceptance -> instrument -> ledger -> certificate -> dashboard).
+
+
+## v0.2.0 Purchase Flow Scaffold
+- WooCommerce integration is optional for plugin activation, but required for paid-order issuance flow.
+- Disclosure acceptance must be recorded before an instrument can be issued from a paid order.
+- Paid WooCommerce order items linked with `_onegodian_capital_offering_id` can create instrument, ledger, and certificate records.
+- Issuance records are bookkeeping artifacts; legal review remains required before any public offering use.

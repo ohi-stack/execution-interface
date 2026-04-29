@@ -2,6 +2,7 @@
 /**
  * Plugin Name: ONEGODIAN Capital Portal
  * Description: Private infrastructure plugin for managing digital records related to private capital instruments.
+ * Version: 0.2.1
  * Version: 0.2.0
  * Author: ONEGODIAN
  * Requires at least: 6.0
@@ -13,6 +14,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('ONEGODIAN_CAPITAL_VERSION', '0.2.1');
 define('ONEGODIAN_CAPITAL_VERSION', '0.2.0');
 define('ONEGODIAN_CAPITAL_PATH', plugin_dir_path(__FILE__));
 define('ONEGODIAN_CAPITAL_URL', plugin_dir_url(__FILE__));

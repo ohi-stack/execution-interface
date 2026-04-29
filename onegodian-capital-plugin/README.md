@@ -30,6 +30,19 @@ The ONEGODIAN Capital Portal is software infrastructure for managing digital rec
 - v0.1.0: Initial scaffold.
 - v0.2.0: Purchase flow integration (order -> disclosure acceptance -> instrument -> ledger -> certificate -> dashboard).
 
+## UI Layer (v0.2.1)
+- Adds public and admin interface styling for institutional portal presentation.
+- Public shortcodes render structured sections for offerings, offering detail, investor dashboard, certificates, and disclosure consent.
+- Investor dashboard sections include My Capital Instruments, Certificates, Disclosure Acceptances, Ledger History, and Account Notices.
+- Purchase processing remains a scaffold in this release and stays disclosure-first; production public offering use still requires legal review.
+
+
+## Shortcode UI Sections
+- `onegodian_capital_offerings`: offering cards with status and disclosure packet metadata.
+- `onegodian_capital_offering`: overview, terms, use-of-funds, disclosure and legal notice, CTA placeholder.
+- `onegodian_investor_dashboard`: instruments, certificates, disclosures, ledger history, and account notices.
+- `onegodian_capital_certificate`: certificate metadata and verification placeholders.
+- `onegodian_capital_disclosure`: disclosure consent state table.
 
 ## v0.2.0 Purchase Flow Scaffold
 - WooCommerce integration is optional for plugin activation, but required for paid-order issuance flow.

@@ -14,6 +14,11 @@
 .og-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .og-card, .og-panel { background: var(--og-white); border: 1px solid var(--og-border); border-radius: 12px; box-shadow: 0 2px 10px rgba(11, 31, 58, .06); padding: 1rem; }
 .og-card h3, .og-panel h2, .og-panel h3 { color: var(--og-navy); margin-top: 0; }
+.og-navy-panel { background: var(--og-navy); border-color: var(--og-navy-soft); color: var(--og-white); }
+.og-navy-panel h1, .og-navy-panel h2, .og-navy-panel h3, .og-navy-panel h4, .og-navy-panel h5, .og-navy-panel h6, .og-navy-panel .og-heading { color: var(--og-white); }
+.og-navy-panel .og-eyebrow, .og-navy-panel .og-kicker { color: var(--og-gold); font-weight: 700; }
+.og-navy-panel p, .og-navy-panel li, .og-navy-panel td, .og-navy-panel th, .og-navy-panel dd, .og-navy-panel dt, .og-navy-panel .og-meta { color: var(--og-white); }
+.og-navy-panel .og-warning { color: var(--og-text); }
 .og-meta { color: var(--og-muted); font-size: .92rem; }
 .og-badge { display: inline-block; border-radius: 999px; padding: .2rem .6rem; font-size: .75rem; font-weight: 700; }
 .og-badge--active { background: #e9f7ef; color: #116639; }
@@ -21,6 +26,8 @@
 .og-badge--draft { background: #edf1f7; color: #344054; }
 .og-warning { border-left: 4px solid var(--og-gold); background: var(--og-warning-bg); border-radius: 8px; padding: .75rem 1rem; margin-bottom: 1rem; }
 .og-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.onegodian-capital-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.onegodian-capital-responsive-table { min-width: 640px; }
 .og-table th { background: var(--og-navy); color: var(--og-white); text-align: left; }
 .og-table th, .og-table td { border: 1px solid var(--og-border); padding: .65rem; vertical-align: top; }
 .og-kv { margin: 0; display: grid; grid-template-columns: minmax(140px, 180px) 1fr; gap: .4rem .9rem; }
@@ -31,5 +38,8 @@
 
 @media (max-width: 760px) {
   .og-kv { grid-template-columns: 1fr; }
-  .og-table { display: block; overflow-x: auto; white-space: nowrap; }
+  .og-grid { grid-template-columns: minmax(0, 1fr); }
+  .og-card, .og-panel { width: 100%; box-sizing: border-box; }
+  .onegodian-capital-table-wrap { margin: 0 -.25rem; padding: 0 .25rem; }
+  .onegodian-capital-responsive-table { min-width: 560px; }
 }

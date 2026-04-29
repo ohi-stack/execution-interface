@@ -12,7 +12,8 @@ $offering = [
 <div class="onegodian-capital-portal">
     <div class="og-warning"><strong><?php esc_html_e('Disclosure-first notice:', 'onegodian-capital'); ?></strong> <?php esc_html_e('This portal displays records and disclosures only. Review disclosure materials before any workflow continuation.', 'onegodian-capital'); ?></div>
     <div class="og-grid">
-        <article class="og-card">
+        <article class="og-card og-navy-panel">
+            <p class="og-eyebrow">Offering</p>
             <h3><?php echo esc_html($offering['title']); ?></h3>
             <dl class="og-kv">
                 <dt>instrument_type</dt><dd><?php echo esc_html($offering['instrument_type']); ?></dd>

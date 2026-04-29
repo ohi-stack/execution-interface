@@ -1,4 +1,4 @@
-# UI Standard (v0.2.1)
+# UI Standard (v0.2.2)
 
 ## UI purpose
 The ONEGODIAN Capital Portal UI provides recordkeeping screens, disclosure display, and capital portal presentation interfaces only.

@@ -1,3 +1,10 @@
+v0.2.2 - WooCommerce + mobile/contrast release
+
+- Fixed parse error in `includes/class-shortcodes.php` and preserved all capital portal shortcodes, including disclosure acceptance handling.
+- Confirmed WooCommerce capital-linked product handling remains registered and keyed by `_onegodian_capital_offering_id`.
+- Confirmed admin and frontend notices for capital-linked products, comment/ping/review disabling hooks, and checkout-only guidance alignment.
+- Polished public UI contrast and responsive overflow behavior for dashboard/card/table views and supporting standards docs.
+
 v0.1.0 - Initial scaffold
 
 - Created plugin bootstrap, activation/deactivation hooks, and uninstall file.

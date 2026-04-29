@@ -5,16 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.49.8",
-    "@types/node": "^22.15.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.6",
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
     "lucide-react": "^0.511.0",
@@ -25,7 +22,14 @@
     "resend": "^4.4.1",
     "stripe": "^18.2.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3",
     "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "@types/node": "^22.15.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.6"
   }
 }

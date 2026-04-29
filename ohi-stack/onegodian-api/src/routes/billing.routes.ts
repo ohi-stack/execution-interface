@@ -61,31 +61,43 @@ router.post('/checkout', requireAuth, async (req, res, next) => {
 
 router.post('/webhook', async (req, res, next) => {
   try {
-    const eventSchema = z.object({
-      id: z.string(),
-      type: z.string(),
-      data: z.object({ object: z.record(z.any()) })
-    });
-
-    const parsed = eventSchema.safeParse(req.body);
-    if (!parsed.success) {
-      const error = new Error('Webhook validation failed') as Error & { status?: number; code?: string; details?: unknown };
+    const signature = req.headers['stripe-signature'];
+    if (typeof signature !== 'string') {
+      const error = new Error('Missing Stripe signature') as Error & { status?: number; code?: string };
       error.status = 400;
-      error.code = 'validation_error';
-      error.details = parsed.error.flatten();
+      error.code = 'invalid_signature';
       next(error);
       return;
     }
 
+    if (!env.stripeWebhookSecret) {
+      const error = new Error('Webhook secret is not configured') as Error & { status?: number; code?: string };
+      error.status = 503;
+      error.code = 'billing_unavailable';
+      next(error);
+      return;
+    }
+
+    const rawBody = req.rawBody;
+    if (!rawBody) {
+      const error = new Error('Webhook raw body is required') as Error & { status?: number; code?: string };
+      error.status = 400;
+      error.code = 'invalid_request';
+      next(error);
+      return;
+    }
+
+    const event = stripeClient.webhooks.constructEvent(rawBody, signature, env.stripeWebhookSecret);
+
     await persistence.createBillingEvent({
-      id: parsed.data.id,
-      type: parsed.data.type,
-      payload: parsed.data.data.object,
+      id: event.id,
+      type: event.type,
+      payload: event.data.object as unknown as Record<string, unknown>,
       createdAt: new Date().toISOString()
     });
 
-    if (parsed.data.type === 'checkout.session.completed') {
-      const object = parsed.data.data.object;
+    if (event.type === 'checkout.session.completed') {
+      const object = event.data.object as { metadata?: { userId?: string; plan?: string }; customer?: string; subscription?: string };
       const userId = typeof object.metadata?.userId === 'string' ? object.metadata.userId : undefined;
       const plan = object.metadata?.plan;
 

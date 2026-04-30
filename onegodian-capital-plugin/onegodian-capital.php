@@ -20,6 +20,7 @@ define('ONEGODIAN_CAPITAL_URL', plugin_dir_url(__FILE__));
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-plugin.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-activator.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-deactivator.php';
+require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-admin-controller.php';
 
 register_activation_hook(__FILE__, ['Onegodian_Capital_Activator', 'activate']);
 register_deactivation_hook(__FILE__, ['Onegodian_Capital_Deactivator', 'deactivate']);

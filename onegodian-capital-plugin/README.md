@@ -57,3 +57,17 @@ The ONEGODIAN Capital Portal is software infrastructure for managing digital rec
 - Product edit screens display an admin warning clarifying Capital Portal-first presentation requirements.
 - Capital-linked products have comments/reviews disabled where possible through plugin hooks.
 - Recommended standards and implementation guidance are documented in `docs/WOOCOMMERCE_PRODUCT_STANDARD.md`.
+
+## Admin Control Layer
+
+The ONEGODIAN Capital Portal includes an administrative control layer for:
+
+- Offering records
+- Disclosure review
+- Certificate records
+- Investor ledger review
+- Investor account visibility
+- Readiness checklist tracking
+- Audit-oriented record review
+
+The admin layer is a recordkeeping and workflow control interface. It does not authorize live securities offerings, investment activity, payment activation, certificate issuance, or investor eligibility approval without qualified legal, compliance, tax/accounting, and operational review.

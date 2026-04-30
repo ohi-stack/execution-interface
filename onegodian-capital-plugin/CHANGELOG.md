@@ -9,3 +9,10 @@ v0.1.0 - Initial scaffold
 
 - Created plugin bootstrap, activation/deactivation hooks, and uninstall file.
 - Added core include classes, admin/public views, templates, docs, and test notes.
+
+## 0.2.5 - Admin Control Layer
+- Added Capital Portal operator admin console with Dashboard, Offerings, Disclosures, Certificates, Ledger, Investors, Readiness Checklist, and Settings sections.
+- Added capability-mapped menu routing using plugin-specific capabilities for role-safe access.
+- Added admin control-layer widgets and legal/compliance boundary notices across operator pages.
+- Added responsive admin CSS for the new control-layer layout.
+- Preserved legal-review boundary and kept live investment/payment workflows inactive pending readiness completion.

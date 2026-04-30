@@ -1,32 +1,40 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.onegodian.org';
-import { publicEnv } from './env';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.onegodian.org";
 
-const API_BASE_URL = publicEnv.NEXT_PUBLIC_API_BASE_URL;
+async function fetchJson<T>(path: string): Promise<T | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      cache: "no-store",
+    });
 
-async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as T;
+  } catch {
+    return null;
   }
-  return response.json() as Promise<T>;
 }
 
 export async function getOfferings() {
-  return apiGet('/api/capital/offerings');
+  return fetchJson("/api/capital/offerings");
 }
 
 export async function getOfferingBySlug(slug: string) {
-  return apiGet(`/api/capital/offerings/${slug}`);
+  return fetchJson(`/api/capital/offerings/${encodeURIComponent(slug)}`);
 }
 
 export async function getCertificateById(id: string) {
-  return apiGet(`/api/capital/certificates/${id}`);
+  return fetchJson(`/api/capital/certificates/${encodeURIComponent(id)}`);
 }
 
 export async function getInvestorDashboard() {
-  return apiGet('/api/capital/investors/me');
+  return fetchJson("/api/capital/investors/me");
 }
 
 export async function getLedgerRecords() {
-  return apiGet('/api/capital/ledger');
+  return fetchJson("/api/capital/ledger");
 }
+
+export { API_BASE_URL };

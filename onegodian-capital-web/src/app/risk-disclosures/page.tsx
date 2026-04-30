@@ -1,11 +1,30 @@
-export default function Page() {
+import PageShell from '@/components/PageShell';
+
+const risks = [
+  'Business risk',
+  'Payment risk',
+  'Liquidity risk',
+  'Regulatory risk',
+  'Technology risk',
+  'Operational risk',
+];
+
+export default function RiskDisclosuresPage() {
   return (
-    <main>
-      <h1>risk disclosures</h1>
-      <p>
-        This section is provided for recordkeeping, disclosure review, and platform infrastructure workflows.
-      </p>
-      <p>Test-mode environment. Legal review required.</p>
-    </main>
+    <PageShell>
+      <section className="hero">
+        <p className="eyebrow">Disclosure</p>
+        <h1>Risk Disclosures</h1>
+        <p>Review the following non-exhaustive risk categories before proceeding with any live deployment plans.</p>
+      </section>
+
+      <section className="page-section grid">
+        {risks.map((risk) => (
+          <article key={risk} className="card">
+            <h2>{risk}</h2>
+          </article>
+        ))}
+      </section>
+    </PageShell>
   );
 }

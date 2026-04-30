@@ -1,11 +1,24 @@
-export default function Page() {
+import PageShell from '@/components/PageShell';
+
+export default function DataRetentionPolicyPage() {
   return (
-    <main>
-      <h1>data retention policy</h1>
-      <p>
-        This section is provided for recordkeeping, disclosure review, and platform infrastructure workflows.
-      </p>
-      <p>Test-mode environment. Legal review required.</p>
-    </main>
+    <PageShell>
+      <section className="hero">
+        <p className="eyebrow">Policy</p>
+        <h1>Data Retention Policy</h1>
+        <p>
+          This policy describes how retained records are managed, including disclosure records, ledger records,
+          certificate records, and payment references.
+        </p>
+      </section>
+
+      <section className="page-section card">
+        <p>
+          Access control, export requests, and deletion limitations must align with legal requirements and
+          operational controls.
+        </p>
+        <p className="notice">Data retention settings require legal review before live use.</p>
+      </section>
+    </PageShell>
   );
 }

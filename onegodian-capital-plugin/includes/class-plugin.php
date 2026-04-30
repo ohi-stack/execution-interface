@@ -15,6 +15,7 @@ require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-instruments.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-woocommerce.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-permissions.php';
 require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-settings.php';
+require_once ONEGODIAN_CAPITAL_PATH . 'includes/class-visual-widgets.php';
 
 class Onegodian_Capital_Plugin {
     private static $instance;
@@ -33,6 +34,7 @@ class Onegodian_Capital_Plugin {
         add_action('admin_init', ['Onegodian_Capital_Settings', 'register']);
         add_action('init', ['Onegodian_Capital_Permissions', 'register_caps']);
         add_action('init', ['Onegodian_Capital_WooCommerce', 'register']);
+        add_action('init', ['Onegodian_Capital_Visual_Widgets', 'register']);
         add_action('rest_api_init', ['Onegodian_Capital_REST_API', 'register_routes']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_public_assets']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
@@ -40,6 +42,7 @@ class Onegodian_Capital_Plugin {
 
     public function enqueue_public_assets() {
         wp_enqueue_style('onegodian-capital-public', ONEGODIAN_CAPITAL_URL . 'public/css/onegodian-capital-public.css', [], ONEGODIAN_CAPITAL_VERSION);
+        wp_enqueue_style('onegodian-capital-visual-widgets', ONEGODIAN_CAPITAL_URL . 'assets/css/visual-widgets.css', [], ONEGODIAN_CAPITAL_VERSION);
     }
 
     public function enqueue_admin_assets($hook_suffix) {
@@ -50,6 +53,7 @@ class Onegodian_Capital_Plugin {
             return;
         }
         wp_enqueue_style('onegodian-capital-admin', ONEGODIAN_CAPITAL_URL . 'admin/css/onegodian-capital-admin.css', [], ONEGODIAN_CAPITAL_VERSION);
+        wp_enqueue_style('onegodian-capital-visual-widgets', ONEGODIAN_CAPITAL_URL . 'assets/css/visual-widgets.css', [], ONEGODIAN_CAPITAL_VERSION);
         add_action('woocommerce_order_status_completed', ['Onegodian_Capital_Instruments', 'handle_paid_order']);
         add_action('woocommerce_payment_complete', ['Onegodian_Capital_Instruments', 'handle_paid_order']);
     }

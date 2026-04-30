@@ -1,25 +1,2 @@
-import PageShell from '@/components/PageShell';
-
-export default function CertificatesPage() {
-  return (
-    <PageShell>
-      <section className="hero">
-        <p className="eyebrow">Verification</p>
-        <h1>Certificate Verification</h1>
-        <p>
-          Certificate verification records should present a certificate ID, instrument ID, current status,
-          verification hash, and verification URL for traceable record checks.
-        </p>
-      </section>
-
-      <section className="page-section card">
-        <h2>Record Linkage Requirement</h2>
-        <p>
-          Certificate records must be tied to corresponding disclosure records and ledger records to maintain
-          a complete audit trail.
-        </p>
-        <p className="notice">Verification is informational and does not constitute legal or investment advice.</p>
-      </section>
-    </PageShell>
-  );
-}
+import PageShell from '@/components/PageShell';import CapitalImagePanel from '@/components/CapitalImagePanel';
+export default function CertificatesPage(){return <PageShell><section className="hero"><h1>Certificate Verification</h1></section><CapitalImagePanel title="Certificate Workflow" description="Lifecycle preview for issue and verification steps." alt="Certificate workflow diagram showing issuance, lookup, and validation stages." /><section className="certificate-preview-grid"><CapitalImagePanel title="Founder Note" description="Certificate preview card." alt="Founder note certificate preview for visual guidance only." /><CapitalImagePanel title="Infrastructure Bond" description="Certificate preview card." alt="Infrastructure bond certificate preview for visual guidance only." /><CapitalImagePanel title="Platform Growth Note" description="Certificate preview card." alt="Platform growth note certificate preview for visual guidance only." /></section><section className="card page-section"><h2>Verification Methods</h2><ul><li>Portal Verification</li><li>QR Code Verification</li><li>Certificate ID Lookup</li><li>Status Validation</li><li>Tamper-Evident Record Notice</li></ul></section></PageShell>;}

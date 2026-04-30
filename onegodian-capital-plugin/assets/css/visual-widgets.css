@@ -1,0 +1,5 @@
+.ogc-visual-widget{background:#fff;border:1px solid #dbe2ea;border-radius:14px;padding:12px}
+.ogc-visual-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.ogc-visual-image{width:100%;height:auto;display:block;border-radius:12px}
+.ogc-certificate-gallery{margin-top:12px}
+.ogc-workflow-panel h3{margin-top:0}

@@ -1,25 +1,2 @@
-import PageShell from '@/components/PageShell';
-
-export default function DisclosuresPage() {
-  return (
-    <PageShell>
-      <section className="hero">
-        <p className="eyebrow">Governance</p>
-        <h1>Disclosure Center</h1>
-        <p>
-          This section follows a disclosure-first workflow where disclosures are reviewed and accepted before
-          related records proceed through internal platform steps.
-        </p>
-      </section>
-
-      <section className="page-section card">
-        <h2>Legal Boundary</h2>
-        <p>
-          Disclosure language, sequencing, and acceptance controls must be reviewed by qualified legal counsel
-          before live deployment.
-        </p>
-        <p className="notice">Legal review required before live use.</p>
-      </section>
-    </PageShell>
-  );
-}
+import PageShell from '@/components/PageShell';import CapitalImagePanel from '@/components/CapitalImagePanel';
+export default function DisclosuresPage(){return <PageShell><section className="hero"><h1>Disclosure Center</h1></section><CapitalImagePanel title="Disclosure Workflow" description="Workflow preview for disclosure acknowledgements." alt="Disclosure workflow preview outlining packet review and acknowledgement checkpoints." /><section className="card page-section"><h2>Disclosure Packet Checklist</h2><ul><li>Instrument summary</li><li>Risk disclosures</li><li>Eligibility statement</li><li>Acceptance record</li></ul></section><section className="card page-section"><h2>Acknowledgement Workflow</h2><p>Disclosure acceptance is captured before record progression.</p></section><section className="card page-section"><h2>Audit Trail</h2><p>All acknowledgements are timestamped and attached to investor records.</p></section></PageShell>;}

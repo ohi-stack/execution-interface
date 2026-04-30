@@ -1,0 +1,3 @@
+import CapitalImagePanel from '@/components/CapitalImagePanel';
+const layers=['WordPress Presentation Layer','WooCommerce Checkout-Only Layer','Capital Portal Recordkeeping Layer','Disclosure Approval Gate','Certificate Verification Layer'];
+export default function Page(){return <main><h1>Operating Boundary</h1><CapitalImagePanel title="Operating Boundary Diagram" description="Layered architecture boundary diagram." alt="Operating boundary diagram illustrating platform layers and governance checkpoints." /><section className="grid">{layers.map((layer)=><article key={layer} className="card"><h3>{layer}</h3></article>)}</section></main>;}

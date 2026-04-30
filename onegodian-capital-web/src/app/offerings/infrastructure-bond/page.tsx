@@ -1,0 +1,2 @@
+import CapitalImagePanel from '@/components/CapitalImagePanel';
+export default function Page(){return <main><h1>Infrastructure Bond</h1><CapitalImagePanel title="Infrastructure Bond Certificate Preview" description="Preview image only." alt="Infrastructure bond certificate preview image for instrument page design review." /><p className="notice">Certificate images are visual previews only. Final instrument terms, legal status, repayment obligations, eligibility, and disclosures require qualified review before live public use.</p></main>;}

@@ -8,8 +8,8 @@ import { gregorianToOT } from '@/lib/onegodian-time';
 const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Galaxy', href: '/galaxy' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Galactic Canon', href: '/galactic-canon' },
   { label: 'Time', href: '/time' },
   { label: 'OHI', href: '/ohi' },
   { label: 'Algorithm', href: '/algorithm' },

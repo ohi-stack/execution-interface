@@ -3,6 +3,18 @@ import { appModules, type Priority, type ProductionStatus } from '@/lib/app-modu
 
 type StatusItem = { title: string; state: string; description: string };
 type ModuleSection = { eyebrow: string; title: string; description: string; points: string[] };
+type StatusItem = {
+  title: string;
+  state: string;
+  description: string;
+};
+
+type ModuleSection = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  points: string[];
+};
 
 const statusStyles: Record<ProductionStatus, string> = {
   Live: 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300',

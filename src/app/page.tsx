@@ -1,228 +1,192 @@
 import Link from 'next/link';
-import {
-  BadgeCheck,
-  BriefcaseBusiness,
-  Clock3,
-  Database,
-  Globe,
-  LayoutDashboard,
-  Newspaper,
-  Orbit,
-  ShoppingBag,
-  Sparkles,
-  Wrench
-} from 'lucide-react';
-import { TodayInOneGodianTime } from '@/components/today-in-onegodian-time';
 
-const mainNavItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Ecosystem', href: '/ecosystem', icon: Globe },
-  { label: 'Registry', href: '/registry', icon: Database },
-  { label: 'Planets', href: '/planets', icon: Orbit },
-  { label: 'Time', href: '/time', icon: Clock3 },
-  { label: 'Products', href: '/products', icon: ShoppingBag },
-  { label: 'Certificates', href: '/certificates', icon: BadgeCheck },
-  { label: 'Media', href: '/media', icon: Newspaper },
-  { label: 'Tools', href: '/tools', icon: Wrench },
-  { label: 'Capital', href: '/dashboard', icon: BriefcaseBusiness },
-  { label: 'Agents', href: '/algorithm', icon: Sparkles }
-];
-
-const stackItems = [
-  'Identity, Verification & Digital Trust',
-  'Capital, Commerce & Economic Engines',
-  'Governance Intelligence & Decision Systems',
-  'Land, Housing & Real Infrastructure',
-  'Human + AI + Robotics Alignment',
-  'Global Trade & Opportunity Networks',
-  'Cloud, Cybersecurity & Runtime Systems',
-  'Education, Media & Narrative Power',
-  'Community Networks & Membership Systems',
-  'Time, Archives & Historical Continuity',
-  'Research, Science & Future Labs',
-  'Creative Worlds & Entertainment Ecosystem',
-  'Personal Mastery & Human Development',
-  'Meta Coordination Layer'
-];
-
-export default function HomePage() {
-  return (
-    <main className="min-h-screen bg-slate-950 px-4 py-6 text-white sm:px-6">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <section className="rounded-2xl border border-cyan-400/20 bg-slate-900/70 p-5">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN APP</p>
-          <h1 className="mt-3 text-3xl font-bold">OneGodian Everything App</h1>
-          <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {mainNavItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link key={item.label} href={item.href} className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-3 text-sm text-slate-100 hover:border-cyan-400/40 hover:text-cyan-200">
-                  <Icon className="h-4 w-4 shrink-0" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-2">
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-            <h2 className="text-lg font-semibold text-cyan-200">Production Status</h2>
-            <p className="mt-2 text-sm text-slate-300">Node App Live · Hostinger Deployment Active · Ecosystem Directory Online.</p>
-          </article>
-          <TodayInOneGodianTime />
-        </section>
-
-        <section className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-          <h2 className="text-xl font-semibold">OneGodian Civilization Stack</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {stackItems.map((item, idx) => (
-              <article key={item} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
-                <p className="text-xs text-cyan-300">Layer {idx + 1}</p>
-                <h3 className="mt-1 text-sm font-medium text-slate-100">{item}</h3>
-              </article>
-type SystemStatus = {
+type StatusItem = {
   title: string;
-  status: 'Live' | 'In Development' | 'Needs Setup' | 'Planned';
-};
-
-type QuickLinkCard = {
-  title: string;
-  href: string;
+  state: string;
   description: string;
-  external?: boolean;
 };
 
-const systemStatuses: SystemStatus[] = [
-  { title: 'Node App Live', status: 'Live' },
-  { title: 'Hostinger Deployment Active', status: 'Live' },
-  { title: 'Ecosystem Directory', status: 'Live' },
-  { title: 'Time Converter', status: 'In Development' },
-  { title: 'Docs Library', status: 'Needs Setup' },
-  { title: 'API Gateway', status: 'Needs Setup' },
-  { title: 'GitHub Repo Matrix', status: 'In Development' },
-  { title: 'Alignment Demo', status: 'Planned' },
-];
-
-const commandCenterModules: QuickLinkCard[] = [
-  { title: 'ODIN Registry', href: '/odin', description: 'Open ODIN command pages and governance modules.' },
-  { title: 'Planetary Registry', href: '/odin/planetary-registry', description: 'Browse PR worlds and linked platform endpoints.' },
-  { title: 'Moons & Systems', href: '/moons-systems', description: 'Review moon, systems, and orbital mapping tools.' },
-  { title: 'Learn Portal', href: '/learn', description: 'Access learning pathways and onboarding content.' },
-  { title: 'Identity Wallet', href: '/identity', description: 'Manage identity records and wallet references.' },
-  { title: 'Verification Tools', href: '/verification', description: 'Validate records, trust states, and verification workflows.' },
-  { title: 'Capital Access', href: '/capital', description: 'Explore financing pathways and capital-facing modules.' },
-  { title: 'Media Center', href: '/media', description: 'Find media publications and communication assets.' },
-  { title: 'Storefront', href: '/store', description: 'Open commerce modules and storefront operations.' },
-  { title: 'OneGodian Time', href: '/time', description: 'Launch OTS-V5 time conversion and timing references.' },
-];
-
-const externalPlatformBridges: QuickLinkCard[] = [
-  { title: 'Student Portal', href: 'https://u.onegodian.org/dashboard', description: 'Open the external student dashboard.', external: true },
-  { title: 'Courses', href: 'https://u.onegodian.org/courses', description: 'View active and archived learning courses.', external: true },
-  { title: 'Onegodianese™ Curriculum', href: 'https://u.onegodian.org/curriculum', description: 'Open curriculum paths and lesson maps.', external: true },
-  { title: 'Developer/API Access', href: '/developer', description: 'Enter developer tooling and API access modules.' },
-];
-
-const statusStyles: Record<SystemStatus['status'], string> = {
-  Live: 'border-emerald-400/50 bg-emerald-500/10 text-emerald-200',
-  'In Development': 'border-cyan-400/50 bg-cyan-500/10 text-cyan-200',
-  'Needs Setup': 'border-amber-400/50 bg-amber-500/10 text-amber-200',
-  Planned: 'border-violet-400/50 bg-violet-500/10 text-violet-200',
+type ModuleSection = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  points: string[];
 };
+
+const productionStatus: StatusItem[] = [
+  {
+    title: 'Node App',
+    state: 'Live',
+    description: 'Primary Next.js application successfully deployed and serving production traffic.'
+  },
+  {
+    title: 'Hostinger Deployment',
+    state: 'Active',
+    description: 'Production hosting environment operational with live routing and domain resolution.'
+  },
+  {
+    title: 'ODIN Systems',
+    state: 'Online',
+    description: 'Registry structure, routing architecture, and synchronization layers initialized.'
+  },
+  {
+    title: 'Static Fallback',
+    state: 'Enabled',
+    description: 'Fallback rendering and static route support active during phased backend expansion.'
+  },
+  {
+    title: 'GitHub Integration',
+    state: 'Connected',
+    description: 'Repository-based deployment workflow and source management active.'
+  },
+  {
+    title: 'UI Framework',
+    state: 'Operational',
+    description: 'Responsive mobile-first shell, navigation system, and module routing online.'
+  },
+  {
+    title: 'Future Database Layer',
+    state: 'In Development',
+    description: 'Structured transition planned from static shell to dynamic registry infrastructure.'
+  }
+];
+
+const moduleSections: ModuleSection[] = [
+  {
+    eyebrow: 'COMMAND HUB',
+    title: 'Dashboard',
+    description:
+      'Open the central operating environment for ecosystem monitoring, module access, deployment visibility, production status, and active OneGodian infrastructure coordination.',
+    points: ['System overview', 'Priority tracking', 'Deployment visibility', 'Operational summaries', 'Gateway routing', 'Infrastructure monitoring']
+  },
+  {
+    eyebrow: 'SYSTEM DIRECTORY',
+    title: 'Ecosystem',
+    description:
+      'Browse connected OneGodian systems, domains, infrastructure layers, applications, educational platforms, synchronization targets, and future execution environments from one unified directory.',
+    points: ['Platform registry', 'Domain structure', 'Service relationships', 'Deployment targets', 'Infrastructure layers', 'Expansion pathways']
+  },
+  {
+    eyebrow: 'ODIN INDEX',
+    title: 'Registry',
+    description:
+      'Access ODIN-aligned registry categories for planetary systems, certificates, products, archives, records, classifications, and future verification layers.',
+    points: ['Planetary records', 'Certificate indexes', 'Product systems', 'Membership structures', 'Archive records', 'Identity-linked entries']
+  },
+  {
+    eyebrow: 'ODIN-PR',
+    title: 'Planets',
+    description:
+      'Explore the 25-world OneGodian Galaxy™ planetary registry, including planetary profiles, environmental canon, system classifications, and future expansion continuity.',
+    points: ['Planet profiles', 'Canon timelines', 'Visual archives', 'Galactic mapping', 'Civilization structures', 'World continuity systems']
+  },
+  {
+    eyebrow: 'ORBITAL SYSTEMS',
+    title: 'Moons & Systems',
+    description:
+      'Review moon systems, orbital continuity structures, expansion interfaces, planetary relationships, and Elyndria™ system architecture across the developing OneGodian Galaxy framework.',
+    points: ['Moon registries', 'Orbital continuity', 'System hierarchies', 'Expansion structures', 'Celestial indexing', 'Elyndria™ archives']
+  },
+  {
+    eyebrow: 'UTILITIES',
+    title: 'Tools',
+    description:
+      'Open verification systems, lookups, time conversion interfaces, synchronization monitoring, product tooling, and operational utilities supporting the broader ecosystem.',
+    points: ['OneGodian Time converter', 'Verification utilities', 'Registry lookup', 'QR validation', 'Sync monitoring', 'Infrastructure diagnostics']
+  },
+  {
+    eyebrow: 'CANON LIBRARY',
+    title: 'Media',
+    description:
+      'Access story worlds, planetary visuals, cinematic artwork, audio systems, poster archives, launch media, educational visuals, and future OneGodian content libraries.',
+    points: ['Planetary artwork', 'Story archives', 'Posters', 'Audio collections', 'Video systems', 'Promotional media']
+  },
+  {
+    eyebrow: 'COMMERCE',
+    title: 'Products',
+    description:
+      'Organize digital downloads, educational products, certificates, memberships, courses, branded assets, and future planetary commerce systems through a centralized product layer.',
+    points: ['eBooks', 'Courses', 'Certificates', 'Memberships', 'Downloads', 'Planetary collections']
+  },
+  {
+    eyebrow: 'OBP-1',
+    title: 'Certificates',
+    description:
+      'Prepare certificate verification systems, holder records, issuer management views, QR-linked validation flows, and future OBP-1™ credential infrastructure.',
+    points: ['Certificate issuance', 'Verification lookup', 'Holder dashboards', 'QR validation', 'Download access', 'Registry linking']
+  },
+  {
+    eyebrow: 'IDENTITY',
+    title: 'Profile',
+    description:
+      'View account structure, membership alignment, registry participation, downloads, certificates, saved systems, and future identity-linked infrastructure modules.',
+    points: ['Account dashboard', 'Membership status', 'Registry alignment', 'Saved downloads', 'Certificate history', 'Identity preferences']
+  }
+];
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-[0_0_0_1px_rgba(34,211,238,0.08)] sm:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN COMMAND DASHBOARD</p>
-          <h1 className="mt-3 text-3xl font-bold sm:text-4xl lg:text-5xl">OneGodian System Control Surface</h1>
+        <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 sm:p-8">
+          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN PLATFORM · APP.ONEGODIAN.COM</p>
+          <h1 className="mt-3 text-3xl font-bold sm:text-4xl">OneGodian Everything App</h1>
+          <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">
+            The central Node/Next.js operating interface for the OneGodian ecosystem — connecting ODIN registry systems, planetary canon infrastructure,
+            moon systems, identity frameworks, certificates, products, media archives, synchronized tooling, and future platform services through a
+            unified application layer.
+          </p>
+          <div className="mt-5 grid gap-2 text-sm text-slate-200 sm:grid-cols-2 lg:grid-cols-3">
+            {['Centralized ecosystem navigation', 'Registry and infrastructure access', 'Operational module management', 'Cross-platform synchronization', 'Visual command routing', 'Scalable gateway architecture'].map((item) => (
+              <p key={item} className="rounded-lg border border-slate-700 bg-slate-950/70 px-3 py-2">
+                • {item}
+              </p>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/dashboard" className="rounded-lg border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-500/10">Open Dashboard</Link>
+            <Link href="/ecosystem" className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-medium text-slate-200 hover:border-cyan-300">Explore Ecosystem</Link>
+          </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Production Status</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {systemStatuses.map((item) => (
+        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+          <h2 className="text-xl font-semibold">Production Status</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {productionStatus.map((item) => (
               <article key={item.title} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
-                <p className="text-sm text-slate-200">{item.title}</p>
-                <span className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${statusStyles[item.status]}`}>
-                  {item.status}
-                </span>
+                <p className="text-sm uppercase tracking-wide text-cyan-300">
+                  {item.title} — {item.state}
+                </p>
+                <p className="mt-2 text-sm text-slate-300">{item.description}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-          <h2 className="text-xl font-semibold text-slate-50 sm:text-2xl">Command Center Modules</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {commandCenterModules.map((module) => (
-              <Link key={module.title} href={module.href} className="group rounded-xl border border-slate-700 bg-slate-950/70 p-5 transition hover:border-cyan-400/60 hover:bg-slate-900">
-                <h3 className="text-lg font-semibold text-slate-50">{module.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300">{module.description}</p>
-              </Link>
-            ))}
-          </div>
+        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Module Wireframe</p>
+          <h2 className="mt-2 text-xl font-semibold">Core app navigation</h2>
+          <p className="mt-3 text-sm leading-relaxed text-slate-300">
+            Each module is connected through the homepage gateway so the platform behaves as a unified operational interface while deeper registry logic,
+            synchronization layers, APIs, and database-backed workflows are deployed incrementally in controlled production phases.
+          </p>
         </section>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-          <h2 className="text-xl font-semibold text-slate-50 sm:text-2xl">External Platform Bridges</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {externalPlatformBridges.map((bridge) => (
-              <Link
-                key={bridge.title}
-                href={bridge.href}
-                target={bridge.external ? '_blank' : undefined}
-                rel={bridge.external ? 'noreferrer noopener' : undefined}
-                className="group rounded-xl border border-slate-700 bg-slate-950/70 p-5 transition hover:border-cyan-400/60 hover:bg-slate-900"
-              >
-                <h3 className="text-lg font-semibold text-slate-50">{bridge.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300">{bridge.description}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-4 md:grid-cols-2">
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5"><h2 className="text-lg font-semibold">Ecosystem Command Cards</h2></article>
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5"><h2 className="text-lg font-semibold">Registry / ODIN / QR-V</h2></article>
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5"><h2 className="text-lg font-semibold">Products + Revenue Engines</h2></article>
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-            <h2 className="text-lg font-semibold">Capital Dashboard</h2>
-            <ul className="mt-3 space-y-2 text-sm text-slate-200">
-              <li>Estimated Current Strategic Platform Value: <span className="text-cyan-200">$52M</span></li>
-              <li>3-Year Strategic Target Range: <span className="text-cyan-200">$135M–$205M</span></li>
-              <li>Execution Readiness Index: <span className="text-cyan-200">71.4%</span></li>
-              <li>Compliance & Verification Readiness: <span className="text-cyan-200">82.6%</span></li>
-            </ul>
-            <p className="mt-3 text-xs text-slate-400">Non-Audited Internal Strategic Estimate</p>
-          </article>
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5"><h2 className="text-lg font-semibold">Media + Galaxy</h2></article>
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-            <h2 className="text-lg font-semibold">OneGodian Algorithm</h2>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-              {['Protocol Layer', 'Experience Layer', 'Community Layer', 'Orientation Layer'].map((name) => (
-                <div key={name} className="rounded-lg border border-slate-700 bg-slate-950/70 p-3">{name}</div>
-              ))}
-            </div>
-            <Link href="/algorithm" className="mt-4 inline-flex rounded-lg border border-cyan-400/50 px-3 py-2 text-sm text-cyan-200">Open Algorithm</Link>
-          </article>
-        </section>
-
-        <section className="grid gap-4 md:grid-cols-2">
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-            <h2 className="text-lg font-semibold">Belief Mapper Lite (Planned)</h2>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-              {['Seeker', 'Believer', 'OneGodian', 'Elder'].map((stage) => (
-                <div key={stage} className="rounded-lg border border-slate-700 bg-slate-950/70 p-3">{stage}</div>
-              ))}
-            </div>
-          </article>
-          <article className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-            <h2 className="text-lg font-semibold">Legal Clarity</h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-300">OneGodian App is a private digital platform operated for identity, education, commerce, documentation, registry, and system-management purposes. References to sovereign or sovereignty describe internal self-governance, voluntary participation, ownership, dignity, and private organizational frameworks. They do not assert governmental authority over non-members, immunity from U.S. law, or diplomatic recognition.</p>
-          </article>
+        <section className="grid gap-4 lg:grid-cols-2">
+          {moduleSections.map((section) => (
+            <article key={section.title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">{section.eyebrow}</p>
+              <h3 className="mt-2 text-2xl font-semibold">{section.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-slate-300">{section.description}</p>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-slate-200">
+                {section.points.map((point) => (
+                  <p key={point} className="rounded-lg border border-slate-700 bg-slate-950/70 px-3 py-2">
+                    • {point}
+                  </p>
+                ))}
+              </div>
+            </article>
+          ))}
         </section>
       </div>
     </main>

@@ -5,21 +5,27 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const desktopNavItems = [
-  { label: 'Dashboard', href: '/dashboard' },
+const mainNavItems = [
+  { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Algorithm', href: '/algorithm' },
-  { label: 'Time', href: '/time' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Docs', href: '/docs' },
-  { label: 'Planets', href: '/planets' }
+  { label: 'Planets', href: '/odin/planetary-registry' },
+  { label: 'ODIN', href: '/odin' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'Identity', href: '/identity' },
+  { label: 'Verification', href: '/verification' },
+  { label: 'Capital', href: '/capital' },
+  { label: 'Media', href: '/media' },
+  { label: 'Store', href: '/store' },
+  { label: 'Time', href: '/time' },
 ];
 
 const mobileNavItems = [
-  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Home', href: '/' },
   { label: 'Systems', href: '/ecosystem' },
-  { label: 'Time', href: '/time' },
-  { label: 'Docs', href: '/docs' }
+  { label: 'Learn', href: '/learn' },
+  { label: 'Community', href: '/community' },
+  { label: 'Identity', href: '/identity' },
 ];
 
 function useLiveTimes() {
@@ -47,7 +53,7 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
         <aside className="hidden w-64 shrink-0 border-r border-slate-800/80 bg-slate-950/95 p-4 lg:block">
           <div className="mb-6 text-lg font-semibold text-cyan-300">OneGodian</div>
           <nav className="space-y-1">
-            {desktopNavItems.map((item) => {
+            {mainNavItems.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link key={item.href} href={item.href} className={`block rounded-lg px-3 py-2 text-sm ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300 hover:bg-slate-800'}`}>
@@ -68,6 +74,22 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
               <div className="rounded-full border border-slate-700 px-2 py-1 text-xs">🔔</div>
               <div className="rounded-full border border-slate-700 px-2 py-1 text-xs">👤</div>
             </div>
+            <div className="mt-3 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <nav className="flex min-w-max items-center gap-2 pb-1" aria-label="Main navigation">
+                {mainNavItems.map((item) => {
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  return (
+                    <Link
+                      key={`top-${item.href}`}
+                      href={item.href}
+                      className={`rounded-full border px-3 py-1.5 text-xs transition ${active ? 'border-cyan-400/70 bg-cyan-500/20 text-cyan-200' : 'border-slate-700 text-slate-300 hover:border-cyan-400/50 hover:text-cyan-200'}`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
             <div className="mt-2 grid grid-cols-1 gap-1 text-xs text-slate-300 sm:grid-cols-3">
               <span>UTC: {utc}</span>
               <span>Local: {local}</span>
@@ -80,12 +102,17 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
       </div>
 
       <nav className="fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-cyan-400/30 bg-slate-950/90 p-2 backdrop-blur lg:hidden">
-        <ul className="grid grid-cols-4 gap-1 text-center text-[11px] text-slate-300">
-          {mobileNavItems.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href} className="block rounded-lg px-1 py-2 hover:bg-slate-800/80 hover:text-cyan-200">{item.label}</Link>
-            </li>
-          ))}
+        <ul className="grid grid-cols-5 gap-1 text-center text-[11px] text-slate-300">
+          {mobileNavItems.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <li key={item.href}>
+                <Link href={item.href} className={`block rounded-lg px-1 py-2 transition ${active ? 'bg-cyan-500/20 text-cyan-200' : 'hover:bg-slate-800/80 hover:text-cyan-200'}`}>
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </div>

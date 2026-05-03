@@ -1,19 +1,32 @@
 {
-  "name": "omos-site",
-  "version": "1.0.0",
-  "description": "Node website for OMOS.OneGodian.org — OneGodian Metaphysical Operating System public site, protocol specification, developer docs, and runtime-ready documentation pages.",
-  "main": "server.js",
+  "name": "onegodian-everything-app",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "check": "node --check server.js",
-    "smoke": "node tests/smoke.test.js"
-  },
-  "engines": {
-    "node": ">=20"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "compression": "^1.7.4",
-    "express": "^4.19.2",
-    "helmet": "^7.1.0"
+    "@auth/prisma-adapter": "^2.7.4",
+    "@prisma/client": "^5.18.0",
+    "next": "14.2.15",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.5",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.15",
+    "postcss": "^8.4.47",
+    "prisma": "^5.18.0",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2"
   }
 }

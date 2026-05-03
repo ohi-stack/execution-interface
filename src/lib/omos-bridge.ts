@@ -99,10 +99,14 @@ export function getOmosEnvironmentSummary() {
 export async function fetchOmosEndpoint<T>(path: string, init: RequestInit = {}): Promise<OmosBridgeResponse<T>> {
   const baseUrl = getOmosBaseUrl();
   const url = `${baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
-  const headers: HeadersInit = {
-    Accept: 'application/json',
-    ...(init.headers || {})
+  const headers: Record<string, string> = {
+    Accept: 'application/json'
   };
+
+  const incomingHeaders = new Headers(init.headers);
+  incomingHeaders.forEach((value, key) => {
+    headers[key] = value;
+  });
 
   if (process.env.OMOS_APP_BRIDGE_KEY) {
     headers['X-OMOS-App-Key'] = process.env.OMOS_APP_BRIDGE_KEY;

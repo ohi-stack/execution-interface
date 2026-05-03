@@ -1,0 +1,1 @@
+export { OdinCtaBand } from './OdinWidgets';

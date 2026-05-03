@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const desktopNavItems = [
-  { label: 'Dashboard', href: '/dashboard' },
+const mainNavItems = [
+  { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
   { label: 'Time', href: '/time' },
@@ -29,6 +29,24 @@ const mobileSecondaryNavItems = [
   { label: 'Algorithm', href: '/algorithm' },
   { label: 'Assets', href: '/assets' },
   { label: 'Economics', href: '/economics' }
+  { label: 'Registry', href: '/registry' },
+  { label: 'Planets', href: '/odin/planetary-registry' },
+  { label: 'ODIN', href: '/odin' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'Identity', href: '/identity' },
+  { label: 'Verification', href: '/verification' },
+  { label: 'Capital', href: '/capital' },
+  { label: 'Media', href: '/media' },
+  { label: 'Store', href: '/store' },
+  { label: 'Time', href: '/time' },
+];
+
+const mobileNavItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Systems', href: '/ecosystem' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'Community', href: '/community' },
+  { label: 'Identity', href: '/identity' },
 ];
 
 function useLiveTimes() {
@@ -56,7 +74,7 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
         <aside className="hidden w-64 shrink-0 border-r border-slate-800/80 bg-slate-950/95 p-4 lg:block">
           <div className="mb-6 text-lg font-semibold text-cyan-300">OneGodian</div>
           <nav className="space-y-1">
-            {desktopNavItems.map((item) => {
+            {mainNavItems.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link key={item.href} href={item.href} className={`block rounded-lg px-3 py-2 text-sm ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300 hover:bg-slate-800'}`}>
@@ -74,6 +92,22 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
               <input className="h-9 flex-1 rounded-md border border-slate-700 bg-slate-900 px-3 text-sm" placeholder="Search planets, ODIN, systems, modules..." />
               <div className="hidden text-xs text-slate-300 md:block">UTC {new Date(utc).toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}</div>
               <div className="hidden text-xs text-slate-300 md:block">OT {ot}</div>
+            </div>
+            <div className="mt-3 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <nav className="flex min-w-max items-center gap-2 pb-1" aria-label="Main navigation">
+                {mainNavItems.map((item) => {
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  return (
+                    <Link
+                      key={`top-${item.href}`}
+                      href={item.href}
+                      className={`rounded-full border px-3 py-1.5 text-xs transition ${active ? 'border-cyan-400/70 bg-cyan-500/20 text-cyan-200' : 'border-slate-700 text-slate-300 hover:border-cyan-400/50 hover:text-cyan-200'}`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
             </div>
             <div className="mt-2 grid grid-cols-1 gap-1 text-xs text-slate-300 sm:grid-cols-3">
               <span>UTC: {utc}</span>
@@ -103,6 +137,16 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
               </div>
             </details>
           </li>
+          {mobileNavItems.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <li key={item.href}>
+                <Link href={item.href} className={`block rounded-lg px-1 py-2 transition ${active ? 'bg-cyan-500/20 text-cyan-200' : 'hover:bg-slate-800/80 hover:text-cyan-200'}`}>
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </div>

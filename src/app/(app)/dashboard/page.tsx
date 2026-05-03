@@ -10,7 +10,8 @@ const cards = [
   { title: 'AI System Prompt', description: 'Operational prompt standards and alignment rules.', href: '/ai-system-prompt' },
   { title: 'Assets', description: 'Digital assets, certificates, and property modules.', href: '/assets' },
   { title: 'Economics', description: 'Economic intelligence and ecosystem economics.', href: '/economics' },
-  { title: 'Institutional Clarity', description: 'Institutional continuity, legal clarity, and governance surfaces.', href: '/identity' }
+  { title: 'Institutional Clarity', description: 'Institutional continuity, legal clarity, and governance surfaces.', href: '/identity' },
+  { title: 'Galactic Canon', description: 'Interactive registry for the OneGodian Galaxy™, planetary canon, moons, species, realms, lineages, figures, and temporal structures.', href: '/galactic-canon' }
 ];
 
 export default function DashboardPage() {

@@ -18,6 +18,124 @@ const priorityStyles: Record<Priority, string> = {
   Low: 'border-slate-500/40 bg-slate-500/10 text-slate-300'
 };
 
+const productionStatus: StatusItem[] = [
+  {
+    title: 'Node App',
+    state: 'Live',
+    description: 'Primary Next.js application successfully deployed and serving production traffic.'
+  },
+  {
+    title: 'Hostinger Deployment',
+    state: 'Active',
+    description: 'Production hosting environment operational with live routing and domain resolution.'
+  },
+  {
+    title: 'ODIN Systems',
+    state: 'Online',
+    description: 'Registry structure, routing architecture, and synchronization layers initialized.'
+  },
+  {
+    title: 'Static Fallback',
+    state: 'Enabled',
+    description: 'Fallback rendering and static route support active during phased backend expansion.'
+  },
+  {
+    title: 'GitHub Integration',
+    state: 'Connected',
+    description: 'Repository-based deployment workflow and source management active.'
+  },
+  {
+    title: 'UI Framework',
+    state: 'Operational',
+    description: 'Responsive mobile-first shell, navigation system, and module routing online.'
+  },
+  {
+    title: 'Future Database Layer',
+    state: 'In Development',
+    description: 'Structured transition planned from static shell to dynamic registry infrastructure.'
+  }
+];
+
+const moduleSections: ModuleSection[] = [
+  {
+    eyebrow: 'COMMAND HUB',
+    title: 'Dashboard',
+    description:
+      'Open the central operating environment for ecosystem monitoring, module access, deployment visibility, production status, and active OneGodian infrastructure coordination.',
+    points: ['System overview', 'Priority tracking', 'Deployment visibility', 'Operational summaries', 'Gateway routing', 'Infrastructure monitoring']
+  },
+  {
+    eyebrow: 'SYSTEM DIRECTORY',
+    title: 'Ecosystem',
+    description:
+      'Browse connected OneGodian systems, domains, infrastructure layers, applications, educational platforms, synchronization targets, and future execution environments from one unified directory.',
+    points: ['Platform registry', 'Domain structure', 'Service relationships', 'Deployment targets', 'Infrastructure layers', 'Expansion pathways']
+  },
+  {
+    eyebrow: 'ODIN INDEX',
+    title: 'Registry',
+    description:
+      'Access ODIN-aligned registry categories for planetary systems, certificates, products, archives, records, classifications, and future verification layers.',
+    points: ['Planetary records', 'Certificate indexes', 'Product systems', 'Membership structures', 'Archive records', 'Identity-linked entries']
+  },
+  {
+    eyebrow: 'ODIN-PR',
+    title: 'Planets',
+    description:
+      'Explore the 25-world OneGodian Galaxy™ planetary registry, including planetary profiles, environmental canon, system classifications, and future expansion continuity.',
+    points: ['Planet profiles', 'Canon timelines', 'Visual archives', 'Galactic mapping', 'Civilization structures', 'World continuity systems']
+  },
+  {
+    eyebrow: 'ORBITAL SYSTEMS',
+    title: 'Moons & Systems',
+    description:
+      'Review moon systems, orbital continuity structures, expansion interfaces, planetary relationships, and Elyndria™ system architecture across the developing OneGodian Galaxy framework.',
+    points: ['Moon registries', 'Orbital continuity', 'System hierarchies', 'Expansion structures', 'Celestial indexing', 'Elyndria™ archives']
+  },
+  {
+    eyebrow: 'UTILITIES',
+    title: 'Tools',
+    description:
+      'Open verification systems, lookups, time conversion interfaces, synchronization monitoring, product tooling, and operational utilities supporting the broader ecosystem.',
+    points: ['OneGodian Time converter', 'Verification utilities', 'Registry lookup', 'QR validation', 'Sync monitoring', 'Infrastructure diagnostics']
+  },
+  {
+    eyebrow: 'CANON LIBRARY',
+    title: 'Media',
+    description:
+      'Access story worlds, planetary visuals, cinematic artwork, audio systems, poster archives, launch media, educational visuals, and future OneGodian content libraries.',
+    points: ['Planetary artwork', 'Story archives', 'Posters', 'Audio collections', 'Video systems', 'Promotional media']
+  },
+  {
+    eyebrow: 'COMMERCE',
+    title: 'Products',
+    description:
+      'Organize digital downloads, educational products, certificates, memberships, courses, branded assets, and future planetary commerce systems through a centralized product layer.',
+    points: ['eBooks', 'Courses', 'Certificates', 'Memberships', 'Downloads', 'Planetary collections']
+  },
+  {
+    eyebrow: 'OBP-1',
+    title: 'Certificates',
+    description:
+      'Prepare certificate verification systems, holder records, issuer management views, QR-linked validation flows, and future OBP-1™ credential infrastructure.',
+    points: ['Certificate issuance', 'Verification lookup', 'Holder dashboards', 'QR validation', 'Download access', 'Registry linking']
+  },
+  {
+    eyebrow: 'ODIN-PR',
+    title: 'Galactic Canon',
+    description:
+      'Interactive registry for the OneGodian Galaxy™, planetary canon, moons, species, realms, lineages, figures, and temporal structures.',
+    points: ['Status: In Development', 'Priority: High', 'Atlas interface', 'Species index', 'Temporal records', 'Satellite registry']
+  },
+  {
+    eyebrow: 'IDENTITY',
+    title: 'Profile',
+    description:
+      'View account structure, membership alignment, registry participation, downloads, certificates, saved systems, and future identity-linked infrastructure modules.',
+    points: ['Account dashboard', 'Membership status', 'Registry alignment', 'Saved downloads', 'Certificate history', 'Identity preferences']
+  }
+];
+
 export default function HomePage() {
   return (
     <main className="space-y-6">

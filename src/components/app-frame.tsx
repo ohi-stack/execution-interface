@@ -9,6 +9,34 @@ const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
+  { label: 'Galactic Canon', href: '/galactic-canon' },
+  { label: 'Time', href: '/time' },
+  { label: 'OHI', href: '/ohi' },
+  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Assets', href: '/assets' },
+  { label: 'Economics', href: '/economics' }
+];
+
+const mobilePrimaryNavItems = [
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Registry', href: '/registry' },
+  { label: 'Planets', href: '/planets' },
+  { label: 'Canon', href: '/galactic-canon' }
+];
+
+const mobileSecondaryNavItems = [
+  { label: 'Time', href: '/time' },
+  { label: 'OHI', href: '/ohi' },
+  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Assets', href: '/assets' },
+  { label: 'Economics', href: '/economics' }
+];
+
+const mobileNavItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Systems', href: '/ecosystem' },
+  { label: 'Identity', href: '/identity' }
   { label: 'Games', href: '/games' },
   { label: 'Tools', href: '/tools' },
   { label: 'Planets', href: '/planets' },

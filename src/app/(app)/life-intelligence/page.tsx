@@ -1,3 +1,5 @@
+"use client";
+
 export default function LifeIntelligencePage() {
   return (
     <section className="life-intelligence-page">

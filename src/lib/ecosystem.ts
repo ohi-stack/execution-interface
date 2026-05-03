@@ -1,38 +1,239 @@
-export type EcosystemModule = {
+export type EcosystemCategory = 'infrastructure' | 'identity' | 'commerce' | 'governance' | 'education' | 'media';
+
+export type ProductionStatus = 'Live' | 'Staging' | 'In Development' | 'Needs Setup' | 'Offline' | 'Planned';
+
+export type Priority = 'Critical' | 'High' | 'Medium' | 'Low';
+
+export type EcosystemIconKey =
+  | 'identity'
+  | 'registry'
+  | 'commerce'
+  | 'infrastructure'
+  | 'api'
+  | 'education'
+  | 'time'
+  | 'media';
+
+export type EcosystemSystem = {
   id: string;
+  slug: string;
+  title: string;
   name: string;
-  category: 'infrastructure' | 'identity' | 'commerce' | 'governance';
-  status: 'active' | 'beta' | 'queued';
-  summary: string;
+  category: EcosystemCategory;
+  iconKey: EcosystemIconKey;
+  productionStatus: ProductionStatus;
+  priority: Priority;
+  domain: string;
+  repo: string;
+  deploymentTarget: string;
+  publicUrl: string;
+  adminUrl: string;
+  apiHealthUrl: string;
+  lastCheckedLabel: string;
+  description: string;
+  productionChecklist: string[];
+  nextActions: string[];
 };
 
-export const ONEGODIAN_ECOSYSTEM: EcosystemModule[] = [
+export const PRODUCTION_STATUSES: ProductionStatus[] = ['Live', 'Staging', 'In Development', 'Needs Setup', 'Offline', 'Planned'];
+
+export const PRIORITIES: Priority[] = ['Critical', 'High', 'Medium', 'Low'];
+
+export const ECOSYSTEM_CATEGORIES: EcosystemCategory[] = ['infrastructure', 'identity', 'commerce', 'governance', 'education', 'media'];
+
+export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
   {
     id: 'OG-ECO-01',
+    slug: 'onegodian-identity-engine',
+    title: 'OneGodian Identity Engine',
     name: 'OneGodian Identity Engine',
     category: 'identity',
-    status: 'active',
-    summary: 'Unified identity profiles, session trust, and role-ready account surfaces for app.onegodian.com.'
+    iconKey: 'identity',
+    productionStatus: 'In Development',
+    priority: 'Critical',
+    domain: 'identity.quantumohi.com',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'Hostinger Node/Next.js runtime',
+    publicUrl: 'https://app.onegodian.com/profile',
+    adminUrl: 'https://app.onegodian.com/settings',
+    apiHealthUrl: 'https://api.onegodian.org/health',
+    lastCheckedLabel: 'Manual review required before production lock',
+    description:
+      'Unified identity profiles, session trust, role-ready account surfaces, and OneGodian member identity controls for app.onegodian.com.',
+    productionChecklist: [
+      'Confirm authentication and account sessions',
+      'Validate profile route and identity data model',
+      'Connect membership roles to dashboard access',
+      'Document privacy and identity data handling'
+    ],
+    nextActions: [
+      'Wire identity records to the API gateway',
+      'Add member status indicators to dashboard cards',
+      'Create QR-V ready identity verification states'
+    ]
   },
   {
     id: 'OG-ECO-02',
+    slug: 'odin-registry-core',
+    title: 'ODIN Registry Core',
     name: 'ODIN Registry Core',
     category: 'governance',
-    status: 'active',
-    summary: 'Canonical registration, validation, and indexing for ODIN records across all routes.'
+    iconKey: 'registry',
+    productionStatus: 'Staging',
+    priority: 'Critical',
+    domain: 'app.onegodian.com/odin',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'Next.js App Router route group',
+    publicUrl: 'https://app.onegodian.com/odin',
+    adminUrl: 'https://app.onegodian.com/registry',
+    apiHealthUrl: 'https://api.onegodian.org/health',
+    lastCheckedLabel: 'Route available; API synchronization pending',
+    description:
+      'Canonical registration, validation, indexing, and review surface for ODIN records across OneGodian systems.',
+    productionChecklist: [
+      'Confirm ODIN route renders on production domain',
+      'Connect registry data source to API gateway',
+      'Add immutable record export workflow',
+      'Add admin-only registry controls'
+    ],
+    nextActions: [
+      'Define ODIN schema for production records',
+      'Add record detail pages',
+      'Add status filters for registry entries'
+    ]
   },
   {
     id: 'OG-ECO-03',
+    slug: 'capital-products-exchange',
+    title: 'Capital + Products Exchange',
     name: 'Capital + Products Exchange',
     category: 'commerce',
-    status: 'beta',
-    summary: 'Commerce and product rails for delivery, licensing, and member-grade monetization.'
+    iconKey: 'commerce',
+    productionStatus: 'Needs Setup',
+    priority: 'High',
+    domain: 'onegodian.com',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'WooCommerce + Stripe commerce layer with app dashboard links',
+    publicUrl: 'https://app.onegodian.com/products',
+    adminUrl: 'https://onegodian.com/wp-admin',
+    apiHealthUrl: 'https://api.onegodian.org/health',
+    lastCheckedLabel: 'Commerce integration not yet locked',
+    description:
+      'Commerce and product rails for digital products, certificates, memberships, licensing, and member-grade monetization.',
+    productionChecklist: [
+      'Confirm Stripe live mode products',
+      'Connect product catalog to app cards',
+      'Add checkout return and success states',
+      'Document fulfillment and certificate delivery flow'
+    ],
+    nextActions: [
+      'Map WooCommerce products to app modules',
+      'Add product status widgets',
+      'Create revenue summary card for dashboard'
+    ]
   },
   {
     id: 'OG-ECO-04',
+    slug: 'planetary-infra-layer',
+    title: 'Planetary Infra Layer',
     name: 'Planetary Infra Layer',
     category: 'infrastructure',
-    status: 'queued',
-    summary: 'Operational infrastructure for planets, moon systems, and cross-route data mirroring.'
+    iconKey: 'infrastructure',
+    productionStatus: 'In Development',
+    priority: 'Medium',
+    domain: 'galaxy.onegodian.com',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'Next.js planetary and moons routes',
+    publicUrl: 'https://app.onegodian.com/planets',
+    adminUrl: 'https://app.onegodian.com/moons-systems',
+    apiHealthUrl: 'https://api.onegodian.org/health',
+    lastCheckedLabel: 'Static canon routes live; data API pending',
+    description:
+      'Operational infrastructure for planets, moon systems, orbital records, and cross-route canon data mirroring.',
+    productionChecklist: [
+      'Confirm planets route production rendering',
+      'Confirm moons and systems route production rendering',
+      'Normalize canon data into reusable library files',
+      'Add API-backed lookup for planetary records'
+    ],
+    nextActions: [
+      'Add detail pages for planets and moons',
+      'Add canon source references',
+      'Add ODIN-PR record linkage'
+    ]
+  },
+  {
+    id: 'OG-ECO-05',
+    slug: 'onegodian-api-gateway',
+    title: 'OneGodian API Gateway',
+    name: 'OneGodian API Gateway',
+    category: 'infrastructure',
+    iconKey: 'api',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    domain: 'api.onegodian.org',
+    repo: 'ohi-stack/onegodian-api',
+    deploymentTarget: 'Hostinger Node.js Express service',
+    publicUrl: 'https://api.onegodian.org',
+    adminUrl: 'https://hpanel.hostinger.com',
+    apiHealthUrl: 'https://api.onegodian.org/health',
+    lastCheckedLabel: 'Deployment target identified; production health pending',
+    description:
+      'Official OneGodian API gateway for health checks, registry endpoints, identity verification, commerce callbacks, and app data services.',
+    productionChecklist: [
+      'Deploy root Node server.js on Hostinger',
+      'Confirm /health returns JSON status',
+      'Configure CORS for app.onegodian.com',
+      'Add environment variables and secrets',
+      'Document restart and rollback procedure'
+    ],
+    nextActions: [
+      'Deploy API gateway to Hostinger',
+      'Connect app dashboard summary cards to health endpoint',
+      'Add uptime and last checked automation'
+    ]
+  },
+  {
+    id: 'OG-ECO-06',
+    slug: 'university-of-onegodian',
+    title: 'University of OneGodian',
+    name: 'University of OneGodian',
+    category: 'education',
+    iconKey: 'education',
+    productionStatus: 'Planned',
+    priority: 'High',
+    domain: 'u.onegodian.org',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'WordPress LMS + app dashboard integration',
+    publicUrl: 'https://u.onegodian.org',
+    adminUrl: 'https://u.onegodian.org/wp-admin',
+    apiHealthUrl: 'https://api.onegodian.org/health',
+    lastCheckedLabel: 'Content model ready; LMS production setup pending',
+    description:
+      'Education, courses, certifications, learning paths, and member development programs for the OneGodian ecosystem.',
+    productionChecklist: [
+      'Confirm LMS platform and course structure',
+      'Add course catalog and enrollment flow',
+      'Connect certificate issuance process',
+      'Create app links for active learners'
+    ],
+    nextActions: [
+      'Build LMS landing page',
+      'Create first certification path',
+      'Add learner dashboard widgets'
+    ]
   }
 ];
+
+export function getEcosystemSystemBySlug(slug: string) {
+  return ONEGODIAN_ECOSYSTEM.find((system) => system.slug === slug);
+}
+
+export function getEcosystemSummary() {
+  return {
+    totalSystems: ONEGODIAN_ECOSYSTEM.length,
+    liveSystems: ONEGODIAN_ECOSYSTEM.filter((system) => system.productionStatus === 'Live').length,
+    criticalSystems: ONEGODIAN_ECOSYSTEM.filter((system) => system.priority === 'Critical').length,
+    needsSetup: ONEGODIAN_ECOSYSTEM.filter((system) => system.productionStatus === 'Needs Setup').length
+  };
+}

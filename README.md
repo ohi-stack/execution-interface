@@ -1,38 +1,69 @@
-# OneGodian Everything App Foundation
+# OneGodian App Monorepo
 
-Next.js + TypeScript + Tailwind + Prisma foundation for `app.onegodian.com`.
+Production target: **`apps/web`** (the `app.onegodian.com` Next.js application).
 
-## Stack
-- Next.js (App Router)
-- TypeScript
-- Tailwind CSS (dark/futuristic baseline)
-- Prisma + PostgreSQL
-- Auth.js-ready dependencies and environment variables
+## Repository structure
 
-## Local setup
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy env template:
-   ```bash
-   cp .env.example .env
-   ```
-3. Generate Prisma client:
-   ```bash
-   npm run prisma:generate
-   ```
-4. Create first migration:
-   ```bash
-   npm run prisma:migrate -- --name init
-   ```
-5. Run app:
-   ```bash
-   npm run dev
-   ```
+```text
+onegodian-app/
+├── apps/
+│   └── web/                                  # app.onegodian.com Next.js app
+├── plugins/
+│   └── wordpress/
+│       └── obp1-certificate-generator/       # OBP-1 WordPress scaffold
+├── packages/                                  # shared modules/data (create as needed)
+├── docs/
+├── package.json
+└── .gitignore
+```
 
-## Deployment notes
-- Set production `DATABASE_URL`, `NEXTAUTH_URL`, and `NEXTAUTH_SECRET` in the host environment.
-- Run Prisma migrations during CI/CD or release hook.
-- Add Auth.js route handlers and provider configuration before production sign-in.
-- Replace placeholders with module-specific APIs and authorization policies.
+## Architecture decision
+
+- `apps/web` owns its Next.js runtime, Prisma schema, and seed data.
+- WordPress plugin code is isolated under `plugins/wordpress`.
+- Root scripts proxy to `apps/web` to avoid deployment ambiguity.
+- Legacy/other app folders can continue to exist, but deployment for `app.onegodian.com` must point at `apps/web`.
+
+## Root commands (from repository root)
+
+Install app dependencies:
+
+```bash
+npm run install:web
+```
+
+Run development server:
+
+```bash
+npm run dev
+```
+
+Lint:
+
+```bash
+npm run lint
+```
+
+Build:
+
+```bash
+npm run build
+```
+
+Prisma commands:
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+```
+
+## Direct app commands
+
+You can also run commands directly in the app:
+
+```bash
+cd apps/web
+npm install
+npm run dev
+```

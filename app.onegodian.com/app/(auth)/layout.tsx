@@ -18,3 +18,4 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     </div>
   );
 }
+export default function AuthLayout({ children }: { children: React.ReactNode }) { return <div><nav className="mb-6 flex gap-3 text-sm"><Link href="/dashboard">Dashboard</Link><Link href="/profile">Profile</Link><Link href="/odin-registry">ODIN</Link><Link href="/planetary-registry">Planets</Link><Link href="/moons-systems">Moons Systems</Link><Link href="/certificates">Certificates</Link><Link href="/downloads">Downloads</Link><Link href="/media">Media</Link><Link href="/tools">Tools</Link><Link href="/admin">Admin</Link></nav>{children}</div>; }

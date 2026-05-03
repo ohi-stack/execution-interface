@@ -2,22 +2,38 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState, type ReactNode, type ComponentType } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
 const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Galaxy', href: '/galaxy' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Time', href: '/time' },
-  { label: 'OHI', href: '/ohi' },
-  { label: 'Algorithm', href: '/algorithm' },
-  { label: 'Assets', href: '/assets' },
-  { label: 'Economics', href: '/economics' },
-  { label: 'Capital', href: '/capital' }
+  { label: 'Systems', href: '/systems' },
+  { label: 'Members', href: '/members' },
+  { label: 'Capital', href: '/capital' },
+  { label: 'Media', href: '/media' },
+  { label: 'Tools', href: '/tools' },
+  { label: 'Galaxy', href: '/galaxy' },
+  { label: 'Developers', href: '/developers' }
 ];
 
+const liveStatusItems = [
+  'Dashboard Runtime Active',
+  'Registry Connected',
+  'Membership Layer Online',
+  'Capital Layer Staging',
+  'OMOS Tools Active',
+  'API Layer Syncing'
+];
+
+const mobilePrimary = [
+  { icon: '🏠', label: 'Dashboard', href: '/' },
+  { icon: '🌐', label: 'Ecosystem', href: '/ecosystem' },
+  { icon: '🪪', label: 'Registry', href: '/registry' },
+  { icon: '⚙️', label: 'Systems', href: '/systems' },
+  { icon: '☰', label: 'More', href: '/developers' }
+];
 
 function useLiveTimes() {
   const [now, setNow] = useState<Date>(new Date());
@@ -39,9 +55,17 @@ export function AppFrame({ children }: { children: ReactNode }) {
   const { utc, local, ot } = useLiveTimes();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-slate-950 pb-20 text-slate-100 md:pb-0">
       <header className="sticky top-0 z-30 border-b border-slate-800 bg-slate-950/90 px-4 py-3 backdrop-blur">
-        <div className="flex items-center gap-3">
+        <div className="rounded-xl border border-cyan-500/40 bg-slate-900/80 px-3 py-2 text-xs text-cyan-100">
+          <span className="mr-2 font-semibold text-cyan-300">LIVE SYSTEM STATUS</span>
+          <div className="mt-1 flex flex-wrap gap-2">
+            {liveStatusItems.map((item) => (
+              <span key={item} className="rounded-full border border-cyan-500/40 bg-cyan-500/10 px-2 py-0.5">● {item}</span>
+            ))}
+          </div>
+        </div>
+        <div className="mt-3 flex items-center gap-3">
           <div className="font-semibold text-cyan-300">OneGodian</div>
           <div className="hidden text-xs text-slate-300 md:block">UTC {new Date(utc).toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}</div>
           <div className="hidden text-xs text-slate-300 md:block">OT {ot}</div>
@@ -73,6 +97,20 @@ export function AppFrame({ children }: { children: ReactNode }) {
         </div>
       </header>
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">{children}</div>
+
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-700 bg-slate-950/95 p-2 backdrop-blur md:hidden" aria-label="Mobile navigation">
+        <div className="grid grid-cols-5 gap-1">
+          {mobilePrimary.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link key={item.href} href={item.href} className={`flex flex-col items-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }

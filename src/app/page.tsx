@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { appModules, type Priority, type ProductionStatus } from '@/lib/app-modules';
 
+type StatusItem = { title: string; state: string; description: string };
+type ModuleSection = { eyebrow: string; title: string; description: string; points: string[] };
 type StatusItem = {
   title: string;
   state: string;

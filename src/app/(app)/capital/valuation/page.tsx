@@ -1,0 +1,6 @@
+import { capitalComplianceDisclaimer, getCapitalValuation } from '@/lib/capital';
+
+export default async function CapitalValuationPage() {
+  const data = await getCapitalValuation();
+  return <main className="space-y-4"><h1 className="text-3xl font-semibold">Capital Valuation</h1><p className="text-sm text-slate-300">All values are non-audited management estimates or illustrative strategic projections.</p><p className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-200">{capitalComplianceDisclaimer}</p><div className="grid gap-2 md:grid-cols-3"><div className="rounded-xl border border-slate-800 p-3">Current Estimated Strategic Platform Value: {data.currentValue}</div><div className="rounded-xl border border-slate-800 p-3">3-Year Strategic Target Range: {data.threeYearRange}</div><div className="rounded-xl border border-slate-800 p-3">5-Year Platform Growth Projection: {data.fiveYearProjection}</div></div><section><h2 className="font-semibold">Asset allocation</h2>{data.assetAllocation.map((a)=><p key={a.label} className="text-sm text-slate-300">{a.label}: {a.percent}%</p>)}</section><section><h2 className="font-semibold">Infrastructure progress</h2>{data.infrastructureProgress.map((a)=><p key={a.label} className="text-sm text-slate-300">{a.label}: {a.percent}%</p>)}</section></main>;
+}

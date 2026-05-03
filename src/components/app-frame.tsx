@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode, type ComponentType } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
 const navItems = [
@@ -14,8 +14,10 @@ const navItems = [
   { label: 'OHI', href: '/ohi' },
   { label: 'Algorithm', href: '/algorithm' },
   { label: 'Assets', href: '/assets' },
-  { label: 'Economics', href: '/economics' }
+  { label: 'Economics', href: '/economics' },
+  { label: 'Capital', href: '/capital' }
 ];
+
 
 function useLiveTimes() {
   const [now, setNow] = useState<Date>(new Date());
@@ -32,7 +34,7 @@ function useLiveTimes() {
   return { utc, local, ot };
 }
 
-export function AppFrame({ children }: { children: React.ReactNode }) {
+export function AppFrame({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { utc, local, ot } = useLiveTimes();
 

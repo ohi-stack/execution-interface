@@ -1,16 +1,21 @@
 import Link from 'next/link';
+import { appModules, type Priority, type ProductionStatus } from '@/lib/app-modules';
 
-type StatusItem = {
-  title: string;
-  state: string;
-  description: string;
+const statusStyles: Record<ProductionStatus, string> = {
+  Live: 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300',
+  'Demo Ready': 'border-cyan-500/40 bg-cyan-500/15 text-cyan-300',
+  Staging: 'border-amber-500/40 bg-amber-500/15 text-amber-300',
+  'In Development': 'border-violet-500/40 bg-violet-500/15 text-violet-300',
+  'Needs Setup': 'border-orange-500/40 bg-orange-500/15 text-orange-300',
+  Planned: 'border-slate-500/40 bg-slate-500/15 text-slate-300',
+  Offline: 'border-red-500/40 bg-red-500/15 text-red-300'
 };
 
-type ModuleSection = {
-  eyebrow: string;
-  title: string;
-  description: string;
-  points: string[];
+const priorityStyles: Record<Priority, string> = {
+  Critical: 'border-red-500/40 bg-red-500/10 text-red-300',
+  High: 'border-orange-500/40 bg-orange-500/10 text-orange-300',
+  Medium: 'border-sky-500/40 bg-sky-500/10 text-sky-300',
+  Low: 'border-slate-500/40 bg-slate-500/10 text-slate-300'
 };
 
 const productionStatus: StatusItem[] = [
@@ -133,69 +138,36 @@ const moduleSections: ModuleSection[] = [
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-        <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 sm:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN PLATFORM · APP.ONEGODIAN.COM</p>
-          <h1 className="mt-3 text-3xl font-bold sm:text-4xl">OneGodian Everything App</h1>
-          <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">
-            The central Node/Next.js operating interface for the OneGodian ecosystem — connecting ODIN registry systems, planetary canon infrastructure,
-            moon systems, identity frameworks, certificates, products, media archives, synchronized tooling, and future platform services through a
-            unified application layer.
-          </p>
-          <div className="mt-5 grid gap-2 text-sm text-slate-200 sm:grid-cols-2 lg:grid-cols-3">
-            {['Centralized ecosystem navigation', 'Registry and infrastructure access', 'Operational module management', 'Cross-platform synchronization', 'Visual command routing', 'Scalable gateway architecture'].map((item) => (
-              <p key={item} className="rounded-lg border border-slate-700 bg-slate-950/70 px-3 py-2">
-                • {item}
-              </p>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/dashboard" className="rounded-lg border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-500/10">Open Dashboard</Link>
-            <Link href="/ecosystem" className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-medium text-slate-200 hover:border-cyan-300">Explore Ecosystem</Link>
-          </div>
-        </section>
+    <main className="space-y-6">
+      <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 sm:p-8">
+        <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN APP · APP.ONEGODIAN.COM</p>
+        <h1 className="mt-3 text-3xl font-bold sm:text-4xl">OneGodian App Systems Model</h1>
+        <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">
+          Central interface layer for navigation, discovery, dashboards, tools, games, records, products, certificates, and future execution environments.
+        </p>
+      </section>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-          <h2 className="text-xl font-semibold">Production Status</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {productionStatus.map((item) => (
-              <article key={item.title} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
-                <p className="text-sm uppercase tracking-wide text-cyan-300">
-                  {item.title} — {item.state}
-                </p>
-                <p className="mt-2 text-sm text-slate-300">{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Module Wireframe</p>
-          <h2 className="mt-2 text-xl font-semibold">Core app navigation</h2>
-          <p className="mt-3 text-sm leading-relaxed text-slate-300">
-            Each module is connected through the homepage gateway so the platform behaves as a unified operational interface while deeper registry logic,
-            synchronization layers, APIs, and database-backed workflows are deployed incrementally in controlled production phases.
-          </p>
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-2">
-          {moduleSections.map((section) => (
-            <article key={section.title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">{section.eyebrow}</p>
-              <h3 className="mt-2 text-2xl font-semibold">{section.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-300">{section.description}</p>
-              <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-slate-200">
-                {section.points.map((point) => (
-                  <p key={point} className="rounded-lg border border-slate-700 bg-slate-950/70 px-3 py-2">
-                    • {point}
-                  </p>
-                ))}
-              </div>
-            </article>
-          ))}
-        </section>
-      </div>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {appModules.map((module) => (
+          <article key={module.slug} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+            <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">{module.category}</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">{module.title}</h2>
+            <p className="mt-3 text-sm leading-relaxed text-slate-300">{module.description}</p>
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium">
+              <span className={`rounded-full border px-2 py-1 ${statusStyles[module.productionStatus]}`}>{module.productionStatus}</span>
+              <span className={`rounded-full border px-2 py-1 ${priorityStyles[module.priority]}`}>{module.priority} Priority</span>
+            </div>
+            <ul className="mt-4 space-y-1 text-sm text-slate-300">
+              {module.features.map((feature) => (
+                <li key={feature}>• {feature}</li>
+              ))}
+            </ul>
+            <Link href={module.route} className="mt-5 inline-flex rounded-lg border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-500/10">
+              Open Module
+            </Link>
+          </article>
+        ))}
+      </section>
     </main>
   );
 }

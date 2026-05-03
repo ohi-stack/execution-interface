@@ -1,1 +1,0 @@
-export default function DisclosureNotice() { return <div className="rounded-md border-l-4 border-gold bg-white p-4 text-sm">Disclosures must be reviewed and approved before publishing offering workflow changes.</div>; }

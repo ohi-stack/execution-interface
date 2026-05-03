@@ -1,5 +1,0 @@
-import CapitalImagePanel from '@/components/CapitalImagePanel';
-
-export default function Page() {
-  return <main><h1>Offerings</h1><div className="certificate-preview-grid"><CapitalImagePanel title="Capital Offerings UI" description="Recordkeeping interface preview for offerings." alt="Capital offerings interface preview with listing panels and filters." /><CapitalImagePanel title="Founder Note Certificate" description="Preview certificate image for founder note instrument." alt="Founder note certificate visual preview for design reference only." href="/offerings/founder-note" /><CapitalImagePanel title="Infrastructure Bond Certificate" description="Preview certificate image for infrastructure bond instrument." alt="Infrastructure bond certificate visual preview for design reference only." href="/offerings/infrastructure-bond" /><CapitalImagePanel title="Platform Growth Note Certificate" description="Preview certificate image for platform growth note instrument." alt="Platform growth note certificate visual preview for design reference only." href="/offerings/platform-growth-note" /></div></main>;
-}

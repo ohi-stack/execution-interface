@@ -1,2 +1,0 @@
-import CapitalImagePanel from '@/components/CapitalImagePanel';
-export default function Page(){return <main><h1>Platform Growth Note</h1><CapitalImagePanel title="Platform Growth Note Certificate Preview" description="Preview image only." alt="Platform growth note certificate preview image for instrument page design review." /><p className="notice">Certificate images are visual previews only. Final instrument terms, legal status, repayment obligations, eligibility, and disclosures require qualified review before live public use.</p></main>;}

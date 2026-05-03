@@ -1,4 +1,0 @@
-import PageShell from '@/components/PageShell';
-import CapitalImagePanel from '@/components/CapitalImagePanel';
-const modules=['My Instruments','Certificates','Disclosure Status','Ledger Activity','Verification Center','Notifications','Support'];
-export default function InvestorPortalPage(){return <PageShell><section className="hero"><h1>Investor Portal</h1></section><section className="dashboard-preview-grid"><CapitalImagePanel title="Investor Dashboard" description="Investor-facing dashboard preview." alt="Investor dashboard preview with instruments and disclosure widgets." /><CapitalImagePanel title="Capital Dashboard" description="Internal capital dashboard preview." alt="Capital operations dashboard preview with certificates and ledger summaries." /></section><section className="grid">{modules.map((m)=><article key={m} className="card"><h3>{m}</h3></article>)}</section></PageShell>;}

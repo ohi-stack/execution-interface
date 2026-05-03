@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { appModules, type Priority, type ProductionStatus } from '@/lib/app-modules';
 
+type StatusItem = { title: string; state: string; description: string };
+type ModuleSection = { eyebrow: string; title: string; description: string; points: string[] };
+
 const statusStyles: Record<ProductionStatus, string> = {
   Live: 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300',
   'Demo Ready': 'border-cyan-500/40 bg-cyan-500/15 text-cyan-300',

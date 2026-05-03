@@ -90,6 +90,12 @@ export const appModules: AppModule[] = [
     checklist: ['Media route pending', 'Asset library pending']
   },
   {
+    title: 'Capital', slug: 'capital', route: '/capital', category: 'Commercial Layer', productionStatus: 'In Development', priority: 'Critical', iconKey: 'landmark',
+    description: 'Capital formation, valuation, licensing, payments, and API subscription operations.',
+    features: ['Capital dashboard', 'Instrument registry', 'Intake workflow', 'Licensing plans'],
+    checklist: ['Capital routes live', 'API integration pending', 'Compliance review active']
+  },
+  {
     title: 'Profile', slug: 'profile', route: '/profile', category: 'User Layer', productionStatus: 'Planned', priority: 'Medium', iconKey: 'user',
     description: 'User identity, access level, member status, preferences, and saved activity.',
     features: ['Profile', 'Access level', 'Saved records', 'Member identity'],

@@ -5,48 +5,17 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const mainNavItems = [
+const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Time', href: '/time' },
-  { label: 'OHI', href: '/ohi' },
-  { label: 'Algorithm', href: '/algorithm' },
-  { label: 'Assets', href: '/assets' },
-  { label: 'Economics', href: '/economics' }
-];
-
-const mobilePrimaryNavItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Registry', href: '/registry' },
-  { label: 'Planets', href: '/planets' }
-];
-
-const mobileSecondaryNavItems = [
-  { label: 'Time', href: '/time' },
-  { label: 'OHI', href: '/ohi' },
-  { label: 'Algorithm', href: '/algorithm' },
-  { label: 'Assets', href: '/assets' },
-  { label: 'Economics', href: '/economics' }
-  { label: 'Registry', href: '/registry' },
-  { label: 'Planets', href: '/odin/planetary-registry' },
-  { label: 'ODIN', href: '/odin' },
-  { label: 'Learn', href: '/learn' },
-  { label: 'Identity', href: '/identity' },
-  { label: 'Verification', href: '/verification' },
-  { label: 'Capital', href: '/capital' },
+  { label: 'Games', href: '/games' },
+  { label: 'Tools', href: '/tools' },
+  { label: 'Planets', href: '/planets' },
+  { label: 'Products', href: '/products' },
+  { label: 'Certificates', href: '/certificates' },
   { label: 'Media', href: '/media' },
-  { label: 'Store', href: '/store' },
-  { label: 'Time', href: '/time' },
-];
-
-const mobileNavItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Systems', href: '/ecosystem' },
-  { label: 'Learn', href: '/learn' },
-  { label: 'Community', href: '/community' },
-  { label: 'Identity', href: '/identity' },
+  { label: 'Profile', href: '/profile' }
 ];
 
 function useLiveTimes() {
@@ -70,85 +39,39 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="flex min-h-screen">
-        <aside className="hidden w-64 shrink-0 border-r border-slate-800/80 bg-slate-950/95 p-4 lg:block">
-          <div className="mb-6 text-lg font-semibold text-cyan-300">OneGodian</div>
-          <nav className="space-y-1">
-            {mainNavItems.map((item) => {
+      <header className="sticky top-0 z-30 border-b border-slate-800 bg-slate-950/90 px-4 py-3 backdrop-blur">
+        <div className="flex items-center gap-3">
+          <div className="font-semibold text-cyan-300">OneGodian</div>
+          <div className="hidden text-xs text-slate-300 md:block">UTC {new Date(utc).toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}</div>
+          <div className="hidden text-xs text-slate-300 md:block">OT {ot}</div>
+        </div>
+        <div className="mt-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <nav className="flex min-w-max items-center gap-2 pb-1" aria-label="Main navigation">
+            {navItems.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
-                <Link key={item.href} href={item.href} className={`block rounded-lg px-3 py-2 text-sm ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300 hover:bg-slate-800'}`}>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`inline-flex h-11 items-center rounded-full border px-4 text-sm transition ${
+                    active
+                      ? 'border-cyan-400/80 bg-cyan-500/20 text-cyan-200'
+                      : 'border-slate-700 text-slate-300 hover:border-cyan-400/50 hover:text-cyan-200'
+                  }`}
+                >
                   {item.label}
                 </Link>
               );
             })}
           </nav>
-        </aside>
-
-        <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 border-b border-slate-800 bg-slate-950/90 px-4 py-3 backdrop-blur">
-            <div className="flex items-center gap-3">
-              <div className="font-semibold text-cyan-300">OneGodian</div>
-              <input className="h-9 flex-1 rounded-md border border-slate-700 bg-slate-900 px-3 text-sm" placeholder="Search planets, ODIN, systems, modules..." />
-              <div className="hidden text-xs text-slate-300 md:block">UTC {new Date(utc).toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}</div>
-              <div className="hidden text-xs text-slate-300 md:block">OT {ot}</div>
-            </div>
-            <div className="mt-3 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <nav className="flex min-w-max items-center gap-2 pb-1" aria-label="Main navigation">
-                {mainNavItems.map((item) => {
-                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                  return (
-                    <Link
-                      key={`top-${item.href}`}
-                      href={item.href}
-                      className={`rounded-full border px-3 py-1.5 text-xs transition ${active ? 'border-cyan-400/70 bg-cyan-500/20 text-cyan-200' : 'border-slate-700 text-slate-300 hover:border-cyan-400/50 hover:text-cyan-200'}`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </div>
-            <div className="mt-2 grid grid-cols-1 gap-1 text-xs text-slate-300 sm:grid-cols-3">
-              <span>UTC: {utc}</span>
-              <span>Local: {local}</span>
-              <span>OT: {ot}</span>
-            </div>
-          </header>
-
-          <div className="flex-1 pb-24">{children}</div>
         </div>
-      </div>
-
-      <nav className="fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-cyan-400/30 bg-slate-950/90 p-2 backdrop-blur lg:hidden">
-        <ul className="grid grid-cols-5 gap-1 text-center text-[11px] text-slate-300">
-          {mobilePrimaryNavItems.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href} className="block rounded-lg px-1 py-2 hover:bg-slate-800/80 hover:text-cyan-200">{item.label}</Link>
-            </li>
-          ))}
-          <li>
-            <details className="relative">
-              <summary className="block cursor-pointer list-none rounded-lg px-1 py-2 hover:bg-slate-800/80 hover:text-cyan-200">More</summary>
-              <div className="absolute bottom-11 right-0 min-w-36 rounded-lg border border-slate-700 bg-slate-900 p-1 text-left">
-                {mobileSecondaryNavItems.map((item) => (
-                  <Link key={item.href} href={item.href} className="block rounded px-2 py-1.5 text-xs hover:bg-slate-800">{item.label}</Link>
-                ))}
-              </div>
-            </details>
-          </li>
-          {mobileNavItems.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <li key={item.href}>
-                <Link href={item.href} className={`block rounded-lg px-1 py-2 transition ${active ? 'bg-cyan-500/20 text-cyan-200' : 'hover:bg-slate-800/80 hover:text-cyan-200'}`}>
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+        <div className="mt-2 grid grid-cols-1 gap-1 text-xs text-slate-300 sm:grid-cols-3">
+          <span>UTC: {utc}</span>
+          <span>Local: {local}</span>
+          <span>OT: {ot}</span>
+        </div>
+      </header>
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">{children}</div>
     </div>
   );
 }

@@ -8,6 +8,17 @@ import { gregorianToOT } from '@/lib/onegodian-time';
 const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Onegodian Algorithm', href: '/algorithm' },
+  { label: 'Protocol Layer', href: '/algorithm/protocol' },
+  { label: 'Experience Layer', href: '/algorithm/experience' },
+  { label: 'Community Layer', href: '/algorithm/community' },
+  { label: 'Orientation Layer', href: '/algorithm/orientation' },
+  { label: 'Belief Mapper Lite', href: '/belief-mapper' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'OneGodian U', href: 'https://u.onegodian.org' },
+  { label: 'Divine 9 Covers', href: '/media/divine-9' },
+  { label: 'Visual Cover Standards', href: '/standards/visual-covers' },
+  { label: 'Institutional Dossier', href: '/institutional' }
   { label: 'Registry', href: '/registry' },
   { label: 'Systems', href: '/systems' },
   { label: 'Members', href: '/members' },

@@ -9,6 +9,8 @@ const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
+  { label: 'Games', href: '/games' },
+  { label: 'Planets', href: '/planets' },
   { label: 'Systems', href: '/systems' },
   { label: 'Members', href: '/members' },
   { label: 'Capital', href: '/capital' },
@@ -31,8 +33,8 @@ const mobilePrimary = [
   { icon: '🏠', label: 'Dashboard', href: '/' },
   { icon: '🌐', label: 'Ecosystem', href: '/ecosystem' },
   { icon: '🪪', label: 'Registry', href: '/registry' },
-  { icon: '⚙️', label: 'Systems', href: '/systems' },
-  { icon: '☰', label: 'More', href: '/developers' }
+  { icon: '🎮', label: 'Games', href: '/games' },
+  { icon: '🪐', label: 'Planets', href: '/planets' }
 ];
 
 function useLiveTimes() {
@@ -71,14 +73,14 @@ export function AppFrame({ children }: { children: ReactNode }) {
           <div className="hidden text-xs text-slate-300 md:block">OT {ot}</div>
         </div>
         <div className="mt-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <nav className="flex min-w-max items-center gap-2 pb-1" aria-label="Main navigation">
+          <nav className="flex min-w-max flex-nowrap items-center gap-2 pb-1 sm:flex-wrap" aria-label="Main navigation">
             {navItems.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`inline-flex h-11 items-center rounded-full border px-4 text-sm transition ${
+                  className={`inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition ${
                     active
                       ? 'border-cyan-400/80 bg-cyan-500/20 text-cyan-200'
                       : 'border-slate-700 text-slate-300 hover:border-cyan-400/50 hover:text-cyan-200'
@@ -103,9 +105,9 @@ export function AppFrame({ children }: { children: ReactNode }) {
           {mobilePrimary.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
-              <Link key={item.href} href={item.href} className={`flex flex-col items-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
+              <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
                 <span>{item.icon}</span>
-                <span>{item.label}</span>
+                <span className="mt-0.5">{item.label}</span>
               </Link>
             );
           })}

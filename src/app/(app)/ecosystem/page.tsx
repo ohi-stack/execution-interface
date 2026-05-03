@@ -17,9 +17,9 @@ export default function EcosystemPage() {
             <article key={module.id} className="rounded-xl border border-cyan-500/20 bg-slate-900/70 p-5">
               <p className="text-xs uppercase tracking-[0.2em] text-neon">{module.id}</p>
               <h2 className="mt-2 text-xl font-semibold text-slate-100">{module.name}</h2>
-              <p className="mt-2 text-sm text-slate-300">{module.summary}</p>
+              <p className="mt-2 text-sm text-slate-300">{module.description}</p>
               <p className="mt-3 text-xs text-slate-400">
-                {module.category} · {module.status}
+                {module.category} · {module.productionStatus}
               </p>
             </article>
           ))}

@@ -100,5 +100,78 @@ export const appModules: AppModule[] = [
     description: 'User identity, access level, member status, preferences, and saved activity.',
     features: ['Profile', 'Access level', 'Saved records', 'Member identity'],
     checklist: ['Profile route pending', 'Auth pending']
-  }
+  },
+
+  {
+    title: 'Onegodian Algorithm™',
+    slug: 'algorithm',
+    route: '/algorithm',
+    category: 'AI Governance',
+    productionStatus: 'In Development',
+    priority: 'Critical',
+    iconKey: 'brain-circuit',
+    description: 'Four-layer AI governance framework for recognition, personalization, community intelligence, and AI/robotic behavioral orientation.',
+    features: ['Protocol layer', 'Experience layer', 'Community layer', 'Orientation layer'],
+    checklist: ['Create /algorithm landing page', 'Add four-layer architecture', 'Add white paper and API-ready endpoint links']
+  },
+  {
+    title: 'Belief Mapper Lite',
+    slug: 'belief-mapper-lite',
+    route: '/belief-mapper',
+    category: 'Identity',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    iconKey: 'sparkles',
+    description: 'Consent-first 3–5 question identity mapper that routes users to stage-aware OneGodian resources.',
+    features: ['Question flow', 'Result stage mapping', 'Consent notice', 'Journey routing'],
+    checklist: ['Build question flow', 'Create result states', 'Do not store belief data without explicit consent']
+  },
+  {
+    title: 'OneGodian Learn',
+    slug: 'learn',
+    route: '/learn',
+    category: 'Education',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    iconKey: 'graduation-cap',
+    description: 'Public educational knowledge layer aligned to onegodian.org/learn with deep links to OneGodian U.',
+    features: ['Knowledge index', 'Six-pillar structure', 'Course links to OneGodian U', 'Public reference layer'],
+    checklist: ['Create /learn landing page', 'Add six pillar cards', 'Route course CTAs to https://u.onegodian.org']
+  },
+  {
+    title: 'OneGodian U',
+    slug: 'onegodian-u',
+    route: 'https://u.onegodian.org',
+    category: 'Education',
+    productionStatus: 'Planned',
+    priority: 'Critical',
+    iconKey: 'book-open-check',
+    description: 'Course execution platform for modules, credentials, account progress, and certification delivery.',
+    features: ['Course shell', 'Authentication', 'Track-based programs', 'Certificate flow'],
+    checklist: ['Create course shell', 'Create authentication flow', 'Connect CTAs from onegodian.org/learn']
+  },
+  {
+    title: 'Visual Cover Standards',
+    slug: 'visual-cover-standards',
+    route: '/standards/visual-covers',
+    category: 'Media',
+    productionStatus: 'In Development',
+    priority: 'High',
+    iconKey: 'image',
+    description: 'Cover-art standard requiring every scroll and companion cover to encode the title’s meaning.',
+    features: ['Core principle', 'Dominant visual anchor rule', 'No-clutter rule', 'Prompt template guidance'],
+    checklist: ['Create standard page', 'Add title-meaning encoding requirement', 'Add prompt template generator']
+  },
+  {
+    title: 'Institutional Dossier',
+    slug: 'institutional',
+    route: '/institutional',
+    category: 'Institutional',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    iconKey: 'landmark',
+    description: 'Institutional-safe overview of ONEGODIAN, LLC, IP standing, legal documentation, and operating structure.',
+    features: ['Positioning statement', 'Entity separation notes', 'IP reference', 'Inquiry routing'],
+    checklist: ['Add positioning statement summary', 'Separate ONEGODIAN, LLC from Indigenous Nation of Onegodia governance', 'Add inquiry routing']
+  },
 ];

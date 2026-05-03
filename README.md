@@ -1,38 +1,63 @@
-# OneGodian Everything App Foundation
+# onegodian-app
 
-Next.js + TypeScript + Tailwind + Prisma foundation for `app.onegodian.com`.
+Monorepo normalized with a single deployable Next.js app at:
 
-## Stack
-- Next.js (App Router)
-- TypeScript
-- Tailwind CSS (dark/futuristic baseline)
-- Prisma + PostgreSQL
-- Auth.js-ready dependencies and environment variables
+- `apps/web` ✅ (only deployable Next.js root)
 
-## Local setup
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy env template:
-   ```bash
-   cp .env.example .env
-   ```
-3. Generate Prisma client:
-   ```bash
-   npm run prisma:generate
-   ```
-4. Create first migration:
-   ```bash
-   npm run prisma:migrate -- --name init
-   ```
-5. Run app:
-   ```bash
-   npm run dev
-   ```
+## Repository layout (target)
 
-## Deployment notes
-- Set production `DATABASE_URL`, `NEXTAUTH_URL`, and `NEXTAUTH_SECRET` in the host environment.
-- Run Prisma migrations during CI/CD or release hook.
-- Add Auth.js route handlers and provider configuration before production sign-in.
-- Replace placeholders with module-specific APIs and authorization policies.
+- `apps/web` — Next.js production app
+- `packages` — shared packages
+- `plugins` — WordPress plugin scaffold(s)
+- `docs` — project documentation
+
+## Deploying `apps/web`
+
+### 1) Install dependencies
+
+```bash
+cd apps/web
+npm install
+```
+
+### 2) Configure environment
+
+```bash
+cp .env.example .env
+```
+
+Set production values:
+- `DATABASE_URL`
+- `NEXTAUTH_URL`
+- `NEXTAUTH_SECRET`
+- `NODE_ENV=production`
+
+### 3) Prisma setup
+
+```bash
+npx prisma generate
+# For first deployment / schema apply:
+npx prisma migrate deploy
+```
+
+### 4) Validate locally
+
+```bash
+npm run lint
+npm run build
+npm run start
+```
+
+### 5) Production start command
+
+```bash
+npm run build && npm run start
+```
+
+## Preserved domain content
+
+- Planets routes/data (ODIN-PR)
+- Moons systems route/data
+- Prisma schema and migrations
+- Reusable UI components
+- WordPress plugin scaffold in `plugins/onegodian-capital-plugin`

@@ -1,229 +1,90 @@
 import Link from 'next/link';
 
-type StatusWidget = {
-  label: string;
-  value: string;
-  accent: 'cyan' | 'gold';
-};
-
-type ModuleCard = {
+type CommandModule = {
   title: string;
   href: string;
   description: string;
-  stats: string[];
-  glyph: string;
+  icon: string;
+  status: 'Live' | 'In Development' | 'Needs Setup' | 'Planned';
 };
 
-const statusWidgets: StatusWidget[] = [
-  { label: 'App Status', value: 'Online', accent: 'cyan' },
-  { label: 'ODIN Registry', value: 'Active', accent: 'gold' },
-  { label: 'OneGodian Time™', value: 'OTS-V5 Active', accent: 'cyan' },
-  { label: 'Ecosystem', value: 'Route Active', accent: 'gold' },
-  { label: 'Mobile Navigation', value: 'Enabled', accent: 'cyan' },
+type SystemStatus = {
+  title: string;
+  status: 'Live' | 'In Development' | 'Needs Setup' | 'Planned';
+};
+
+const commandModules: CommandModule[] = [
+  { title: 'Algorithm', href: '/algorithm', description: 'Four-layer operational model for protocol, experience, community, and orientation.', icon: '◈', status: 'Live' },
+  { title: 'OMOS', href: '/omos', description: 'Operational module index for command workflows and system alignment.', icon: '◎', status: 'In Development' },
+  { title: 'Time', href: '/time', description: 'OTS-V5 timing reference, conversion tools, and legal-time guidance.', icon: '⏣', status: 'Live' },
+  { title: 'Protocol', href: '/protocol', description: 'Protocol governance references and implementation placeholders.', icon: '⌬', status: 'In Development' },
+  { title: 'AI Prompt', href: '/ai-system-prompt', description: 'Behavioral and classification standards for AI system usage.', icon: '✦', status: 'Live' },
+  { title: 'Identity', href: '/identity', description: 'Identity model, records, and LLC/INO separation references.', icon: '▣', status: 'Live' },
+  { title: 'Pipeline', href: '/pipeline', description: 'Compare, Filter, Normalize, and Output workflow specification.', icon: '⇄', status: 'In Development' },
+  { title: 'Gen Alpha', href: '/gen-alpha', description: 'Belief Mapper Lite stages for guided user progression.', icon: '△', status: 'Planned' },
+  { title: 'Docs', href: '/docs', description: 'Document library cards for system records and milestones.', icon: '☰', status: 'Needs Setup' },
 ];
 
-const moduleGroups: { title: string; modules: ModuleCard[] }[] = [
-  {
-    title: 'Core Registry',
-    modules: [
-      {
-        title: 'Planetary Registry',
-        href: '/planets',
-        description: 'ODIN-PR planets, civilizations, and registry systems.',
-        stats: ['25 Planets', 'ODIN-PR', 'Canon'],
-        glyph: '◉',
-      },
-      {
-        title: 'ODIN Registry',
-        href: '/odin',
-        description: 'Canonical registry hub for series, platforms, verification, worlds, and planetary records.',
-        stats: ['Registry', 'Verification', 'Canon'],
-        glyph: '⌬',
-      },
-      {
-        title: 'OneGodian Time™',
-        href: '/time',
-        description: 'OTS-V5 dual-date clock, Gregorian → OneGodian converter, epoch rules, and timestamp governance.',
-        stats: ['OTS-V5', 'UTC Truth', '13 Months'],
-        glyph: '⏣',
-      },
-      {
-        title: 'Certificates',
-        href: '/certificates',
-        description: 'Certificate views, registry references, and OneGodian verification records.',
-        stats: ['Records', 'Identity', 'Archive'],
-        glyph: '▣',
-      },
-    ],
-  },
-  {
-    title: 'Worlds & Systems',
-    modules: [
-      {
-        title: 'Moons & Systems',
-        href: '/moons-systems',
-        description: 'Moon systems, orbital continuity, and expansion interfaces.',
-        stats: ['Moons', 'Orbits', 'Systems'],
-        glyph: '◍',
-      },
-      {
-        title: 'Ecosystem',
-        href: '/ecosystem',
-        description: 'Connected OneGodian systems and infrastructure layers.',
-        stats: ['Routes', 'Modules', 'Infrastructure'],
-        glyph: '◈',
-      },
-      {
-        title: 'Media Center',
-        href: '/media',
-        description: 'Visual media, banners, assets, and content presentation layers.',
-        stats: ['Media', 'Assets', 'Visuals'],
-        glyph: '◫',
-      },
-      {
-        title: 'Products',
-        href: '/products',
-        description: 'Product surfaces, digital assets, app-linked offerings, and commerce expansion.',
-        stats: ['Store', 'Digital', 'Commerce'],
-        glyph: '◬',
-      },
-    ],
-  },
-  {
-    title: 'Tools & Operations',
-    modules: [
-      {
-        title: 'Tools',
-        href: '/tools',
-        description: 'Operational utilities, converters, dashboards, and app functions.',
-        stats: ['Utilities', 'Engines', 'Workflow'],
-        glyph: '⚙',
-      },
-      {
-        title: 'Registry',
-        href: '/registry',
-        description: 'Unified registry access for app-level records and canonical systems.',
-        stats: ['Index', 'Records', 'Links'],
-        glyph: '▦',
-      },
-      {
-        title: 'Dashboard',
-        href: '/dashboard',
-        description: 'Operational dashboard for the OneGodian App interface.',
-        stats: ['Modules', 'Status', 'Navigation'],
-        glyph: '◩',
-      },
-      {
-        title: 'Profile',
-        href: '/profile',
-        description: 'Identity profile, app presence, and user-facing account layer.',
-        stats: ['Identity', 'Account', 'Access'],
-        glyph: '◪',
-      },
-    ],
-  },
+const systemStatuses: SystemStatus[] = [
+  { title: 'Node App Live', status: 'Live' },
+  { title: 'Hostinger Deployment Active', status: 'Live' },
+  { title: 'Ecosystem Directory', status: 'Live' },
+  { title: 'Time Converter', status: 'In Development' },
+  { title: 'Docs Library', status: 'Needs Setup' },
+  { title: 'API Gateway', status: 'Needs Setup' },
+  { title: 'GitHub Repo Matrix', status: 'In Development' },
+  { title: 'Alignment Demo', status: 'Planned' },
 ];
 
-const wireframeFlow = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Registry', href: '/registry' },
-  { label: 'Planetary Systems', href: '/planets' },
-  { label: 'Time', href: '/time' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Profile', href: '/profile' },
-];
-
-const milestones = [
-  {
-    title: 'Ecosystem Route Added',
-    text: 'Production-safe ecosystem module and route added to the app.',
-  },
-  {
-    title: 'ODIN Registry Expanded',
-    text: 'ODIN landing pages, registry datasets, navigation, and reusable components added.',
-  },
-  {
-    title: 'Navigation Upgraded',
-    text: 'Glyph cards, accents, mobile navigation, and stronger dashboard identity added.',
-  },
-  {
-    title: 'OneGodian Time™ Added',
-    text: 'OTS-V5 deterministic conversion library and dashboard widgets merged.',
-  },
-];
+const statusStyles: Record<SystemStatus['status'], string> = {
+  Live: 'border-emerald-400/50 bg-emerald-500/10 text-emerald-200',
+  'In Development': 'border-cyan-400/50 bg-cyan-500/10 text-cyan-200',
+  'Needs Setup': 'border-amber-400/50 bg-amber-500/10 text-amber-200',
+  Planned: 'border-violet-400/50 bg-violet-500/10 text-violet-200',
+};
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
         <section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-[0_0_0_1px_rgba(34,211,238,0.08)] sm:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN PLATFORM</p>
-          <h1 className="mt-3 text-3xl font-bold sm:text-4xl lg:text-5xl">OneGodian Everything App</h1>
-          <p className="mt-3 text-lg text-cyan-100">Central command interface for the OneGodian ecosystem.</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN COMMAND DASHBOARD</p>
+          <h1 className="mt-3 text-3xl font-bold sm:text-4xl lg:text-5xl">OneGodian System Control Surface</h1>
           <p className="mt-4 max-w-4xl text-base leading-relaxed text-slate-300 sm:text-lg">
-            Access registry systems, planetary worlds, moon systems, OneGodian Time™, ODIN records, ecosystem infrastructure, media, tools, products, certificates, and profile services from one synchronized app interface.
+            Command access for operational modules, records, timing systems, and documentation. Status tags indicate current implementation maturity.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link href="/dashboard" className="rounded-xl bg-cyan-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 sm:text-base">Open Dashboard</Link>
-            <Link href="/registry" className="rounded-xl border border-cyan-400/60 bg-slate-950/60 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300 sm:text-base">Explore Registry</Link>
-            <Link href="/time" className="rounded-xl border border-amber-300/60 bg-slate-950/60 px-5 py-3 text-sm font-semibold text-amber-200 transition hover:border-amber-200 sm:text-base">OneGodian Time™</Link>
+            <Link href="/algorithm" className="rounded-xl border border-cyan-400/60 bg-slate-950/60 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300 sm:text-base">View Algorithm</Link>
+            <Link href="/docs" className="rounded-xl border border-slate-600 bg-slate-950/60 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300 sm:text-base">Open Docs</Link>
           </div>
         </section>
 
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {statusWidgets.map((item) => (
-            <article key={item.label} className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
-              <p className={`mt-2 text-base font-semibold ${item.accent === 'cyan' ? 'text-cyan-200' : 'text-amber-200'}`}>{item.value}</p>
-            </article>
-          ))}
-        </section>
-
-        {moduleGroups.map((group) => (
-          <section key={group.title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-50 sm:text-2xl">{group.title}</h2>
-            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {group.modules.map((module) => (
-                <Link key={module.title} href={module.href} className="group rounded-xl border border-slate-700 bg-slate-950/70 p-5 transition hover:border-cyan-400/60 hover:bg-slate-900">
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl text-cyan-300">{module.glyph}</span>
-                    <span className="text-xs uppercase tracking-[0.15em] text-slate-400 group-hover:text-cyan-200">Open</span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-slate-50">{module.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-300">{module.description}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {module.stats.map((stat) => (
-                      <span key={stat} className="rounded-full border border-slate-600 px-3 py-1 text-xs text-slate-200">{stat}</span>
-                    ))}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ))}
-
         <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">App Wireframe</h2>
-          <p className="mt-3 max-w-4xl text-slate-300">
-            The OneGodian App organizes registry, planetary, timekeeping, media, product, and identity systems into one synchronized interface.
-          </p>
-          <div className="mt-5 flex flex-wrap items-center gap-2 sm:gap-3">
-            {wireframeFlow.map((item, index) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <Link href={item.href} className="rounded-full border border-cyan-500/50 bg-slate-950/70 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:border-cyan-300">{item.label}</Link>
-                {index < wireframeFlow.length - 1 && <span className="text-slate-500">→</span>}
-              </div>
+          <h2 className="text-xl font-semibold text-slate-50 sm:text-2xl">Command Modules</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {commandModules.map((module) => (
+              <Link key={module.title} href={module.href} className="group rounded-xl border border-slate-700 bg-slate-950/70 p-5 transition hover:border-cyan-400/60 hover:bg-slate-900">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-2xl text-cyan-300">{module.icon}</span>
+                  <span className={`rounded-full border px-2.5 py-1 text-[11px] font-medium ${statusStyles[module.status]}`}>{module.status}</span>
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-slate-50">{module.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">{module.description}</p>
+              </Link>
             ))}
           </div>
         </section>
 
         <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Recent App Milestones</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {milestones.map((milestone) => (
-              <article key={milestone.title} className="rounded-xl border border-slate-700 bg-slate-950/70 p-5">
-                <h3 className="text-base font-semibold text-slate-100">{milestone.title}</h3>
-                <p className="mt-2 text-sm text-slate-300">{milestone.text}</p>
+          <h2 className="text-xl font-semibold sm:text-2xl">System Status</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {systemStatuses.map((item) => (
+              <article key={item.title} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                <p className="text-sm text-slate-200">{item.title}</p>
+                <span className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${statusStyles[item.status]}`}>
+                  {item.status}
+                </span>
               </article>
             ))}
           </div>

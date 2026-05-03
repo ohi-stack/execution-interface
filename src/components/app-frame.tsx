@@ -5,18 +5,21 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const navItems = [
+const desktopNavItems = [
   { label: 'Dashboard', href: '/dashboard' },
-  { label: 'ODIN', href: '/odin' },
-  { label: 'Time', href: '/time' },
-  { label: 'Planets', href: '/planets' },
-  { label: 'Moons', href: '/moons-systems' },
   { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Media', href: '/media' },
-  { label: 'Products', href: '/products' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Profile', href: '/profile' },
-  { label: 'Settings', href: '/settings' }
+  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Time', href: '/time' },
+  { label: 'Registry', href: '/registry' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Planets', href: '/planets' }
+];
+
+const mobileNavItems = [
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Systems', href: '/ecosystem' },
+  { label: 'Time', href: '/time' },
+  { label: 'Docs', href: '/docs' }
 ];
 
 function useLiveTimes() {
@@ -44,7 +47,7 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
         <aside className="hidden w-64 shrink-0 border-r border-slate-800/80 bg-slate-950/95 p-4 lg:block">
           <div className="mb-6 text-lg font-semibold text-cyan-300">OneGodian</div>
           <nav className="space-y-1">
-            {navItems.map((item) => {
+            {desktopNavItems.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link key={item.href} href={item.href} className={`block rounded-lg px-3 py-2 text-sm ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300 hover:bg-slate-800'}`}>
@@ -77,8 +80,8 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
       </div>
 
       <nav className="fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-cyan-400/30 bg-slate-950/90 p-2 backdrop-blur lg:hidden">
-        <ul className="grid grid-cols-5 gap-1 text-center text-[11px] text-slate-300">
-          {navItems.slice(0, 5).map((item) => (
+        <ul className="grid grid-cols-4 gap-1 text-center text-[11px] text-slate-300">
+          {mobileNavItems.map((item) => (
             <li key={item.href}>
               <Link href={item.href} className="block rounded-lg px-1 py-2 hover:bg-slate-800/80 hover:text-cyan-200">{item.label}</Link>
             </li>

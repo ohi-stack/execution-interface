@@ -9,6 +9,7 @@ const mainNavItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
+  { label: 'Galactic Canon', href: '/galactic-canon' },
   { label: 'Time', href: '/time' },
   { label: 'OHI', href: '/ohi' },
   { label: 'Algorithm', href: '/algorithm' },
@@ -20,7 +21,8 @@ const mobilePrimaryNavItems = [
   { label: 'Dashboard', href: '/dashboard' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Planets', href: '/planets' }
+  { label: 'Planets', href: '/planets' },
+  { label: 'Canon', href: '/galactic-canon' }
 ];
 
 const mobileSecondaryNavItems = [
@@ -29,24 +31,12 @@ const mobileSecondaryNavItems = [
   { label: 'Algorithm', href: '/algorithm' },
   { label: 'Assets', href: '/assets' },
   { label: 'Economics', href: '/economics' }
-  { label: 'Registry', href: '/registry' },
-  { label: 'Planets', href: '/odin/planetary-registry' },
-  { label: 'ODIN', href: '/odin' },
-  { label: 'Learn', href: '/learn' },
-  { label: 'Identity', href: '/identity' },
-  { label: 'Verification', href: '/verification' },
-  { label: 'Capital', href: '/capital' },
-  { label: 'Media', href: '/media' },
-  { label: 'Store', href: '/store' },
-  { label: 'Time', href: '/time' },
 ];
 
 const mobileNavItems = [
   { label: 'Home', href: '/' },
   { label: 'Systems', href: '/ecosystem' },
-  { label: 'Learn', href: '/learn' },
-  { label: 'Community', href: '/community' },
-  { label: 'Identity', href: '/identity' },
+  { label: 'Identity', href: '/identity' }
 ];
 
 function useLiveTimes() {

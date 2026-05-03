@@ -116,6 +116,13 @@ const moduleSections: ModuleSection[] = [
     points: ['Certificate issuance', 'Verification lookup', 'Holder dashboards', 'QR validation', 'Download access', 'Registry linking']
   },
   {
+    eyebrow: 'ODIN-PR',
+    title: 'Galactic Canon',
+    description:
+      'Interactive registry for the OneGodian Galaxy™, planetary canon, moons, species, realms, lineages, figures, and temporal structures.',
+    points: ['Status: In Development', 'Priority: High', 'Atlas interface', 'Species index', 'Temporal records', 'Satellite registry']
+  },
+  {
     eyebrow: 'IDENTITY',
     title: 'Profile',
     description:

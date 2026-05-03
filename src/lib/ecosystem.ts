@@ -74,6 +74,41 @@ export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
   },
   {
     id: 'OG-ECO-02',
+    slug: 'onegodian-members-plugin-bridge',
+    title: 'OneGodian Members Plugin Bridge',
+    name: 'OneGodian Members Plugin Bridge',
+    category: 'identity',
+    iconKey: 'identity',
+    productionStatus: 'In Development',
+    priority: 'Critical',
+    domain: 'onegodian.org',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'WordPress plugin v1.1.0 + Next.js app module bridge',
+    publicUrl: 'https://app.onegodian.com/members',
+    adminUrl: 'https://onegodian.org/wp-admin/admin.php?page=onegodian-members-dashboard',
+    apiHealthUrl: 'https://onegodian.org/wp-json/onegodian-members/v1/health',
+    lastCheckedLabel: 'Plugin package prepared; WordPress installation and live endpoint verification required',
+    description:
+      'Bridge layer for member dashboard access, certificate retrieval, resources, account routing, admin summary data, and app-side member tools.',
+    productionChecklist: [
+      'Install and activate OneGodian Members Plugin v1.1.0 in WordPress',
+      'Create /member-dashboard/ with [onegodian_members_dashboard]',
+      'Create /member-certificate/ with [onegodian_member_certificate]',
+      'Create /member-resources/ with [onegodian_member_resources]',
+      'Create /membership-pricing/ with [onegodian_members_pricing]',
+      'Confirm /wp-json/onegodian-members/v1/health returns JSON',
+      'Protect admin summary endpoint with proper WordPress capability checks',
+      'Connect app member cards to live plugin URLs and authenticated member API responses'
+    ],
+    nextActions: [
+      'Add production WordPress base URL to the app environment',
+      'Wire /members cards to health, me, and admin summary endpoints',
+      'Add authenticated member state and certificate download handoff',
+      'Add QR-V verification support for member certificate numbers'
+    ]
+  },
+  {
+    id: 'OG-ECO-03',
     slug: 'odin-registry-core',
     title: 'ODIN Registry Core',
     name: 'ODIN Registry Core',
@@ -103,7 +138,7 @@ export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
     ]
   },
   {
-    id: 'OG-ECO-03',
+    id: 'OG-ECO-04',
     slug: 'capital-products-exchange',
     title: 'Capital + Products Exchange',
     name: 'Capital + Products Exchange',
@@ -133,7 +168,7 @@ export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
     ]
   },
   {
-    id: 'OG-ECO-04',
+    id: 'OG-ECO-05',
     slug: 'planetary-infra-layer',
     title: 'Planetary Infra Layer',
     name: 'Planetary Infra Layer',
@@ -163,7 +198,7 @@ export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
     ]
   },
   {
-    id: 'OG-ECO-05',
+    id: 'OG-ECO-06',
     slug: 'onegodian-api-gateway',
     title: 'OneGodian API Gateway',
     name: 'OneGodian API Gateway',
@@ -194,7 +229,7 @@ export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
     ]
   },
   {
-    id: 'OG-ECO-06',
+    id: 'OG-ECO-07',
     slug: 'university-of-onegodian',
     title: 'University of OneGodian',
     name: 'University of OneGodian',

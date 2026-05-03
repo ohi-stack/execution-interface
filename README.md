@@ -36,3 +36,28 @@ Next.js + TypeScript + Tailwind + Prisma foundation for `app.onegodian.com`.
 - Run Prisma migrations during CI/CD or release hook.
 - Add Auth.js route handlers and provider configuration before production sign-in.
 - Replace placeholders with module-specific APIs and authorization policies.
+
+## OneGodian Everything App deployment target
+
+Deployable Next.js app root: `apps/web`
+
+### Commands
+
+```bash
+cd apps/web
+npm install
+npm run lint
+npm run build
+```
+
+### Required environment variables
+
+See `.env.example` at repository root.
+
+### DNS
+
+For `app.onegodian.com` use:
+- Type: `CNAME`
+- Name: `app`
+- Value: `cname.vercel-dns.com`
+

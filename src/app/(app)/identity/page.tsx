@@ -1,0 +1,3 @@
+export default function IdentityPage() {
+  return <main className="p-6 text-slate-100 space-y-3"><h1 className="text-3xl font-semibold">Identity</h1><p className="text-slate-300">OneGodian identity defines naming, record continuity, and institutional references.</p><p className="text-slate-300">Copyright and commercial/IP/technology rights remain under ONEGODIAN, LLC.</p><p className="text-slate-300">INO remains separate for spiritual/community governance and does not replace LLC operations.</p><p className="text-slate-300">Institutional records include foundational documents, certificates, and software milestone logs.</p></main>;
+}

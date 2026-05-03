@@ -1,63 +1,60 @@
-# onegodian-app
+# onegodian-app-deploy
 
-Monorepo normalized with a single deployable Next.js app at:
+Hostinger-compatible deployment repository for **app.onegodian.com** using a standalone Next.js app at the repository root.
 
-- `apps/web` ✅ (only deployable Next.js root)
+## Runtime
 
-## Repository layout (target)
+- **Node.js:** 20.x LTS (recommended on Hostinger Node.js hosting)
+- **Package manager:** npm
+- **Framework:** Next.js 14
 
-- `apps/web` — Next.js production app
-- `packages` — shared packages
-- `plugins` — WordPress plugin scaffold(s)
-- `docs` — project documentation
+## Repository root structure
 
-## Deploying `apps/web`
+This repository is intentionally flat for deployment:
 
-### 1) Install dependencies
+- `package.json`
+- `package-lock.json`
+- `next.config.js`
+- `tsconfig.json`
+- `tailwind.config.ts`
+- `postcss.config.js`
+- `.env.example`
+- `src/`
+- `prisma/`
+- `public/`
+
+## Environment variables
+
+1. Copy `.env.example` to `.env` in the server environment.
+2. Set production values for all keys, especially:
+   - `DATABASE_URL`
+   - `NEXTAUTH_SECRET`
+   - `NEXTAUTH_URL` (set to `https://app.onegodian.com`)
+
+## Hostinger deployment steps
+
+1. Create a Node.js application in Hostinger hPanel.
+2. Set the application root to this repository root.
+3. Upload repository files or connect Git deployment.
+4. Set Node.js version to **20.x**.
+5. Configure environment variables from `.env.example`.
+6. Install dependencies:
+   ```bash
+   npm install
+   ```
+7. Build the app:
+   ```bash
+   npm run build
+   ```
+8. Start command:
+   ```bash
+   npm run start
+   ```
+
+## Local validation
 
 ```bash
-cd apps/web
 npm install
-```
-
-### 2) Configure environment
-
-```bash
-cp .env.example .env
-```
-
-Set production values:
-- `DATABASE_URL`
-- `NEXTAUTH_URL`
-- `NEXTAUTH_SECRET`
-- `NODE_ENV=production`
-
-### 3) Prisma setup
-
-```bash
-npx prisma generate
-# For first deployment / schema apply:
-npx prisma migrate deploy
-```
-
-### 4) Validate locally
-
-```bash
 npm run lint
 npm run build
-npm run start
 ```
-
-### 5) Production start command
-
-```bash
-npm run build && npm run start
-```
-
-## Preserved domain content
-
-- Planets routes/data (ODIN-PR)
-- Moons systems route/data
-- Prisma schema and migrations
-- Reusable UI components
-- WordPress plugin scaffold in `plugins/onegodian-capital-plugin`

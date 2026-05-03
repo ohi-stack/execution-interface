@@ -1,1 +1,0 @@
-export default function CertificateVerificationPanel({ certificateId }: { certificateId: string }) {return <div className="rounded-lg border bg-white p-4"><h2 className="font-semibold">Certificate verification</h2><p className="text-sm text-slate-700">Lookup certificate ID: {certificateId}</p></div>;}

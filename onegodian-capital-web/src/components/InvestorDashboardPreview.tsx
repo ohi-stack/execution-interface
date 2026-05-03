@@ -1,1 +1,0 @@
-export default function InvestorDashboardPreview(){return <section className="grid gap-3 md:grid-cols-3">{['Profile verification','Disclosure acknowledgments','Certificate lookup'].map((x)=><div key={x} className="rounded border bg-white p-4"><h3 className="font-medium">{x}</h3><p className="text-sm text-slate-600">Preview module</p></div>)}</section>;}

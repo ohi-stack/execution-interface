@@ -1,1 +1,0 @@
-export const ONEGODIAN_ALGORITHM_VERSION = '0.1.0';

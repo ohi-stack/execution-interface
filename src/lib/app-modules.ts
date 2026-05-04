@@ -157,7 +157,7 @@ export const appModules: AppModule[] = [
   {
     title: 'Planets',
     slug: 'planets',
-    route: '/planets',
+    route: '/galaxy/planets',
     category: 'Canon',
     description: 'Planetary canon, moons, systems, realms, and OneGodian Galaxy records.',
     productionStatus: 'Live',

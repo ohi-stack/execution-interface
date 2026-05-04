@@ -7,28 +7,23 @@ import { gregorianToOT } from '@/lib/onegodian-time';
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Galaxy', href: '/galaxy' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Planets', href: '/planets' },
-  { label: 'Moon Systems', href: '/moons-systems' },
-  { label: 'Products', href: '/products' },
-  { label: 'Certificates', href: '/certificates' },
-  { label: 'Media', href: '/media' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Time', href: '/time' },
-  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Systems', href: '/systems' },
+  { label: 'Members', href: '/members' },
+  { label: 'Developers', href: '/developers' },
   { label: 'Capital', href: '/capital' },
-  { label: 'OMOS', href: '/omos' },
-  { label: 'Standards', href: '/standards/app-structure' },
-  { label: 'Settings', href: '/settings' }
+  { label: 'Media', href: '/media' },
+  { label: 'Games', href: '/games' },
+  { label: 'OMOS', href: '/omos' }
 ];
 
 const mobilePrimary = [
   { icon: '🧭', label: 'Dashboard', href: '/dashboard' },
-  { icon: '🌐', label: 'Ecosystem', href: '/ecosystem' },
+  { icon: '🌌', label: 'Galaxy', href: '/galaxy' },
   { icon: '🪪', label: 'Registry', href: '/registry' },
-  { icon: '⏱️', label: 'Time', href: '/time' },
-  { icon: '⚙️', label: 'Settings', href: '/settings' }
+  { icon: '🛰️', label: 'Systems', href: '/systems' },
+  { icon: '👥', label: 'Members', href: '/members' }
 ];
 
 export function AppFrame({ children }: { children: ReactNode }) {

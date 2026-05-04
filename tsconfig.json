@@ -36,7 +36,10 @@
     "src/components/**/*.tsx",
     "src/lib/**/*.ts",
     "src/lib/**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/config/**/*.ts",
+    "src/core/**/*.ts",
+    "src/lib/server/**/*.ts"
   ],
   "exclude": [
     "node_modules"

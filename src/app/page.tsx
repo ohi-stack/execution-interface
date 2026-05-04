@@ -1,353 +1,116 @@
 import Link from 'next/link';
-import { appModules } from '@/lib/app-modules';
+import {
+  Building2,
+  CandlestickChart,
+  BadgeCheck,
+  Compass,
+  Cuboid,
+  Database,
+  Globe,
+  Moon,
+  SatelliteDish,
+  Settings,
+  Telescope,
+  Timer,
+  Wrench
+} from 'lucide-react';
+import { gregorianToOT } from '@/lib/onegodian-time';
 
-const commandModules = [
-  { icon: '🧭', title: 'Dashboard', href: '/', description: 'Central command and runtime overview.', status: 'Active' },
-  { icon: '🌐', title: 'Ecosystem', href: '/ecosystem', description: 'Platform directory and system discovery.', status: 'Connected' },
-  { icon: '🪪', title: 'Registry', href: '/registry', description: 'ODIN records, entries, and validation.', status: 'Connected' },
-  { icon: '⚙️', title: 'Systems', href: '/systems', description: 'Infrastructure architecture and core system states.', status: 'Priority' },
-  { icon: '👤', title: 'Members', href: '/members', description: 'Identity, profile, verification, and access.', status: 'Online' },
-  { icon: '📈', title: 'Capital', href: '/capital', description: 'Scenario-driven financial and contribution systems.', status: 'Staging' },
-  { icon: '🧠', title: 'Tools', href: '/tools', description: 'OMOS utilities and operational tooling layer.', status: 'Active' },
-  { icon: '🎬', title: 'Media', href: '/media', description: 'Content, assets, and press distribution hub.', status: 'Online' },
-  { icon: '🌌', title: 'Galaxy', href: '/galaxy', description: 'Planets, canon, moons, and world map.', status: 'Expanding' },
-  { icon: '🧩', title: 'Developers', href: '/developers', description: 'Repositories, APIs, docs, and SDK pathing.', status: 'Syncing' }
-type HealthCard = {
-  title: string;
-  url: string;
-  status: 'Live' | 'In Development' | 'Needs Setup';
-  target: string;
-  lastChecked: string;
-};
-
-type QuickAction = {
-  title: string;
-  href: string;
-  description: string;
-  accent: 'cyan' | 'gold';
-};
-
-type DocumentCard = {
-  title: string;
-  description: string;
-  href: string;
-};
-
-const statusStyles: Record<ProductionStatus, string> = {
-  Live: 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300',
-  'Demo Ready': 'border-cyan-500/40 bg-cyan-500/15 text-cyan-300',
-  Staging: 'border-amber-500/40 bg-amber-500/15 text-amber-300',
-  'In Development': 'border-violet-500/40 bg-violet-500/15 text-violet-300',
-  'Needs Setup': 'border-orange-500/40 bg-orange-500/15 text-orange-300',
-  Planned: 'border-slate-500/40 bg-slate-500/15 text-slate-300',
-  Offline: 'border-red-500/40 bg-red-500/15 text-red-300'
-};
-
-const priorityStyles: Record<Priority, string> = {
-  Critical: 'border-red-500/40 bg-red-500/10 text-red-300',
-  High: 'border-orange-500/40 bg-orange-500/10 text-orange-300',
-  Medium: 'border-sky-500/40 bg-sky-500/10 text-sky-300',
-  Low: 'border-slate-500/40 bg-slate-500/10 text-slate-300'
-};
-
-const healthCards: HealthCard[] = [
-  {
-    title: 'app.onegodian.com',
-    url: 'https://app.onegodian.com',
-    status: 'Live',
-    target: 'Hostinger / Next.js App',
-    lastChecked: 'Manual visual check active'
-  },
-  {
-    title: 'api.onegodian.org',
-    url: 'https://api.onegodian.org/health',
-    status: 'In Development',
-    target: 'Node API Service',
-    lastChecked: 'Health endpoint integration pending'
-  },
-  {
-    title: 'onegodian.org',
-    url: 'https://onegodian.org',
-    status: 'Live',
-    target: 'WordPress / WooCommerce',
-    lastChecked: 'Public site handoff active'
-  },
-  {
-    title: 'u.onegodian.org',
-    url: 'https://u.onegodian.org',
-    status: 'Needs Setup',
-    target: 'Education Execution Platform',
-    lastChecked: 'Course platform routing pending'
-  }
-];
-
-const quickActions: QuickAction[] = [
-  { title: 'Open Dashboard', href: '/dashboard', description: 'View the operational command hub.', accent: 'cyan' },
-  { title: 'Check API Health', href: 'https://api.onegodian.org/health', description: 'Open the API health endpoint.', accent: 'gold' },
-  { title: 'Open OneGodian Time™', href: '/time', description: 'View time standard and date systems.', accent: 'cyan' },
-  { title: 'View Products', href: '/products', description: 'Open digital products and store surfaces.', accent: 'gold' },
-  { title: 'View Certificates', href: '/certificates', description: 'Open certificate and verification surfaces.', accent: 'cyan' },
-  { title: 'Open Media Center', href: '/media', description: 'Open media, visuals, and brand assets.', accent: 'gold' },
-  { title: 'Launch WooCommerce Store', href: 'https://onegodian.org/shop', description: 'Open the current commerce layer.', accent: 'cyan' },
-  { title: 'Open Education System', href: 'https://onegodian.org/learn', description: 'Open the learning architecture hub.', accent: 'gold' }
-];
-
-const documentCards: DocumentCard[] = [
-  {
-    title: 'Whitepapers',
-    description: 'OneGodian Algorithm™, protocol, governance, and institutional research documents.',
-    href: '/media'
-  },
-  {
-    title: 'WooCommerce Products',
-    description: 'Product import files, digital downloads, books, courses, and store-ready assets.',
-    href: '/products'
-  },
-  {
-    title: 'Book Store',
-    description: 'Gregory the Author, source files, product pages, and public book catalog.',
-    href: '/products'
-  },
-  {
-    title: 'Education System',
-    description: 'Onegodianology, Onegodianosophy, Onegodianese, Onegodianism, and Onegodianonomics.',
-    href: 'https://onegodian.org/learn'
-  },
-  {
-    title: 'Scroll Covers',
-    description: 'Visual meaning standards for covers, posters, scrolls, and symbolic product art.',
-    href: '/media'
-  },
-  {
-    title: 'Institutional Documents',
-    description: 'Positioning statements, legal framing, founder records, and public-safe summaries.',
-    href: '/registry'
-  }
-];
-
-const completionTracker = [
-  { module: 'Dashboard', status: 'Live', priority: 'Critical', nextAction: 'Add live health widgets', href: '/dashboard' },
-  { module: 'Ecosystem', status: 'Live', priority: 'Critical', nextAction: 'Add filters and detail routes', href: '/ecosystem' },
-  { module: 'Registry', status: 'In Development', priority: 'High', nextAction: 'Add record creation and API sync', href: '/registry' },
-  { module: 'Time', status: 'Live', priority: 'High', nextAction: 'Add OTS display controls and daily stamp', href: '/time' },
-  { module: 'Products', status: 'In Development', priority: 'High', nextAction: 'Connect WooCommerce/product imports', href: '/products' },
-  { module: 'API', status: 'In Development', priority: 'Critical', nextAction: 'Connect real health and readiness checks', href: 'https://api.onegodian.org/health' },
-  { module: 'Education', status: 'Needs Setup', priority: 'High', nextAction: 'Route learn pages to OneGodian U', href: 'https://onegodian.org/learn' },
-  { module: 'Profile', status: 'Planned', priority: 'Medium', nextAction: 'Add auth and member account layer', href: '/profile' }
+const modules = [
+  { title: 'Dashboard', href: '/dashboard', description: 'Central command and runtime overview.', status: 'Live', icon: Compass },
+  { title: 'Ecosystem', href: '/ecosystem', description: 'Platform directory and system discovery.', status: 'Live', icon: Globe },
+  { title: 'Registry', href: '/registry', description: 'ODIN records and validation.', status: 'Staging', icon: Database },
+  { title: 'Planets', href: '/planets', description: 'Planetary canon and world map.', status: 'Live', icon: Telescope },
+  { title: 'Moon Systems', href: '/moons-systems', description: 'Moon systems and satellite intelligence.', status: 'In Development', icon: Moon },
+  { title: 'Products', href: '/products', description: 'Founder products and digital commerce.', status: 'Staging', icon: Cuboid },
+  { title: 'Certificates', href: '/certificates', description: 'Verification and certificate surfaces.', status: 'In Development', icon: BadgeCheck },
+  { title: 'Media', href: '/media', description: 'Public content and brand distribution.', status: 'Live', icon: SatelliteDish },
+  { title: 'Tools', href: '/tools', description: 'Operational utilities and execution tooling.', status: 'Live', icon: Wrench },
+  { title: 'OneGodian Time', href: '/time', description: 'Time standards and sequence logic.', status: 'Live', icon: Timer },
+  { title: 'OneGodian Algorithm', href: '/algorithm', description: 'Four-layer architecture and AI governance.', status: 'In Development', icon: CandlestickChart },
+  { title: 'Capital Dashboard', href: '/capital', description: 'Economic intelligence and readiness.', status: 'Staging', icon: Building2 }
 ] as const;
 
-function getCommandCount(status: ProductionStatus) {
-  return appModules.filter((module) => module.productionStatus === status).length;
-}
+const statusRows = [
+  ['Node App Live', 'Live'],
+  ['Hostinger Deployment Active', 'Live'],
+  ['Domain Connected', 'Live'],
+  ['SSL Active', 'Live'],
+  ['GitHub Repo Connected', 'Live'],
+  ['API Gateway', 'In Development'],
+  ['Stripe Integration', 'Staging'],
+  ['WooCommerce Sync', 'In Development'],
+  ['Registry Data Layer', 'Needs Setup']
+] as const;
 
-function getPriorityCount(priority: Priority) {
-  return appModules.filter((module) => module.priority === priority).length;
-}
+const dayOrderNames = ['ONYÁ·NOL', 'ONYÁ·SEN', 'ONYÁ·TRA', 'ONYÁ·FOR', 'ONYÁ·TA', 'ONYÁ·SIX', 'ONYÁ·SEV'];
 
 export default function HomePage() {
-  const liveCount = getCommandCount('Live') + getCommandCount('Demo Ready');
-  const developmentCount = getCommandCount('In Development');
-  const needsSetupCount = getCommandCount('Needs Setup') + getCommandCount('Planned');
-  const criticalCount = getPriorityCount('Critical');
+  const now = new Date();
+  const ot = gregorianToOT(now);
 
   return (
     <main className="space-y-6 pb-24">
-      <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN COMMAND HUB</p>
-        <h1 className="mt-3 text-3xl font-bold sm:text-4xl">Unified Operational Interface</h1>
-        <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">May 2026 systems model for identity, systems, registries, infrastructure, execution, capital, media, and developer access.</p>
-      </section>
-      <section className="rounded-2xl border border-violet-500/30 bg-violet-500/10 p-5">
-        <h2 className="text-xl font-semibold">May 2026 Systems Model</h2>
-        <p className="mt-2 text-sm text-slate-300">View the full hierarchy and infrastructure-control thesis.</p>
-        <Link href="/systems" className="mt-3 inline-flex rounded-lg border border-cyan-400/60 px-4 py-2 text-sm text-cyan-200">Open Systems Model</Link>
-        <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">
-          Identity, systems, registries, infrastructure, verification, execution, capital, tooling, media, and developer access synchronized through one runtime environment.
+      <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-5 sm:p-8">
         <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN APP · APP.ONEGODIAN.COM</p>
-        <h1 className="mt-3 text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">OneGodian Everything App</h1>
-        <p className="mt-4 max-w-4xl text-base leading-relaxed text-slate-300 sm:text-lg">
-          The central Node/Next.js interface for the OneGodian ecosystem: ODIN registry systems, planetary canon, moon systems, products, certificates, media, tools, and synchronized platform infrastructure.
-        </p>
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Link href="/dashboard" className="rounded-xl bg-cyan-300 px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-cyan-200 sm:text-base">
-            Open Dashboard
-          </Link>
-          <Link href="/ecosystem" className="rounded-xl border border-slate-700 bg-slate-950/60 px-5 py-3 text-center text-sm font-bold text-white transition hover:border-cyan-300 sm:text-base">
-            Explore Ecosystem
-          </Link>
-          <Link href="/time" className="rounded-xl border border-amber-300/60 bg-slate-950/60 px-5 py-3 text-center text-sm font-bold text-amber-200 transition hover:border-amber-200 sm:text-base">
-            OneGodian Time™
-          </Link>
+        <h1 className="mt-3 text-3xl font-black leading-tight text-white sm:text-5xl">OneGodian Everything App</h1>
+        <p className="mt-4 max-w-4xl text-sm text-slate-300 sm:text-base">Operational command dashboard for registry systems, planetary intelligence, media, products, tools, algorithm, capital, and governance sequencing.</p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <Link href="/dashboard" className="rounded-xl bg-cyan-300 px-5 py-3 text-center font-bold text-slate-950">Open Dashboard</Link>
+          <Link href="/ecosystem" className="rounded-xl border border-slate-700 px-5 py-3 text-center font-bold">Explore Ecosystem</Link>
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-        <article className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/15 via-slate-900 to-slate-950 p-6">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-200">Today in OneGodian Time™</p>
-          <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">THE FIFTH DAY™ — ONYÁ·TA</h2>
-          <p className="mt-2 text-lg font-semibold text-amber-200">The Expansion</p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-700 bg-slate-950/60 p-4">
-              <p className="text-xs uppercase tracking-[0.16em] text-slate-400">OT Date</p>
-              <p className="mt-1 font-semibold text-slate-100">Invention 4, 0000 (OT)</p>
-            </div>
-            <div className="rounded-xl border border-slate-700 bg-slate-950/60 p-4">
-              <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Gregorian Sync</p>
-              <p className="mt-1 font-semibold text-slate-100">Thu, Jan 15, 2026</p>
-            </div>
-          </div>
-          <Link href="/time" className="mt-5 inline-flex rounded-xl border border-cyan-300/70 px-4 py-2 text-sm font-bold text-cyan-100 hover:bg-cyan-400/10">
-            Open Time System
-          </Link>
-        </article>
-
-        <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Founder & Identity</p>
-          <h2 className="mt-3 text-2xl font-black text-white">Gregory Lamar Jones / One Gregory OneGodian™</h2>
-          <p className="mt-3 text-sm leading-relaxed text-slate-300">
-            Founder of ONEGODIAN, LLC, author of The OneGodian Algorithm™, and builder of the OneGodian App ecosystem.
-          </p>
-          <div className="mt-5 grid gap-2 sm:grid-cols-2">
-            <Link href="/profile" className="rounded-lg border border-cyan-400/60 px-4 py-2 text-center text-sm font-semibold text-cyan-100 hover:bg-cyan-500/10">
-              Founder Profile
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
+        <h2 className="text-2xl font-black text-white">Command Modules</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {modules.map((module) => (
+            <Link key={module.href} href={module.href} className="rounded-xl border border-slate-700 bg-slate-950/60 p-4 hover:border-cyan-400/70">
+              <module.icon className="h-6 w-6 text-cyan-300" />
+              <div className="mt-3 flex items-center justify-between"><h3 className="font-semibold">{module.title}</h3><span className="rounded-full border border-slate-600 px-2 py-0.5 text-xs">{module.status}</span></div>
+              <p className="mt-2 text-sm text-slate-300">{module.description}</p>
             </Link>
-            <Link href="/products" className="rounded-lg border border-amber-300/60 px-4 py-2 text-center text-sm font-semibold text-amber-100 hover:bg-amber-500/10">
-              Author Page
-            </Link>
-            <Link href="/media" className="rounded-lg border border-slate-700 px-4 py-2 text-center text-sm font-semibold text-slate-100 hover:border-cyan-300">
-              Whitepapers
-            </Link>
-            <Link href="/registry" className="rounded-lg border border-slate-700 px-4 py-2 text-center text-sm font-semibold text-slate-100 hover:border-cyan-300">
-              Institutional Docs
-            </Link>
-          </div>
-        </article>
+          ))}
+        </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 lg:grid-cols-2">
         <article className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5">
-          <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Live Systems</p>
-          <p className="mt-3 text-4xl font-black text-white">{liveCount}</p>
-          <p className="mt-2 text-sm text-slate-300">Operational or demo-ready modules.</p>
+          <h2 className="text-xl font-bold">Production Status</h2>
+          <div className="mt-3 space-y-2">{statusRows.map(([k, v]) => <div key={k} className="flex items-center justify-between rounded-lg border border-slate-700 p-2 text-sm"><span>{k}</span><span>{v}</span></div>)}</div>
         </article>
+        <article className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-5">
+          <h2 className="text-xl font-bold">OneGodian Time Widget</h2>
+          <p className="mt-2 text-sm">Gregorian: {now.toLocaleString()}</p>
+          <p className="text-sm">UTC: {now.toISOString()}</p>
+          <p className="text-sm">Computed OT: {ot.display}</p>
+          <p className="text-sm">Day Order™: {dayOrderNames[now.getUTCDay()]}</p>
+          <p className="mt-3 text-xs text-slate-300">Gregorian Time remains the controlling legal reference. OneGodian Time is an internal sequencing and governance layer.</p>
+        </article>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-2">
         <article className="rounded-2xl border border-violet-500/30 bg-violet-500/10 p-5">
-          <p className="text-xs uppercase tracking-[0.18em] text-violet-300">In Development</p>
-          <p className="mt-3 text-4xl font-black text-white">{developmentCount}</p>
-          <p className="mt-2 text-sm text-slate-300">Modules requiring backend/API completion.</p>
+          <h2 className="text-xl font-bold">Entity Structure</h2>
+          <p className="mt-2 text-sm text-slate-300">ONEGODIAN, LLC is the commercial, technology, publishing, intellectual property, and platform-development entity. The Indigenous Nation of Onegodia™ is a separate voluntary religious society/private association responsible for internal community governance. ‘Sovereign’ refers to internal self-governance and voluntary jurisdiction; it does not imply nation-state status, immunity from U.S. law, or authority over non-members.</p>
         </article>
-        <article className="rounded-2xl border border-orange-500/30 bg-orange-500/10 p-5">
-          <p className="text-xs uppercase tracking-[0.18em] text-orange-300">Needs Setup</p>
-          <p className="mt-3 text-4xl font-black text-white">{needsSetupCount}</p>
-          <p className="mt-2 text-sm text-slate-300">Planned or not-yet-connected modules.</p>
-        </article>
-        <article className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5">
-          <p className="text-xs uppercase tracking-[0.18em] text-red-300">Critical Priority</p>
-          <p className="mt-3 text-4xl font-black text-white">{criticalCount}</p>
-          <p className="mt-2 text-sm text-slate-300">Highest-priority app systems.</p>
-        </article>
-      </section>
-
-      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Quick Actions</p>
-            <h2 className="mt-2 text-2xl font-black text-white">Command Shortcuts</h2>
+        <article className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
+          <h2 className="text-xl font-bold">Onegodian.org — Civil, Cultural, and Human-Facing Domain</h2>
+          <p className="mt-2 text-sm text-slate-300">Onegodian.org houses philosophy, education, community initiatives, cultural archives, spiritual teachings, public narratives, identity materials, and civic/social initiatives. It is not the core systems or execution domain.</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <Link href="https://onegodian.org" className="rounded-lg border border-slate-700 px-3 py-2 text-center text-sm">Open Onegodian.org</Link>
+            <Link href="https://onegodian.org/education" className="rounded-lg border border-slate-700 px-3 py-2 text-center text-sm">View Education</Link>
+            <Link href="https://onegodian.org/membership" className="rounded-lg border border-slate-700 px-3 py-2 text-center text-sm">View Membership</Link>
+            <Link href="https://onegodian.org/cultural-archives" className="rounded-lg border border-slate-700 px-3 py-2 text-center text-sm">View Cultural Archives</Link>
           </div>
-          <p className="max-w-xl text-sm text-slate-400">Fast links for registry, health, commerce, education, media, and production operations.</p>
-        </div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {quickActions.map((action) => (
-            <Link
-              key={action.title}
-              href={action.href}
-              className={`rounded-xl border p-4 transition hover:-translate-y-0.5 ${
-                action.accent === 'cyan'
-                  ? 'border-cyan-500/30 bg-cyan-500/10 hover:border-cyan-300/70'
-                  : 'border-amber-400/30 bg-amber-400/10 hover:border-amber-200/70'
-              }`}
-            >
-              <h3 className="font-bold text-white">{action.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-300">{action.description}</p>
-            </Link>
-          ))}
-        </div>
+        </article>
       </section>
 
-      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Production Health</p>
-        <h2 className="mt-2 text-2xl font-black text-white">Connected System Status</h2>
-        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {healthCards.map((card) => (
-            <a key={card.title} href={card.url} className="rounded-xl border border-slate-700 bg-slate-950/60 p-5 transition hover:border-cyan-400/60">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="font-bold text-white">{card.title}</h3>
-                <span className={`rounded-full border px-2 py-1 text-xs ${statusStyles[card.status]}`}>{card.status}</span>
-              </div>
-              <p className="mt-3 text-sm text-slate-300">{card.target}</p>
-              <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-500">{card.lastChecked}</p>
-            </a>
-          ))}
-        </div>
-      </section>
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {appModules.map((module) => (
-          <article key={module.slug} className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-5">
-            <div className="flex items-center justify-between"><h2 className="text-xl font-semibold text-white">{module.title}</h2><span className="rounded-full border border-cyan-500/30 px-2 py-1 text-xs text-cyan-200">{module.productionStatus}</span></div>
-            <p className="mt-2 text-xs uppercase tracking-[0.2em] text-cyan-300">{module.category}</p>
-            <p className="mt-3 text-sm text-slate-300">{module.description}</p>
-            <Link href={module.route} className="mt-4 inline-flex rounded-lg border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200">Open Module</Link>
-        {commandModules.map((module) => (
-          <article key={module.title} className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-5 shadow-[0_0_30px_rgba(34,211,238,0.05)]">
-            <div className="flex items-center justify-between">
-              <span className="text-2xl">{module.icon}</span>
-              <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-1 text-xs text-cyan-200">{module.status}</span>
-            </div>
-            <h2 className="mt-3 text-2xl font-semibold text-white">{module.title}</h2>
-            <p className="mt-2 text-sm text-slate-300">{module.description}</p>
-            <Link href={module.href} className="mt-4 inline-flex rounded-lg border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-500/10">
-              Open {module.title}
-            </Link>
-          </article>
-        ))}
-      </section>
-
-      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Documents & Products</p>
-        <h2 className="mt-2 text-2xl font-black text-white">Source Files, Store Assets, and Institutional Records</h2>
-        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {documentCards.map((card) => (
-            <Link key={card.title} href={card.href} className="rounded-xl border border-slate-700 bg-slate-950/60 p-5 transition hover:border-cyan-400/60">
-              <h3 className="font-bold text-white">{card.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-300">{card.description}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">Completion Tracker</p>
-        <h2 className="mt-2 text-2xl font-black text-white">App Modules Production Board</h2>
-        <div className="mt-5 overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-            <thead className="text-xs uppercase tracking-[0.14em] text-slate-400">
-              <tr>
-                <th className="px-3 py-3">Module</th>
-                <th className="px-3 py-3">Status</th>
-                <th className="px-3 py-3">Priority</th>
-                <th className="px-3 py-3">Next Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-200">
-              {completionTracker.map((item) => (
-                <tr key={item.module}>
-                  <td className="px-3 py-4 font-semibold text-white"><Link href={item.href}>{item.module}</Link></td>
-                  <td className="px-3 py-4">{item.status}</td>
-                  <td className="px-3 py-4">{item.priority}</td>
-                  <td className="px-3 py-4 text-slate-300">{item.nextAction}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+        <h2 className="text-xl font-bold">Revenue Architecture</h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <article className="rounded-lg border border-slate-700 p-4 text-sm">Onegodian.org / WooCommerce: books, founder products, courses, merchandise, content-driven products</article>
+          <article className="rounded-lg border border-slate-700 p-4 text-sm">api.onegodian.org / Stripe: subscriptions, developer tools, premium access, licensing, API plans</article>
         </div>
       </section>
     </main>

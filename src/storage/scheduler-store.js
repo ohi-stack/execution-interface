@@ -6,3 +6,15 @@ function createEvent(data) { const id = `evt_${randomUUID()}`; const now = new D
 function updateEvent(id, data) { const existing = events.get(id); if (!existing) return null; const updated = { ...existing, ...data, updated_at_utc: new Date().toISOString() }; events.set(id, updated); return updated; }
 function deleteEvent(id) { return events.delete(id); }
 module.exports = { listEvents, getEvent, createEvent, updateEvent, deleteEvent };
+import { ENV } from '../config/env.js';
+
+import * as memory from './memory-scheduler-store.js';
+import * as postgres from './postgres-scheduler-store.js';
+
+const store = ENV.ENABLE_DATABASE ? postgres : memory;
+
+export const listEvents = store.listEvents;
+export const getEvent = store.getEvent;
+export const createEvent = store.createEvent;
+export const updateEvent = store.updateEvent;
+export const deleteEvent = store.deleteEvent;

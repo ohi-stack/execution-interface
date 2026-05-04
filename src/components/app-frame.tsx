@@ -16,7 +16,45 @@ const navItems = [
   { label: 'Media', href: '/media' },
   { label: 'Games', href: '/games' },
   { label: 'OMOS', href: '/omos' }
+const navGroups = [
+  {
+    label: 'Identity + Intelligence',
+    items: [
+      { label: 'Onegodian Algorithm', href: '/algorithm' },
+      { label: 'Protocol Layer', href: '/algorithm/protocol' },
+      { label: 'Experience Layer', href: '/algorithm/experience' },
+      { label: 'Community Layer', href: '/algorithm/community' },
+      { label: 'Orientation Layer', href: '/algorithm/orientation' },
+      { label: 'Belief Mapper Lite', href: '/belief-mapper' }
+    ]
+  },
+  {
+    label: 'Education',
+    items: [
+      { label: 'Learn', href: '/learn' },
+      { label: 'OneGodian U', href: 'https://u.onegodian.org' }
+    ]
+  },
+  {
+    label: 'Media + Standards',
+    items: [
+      { label: 'Divine 9 Covers', href: '/media/divine-9' },
+      { label: 'Visual Cover Standards', href: '/standards/visual-covers' }
+    ]
+  },
+  {
+    label: 'Core',
+    items: [
+      { label: 'Dashboard', href: '/dashboard' },
+      { label: 'Ecosystem', href: '/ecosystem' },
+      { label: 'Registry', href: '/registry' },
+      { label: 'Institutional Dossier', href: '/institutional' },
+      { label: 'Settings', href: '/settings' }
+    ]
+  }
 ];
+
+const navItems = navGroups.flatMap((group) => group.items);
 
 const mobilePrimary = [
   { icon: '🧭', label: 'Dashboard', href: '/dashboard' },

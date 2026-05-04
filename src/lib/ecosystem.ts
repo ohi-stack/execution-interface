@@ -222,6 +222,36 @@ export const ONEGODIAN_ECOSYSTEM: EcosystemSystem[] = [
       'Create first certification path',
       'Add learner dashboard widgets'
     ]
+  },
+  {
+    id: 'OG-ECO-07',
+    slug: 'omos-plugin-bridge',
+    title: 'OMOS Plugin Bridge',
+    name: 'OMOS Plugin Bridge',
+    category: 'infrastructure',
+    iconKey: 'api',
+    productionStatus: 'Staging',
+    priority: 'Critical',
+    domain: 'app.onegodian.com/omos',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'Next.js OMOS dashboard + API bridge endpoint',
+    publicUrl: 'https://app.onegodian.com/omos',
+    adminUrl: 'https://app.onegodian.com/dashboard',
+    apiHealthUrl: 'https://app.onegodian.com/api/omos/llm/chat',
+    lastCheckedLabel: 'Bridge route added; external OMOS API validation required',
+    description:
+      'Operational Module Operating System dashboard and secure app bridge endpoint for OMOS plugin communications.',
+    productionChecklist: [
+      'Set OMOS bridge environment variables',
+      'Validate /api/omos/llm/chat POST response in production',
+      'Confirm dashboard route and navigation visibility',
+      'Verify bridge key rotation policy'
+    ],
+    nextActions: [
+      'Connect OMOS dashboard widgets to live bridge telemetry',
+      'Add request/response audit logging',
+      'Publish plugin-side setup guide'
+    ]
   }
 ];
 

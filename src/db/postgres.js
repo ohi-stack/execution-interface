@@ -1,3 +1,5 @@
+const { Pool } = require('pg');
+const { ENV } = require('../config/env');
 import pkg from 'pg';
 import { ENV } from '../config/env.js';
 
@@ -8,6 +10,11 @@ let pool;
 if (ENV.ENABLE_DATABASE) {
   pool = new Pool({
     connectionString: ENV.DATABASE_URL,
+    ssl: ENV.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  });
+}
+
+async function query(text, params) {
     ssl: ENV.NODE_ENV === 'production'
       ? { rejectUnauthorized: false }
       : false
@@ -19,12 +26,19 @@ export async function query(text, params) {
   return pool.query(text, params);
 }
 
+async function checkDatabase() {
 export async function checkDatabase() {
   if (!pool) return { enabled: false };
 
   try {
     await pool.query('SELECT 1');
     return { enabled: true, ok: true };
+  } catch (_err) {
+    return { enabled: true, ok: false };
+  }
+}
+
+module.exports = { query, checkDatabase };
   } catch (err) {
     return { enabled: true, ok: false };
   }

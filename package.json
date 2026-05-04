@@ -9,11 +9,13 @@
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "check": "node --check server.js"
+    "check": "node --check server.js",
+    "db:migrate": "node scripts/migrate.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
     "@prisma/client": "^5.18.0",
+    "dotenv": "^17.4.2",
     "express": "^4.22.1",
     "lucide-react": "^1.14.0",
     "next": "^14.2.35",

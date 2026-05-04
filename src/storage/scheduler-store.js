@@ -1,3 +1,17 @@
+const { ENV } = require('../config/env');
+
+const memory = require('./memory-scheduler-store');
+const postgres = require('./postgres-scheduler-store');
+
+const store = ENV.ENABLE_DATABASE ? postgres : memory;
+
+module.exports = {
+  listEvents: store.listEvents,
+  getEvent: store.getEvent,
+  createEvent: store.createEvent,
+  updateEvent: store.updateEvent,
+  deleteEvent: store.deleteEvent
+};
 const { randomUUID } = require('crypto');
 const events = new Map();
 function listEvents({ from, to, status, type } = {}) { let results = Array.from(events.values()); if (from) results = results.filter((e) => e.timestamp_utc >= from); if (to) results = results.filter((e) => e.timestamp_utc <= to); if (status) results = results.filter((e) => e.status === status); if (type) results = results.filter((e) => e.type === type); return results; }

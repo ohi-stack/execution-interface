@@ -267,3 +267,128 @@ export function getEcosystemSummary() {
     needsSetup: ONEGODIAN_ECOSYSTEM.filter((system) => system.productionStatus === 'Needs Setup').length
   };
 }
+
+export const onegodianAppModules = [
+  {
+    slug: 'algorithm',
+    title: 'Onegodian Algorithm™',
+    category: 'AI Governance',
+    iconKey: 'BrainCircuit',
+    productionStatus: 'In Development',
+    priority: 'Critical',
+    domain: 'app.onegodian.com',
+    publicUrl: '/algorithm',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'Hostinger Node / Next.js',
+    description:
+      'Four-layer AI governance framework for recognition, personalization, community intelligence, and AI/robotic behavioral orientation.',
+    productionChecklist: [
+      'Create /algorithm landing page',
+      'Add four-layer visual architecture',
+      'Add Protocol, Experience, Community, Orientation child pages',
+      'Add downloadable white paper link',
+      'Add API-ready endpoint structure',
+      'Add institutional-safe definitions'
+    ]
+  },
+  {
+    slug: 'belief-mapper-lite',
+    title: 'Belief Mapper Lite',
+    category: 'Identity',
+    iconKey: 'Sparkles',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    domain: 'app.onegodian.com',
+    publicUrl: '/belief-mapper',
+    repo: 'ohi-stack/execution-interface',
+    deploymentTarget: 'Next.js App Router',
+    description:
+      'Interactive 3–5 question entry tool that maps users into Seeker, Believer, Onegodian, or Elder journey stages.',
+    productionChecklist: [
+      'Build question flow',
+      'Create result states',
+      'Add consent notice',
+      'Do not store belief data without explicit consent',
+      'Route users to content, courses, or membership'
+    ]
+  },
+  {
+    slug: 'learn',
+    title: 'OneGodian Learn',
+    category: 'Education',
+    iconKey: 'GraduationCap',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    domain: 'onegodian.org',
+    publicUrl: 'https://onegodian.org/learn',
+    adminUrl: 'https://onegodian.org/wp-admin',
+    deploymentTarget: 'WordPress Knowledge Layer',
+    description:
+      'Public educational structure for Onegodianology, Onegodianosophy, Onegodianese, Onegodianism, Onegodianonomics, and Courses.',
+    productionChecklist: [
+      'Create /learn landing page',
+      'Create six pillar cards',
+      'Deep-link all course buttons to u.onegodian.org',
+      'Keep onegodian.org as knowledge layer',
+      'Keep u.onegodian.org as execution layer'
+    ]
+  },
+  {
+    slug: 'onegodian-u',
+    title: 'OneGodian U',
+    category: 'Education',
+    iconKey: 'BookOpenCheck',
+    productionStatus: 'Planned',
+    priority: 'Critical',
+    domain: 'u.onegodian.org',
+    publicUrl: 'https://u.onegodian.org',
+    deploymentTarget: 'Course Execution Platform',
+    description:
+      'Operational course delivery environment for lessons, modules, accounts, certifications, and progress tracking.',
+    productionChecklist: [
+      'Create course shell',
+      'Create authentication flow',
+      'Add courses by track',
+      'Add certificates',
+      'Connect course CTAs from onegodian.org/learn'
+    ]
+  },
+  {
+    slug: 'visual-cover-standards',
+    title: 'Visual Cover Standards',
+    category: 'Media',
+    iconKey: 'Image',
+    productionStatus: 'In Development',
+    priority: 'High',
+    domain: 'app.onegodian.com',
+    publicUrl: '/standards/visual-covers',
+    description:
+      'Cover-art governance standard requiring every scroll and companion cover to visually encode the title’s meaning.',
+    productionChecklist: [
+      'Create standard page',
+      'Add core principle',
+      'Add dominant visual anchor rule',
+      'Add no-clutter rule',
+      'Add prompt template generator'
+    ]
+  },
+  {
+    slug: 'institutional',
+    title: 'Institutional Dossier',
+    category: 'Institutional',
+    iconKey: 'Landmark',
+    productionStatus: 'Needs Setup',
+    priority: 'Critical',
+    domain: 'app.onegodian.com',
+    publicUrl: '/institutional',
+    description:
+      'Institutional-safe overview of ONEGODIAN, LLC, IP standing, Onegodian Algorithm, legal documentation, and operating structure.',
+    productionChecklist: [
+      'Add positioning statement summary',
+      'Separate ONEGODIAN, LLC from INO governance',
+      'Add copyright reference',
+      'Add valuation document placeholder',
+      'Add investor/banking/press inquiry routing'
+    ]
+  }
+];

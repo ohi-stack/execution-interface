@@ -21,5 +21,6 @@ export const appModules: AppModule[] = [
   { title: 'Planets', slug: 'planets', route: '/planets', category: 'Canon', description: 'Planetary canon.', productionStatus: 'Live', priority: 'Medium', iconKey: 'orbit', features: ['Cards'], checklist: ['Live'] },
   { title: 'Tools', slug: 'tools', route: '/tools', category: 'Utilities', description: 'Operational tools.', productionStatus: 'In Development', priority: 'High', iconKey: 'wrench', features: ['Utilities'], checklist: ['Expand'] },
   { title: 'Media', slug: 'media', route: '/media', category: 'Media', description: 'Media center.', productionStatus: 'Live', priority: 'Medium', iconKey: 'image', features: ['Assets'], checklist: ['Live'] },
-  { title: 'Capital', slug: 'capital', route: '/capital', category: 'Economic', description: 'Economic intelligence.', productionStatus: 'Staging', priority: 'High', iconKey: 'landmark', features: ['Metrics'], checklist: ['Refine'] }
+  { title: 'Capital', slug: 'capital', route: '/capital', category: 'Economic', description: 'Economic intelligence.', productionStatus: 'Staging', priority: 'High', iconKey: 'landmark', features: ['Metrics'], checklist: ['Refine'] },
+  { title: 'OMOS', slug: 'omos', route: '/omos', category: 'Systems', description: 'OMOS plugin bridge dashboard and operations.', productionStatus: 'Staging', priority: 'Critical', iconKey: 'network', features: ['Bridge'], checklist: ['Configure OMOS env', 'Validate /api/omos/llm/chat'] }
 ];

@@ -18,6 +18,7 @@ const navItems = [
   { label: 'Time', href: '/time' },
   { label: 'Algorithm', href: '/algorithm' },
   { label: 'Capital', href: '/capital' },
+  { label: 'OMOS', href: '/omos' },
   { label: 'Settings', href: '/settings' }
 ];
 

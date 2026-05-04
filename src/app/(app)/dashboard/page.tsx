@@ -4,7 +4,6 @@ const cards = [
   { title: 'Ecosystem', description: 'Core OneGodian ecosystem map and module status.', href: '/ecosystem' },
   { title: 'Registry', description: 'ODIN registry systems and canonical record continuity.', href: '/registry' },
   { title: 'Galaxy', description: 'OneGodian Galaxy hub for Galactic Canon, Planets, Moons & Systems, and Realms.', href: '/galaxy' },
-  { title: 'Planets', description: 'Planetary and moon registry operations.', href: '/planets' },
   { title: 'Time', description: 'OneGodian Time™ synchronization and daily references.', href: '/time' },
   { title: 'OHI', description: 'OHI™ and Quantum OHI™ system interfaces.', href: '/ohi' },
   { title: 'Algorithm', description: 'The Onegodian Algorithm™ command layers.', href: '/algorithm' },

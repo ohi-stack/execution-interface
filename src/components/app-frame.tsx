@@ -19,6 +19,7 @@ const navItems = [
   { label: 'Algorithm', href: '/algorithm' },
   { label: 'Capital', href: '/capital' },
   { label: 'OMOS', href: '/omos' },
+  { label: 'Standards', href: '/standards/app-structure' },
   { label: 'Settings', href: '/settings' }
 ];
 

@@ -248,5 +248,26 @@ export const appModules: AppModule[] = [
     readinessChecklist: { publicPage: true, dashboardView: true, adminView: false, apiRoute: true, dataModel: true, security: false, documentation: false, compliance: true, deployment: false },
     adminRoute: defaultAdminRoute('omos'),
     dashboardRoute: defaultDashboardRoute('omos')
-  }
+  },
+
+  {
+    title: 'App Structure Standard',
+    slug: 'app-structure-standard',
+    route: '/standards/app-structure',
+    category: 'Governance',
+    description: 'OneGodian App Core enforcement module that tracks 10-layer readiness requirements across public, dashboard, admin, API, data, security, UX, docs, compliance, and deployment.',
+    productionStatus: 'In Development',
+    priority: 'Critical',
+    iconKey: 'shield',
+    layer: 'governance',
+    features: ['Layer requirements', 'Checklist enforcement', 'Cross-layer stubs'],
+    checklist: ['Public page live', 'Admin stub live', 'API/data/security/compliance/deployment marked planned'],
+    access: { public: true, dashboard: true, admin: true },
+    api: { enabled: false, endpoints: ['/api/standards/app-structure'], status: 'stubbed' },
+    docs: { exists: true, path: '/docs/onegodian-runtime-standard.md', status: 'ready' },
+    readinessChecklist: { publicPage: true, dashboardView: true, adminView: true, apiRoute: false, dataModel: false, security: false, documentation: true, compliance: false, deployment: false },
+    adminRoute: '/admin/modules/app-structure',
+    dashboardRoute: defaultDashboardRoute('app-structure-standard')
+  },
+
 ];

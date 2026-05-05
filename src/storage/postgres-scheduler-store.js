@@ -2,6 +2,10 @@ import { query } from '../db/postgres.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function listEvents(filters = {}) {
+const { query } = require('../db/postgres');
+const { v4: uuidv4 } = require('uuid');
+
+async function listEvents(filters = {}) {
   let sql = 'SELECT * FROM scheduler_events WHERE 1=1';
   const params = [];
 
@@ -78,3 +82,9 @@ export async function deleteEvent(id) {
   await query('DELETE FROM scheduler_events WHERE id=$1', [id]);
   return true;
 }
+async function deleteEvent(id) {
+  await query('DELETE FROM scheduler_events WHERE id=$1', [id]);
+  return true;
+}
+
+module.exports = { listEvents, getEvent, createEvent, updateEvent, deleteEvent };

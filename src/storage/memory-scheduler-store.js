@@ -16,6 +16,29 @@ export async function createEvent(data) {
   const id = `evt_mem_${Date.now()}`;
   const now = new Date().toISOString();
   const row = {
+const { v4: uuidv4 } = require('uuid');
+
+const events = new Map();
+
+async function listEvents(filters = {}) {
+  const rows = Array.from(events.values());
+
+  return rows.filter((event) => {
+    if (filters.from && new Date(event.timestamp_utc) < new Date(filters.from)) return false;
+    if (filters.to && new Date(event.timestamp_utc) > new Date(filters.to)) return false;
+    if (filters.status && event.status !== filters.status) return false;
+    return true;
+  });
+}
+
+async function getEvent(id) {
+  return events.get(id);
+}
+
+async function createEvent(data) {
+  const id = `evt_${uuidv4()}`;
+  const now = new Date().toISOString();
+  const event = {
     id,
     title: data.title,
     description: data.description || '',
@@ -38,10 +61,18 @@ export async function createEvent(data) {
 export async function updateEvent(id, data) {
   const existing = events.get(id);
   if (!existing) return null;
+
+  events.set(id, event);
+  return event;
+}
+
+async function updateEvent(id, data) {
+  const existing = events.get(id);
+  if (!existing) return undefined;
+
   const updated = {
     ...existing,
-    title: data.title ?? existing.title,
-    description: data.description ?? existing.description,
+    ...data,
     updated_at_utc: new Date().toISOString()
   };
 
@@ -52,3 +83,8 @@ export async function updateEvent(id, data) {
 export async function deleteEvent(id) {
   return events.delete(id);
 }
+async function deleteEvent(id) {
+  return events.delete(id);
+}
+
+module.exports = { listEvents, getEvent, createEvent, updateEvent, deleteEvent };

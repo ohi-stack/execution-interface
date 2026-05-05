@@ -1,26 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const events = new Map();
 
 export async function listEvents(filters = {}) {
-  let all = Array.from(events.values());
-  if (filters.from) all = all.filter((e) => new Date(e.timestamp_utc) >= new Date(filters.from));
-  if (filters.to) all = all.filter((e) => new Date(e.timestamp_utc) <= new Date(filters.to));
-  if (filters.status) all = all.filter((e) => e.status === filters.status);
-  return all;
-}
-
-export async function getEvent(id) {
-  return events.get(id);
-}
-
-export async function createEvent(data) {
-  const id = `evt_mem_${Date.now()}`;
-  const now = new Date().toISOString();
-  const row = {
-const { v4: uuidv4 } = require('uuid');
-
-const events = new Map();
-
-function listEvents(filters = {}) {
   const rows = Array.from(events.values());
 
   return rows.filter((event) => {
@@ -31,11 +13,11 @@ function listEvents(filters = {}) {
   });
 }
 
-function getEvent(id) {
+export async function getEvent(id) {
   return events.get(id);
 }
 
-function createEvent(data) {
+export async function createEvent(data) {
   const id = `evt_${uuidv4()}`;
   const now = new Date().toISOString();
   const event = {
@@ -54,21 +36,14 @@ function createEvent(data) {
     updated_at_utc: now,
     metadata: data.metadata || {}
   };
-  events.set(id, row);
-  return row;
-}
-
-export async function updateEvent(id, data) {
-  const existing = events.get(id);
-  if (!existing) return null;
 
   events.set(id, event);
   return event;
 }
 
-function updateEvent(id, data) {
+export async function updateEvent(id, data) {
   const existing = events.get(id);
-  if (!existing) return undefined;
+  if (!existing) return null;
 
   const updated = {
     ...existing,
@@ -80,12 +55,6 @@ function updateEvent(id, data) {
   return updated;
 }
 
-function deleteEvent(id) {
 export async function deleteEvent(id) {
   return events.delete(id);
 }
-async function deleteEvent(id) {
-  return events.delete(id);
-}
-
-module.exports = { listEvents, getEvent, createEvent, updateEvent, deleteEvent };

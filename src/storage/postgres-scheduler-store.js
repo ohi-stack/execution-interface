@@ -37,6 +37,7 @@ export async function createEvent(data) {
   const id = `evt_${uuidv4()}`;
 
   const res = await query(
+    `INSERT INTO scheduler_events (
     `
     INSERT INTO scheduler_events (
       id, title, description, type, status,
@@ -44,8 +45,7 @@ export async function createEvent(data) {
       duration_minutes, price_usd, payment_status
     )
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
-    RETURNING *
-  `,
+    RETURNING *`,
     [
       id,
       data.title,
@@ -66,12 +66,12 @@ export async function createEvent(data) {
 
 export async function updateEvent(id, data) {
   const res = await query(
+    `UPDATE scheduler_events
     `
     UPDATE scheduler_events
     SET title=$2, description=$3, updated_at_utc=NOW()
     WHERE id=$1
-    RETURNING *
-  `,
+    RETURNING *`,
     [id, data.title, data.description]
   );
 

@@ -20,7 +20,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const events = new Map();
 
-async function listEvents(filters = {}) {
+function listEvents(filters = {}) {
   const rows = Array.from(events.values());
 
   return rows.filter((event) => {
@@ -31,11 +31,11 @@ async function listEvents(filters = {}) {
   });
 }
 
-async function getEvent(id) {
+function getEvent(id) {
   return events.get(id);
 }
 
-async function createEvent(data) {
+function createEvent(data) {
   const id = `evt_${uuidv4()}`;
   const now = new Date().toISOString();
   const event = {
@@ -66,7 +66,7 @@ export async function updateEvent(id, data) {
   return event;
 }
 
-async function updateEvent(id, data) {
+function updateEvent(id, data) {
   const existing = events.get(id);
   if (!existing) return undefined;
 
@@ -80,6 +80,7 @@ async function updateEvent(id, data) {
   return updated;
 }
 
+function deleteEvent(id) {
 export async function deleteEvent(id) {
   return events.delete(id);
 }

@@ -1,15 +1,9 @@
-const express = require('express');
-const { checkDatabase } = require('../db/postgres');
-
-const router = express.Router();
-
-router.get('/ready', async (_req, res) => {
 import express from 'express';
 import { checkDatabase } from '../db/postgres.js';
 
 const router = express.Router();
 
-router.get('/ready', async (req, res) => {
+router.get('/ready', async (_req, res) => {
   const db = await checkDatabase();
 
   res.json({
@@ -19,5 +13,4 @@ router.get('/ready', async (req, res) => {
   });
 });
 
-module.exports = router;
 export default router;

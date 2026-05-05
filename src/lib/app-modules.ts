@@ -117,6 +117,23 @@ export const appModules: AppModule[] = [
     dashboardRoute: '/dashboard'
   },
   {
+    title: 'Members',
+    slug: 'members',
+    route: '/members',
+    category: 'Membership Layer',
+    productionStatus: 'In Development',
+    priority: 'Critical',
+    iconKey: 'users-round',
+    description: 'OneGodian Members Plugin bridge, member tools, certificate access, resources, account handoff, and admin summary routing.',
+    features: ['Plugin health bridge', 'Member certificate', 'Member tools', 'Admin summary', 'Resources', 'Account handoff'],
+    checklist: [
+      'Install OneGodian Members Plugin v1.1.0 in WordPress',
+      'Confirm /wp-json/onegodian-members/v1/health responds',
+      'Create /member-dashboard/ and /member-certificate/ WordPress pages',
+      'Connect app cards to authenticated member endpoints'
+    ]
+  },
+  {
     title: 'Ecosystem',
     slug: 'ecosystem',
     route: '/ecosystem',

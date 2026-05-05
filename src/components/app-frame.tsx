@@ -5,17 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Galaxy', href: '/galaxy' },
-  { label: 'Registry', href: '/registry' },
-  { label: 'Systems', href: '/systems' },
-  { label: 'Members', href: '/members' },
-  { label: 'Developers', href: '/developers' },
-  { label: 'Capital', href: '/capital' },
-  { label: 'Media', href: '/media' },
-  { label: 'Games', href: '/games' },
-  { label: 'OMOS', href: '/omos' }
 const navGroups = [
   {
     label: 'Identity + Intelligence',

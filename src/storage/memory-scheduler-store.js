@@ -21,23 +21,6 @@ async function createEvent(data) {
   const id = `evt_${uuidv4()}`;
   const now = new Date().toISOString();
   const event = {
-const events = new Map();
-
-export async function listEvents(filters = {}) {
-  let all = Array.from(events.values());
-  if (filters.from) all = all.filter((e) => new Date(e.timestamp_utc) >= new Date(filters.from));
-  if (filters.to) all = all.filter((e) => new Date(e.timestamp_utc) <= new Date(filters.to));
-  if (filters.status) all = all.filter((e) => e.status === filters.status);
-  return all;
-}
-
-export async function getEvent(id) {
-  return events.get(id);
-}
-
-export async function createEvent(data) {
-  const id = `evt_mem_${Date.now()}`;
-  const row = {
     id,
     title: data.title,
     description: data.description || '',
@@ -62,21 +45,9 @@ async function updateEvent(id, data) {
   const existing = events.get(id);
   if (!existing) return undefined;
 
-    created_at_utc: new Date().toISOString(),
-    updated_at_utc: new Date().toISOString(),
-    metadata: data.metadata || {}
-  };
-  events.set(id, row);
-  return row;
-}
-
-export async function updateEvent(id, data) {
-  const existing = events.get(id);
-  if (!existing) return null;
   const updated = {
     ...existing,
-    title: data.title ?? existing.title,
-    description: data.description ?? existing.description,
+    ...data,
     updated_at_utc: new Date().toISOString()
   };
 
@@ -89,6 +60,3 @@ async function deleteEvent(id) {
 }
 
 module.exports = { listEvents, getEvent, createEvent, updateEvent, deleteEvent };
-export async function deleteEvent(id) {
-  return events.delete(id);
-}

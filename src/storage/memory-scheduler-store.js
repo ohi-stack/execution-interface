@@ -1,3 +1,21 @@
+const events = new Map();
+
+export async function listEvents(filters = {}) {
+  let all = Array.from(events.values());
+  if (filters.from) all = all.filter((e) => new Date(e.timestamp_utc) >= new Date(filters.from));
+  if (filters.to) all = all.filter((e) => new Date(e.timestamp_utc) <= new Date(filters.to));
+  if (filters.status) all = all.filter((e) => e.status === filters.status);
+  return all;
+}
+
+export async function getEvent(id) {
+  return events.get(id);
+}
+
+export async function createEvent(data) {
+  const id = `evt_mem_${Date.now()}`;
+  const now = new Date().toISOString();
+  const row = {
 const { v4: uuidv4 } = require('uuid');
 
 const events = new Map();
@@ -36,6 +54,13 @@ async function createEvent(data) {
     updated_at_utc: now,
     metadata: data.metadata || {}
   };
+  events.set(id, row);
+  return row;
+}
+
+export async function updateEvent(id, data) {
+  const existing = events.get(id);
+  if (!existing) return null;
 
   events.set(id, event);
   return event;
@@ -55,6 +80,9 @@ async function updateEvent(id, data) {
   return updated;
 }
 
+export async function deleteEvent(id) {
+  return events.delete(id);
+}
 async function deleteEvent(id) {
   return events.delete(id);
 }

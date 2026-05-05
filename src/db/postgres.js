@@ -1,3 +1,7 @@
+import pkg from 'pg';
+import { ENV } from '../config/env.js';
+
+const { Pool } = pkg;
 const { Pool } = require('pg');
 const { ENV } = require('../config/env');
 
@@ -10,11 +14,13 @@ if (ENV.ENABLE_DATABASE) {
   });
 }
 
+export async function query(text, params) {
 async function query(text, params) {
   if (!pool) throw new Error('database_not_enabled');
   return pool.query(text, params);
 }
 
+export async function checkDatabase() {
 async function checkDatabase() {
   if (!pool) return { enabled: false };
 

@@ -21,6 +21,13 @@ export default function DashboardPage() {
         <section>
           <h2 className="mb-3 text-xl font-semibold">System Modules</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {appModules.map((moduleItem) => (
+              <Link key={moduleItem.slug} href={moduleItem.route} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 transition hover:border-cyan-400/60">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="font-semibold">{moduleItem.title}</h3>
+                  <span className="rounded-full border border-slate-600 px-2 py-1 text-xs text-slate-300">{moduleItem.productionStatus}</span>
+                </div>
+                <p className="mt-2 text-sm text-slate-300">{moduleItem.odinCode} · {moduleItem.version}</p>
             {appModules.map((appModule) => (
               <Link
                 key={appModule.slug}

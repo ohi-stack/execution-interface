@@ -55,6 +55,17 @@ export const appModules: AppModule[] = [
 ];
 
 export function getAppModuleBySlug(slug: string) {
+  return appModules.find((moduleItem) => moduleItem.slug === slug);
+}
+
+export function getAppModulesByCategory(category: string) {
+  return appModules.filter((moduleItem) => moduleItem.category === category);
+}
+
+export function getConnectedModules(slug: string) {
+  const moduleItem = getAppModuleBySlug(slug);
+  if (!moduleItem) return [];
+  return moduleItem.connectedSystemIds
   return appModules.find((appModule) => appModule.slug === slug);
 }
 
@@ -70,6 +81,9 @@ export function getConnectedModules(slug: string) {
     .filter((connectedModule): connectedModule is AppModule => Boolean(connectedModule));
 }
 
+export const liveSystems = appModules.filter((moduleItem) => moduleItem.productionStatus === 'Live');
+
+export const criticalSystems = appModules.filter((moduleItem) => moduleItem.priority === 'Critical');
 export const liveSystems = appModules.filter((appModule) => appModule.productionStatus === 'Live');
 
 export const criticalSystems = appModules.filter((appModule) => appModule.priority === 'Critical');

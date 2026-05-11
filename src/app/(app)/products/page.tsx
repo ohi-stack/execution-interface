@@ -1,5 +1,5 @@
 import { AppShell } from '@/components/app-shell';
 
-export default function Page() {
-  return <AppShell title="Products" modules={[{ title: 'Products Placeholder', description: 'Foundation placeholder for products module.' }]} />;
+export default function ProductsPage() {
+  return <AppShell title="Products" modules={[{ title: 'Product Catalog', description: 'Central listing of OneGodian products, bundles, and active offerings.' }, { title: 'Release Controls', description: 'Coordinate release readiness with production checklist standards.', href: '/production-checklist' }]} />;
 }

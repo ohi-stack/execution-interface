@@ -1,0 +1,14 @@
+.ogulms-admin-wrap {
+  max-width: 1200px;
+}
+
+.ogulms-nav {
+  margin: 16px 0;
+}
+
+.ogulms-panel {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  padding: 20px;
+}

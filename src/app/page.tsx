@@ -1,17 +1,16 @@
 import Link from 'next/link';
-import { appModules, type Priority, type ProductionStatus } from '@/lib/app-modules';
+import {
+  appModules,
+  criticalSystems,
+  liveSystems,
+  type Priority,
+  type ProductionStatus
+} from '@/lib/app-modules';
 
 type StatusItem = {
   title: string;
   state: string;
   description: string;
-};
-
-type ModuleSection = {
-  eyebrow: string;
-  title: string;
-  description: string;
-  points: string[];
 };
 
 const statusStyles: Record<ProductionStatus, string> = {
@@ -33,153 +32,207 @@ const priorityStyles: Record<Priority, string> = {
 
 const productionStatus: StatusItem[] = [
   {
-    title: 'Node App',
+    title: 'Node Runtime',
     state: 'Live',
-    description: 'Primary Next.js application successfully deployed and serving production traffic.'
+    description: 'Primary Next.js production interface online and serving app.onegodian.com.'
   },
   {
-    title: 'Hostinger Deployment',
-    state: 'Active',
-    description: 'Production hosting environment operational with live routing and domain resolution.'
-  },
-  {
-    title: 'ODIN Systems',
-    state: 'Online',
-    description: 'Registry structure, routing architecture, and synchronization layers initialized.'
-  },
-  {
-    title: 'Static Fallback',
-    state: 'Enabled',
-    description: 'Fallback rendering and static route support active during phased backend expansion.'
-  },
-  {
-    title: 'GitHub Integration',
-    state: 'Connected',
-    description: 'Repository-based deployment workflow and source management active.'
-  },
-  {
-    title: 'UI Framework',
+    title: 'Systems Model',
     state: 'Operational',
-    description: 'Responsive mobile-first shell, navigation system, and module routing online.'
+    description: 'Typed OneGodian systems registry and modular platform architecture active.'
   },
   {
-    title: 'Future Database Layer',
+    title: 'Galaxy Canon',
     state: 'In Development',
-    description: 'Structured transition planned from static shell to dynamic registry infrastructure.'
-  }
-];
-
-const moduleSections: ModuleSection[] = [
-  {
-    eyebrow: 'COMMAND HUB',
-    title: 'Dashboard',
-    description:
-      'Open the central operating environment for ecosystem monitoring, module access, deployment visibility, production status, and active OneGodian infrastructure coordination.',
-    points: ['System overview', 'Priority tracking', 'Deployment visibility', 'Operational summaries', 'Gateway routing', 'Infrastructure monitoring']
+    description: 'Planetary registry, orbital systems, and life-intelligence structures expanding.'
   },
   {
-    eyebrow: 'SYSTEM DIRECTORY',
-    title: 'Ecosystem',
-    description:
-      'Browse connected OneGodian systems, domains, infrastructure layers, applications, educational platforms, synchronization targets, and future execution environments from one unified directory.',
-    points: ['Platform registry', 'Domain structure', 'Service relationships', 'Deployment targets', 'Infrastructure layers', 'Expansion pathways']
-  },
-  {
-    eyebrow: 'ODIN INDEX',
-    title: 'Registry',
-    description:
-      'Access ODIN-aligned registry categories for planetary systems, certificates, products, archives, records, classifications, and future verification layers.',
-    points: ['Planetary records', 'Certificate indexes', 'Product systems', 'Membership structures', 'Archive records', 'Identity-linked entries']
-  },
-  {
-    eyebrow: 'ODIN-PR',
-    title: 'Planets',
-    description:
-      'Explore the 25-world OneGodian Galaxy™ planetary registry, including planetary profiles, environmental canon, system classifications, and future expansion continuity.',
-    points: ['Planet profiles', 'Canon timelines', 'Visual archives', 'Galactic mapping', 'Civilization structures', 'World continuity systems']
-  },
-  {
-    eyebrow: 'ORBITAL SYSTEMS',
-    title: 'Moons & Systems',
-    description:
-      'Review moon systems, orbital continuity structures, expansion interfaces, planetary relationships, and Elyndria™ system architecture across the developing OneGodian Galaxy framework.',
-    points: ['Moon registries', 'Orbital continuity', 'System hierarchies', 'Expansion structures', 'Celestial indexing', 'Elyndria™ archives']
-  },
-  {
-    eyebrow: 'UTILITIES',
-    title: 'Tools',
-    description:
-      'Open verification systems, lookups, time conversion interfaces, synchronization monitoring, product tooling, and operational utilities supporting the broader ecosystem.',
-    points: ['OneGodian Time converter', 'Verification utilities', 'Registry lookup', 'QR validation', 'Sync monitoring', 'Infrastructure diagnostics']
-  },
-  {
-    eyebrow: 'CANON LIBRARY',
-    title: 'Media',
-    description:
-      'Access story worlds, planetary visuals, cinematic artwork, audio systems, poster archives, launch media, educational visuals, and future OneGodian content libraries.',
-    points: ['Planetary artwork', 'Story archives', 'Posters', 'Audio collections', 'Video systems', 'Promotional media']
-  },
-  {
-    eyebrow: 'COMMERCE',
-    title: 'Products',
-    description:
-      'Organize digital downloads, educational products, certificates, memberships, courses, branded assets, and future planetary commerce systems through a centralized product layer.',
-    points: ['eBooks', 'Courses', 'Certificates', 'Memberships', 'Downloads', 'Planetary collections']
-  },
-  {
-    eyebrow: 'OBP-1',
-    title: 'Certificates',
-    description:
-      'Prepare certificate verification systems, holder records, issuer management views, QR-linked validation flows, and future OBP-1™ credential infrastructure.',
-    points: ['Certificate issuance', 'Verification lookup', 'Holder dashboards', 'QR validation', 'Download access', 'Registry linking']
-  },
-  {
-    eyebrow: 'ODIN-PR',
-    title: 'Galactic Canon',
-    description:
-      'Interactive registry for the OneGodian Galaxy™, planetary canon, moons, species, realms, lineages, figures, and temporal structures.',
-    points: ['Status: In Development', 'Priority: High', 'Atlas interface', 'Species index', 'Temporal records', 'Satellite registry']
-  },
-  {
-    eyebrow: 'IDENTITY',
-    title: 'Profile',
-    description:
-      'View account structure, membership alignment, registry participation, downloads, certificates, saved systems, and future identity-linked infrastructure modules.',
-    points: ['Account dashboard', 'Membership status', 'Registry alignment', 'Saved downloads', 'Certificate history', 'Identity preferences']
+    title: 'Capital Layer',
+    state: 'Connected',
+    description: 'OneGodian Capital integration planning and commerce routing underway.'
   }
 ];
 
 export default function HomePage() {
   return (
     <main className="space-y-6">
-      <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN APP · APP.ONEGODIAN.COM</p>
-        <h1 className="mt-3 text-3xl font-bold sm:text-4xl">OneGodian App Systems Model</h1>
-        <p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">
-          Central interface layer for navigation, discovery, dashboards, tools, games, records, products, certificates, and future execution environments.
-        </p>
+      <section className="overflow-hidden rounded-3xl border border-cyan-400/20 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 p-6 sm:p-8 lg:p-10">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-4xl">
+            <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">ONEGODIAN PLATFORM · APP.ONEGODIAN.COM</p>
+            <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+              OneGodian App Systems Model
+            </h1>
+            <p className="mt-5 max-w-3xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              Central interface layer for navigation, registry systems, planetary canon, life intelligence, certificates,
+              products, utilities, games, capital systems, and future execution environments.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/ecosystem"
+                className="rounded-xl border border-cyan-400/60 bg-cyan-500/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20"
+              >
+                Explore Ecosystem
+              </Link>
+
+              <Link
+                href="/galaxy"
+                className="rounded-xl border border-slate-700 bg-slate-900/70 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/50"
+              >
+                Open Galaxy Canon
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 lg:w-[420px]">
+            <div className="rounded-2xl border border-cyan-500/20 bg-slate-950/70 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Systems</p>
+              <p className="mt-2 text-3xl font-black text-white">{appModules.length}</p>
+              <p className="mt-1 text-xs text-slate-400">Connected platform modules</p>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-emerald-300">Live</p>
+              <p className="mt-2 text-3xl font-black text-white">{liveSystems.length}</p>
+              <p className="mt-1 text-xs text-slate-400">Operational systems</p>
+            </div>
+
+            <div className="rounded-2xl border border-red-500/20 bg-slate-950/70 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-red-300">Critical</p>
+              <p className="mt-2 text-3xl font-black text-white">{criticalSystems.length}</p>
+              <p className="mt-1 text-xs text-slate-400">Priority systems</p>
+            </div>
+
+            <div className="rounded-2xl border border-violet-500/20 bg-slate-950/70 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-violet-300">Version</p>
+              <p className="mt-2 text-3xl font-black text-white">0.2</p>
+              <p className="mt-1 text-xs text-slate-400">Production shell</p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {appModules.map((module) => (
-          <article key={module.slug} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">{module.category}</p>
-            <h2 className="mt-2 text-2xl font-semibold text-white">{module.title}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-300">{module.description}</p>
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium">
-              <span className={`rounded-full border px-2 py-1 ${statusStyles[module.productionStatus]}`}>{module.productionStatus}</span>
-              <span className={`rounded-full border px-2 py-1 ${priorityStyles[module.priority]}`}>{module.priority} Priority</span>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {productionStatus.map((item) => (
+          <article
+            key={item.title}
+            className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold text-white">{item.title}</h2>
+              <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-1 text-xs font-medium text-cyan-200">
+                {item.state}
+              </span>
             </div>
-            <ul className="mt-4 space-y-1 text-sm text-slate-300">
-              {module.features.map((feature) => (
-                <li key={feature}>• {feature}</li>
-              ))}
-            </ul>
-            <Link href={module.route} className="mt-5 inline-flex rounded-lg border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-500/10">
-              Open Module
-            </Link>
+            <p className="mt-3 text-sm leading-relaxed text-slate-300">{item.description}</p>
           </article>
         ))}
+      </section>
+
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">SYSTEM DIRECTORY</p>
+            <h2 className="mt-2 text-3xl font-black text-white">Platform Modules</h2>
+          </div>
+
+          <div className="rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-2 text-xs text-slate-400">
+            Typed registry architecture active · Modular expansion enabled
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {appModules.map((module) => (
+            <article
+              key={module.slug}
+              className="flex flex-col rounded-2xl border border-slate-800 bg-slate-950/70 p-5 transition hover:border-cyan-500/40"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">
+                    {module.category}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-bold text-white">
+                    {module.shortTitle ?? module.title}
+                  </h2>
+                </div>
+
+                <div className="rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-right">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-slate-400">ODIN</p>
+                  <p className="mt-1 text-xs font-semibold text-cyan-200">{module.odinCode}</p>
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                {module.description}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium">
+                <span className={`rounded-full border px-2 py-1 ${statusStyles[module.productionStatus]}`}>
+                  {module.productionStatus}
+                </span>
+
+                <span className={`rounded-full border px-2 py-1 ${priorityStyles[module.priority]}`}>
+                  {module.priority} Priority
+                </span>
+
+                <span className="rounded-full border border-slate-700 bg-slate-900/70 px-2 py-1 text-slate-300">
+                  {module.visibility}
+                </span>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3 text-xs">
+                <div>
+                  <p className="uppercase tracking-[0.18em] text-slate-500">Version</p>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {module.version ?? '0.1'}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="uppercase tracking-[0.18em] text-slate-500">Deployment</p>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {module.deploymentTarget ?? 'Pending'}
+                  </p>
+                </div>
+              </div>
+
+              <ul className="mt-5 space-y-1 text-sm text-slate-300">
+                {module.features.slice(0, 4).map((feature) => (
+                  <li key={feature}>• {feature}</li>
+                ))}
+              </ul>
+
+              {module.nextActions?.length ? (
+                <div className="mt-5 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-cyan-300">
+                    Next Actions
+                  </p>
+
+                  <ul className="mt-3 space-y-1 text-sm text-slate-300">
+                    {module.nextActions.map((action) => (
+                      <li key={action}>• {action}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="mt-6 flex items-center justify-between gap-4">
+                <div className="text-xs text-slate-500">
+                  {module.lastCheckedLabel ?? 'System registry synchronized'}
+                </div>
+
+                <Link
+                  href={module.route}
+                  className="inline-flex rounded-xl border border-cyan-400/70 px-4 py-2 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/10"
+                >
+                  Open Module
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   );

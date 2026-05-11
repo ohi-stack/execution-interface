@@ -1,24 +1,36 @@
 import Link from 'next/link';
 
 const cards = [
-  { title: 'Ecosystem', description: 'Core OneGodian ecosystem map and module status.', href: '/ecosystem' },
-  { title: 'Registry', description: 'ODIN registry systems and canonical record continuity.', href: '/registry' },
-  { title: 'Galaxy', description: 'OneGodian Galaxy hub for Galactic Canon, Planets, Moons & Systems, and Realms.', href: '/galaxy' },
-  { title: 'Time', description: 'OneGodian Time™ synchronization and daily references.', href: '/time' },
-  { title: 'OHI', description: 'OHI™ and Quantum OHI™ system interfaces.', href: '/ohi' },
-  { title: 'Algorithm', description: 'The Onegodian Algorithm™ command layers.', href: '/algorithm' },
-  { title: 'AI System Prompt', description: 'Operational prompt standards and alignment rules.', href: '/ai-system-prompt' },
-  { title: 'Assets', description: 'Digital assets, certificates, and property modules.', href: '/assets' },
-  { title: 'Economics', description: 'Economic intelligence and ecosystem economics.', href: '/economics' },
-  { title: 'Institutional Clarity', description: 'Institutional continuity, legal clarity, and governance surfaces.', href: '/identity' },
-  { title: 'Galactic Canon', description: 'Interactive registry for the OneGodian Galaxy™, planetary canon, moons, species, realms, lineages, figures, and temporal structures.', href: '/galactic-canon' },
-
-  { title: 'Belief Mapper Lite', description: 'Consent-first identity mapper for stage-aware pathways.', href: '/belief-mapper' },
-  { title: 'Learn', description: 'Public knowledge-layer index aligned to onegodian.org/learn.', href: '/learn' },
-  { title: 'OneGodian U', description: 'Course execution platform and certification flows.', href: 'https://u.onegodian.org' },
-  { title: 'Visual Cover Standards', description: 'Rule set requiring title-encoded visual covers.', href: '/standards/visual-covers' },
-  { title: 'Institutional Dossier', description: 'Legal, IP, and governance-positioning command page.', href: '/institutional' },
-  { title: 'Divine 9 Covers', description: 'Companion gallery route for Divine 9 cover assets.', href: '/media/divine-9' },
+  { title: 'Systems', href: '/ecosystem' },
+  { title: 'Plugins', href: '/plugins' },
+  { title: 'Registry', href: '/registry' },
+  { title: 'Tools', href: '/tools' },
+  { title: 'Certificates', href: '/certificates' },
+  { title: 'Members', href: '/members' },
+  { title: 'Products', href: '/products' },
+  { title: 'Media', href: '/media' },
+  { title: 'App Bridge', href: '/app-bridge' },
+  { title: 'Production Checklist', href: '/production-checklist' }
 ];
 
-export default function DashboardPage() { return <main className="min-h-screen px-6 py-10 text-slate-100"><div className="mx-auto max-w-6xl space-y-8"><header className="rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6"><h1 className="text-3xl font-bold">Dashboard</h1><p className="mt-4 text-slate-300">The central Node/Next.js command interface for the core OneGodian ecosystem: ODIN registry systems, OneGodian Time™, OHI™, Quantum OHI™, The Onegodian Algorithm™, certificates, planets, assets, and synchronized platform infrastructure.</p></header><section><h2 className="text-xl font-semibold">Production Status</h2><p className="mt-2 text-sm text-slate-300">Core services are synchronized with active route and module health checks.</p></section><section><h2 className="text-xl font-semibold">Today in OneGodian Time™</h2><p className="mt-2 text-sm text-slate-300">Use the Time module for live UTC ↔ OT alignment and platform clock references.</p></section><section><h2 className="mb-3 text-xl font-semibold">Core Systems</h2><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{cards.map((card) => <Link key={card.title} href={card.href} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 hover:border-cyan-400/60"><h3 className="font-medium">{card.title}</h3><p className="mt-2 text-sm text-slate-300">{card.description}</p></Link>)}</div></section></div></main>; }
+export default function DashboardPage() {
+  return (
+    <main className="space-y-8">
+      <header className="rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6">
+        <h1 className="text-3xl font-bold">OneGodian App Dashboard</h1>
+        <p className="mt-3 max-w-3xl text-slate-300">Central command interface for systems, plugins, dashboards, tools, registries, media, products, certificates, and ecosystem navigation.</p>
+      </header>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">Command Modules</h2>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((card) => (
+            <Link key={card.href} href={card.href} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 hover:border-cyan-400/60">
+              <h3 className="font-medium">{card.title}</h3>
+              <p className="mt-2 text-sm text-slate-300">Open {card.title} interface.</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}

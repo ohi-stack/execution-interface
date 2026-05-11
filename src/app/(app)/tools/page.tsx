@@ -1,3 +1,5 @@
+export const metadata = { title: 'OneGodian App | Tools', description: 'The official OneGodian App dashboard for identity, membership, certificates, systems, tools, campaigns, products, and ecosystem access.' };
+
 import { AppShell } from '@/components/app-shell';
 
 export default function ToolsPage() {

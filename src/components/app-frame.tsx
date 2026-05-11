@@ -5,52 +5,21 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const navGroups = [
-  {
-    label: 'Identity + Intelligence',
-    items: [
-      { label: 'Onegodian Algorithm', href: '/algorithm' },
-      { label: 'Protocol Layer', href: '/algorithm/protocol' },
-      { label: 'Experience Layer', href: '/algorithm/experience' },
-      { label: 'Community Layer', href: '/algorithm/community' },
-      { label: 'Orientation Layer', href: '/algorithm/orientation' },
-      { label: 'Belief Mapper Lite', href: '/belief-mapper' }
-    ]
-  },
-  {
-    label: 'Education',
-    items: [
-      { label: 'Learn', href: '/learn' },
-      { label: 'OneGodian U', href: 'https://u.onegodian.org' }
-    ]
-  },
-  {
-    label: 'Media + Standards',
-    items: [
-      { label: 'Divine 9 Covers', href: '/media/divine-9' },
-      { label: 'Visual Cover Standards', href: '/standards/visual-covers' }
-    ]
-  },
-  {
-    label: 'Core',
-    items: [
-      { label: 'Dashboard', href: '/dashboard' },
-      { label: 'Ecosystem', href: '/ecosystem' },
-      { label: 'Registry', href: '/registry' },
-      { label: 'Institutional Dossier', href: '/institutional' },
-      { label: 'Settings', href: '/settings' }
-    ]
-  }
+const desktopNav = [
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Time', href: '/time' },
+  { label: 'Registry', href: '/registry' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Planets', href: '/planets' }
 ];
-
-const navItems = navGroups.flatMap((group) => group.items);
 
 const mobilePrimary = [
   { icon: '🧭', label: 'Dashboard', href: '/dashboard' },
-  { icon: '🌌', label: 'Galaxy', href: '/galaxy' },
-  { icon: '🪪', label: 'Registry', href: '/registry' },
   { icon: '🛰️', label: 'Systems', href: '/systems' },
-  { icon: '👥', label: 'Members', href: '/members' }
+  { icon: '🕒', label: 'Time', href: '/time' },
+  { icon: '📘', label: 'Docs', href: '/docs' }
 ];
 
 export function AppFrame({ children }: { children: ReactNode }) {
@@ -71,9 +40,9 @@ export function AppFrame({ children }: { children: ReactNode }) {
           <p className="font-semibold text-cyan-300">OneGodian Command</p>
           <p className="hidden text-xs text-slate-300 sm:block">OT {ot}</p>
         </div>
-        <div className="mt-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-3 hidden overflow-x-auto [scrollbar-width:none] md:block [&::-webkit-scrollbar]:hidden">
           <nav className="flex min-w-max flex-nowrap gap-2" aria-label="Main navigation">
-            {navItems.map((item) => {
+            {desktopNav.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
@@ -96,11 +65,11 @@ export function AppFrame({ children }: { children: ReactNode }) {
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">{children}</div>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-700 bg-slate-950/95 p-2 backdrop-blur md:hidden" aria-label="Mobile navigation">
-        <div className="grid grid-cols-5 gap-1">
+        <div className="grid grid-cols-4 gap-1">
           {mobilePrimary.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
-              <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
+              <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-1 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
                 <span>{item.icon}</span>
                 <span>{item.label}</span>
               </Link>

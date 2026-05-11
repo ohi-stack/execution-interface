@@ -1,3 +1,24 @@
-import Link from 'next/link';
-const cards=[{title:'Identity Records',description:'Identity records, ownership continuity, and profile linkage.'},{title:'Verification Status',description:'Membership verification state and certificate validation routes.'},{title:'Access Permissions',description:'Access roles, permission states, and registry continuity.'}];
-export default function IdentityPage(){return <main className="space-y-8"><section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 sm:p-8"><p className="text-xs uppercase tracking-[0.22em] text-cyan-300">ONEGODIAN APP · IDENTITY</p><h1 className="mt-3 text-3xl font-bold sm:text-4xl">Identity & Verification</h1><p className="mt-4 max-w-4xl text-sm leading-relaxed text-slate-300 sm:text-base">Identity records, verification states, QR-V lookup, certificate ownership, and access permissions.</p><div className="mt-6 flex flex-wrap gap-3"><Link href="/members" className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950">Open Members</Link><Link href="/" className="rounded-lg border border-cyan-400/60 px-4 py-2 text-sm font-semibold text-cyan-200">Back to Dashboard</Link></div></section><section className="grid gap-4 md:grid-cols-3">{cards.map(c=><article key={c.title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5"><h2 className="text-xl font-semibold text-white">{c.title}</h2><p className="mt-3 text-sm leading-relaxed text-slate-300">{c.description}</p></article>)}</section><section className="rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-6 text-sm text-slate-300">Status: Verification schema planned • QR-V API pending • Member integration pending.</section></main>}
+export default function IdentityPage() {
+  return (
+    <main className="space-y-6 text-slate-100">
+      <section className="rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6">
+        <h1 className="text-3xl font-bold">Identity</h1>
+        <p className="mt-3 text-slate-300">Identity defines how OneGodian records, ownership references, and institutional context are represented across software.</p>
+      </section>
+      <section className="grid gap-3 md:grid-cols-2">
+        <article className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
+          <h2 className="font-semibold">Copyright + Commercial Context</h2>
+          <p className="mt-2 text-sm text-slate-300">ONEGODIAN, LLC is the commercial and technology operating entity for software, IP, and implementation assets.</p>
+        </article>
+        <article className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
+          <h2 className="font-semibold">Entity Separation</h2>
+          <p className="mt-2 text-sm text-slate-300">INO remains separate for spiritual and community governance functions and is not represented here as a commercial authority.</p>
+        </article>
+        <article className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 md:col-span-2">
+          <h2 className="font-semibold">Institutional Records</h2>
+          <p className="mt-2 text-sm text-slate-300">Institutional records include dated filings, certificates, and internal continuity notes used for operational reference.</p>
+        </article>
+      </section>
+    </main>
+  );
+}

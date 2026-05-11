@@ -5,36 +5,22 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Registry', href: '/registry' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Plugins', href: '/plugins' },
-  { label: 'App Bridge', href: '/app-bridge' },
-  { label: 'Media', href: '/media' },
-  { label: 'Products', href: '/products' },
-  { label: 'Certificates', href: '/certificates' },
-  { label: 'Settings', href: '/settings' }
 const desktopNav = [
   { label: 'Dashboard', href: '/dashboard' },
   { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Algorithm', href: '/algorithm' },
-  { label: 'Time', href: '/time' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Docs', href: '/docs' },
-  { label: 'Planets', href: '/planets' }
+  { label: 'Galaxy', href: '/galaxy' },
+  { label: 'Tools', href: '/tools' },
+  { label: 'Time', href: '/time' },
+  { label: 'Media', href: '/media' }
 ];
 
 const mobilePrimary = [
   { icon: '🧭', label: 'Dashboard', href: '/dashboard' },
   { icon: '🌐', label: 'Ecosystem', href: '/ecosystem' },
-  { icon: '🧩', label: 'Plugins', href: '/plugins' },
-  { icon: '🛰️', label: 'Bridge', href: '/app-bridge' },
+  { icon: '🗂️', label: 'Registry', href: '/registry' },
+  { icon: '🛰️', label: 'Galaxy', href: '/galaxy' },
   { icon: '🛠️', label: 'Tools', href: '/tools' }
-  { icon: '🛰️', label: 'Systems', href: '/systems' },
-  { icon: '🕒', label: 'Time', href: '/time' },
-  { icon: '📘', label: 'Docs', href: '/docs' }
 ];
 
 export function AppFrame({ children }: { children: ReactNode }) {
@@ -70,15 +56,11 @@ export function AppFrame({ children }: { children: ReactNode }) {
       </header>
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">{children}</div>
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-700 bg-slate-950/95 p-2 backdrop-blur md:hidden" aria-label="Mobile navigation">
-        <div className="grid grid-cols-5 gap-1">{mobilePrimary.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-          return <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}><span>{item.icon}</span><span>{item.label}</span></Link>;
-        })}</div>
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-5 gap-1">
           {mobilePrimary.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
-              <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-1 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
+              <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
                 <span>{item.icon}</span>
                 <span>{item.label}</span>
               </Link>

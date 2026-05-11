@@ -1,3 +1,5 @@
+export const metadata = { title: 'OneGodian App | Members', description: 'The official OneGodian App dashboard for identity, membership, certificates, systems, tools, campaigns, products, and ecosystem access.' };
+
 export default function MembersPage() {
   return (
     <main className="space-y-6">

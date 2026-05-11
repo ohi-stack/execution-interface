@@ -1,3 +1,5 @@
+export const metadata = { title: 'OneGodian App | Settings', description: 'The official OneGodian App dashboard for identity, membership, certificates, systems, tools, campaigns, products, and ecosystem access.' };
+
 export default function SettingsPage() {
   return (
     <main className="px-6 py-8">

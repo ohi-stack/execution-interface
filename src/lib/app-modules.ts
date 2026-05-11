@@ -55,21 +55,35 @@ export const appModules: AppModule[] = [
 ];
 
 export function getAppModuleBySlug(slug: string) {
-  return appModules.find((module) => module.slug === slug);
+  return appModules.find((moduleItem) => moduleItem.slug === slug);
 }
 
 export function getAppModulesByCategory(category: string) {
-  return appModules.filter((module) => module.category === category);
+  return appModules.filter((moduleItem) => moduleItem.category === category);
 }
 
 export function getConnectedModules(slug: string) {
-  const module = getAppModuleBySlug(slug);
-  if (!module) return [];
-  return module.connectedSystemIds
+  const moduleItem = getAppModuleBySlug(slug);
+  if (!moduleItem) return [];
+  return moduleItem.connectedSystemIds
+  return appModules.find((appModule) => appModule.slug === slug);
+}
+
+export function getAppModulesByCategory(category: string) {
+  return appModules.filter((appModule) => appModule.category === category);
+}
+
+export function getConnectedModules(slug: string) {
+  const appModule = getAppModuleBySlug(slug);
+  if (!appModule) return [];
+  return appModule.connectedSystemIds
     .map((id) => getAppModuleBySlug(id))
     .filter((connectedModule): connectedModule is AppModule => Boolean(connectedModule));
 }
 
-export const liveSystems = appModules.filter((module) => module.productionStatus === 'Live');
+export const liveSystems = appModules.filter((moduleItem) => moduleItem.productionStatus === 'Live');
 
-export const criticalSystems = appModules.filter((module) => module.priority === 'Critical');
+export const criticalSystems = appModules.filter((moduleItem) => moduleItem.priority === 'Critical');
+export const liveSystems = appModules.filter((appModule) => appModule.productionStatus === 'Live');
+
+export const criticalSystems = appModules.filter((appModule) => appModule.priority === 'Critical');

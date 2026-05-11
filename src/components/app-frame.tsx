@@ -16,6 +16,14 @@ const navItems = [
   { label: 'Products', href: '/products' },
   { label: 'Certificates', href: '/certificates' },
   { label: 'Settings', href: '/settings' }
+const desktopNav = [
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Time', href: '/time' },
+  { label: 'Registry', href: '/registry' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Planets', href: '/planets' }
 ];
 
 const mobilePrimary = [
@@ -24,6 +32,9 @@ const mobilePrimary = [
   { icon: '🧩', label: 'Plugins', href: '/plugins' },
   { icon: '🛰️', label: 'Bridge', href: '/app-bridge' },
   { icon: '🛠️', label: 'Tools', href: '/tools' }
+  { icon: '🛰️', label: 'Systems', href: '/systems' },
+  { icon: '🕒', label: 'Time', href: '/time' },
+  { icon: '📘', label: 'Docs', href: '/docs' }
 ];
 
 export function AppFrame({ children }: { children: ReactNode }) {
@@ -44,9 +55,9 @@ export function AppFrame({ children }: { children: ReactNode }) {
           <Link href="/" className="font-semibold text-cyan-300">OneGodian App</Link>
           <p className="hidden text-xs text-slate-300 sm:block">OT {ot}</p>
         </div>
-        <div className="mt-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-3 hidden overflow-x-auto [scrollbar-width:none] md:block [&::-webkit-scrollbar]:hidden">
           <nav className="flex min-w-max flex-nowrap gap-2" aria-label="Main navigation">
-            {navItems.map((item) => {
+            {desktopNav.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link key={item.href} href={item.href} className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${active ? 'border-cyan-400/80 bg-cyan-500/20 text-cyan-200' : 'border-slate-700 text-slate-300 hover:border-cyan-400/50 hover:text-cyan-200'}`}>
@@ -63,6 +74,17 @@ export function AppFrame({ children }: { children: ReactNode }) {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-2 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}><span>{item.icon}</span><span>{item.label}</span></Link>;
         })}</div>
+        <div className="grid grid-cols-4 gap-1">
+          {mobilePrimary.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link key={item.href} href={item.href} className={`flex min-h-12 flex-col items-center justify-center rounded-lg px-1 py-1 text-[11px] ${active ? 'bg-cyan-500/20 text-cyan-200' : 'text-slate-300'}`}>
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
     </div>
   );

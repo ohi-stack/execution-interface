@@ -112,13 +112,13 @@ export default function HomePage() {
               href="/ecosystem"
               className="rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20"
             >
-              Explore Ecosystem
+              Explore Ecosystem →
             </Link>
             <Link
               href="/galaxy"
               className="rounded-xl border border-slate-600 bg-slate-900/70 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-500/40 hover:text-cyan-100"
             >
-              Open Galaxy Canon
+              Open Galaxy Canon →
             </Link>
           </div>
         </section>

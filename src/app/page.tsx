@@ -3,148 +3,169 @@ import Link from 'next/link';
 export const metadata = {
   title: 'OneGodian App | Platform Command Surface',
   description:
-    'The OneGodian platform command surface for registry systems, planetary canon, life intelligence, certificates, products, tools, games, capital systems, and execution environments.'
+    'The OneGodian platform command surface for the seven-property digital ecosystem foundation, system bridges, and production readiness telemetry.'
 };
 
-type MetricCard = {
-  label: string;
-  value: string;
-  accent: string;
-};
-
-type StatusCard = {
-  title: string;
-  status: string;
+type EcosystemCard = {
+  name: string;
+  role: string;
+  href: string;
+  status: 'Operational' | 'Linking' | 'Documenting' | 'Stabilizing';
+  readiness: number;
   detail: string;
 };
 
-type OdinModule = {
-  category: string;
+type SystemCard = {
   title: string;
-  odinCode: string;
-  productionStatus: string;
-  priority: 'P0' | 'P1' | 'P2';
-  visibility: 'Public' | 'Partner' | 'Internal';
-  version: string;
-  deploymentTarget: string;
-  features: string[];
-  nextActions: string;
+  detail: string;
   href: string;
+  status: 'Live' | 'In Progress' | 'Attention';
+  readiness: number;
 };
 
-const metricCards: MetricCard[] = [
-  { label: 'Total Systems', value: '184', accent: 'text-cyan-300' },
-  { label: 'Live Systems', value: '137', accent: 'text-emerald-300' },
-  { label: 'Critical Systems', value: '12', accent: 'text-rose-300' },
-  { label: 'Current Shell Version', value: 'OG-SH 3.2.1', accent: 'text-sky-300' }
-];
-
-const productionStatusCards: StatusCard[] = [
-  { title: 'Node Runtime', status: 'Production Ready', detail: 'Clustered execution pipelines healthy across all gateway regions.' },
-  { title: 'Systems Model', status: 'Live', detail: 'Registry indexing and lifecycle orchestration actively synchronized.' },
-  { title: 'Galaxy Canon', status: 'Publishing', detail: 'Planetary canon entities, timeline contracts, and lore state deployed.' },
-  { title: 'Capital Layer', status: 'Staged', detail: 'Treasury protocols and programmable allocation layers in controlled rollout.' }
-];
-
-const odinModules: OdinModule[] = [
+const ecosystemCards: EcosystemCard[] = [
   {
-    category: 'Registry System',
-    title: 'Sovereign Identity Registry',
-    odinCode: 'ODIN-RGX-011',
-    productionStatus: 'Live',
-    priority: 'P0',
-    visibility: 'Public',
-    version: 'v5.4.0',
-    deploymentTarget: 'global.identity.onegodian.com',
-    features: ['Deterministic identity records', 'Membership graph federation', 'Certificate claim verification', 'Audit-grade event chronology'],
-    nextActions: 'Ship delegated recovery flows and expand zk-proof policy templates.',
-    href: '/modules/identity-registry'
+    name: 'OneGodian.org',
+    role: 'Organization',
+    href: 'https://onegodian.org',
+    status: 'Operational',
+    readiness: 92,
+    detail: 'Public mission, history, records, membership, and institutional education base.'
   },
   {
-    category: 'Planetary Canon',
-    title: 'Galaxy Canon Navigator',
-    odinCode: 'ODIN-CNX-204',
-    productionStatus: 'Publishing',
-    priority: 'P1',
-    visibility: 'Public',
-    version: 'v2.9.3',
-    deploymentTarget: 'canon.onegodian.com/galaxy',
-    features: ['Planetary lineage mapping', 'Canon timeline states', 'Narrative authority contracts', 'Cross-world citation engine'],
-    nextActions: 'Publish sector atlas annotations and expose timeline diff viewer.',
-    href: '/modules/galaxy-canon'
+    name: 'OneGodian.com',
+    role: 'Store',
+    href: 'https://onegodian.com',
+    status: 'Operational',
+    readiness: 89,
+    detail: 'Products, merchandise, certificates, digital downloads, and campaign commerce.'
   },
   {
-    category: 'Capital System',
-    title: 'Execution Capital Matrix',
-    odinCode: 'ODIN-CAP-077',
-    productionStatus: 'Staged',
-    priority: 'P0',
-    visibility: 'Partner',
-    version: 'v1.8.5',
-    deploymentTarget: 'capital.onegodian.com/runtime',
-    features: ['Programmatic treasury channels', 'Product and tool funding rails', 'Risk-aware allocation scoring', 'Runway and yield observability'],
-    nextActions: 'Complete partner policy onboarding and enable automated circuit limits.',
-    href: '/modules/capital-matrix'
+    name: 'u.OneGodian.com',
+    role: 'Education',
+    href: 'https://u.onegodian.com',
+    status: 'Linking',
+    readiness: 82,
+    detail: 'University LMS for courses, lessons, learning paths, and training certificates.'
+  },
+  {
+    name: 'galaxy.OneGodian.com',
+    role: 'Galaxy / Planets',
+    href: 'https://galaxy.onegodian.com',
+    status: 'Linking',
+    readiness: 80,
+    detail: 'Galaxy console, planet navigator, planet stores, lore, and gateway navigation.'
+  },
+  {
+    name: 'capital.OneGodian.com',
+    role: 'Corporate Finance',
+    href: 'https://capital.onegodian.com',
+    status: 'Documenting',
+    readiness: 77,
+    detail: 'Corporate finance materials, funding pages, capital strategy, and contributors.'
+  },
+  {
+    name: 'OMOS.OneGodian.com',
+    role: 'Protocol / Specification / Alignment System',
+    href: 'https://omos.onegodian.com',
+    status: 'Stabilizing',
+    readiness: 75,
+    detail: 'OMOS-1.0 protocol docs, Alignment API, dev specification, and alignment framework.'
+  },
+  {
+    name: 'app.OneGodian.com',
+    role: 'Node Control Plane',
+    href: 'https://app.onegodian.com',
+    status: 'Operational',
+    readiness: 94,
+    detail: 'Repository-connected command center mirroring all ecosystem systems and bridges.'
+  }
+];
+
+const systemCards: SystemCard[] = [
+  {
+    title: 'Repositories',
+    detail: 'GitHub sync and deployment status across app, plugins, API, and runtime repos.',
+    href: 'https://github.com',
+    status: 'In Progress',
+    readiness: 84
+  },
+  {
+    title: 'Plugin Status',
+    detail: 'WordPress plugin bridge status for Store, University, Capital, and OMOS integrations.',
+    href: '/ecosystem',
+    status: 'In Progress',
+    readiness: 79
+  },
+  {
+    title: 'API Health',
+    detail: 'Node endpoint checks, bridge heartbeat, and control-plane service availability.',
+    href: '/status',
+    status: 'Live',
+    readiness: 90
   }
 ];
 
 const statusClassName: Record<string, string> = {
-  Live: 'text-emerald-300 border-emerald-500/30 bg-emerald-500/10',
-  Publishing: 'text-amber-200 border-amber-500/30 bg-amber-500/10',
-  Staged: 'text-sky-300 border-sky-500/30 bg-sky-500/10',
-  'Production Ready': 'text-emerald-300 border-emerald-500/30 bg-emerald-500/10'
+  Operational: 'text-emerald-200 border-emerald-500/30 bg-emerald-500/10',
+  Linking: 'text-cyan-200 border-cyan-500/30 bg-cyan-500/10',
+  Documenting: 'text-amber-200 border-amber-500/30 bg-amber-500/10',
+  Stabilizing: 'text-violet-200 border-violet-500/30 bg-violet-500/10',
+  Live: 'text-emerald-200 border-emerald-500/30 bg-emerald-500/10',
+  'In Progress': 'text-cyan-200 border-cyan-500/30 bg-cyan-500/10',
+  Attention: 'text-rose-200 border-rose-500/30 bg-rose-500/10'
 };
+
+function readinessLabel(value: number) {
+  if (value >= 90) return 'Production Stable';
+  if (value >= 80) return 'Near Production';
+  return 'Stabilizing';
+}
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-12 text-slate-100">
-      <div className="mx-auto max-w-7xl space-y-10">
-        <section className="rounded-3xl border border-cyan-500/40 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/25 p-8 shadow-2xl shadow-cyan-900/20 sm:p-12">
-          <p className="text-xs uppercase tracking-[0.24em] text-cyan-300">ONEGODIAN PLATFORM · APP.ONEGODIAN.COM</p>
-          <h1 className="mt-3 text-4xl font-bold leading-tight sm:text-5xl">OneGodian App Systems Model</h1>
-          <p className="mt-5 max-w-4xl text-lg leading-relaxed text-slate-300">
-            A production command surface for OneGodian registry systems, planetary canon intelligence, life intelligence engines,
-            certificates, products, tools, games, capital systems, and execution environments. Operate every mission-critical
-            layer from one unified ODIN-aware control plane.
+    <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <section className="rounded-3xl border border-cyan-500/40 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/25 p-6 shadow-2xl shadow-cyan-900/20 sm:p-10">
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-300">APP.ONEGODIAN.COM · NODE CONTROL PLANE</p>
+          <h1 className="mt-3 text-3xl font-bold leading-tight sm:text-5xl">OneGodian Digital Ecosystem</h1>
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-slate-300 sm:text-lg">
+            Production baseline: the Seven-Property OneGodian Digital Ecosystem. This control plane remains the governing structure until all seven
+            properties are operational, clearly linked, documented, mirrored, bridge-connected, and production-stable.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/ecosystem"
-              className="rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20"
-            >
-              Explore Ecosystem →
-            </Link>
-            <Link
-              href="/galaxy"
-              className="rounded-xl border border-slate-600 bg-slate-900/70 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-500/40 hover:text-cyan-100"
-            >
-              Open Galaxy Canon →
-            </Link>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href="https://onegodian.org" className="rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20">Open Organization</a>
+            <a href="https://onegodian.com" className="rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20">Open Store</a>
+            <a href="https://app.onegodian.com" className="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-500/40 hover:text-cyan-100">Open Control Plane</a>
           </div>
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {metricCards.map((card) => (
-            <article key={card.label} className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-5">
-              <p className="text-xs uppercase tracking-[0.16em] text-slate-400">{card.label}</p>
-              <p className={`mt-3 text-3xl font-bold ${card.accent}`}>{card.value}</p>
-            </article>
-          ))}
         </section>
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Production Status</h2>
-            <span className="text-xs uppercase tracking-[0.16em] text-slate-400">Realtime Platform Signals</span>
+            <h2 className="text-xl font-semibold">Seven-Property Foundation</h2>
+            <span className="text-xs uppercase tracking-[0.16em] text-slate-400">Production Baseline</span>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {productionStatusCards.map((card) => (
-              <article key={card.title} className="rounded-2xl border border-slate-700 bg-slate-900/65 p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-400">{card.title}</p>
-                <p className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${statusClassName[card.status]}`}>
-                  {card.status}
-                </p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {ecosystemCards.map((card) => (
+              <article key={card.name} className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.16em] text-cyan-300">{card.role}</p>
+                    <h3 className="mt-1 text-lg font-semibold text-white">{card.name}</h3>
+                  </div>
+                  <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${statusClassName[card.status]}`}>{card.status}</span>
+                </div>
                 <p className="mt-3 text-sm text-slate-300">{card.detail}</p>
+                <div className="mt-4">
+                  <div className="mb-2 flex items-center justify-between text-xs text-slate-300">
+                    <span>Production readiness</span>
+                    <span>{card.readiness}% · {readinessLabel(card.readiness)}</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-800">
+                    <div className="h-2 rounded-full bg-cyan-400" style={{ width: `${card.readiness}%` }} />
+                  </div>
+                </div>
+                <a href={card.href} className="mt-4 inline-flex rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20">External Link ↗</a>
               </article>
             ))}
           </div>
@@ -152,50 +173,17 @@ export default function HomePage() {
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">ODIN-Aware Modules</h2>
-            <span className="text-xs uppercase tracking-[0.16em] text-slate-400">Command Surface / Production</span>
+            <h2 className="text-xl font-semibold">System Operations</h2>
+            <span className="text-xs uppercase tracking-[0.16em] text-slate-400">Bridge & Runtime Status</span>
           </div>
-          <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-            {odinModules.map((module) => (
-              <article key={module.odinCode} className="flex h-full flex-col rounded-2xl border border-cyan-900/40 bg-slate-900/70 p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-cyan-300">{module.category}</p>
-                    <h3 className="mt-2 text-lg font-semibold">{module.title}</h3>
-                  </div>
-                  <span className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-2 py-1 text-xs font-medium text-cyan-200">{module.odinCode}</span>
-                </div>
-
-                <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <div><dt className="text-slate-400">Production Status</dt><dd className="font-medium text-slate-100">{module.productionStatus}</dd></div>
-                  <div><dt className="text-slate-400">Priority</dt><dd className="font-medium text-slate-100">{module.priority}</dd></div>
-                  <div><dt className="text-slate-400">Visibility</dt><dd className="font-medium text-slate-100">{module.visibility}</dd></div>
-                  <div><dt className="text-slate-400">Version</dt><dd className="font-medium text-slate-100">{module.version}</dd></div>
-                  <div className="col-span-2"><dt className="text-slate-400">Deployment Target</dt><dd className="font-medium text-slate-100">{module.deploymentTarget}</dd></div>
-                </dl>
-
-                <div className="mt-4">
-                  <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Features</p>
-                  <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-300">
-                    {module.features.slice(0, 4).map((feature) => (
-                      <li key={feature}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-4 rounded-xl border border-slate-700 bg-slate-950/40 p-3">
-                  <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Next Actions</p>
-                  <p className="mt-2 text-sm text-slate-300">{module.nextActions}</p>
-                </div>
-
-                <div className="mt-5">
-                  <Link
-                    href={module.href}
-                    className="inline-flex rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20"
-                  >
-                    Open Module
-                  </Link>
-                </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {systemCards.map((card) => (
+              <article key={card.title} className="rounded-2xl border border-slate-700 bg-slate-900/65 p-5">
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-400">{card.title} Card</p>
+                <p className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${statusClassName[card.status]}`}>{card.status}</p>
+                <p className="mt-3 text-sm text-slate-300">{card.detail}</p>
+                <p className="mt-3 text-xs text-cyan-200">Readiness: {card.readiness}% · {readinessLabel(card.readiness)}</p>
+                <Link href={card.href} className="mt-4 inline-flex rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20">Open Card</Link>
               </article>
             ))}
           </div>

@@ -5,3 +5,11 @@
 body {
   @apply bg-abyss text-slate-100;
 }
+
+.capital-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgb(51 65 85); background: rgba(2,6,23,0.95); backdrop-filter: blur(10px); }
+.capital-header-inner { max-width: 80rem; margin: 0 auto; padding: 0.75rem 1rem; display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; }
+.capital-logo { font-weight: 700; color: #e2e8f0; display: inline-flex; align-items: center; gap: .5rem; white-space: nowrap; }
+.capital-logo-mark { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 9999px; background: #06b6d4; color: #082f49; font-size: .75rem; }
+.capital-nav, .capital-ecosystem-nav { display: flex; flex-wrap: wrap; gap: .5rem .9rem; min-width: 0; }
+.capital-nav a, .capital-ecosystem-nav a { font-size: .9rem; color: #cbd5e1; }
+@media (min-width: 1024px) { .capital-nav { margin-left: auto; } .capital-ecosystem-nav { margin-left: 1rem; border-left:1px solid rgb(71 85 105); padding-left: 1rem; } }

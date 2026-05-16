@@ -5,22 +5,27 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { gregorianToOT } from '@/lib/onegodian-time';
 
-const desktopNav = [
-  { label: 'Dashboard', href: '/dashboard' },
+const topNav = [
+  { label: 'Dashboard', href: '/' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Registry', href: '/registry' },
-  { label: 'Galaxy', href: '/galaxy' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Time', href: '/time' },
-  { label: 'Media', href: '/media' }
+  { label: 'Planets', href: '/odin/planetary-registry' },
+  { label: 'ODIN', href: '/odin' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'Identity', href: '/identity' },
+  { label: 'Verification', href: '/verification' },
+  { label: 'Capital', href: '/capital' },
+  { label: 'Media', href: '/media' },
+  { label: 'Store', href: '/store' },
+  { label: 'Time', href: '/time' }
 ];
 
 const mobilePrimary = [
-  { icon: '🧭', label: 'Dashboard', href: '/dashboard' },
-  { icon: '🌐', label: 'Ecosystem', href: '/ecosystem' },
-  { icon: '🗂️', label: 'Registry', href: '/registry' },
-  { icon: '🛰️', label: 'Galaxy', href: '/galaxy' },
-  { icon: '🛠️', label: 'Tools', href: '/tools' }
+  { icon: '🏠', label: 'Home', href: '/' },
+  { icon: '🌐', label: 'Systems', href: '/ecosystem' },
+  { icon: '📘', label: 'Learn', href: '/learn' },
+  { icon: '🤝', label: 'Community', href: '/community' },
+  { icon: '🪪', label: 'Identity', href: '/identity' }
 ];
 
 export function AppFrame({ children }: { children: ReactNode }) {
@@ -43,9 +48,9 @@ export function AppFrame({ children }: { children: ReactNode }) {
           </Link>
           <p className="hidden text-xs text-slate-300 sm:block">OT {ot}</p>
         </div>
-        <div className="mt-3 hidden overflow-x-auto [scrollbar-width:none] md:block [&::-webkit-scrollbar]:hidden">
+        <div className="mt-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <nav className="flex min-w-max flex-nowrap gap-2" aria-label="Main navigation">
-            {desktopNav.map((item) => {
+            {topNav.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link

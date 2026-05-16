@@ -1,99 +1,55 @@
-export const onegodianAppMeta = {
-  eyebrow: 'ONEGODIAN APP',
-  title: 'Your OneGodian Command Dashboard',
+export const appMeta = {
+  eyebrow: 'APP.ONEGODIAN.COM · CONTROL PLANE',
+  title: 'OneGodian Control Plane',
   description:
-    'Access your OneGodian identity, membership tools, certificates, systems, products, media, campaigns, and ecosystem dashboards from one unified app.',
-  primaryCta: {
-    label: 'Open Dashboard',
-    href: '/dashboard'
-  },
-  secondaryCta: {
-    label: 'Explore Ecosystem',
-    href: '/ecosystem'
-  }
+    'The unified command dashboard for OneGodian apps, plugins, registries, certificates, campaigns, media, tools, and ecosystem operations.',
+  primaryCta: { label: 'Open Dashboard', href: '/dashboard' },
+  secondaryCta: { label: 'View Ecosystem', href: '/ecosystem' }
 };
 
 export const appNavigation = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Systems Model', href: '/systems-model' },
-  { label: 'Remember Campaign', href: '/campaigns/remember' },
-  { label: 'Members', href: '/members' },
-  { label: 'Certificates', href: '/certificates' },
-  { label: 'Registry', href: '/registry' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Products', href: '/products' },
-  { label: 'Media', href: '/media' },
-  { label: 'Profile', href: '/profile' },
-  { label: 'Settings', href: '/settings' },
-  { label: 'Admin', href: '/admin' }
+  { label: 'Dashboard', href: '/dashboard' }, { label: 'Ecosystem', href: '/ecosystem' }, { label: 'Apps', href: '/apps' }, { label: 'Plugins', href: '/plugins' },
+  { label: 'Registry', href: '/registry' }, { label: 'Certificates', href: '/certificates' }, { label: 'Members', href: '/members' }, { label: 'Tools', href: '/tools' },
+  { label: 'Campaigns', href: '/campaigns' }, { label: 'Media', href: '/media' }, { label: 'API Status', href: '/api-status' }, { label: 'Admin', href: '/admin' }
+];
+
+export const ecosystemLinks = [
+  { label: 'OneGodian.org', href: 'https://onegodian.org' }, { label: 'OneGodian.com', href: 'https://onegodian.com' }, { label: 'University', href: 'https://u.onegodian.org' },
+  { label: 'Galaxy Console', href: 'https://galaxy.onegodian.com' }, { label: 'Capital Portal', href: 'https://capital.onegodian.com' }, { label: 'OMOS', href: 'https://omos.onegodian.com' }
 ];
 
 export const dashboardCards = [
-  { title: 'My OneGodian Profile', description: 'View identity details, member status, and app access.', href: '/profile', status: 'Active' },
-  { title: 'Membership', description: 'Access membership records, plans, benefits, and member tools.', href: '/members', status: 'Available' },
-  { title: 'Certificates', description: 'View, verify, and manage OneGodian certificates.', href: '/certificates', status: 'Available' },
-  { title: 'Remember Campaign', description: 'Access campaign tools, visuals, posts, and participation resources.', href: '/campaigns/remember', status: 'Live' },
-  { title: 'Ecosystem', description: 'Navigate OneGodian systems, stores, education, media, and capital portals.', href: '/ecosystem', status: 'Expanded' },
-  { title: 'Tools', description: 'Access system tools, generators, bridge functions, and app utilities.', href: '/tools', status: 'In Progress' },
-  { title: 'Registry', description: 'Review ODIN, certificate, submission, and verification records.', href: '/registry', status: 'Planned' },
-  { title: 'Media Center', description: 'Access campaign media, brand visuals, audio, videos, and press resources.', href: '/media', status: 'Available' }
+  { title: 'App Structure', description: 'Review the standard OneGodian app structure across public pages, dashboards, admin screens, APIs, data, security, documentation, compliance, and deployment.', href: '/apps', status: 'Active' },
+  { title: 'Plugins', description: 'Manage OneGodian plugins, commerce extensions, LMS tools, capital modules, media tools, and ecosystem bridges.', href: '/plugins', status: 'Active' },
+  { title: 'Ecosystem', description: 'Access OneGodian.org, OneGodian.com, U OneGodian, Galaxy, Capital, OMOS, and connected properties.', href: '/ecosystem', status: 'Active' },
+  { title: 'Certificates', description: 'View certificate records, verification metadata, member certificates, product certificates, and registry-linked documents.', href: '/certificates', status: 'Available' },
+  { title: 'Registry', description: 'Access ODIN, OBP-1, product, system, certificate, and submission registries.', href: '/registry', status: 'Planned' },
+  { title: 'Members', description: 'Access member tools, membership records, member IDs, onboarding, and profile functions.', href: '/members', status: 'Planned' },
+  { title: 'Remember Campaign', description: 'Manage THE ONEGODIAN: Remember Campaign content, links, media assets, and campaign resources.', href: '/campaigns/remember', status: 'Live' },
+  { title: 'API Status', description: 'Review runtime health, manifest endpoints, API bridge readiness, and deployment metadata.', href: '/api-status', status: 'Production Prep' }
 ];
 
-export const ecosystemPortals = [
-  { name: 'OneGodian Store', description: 'Commerce, products, apparel, books, memberships, and digital downloads.', url: 'https://onegodian.com', type: 'Store / Commerce' },
-  { name: 'OneGodian Official Site', description: 'Public identity, writings, remembrance, articles, founder content, and public education.', url: 'https://onegodian.org', type: 'Public Site' },
-  { name: 'University of OneGodian', description: 'Education, courses, certificates, learning paths, and curriculum.', url: 'https://u.onegodian.org', type: 'Education' },
-  { name: 'OneGodian Capital', description: 'Capital portal, funding materials, financial instruments, and contributor onboarding.', url: 'https://capital.onegodian.com', type: 'Capital' },
-  { name: 'OneGodian App', description: 'Dashboard, systems access, app bridge, tools, profile, and registry.', url: 'https://app.onegodian.com', type: 'Application' },
-  { name: 'OneGodian API', description: 'Runtime API, bridge layer, system health, manifest, and tool endpoints.', url: 'https://api.onegodian.org', type: 'Runtime / API' }
-];
+export const appStructureLayers = ['Public App', 'Dashboard', 'Admin', 'API / Bridge', 'Data', 'Security', 'UI / UX', 'Documentation', 'Compliance', 'Deployment'];
+export const coreRoutes = ['/dashboard', '/ecosystem', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/admin', '/api/health', '/api/manifest', '/api/tools', '/api/stats'];
 
-export const rememberCampaign = {
-  name: 'THE ONEGODIAN: Remember Campaign', officialStartDate: 'May 9, 2026', onegodianDate: 'Wisdom 23, OT 0001',
-  purpose: 'A public-facing awareness campaign centered on remembrance, identity, unity, origin, and shared human connection.',
-  coreMessage: 'You were always One — you simply forgot. Remember who you are.',
-  primaryAudience: ['members', 'supporters', 'families', 'students', 'creators', 'faith-aligned participants', 'global OneGodian allies'],
-  sections: [
-    { title: 'Why', body: 'To remind people of shared origin, dignity, identity, and belonging through OneGodian remembrance.' },
-    { title: 'What', body: 'A campaign using apparel, media, posts, videos, events, storefront displays, identity tools, and educational content.' },
-    { title: 'Who', body: 'For members, supporters, learners, families, creators, institutions, and respectful observers of OneGodian principles.' },
-    { title: 'When', body: 'Officially launched May 9, 2026 / Wisdom 23, OT 0001.' },
-    { title: 'How', body: 'Through coordinated content, store products, member participation, campaign visuals, public education, and app-based dashboard access.' }
-  ]
-};
+export const pluginCategories = [{ title: 'Core Platform Plugins', plugins: ['OneGodian Platform Plugin', 'OneGodian App Bridge Plugin', 'OneGodian Members Plugin', 'OneGodian Certificates Plugin', 'OneGodian Registry Plugin'] }, { title: 'Commerce Plugins', plugins: ['OneGodian Store Plugin', 'OneGodian Products Plugin', 'OneGodian Contributor Plugin', 'OneGodian Affiliate Plugin', 'OneGodian Capital Plugin'] }, { title: 'Education Plugins', plugins: ['U OneGodian LMS Plugin', 'OneGodian Courses Plugin', 'OneGodian Certificates for Learning Plugin', 'OneGodian Student Portal Plugin'] }, { title: 'Media & Campaign Plugins', plugins: ['OneGodian Media Center Plugin', 'Remember Campaign Plugin', 'OneGodian Creator Network Plugin', 'OneGodian Press Kit Plugin'] }, { title: 'Runtime / API Plugins', plugins: ['OneGodian API Bridge Plugin', 'OneGodian Tools Runtime Plugin', 'OneGodian Manifest Plugin', 'OneGodian Status Monitor Plugin'] }];
+
+export const ecosystemPortals = [{ name: 'OneGodian.org', role: 'Official public identity and institutional site', url: 'https://onegodian.org' }, { name: 'OneGodian.com', role: 'Store, products, memberships, commerce, and public shopping platform', url: 'https://onegodian.com' }, { name: 'U OneGodian', role: 'Education, LMS, courses, certificates, and learning paths', url: 'https://u.onegodian.org' }, { name: 'Galaxy OneGodian', role: 'Galaxy console, planet navigator, planet stores, and immersive ecosystem layer', url: 'https://galaxy.onegodian.com' }, { name: 'Capital OneGodian', role: 'Corporate finance, disclosure, capital materials, and contributor/investor readiness', url: 'https://capital.onegodian.com' }, { name: 'OMOS OneGodian', role: 'OMOS protocol, specification, alignment system, and consciousness-centered operating model', url: 'https://omos.onegodian.com' }, { name: 'App OneGodian', role: 'Control plane tying every OneGodian property, app, plugin, registry, and dashboard together', url: 'https://app.onegodian.com' }];
+
+export const rememberCampaign = { officialStartDate: 'May 9, 2026', onegodianDate: 'Wisdom 23, OT 0001', message: 'You were always One — you simply forgot. Remember who you are.', purpose: 'A public-facing awareness campaign centered on remembrance, identity, unity, origin, and shared human connection.', dashboardFunctions: ['Campaign overview', 'Campaign media', 'Store product links', 'Creator resources', 'Member participation tools', 'Social captions', 'Campaign status'] };
+
+export const apiStatus = { app: 'OneGodian Control Plane', version: '0.1.0', buildMarker: '2026.05.16-prod', environment: 'Production', deploymentHost: 'Hostinger', framework: 'Next.js', nodeVersion: '20.x', repository: 'ohi-stack/execution-interface', branch: 'main', requiredEndpoints: ['/api/health', '/api/manifest', '/api/tools', '/api/stats'] };
+
+export const footerSections = [
+  { title: 'Control Plane', links: [{ label: 'Dashboard', href: '/dashboard' }, { label: 'Apps', href: '/apps' }, { label: 'Plugins', href: '/plugins' }, { label: 'Registry', href: '/registry' }] },
+  { title: 'Ecosystem', links: [{ label: 'OneGodian.org', href: 'https://onegodian.org' }, { label: 'OneGodian.com', href: 'https://onegodian.com' }, { label: 'University', href: 'https://u.onegodian.org' }, { label: 'Capital', href: 'https://capital.onegodian.com' }] },
+  { title: 'Operations', links: [{ label: 'Certificates', href: '/certificates' }, { label: 'Members', href: '/members' }, { label: 'Tools', href: '/tools' }, { label: 'API Status', href: '/api-status' }] }
+];
 
 export const systemsModel = [
-  { title: 'Identity Layer', items: ['Profile', 'Membership', 'OneGodian ID', 'Certificates', 'QR-V Verification'] },
-  { title: 'Ecosystem Layer', items: ['Store', 'Education', 'Capital', 'Media', 'Products', 'Members'] },
-  { title: 'Registry Layer', items: ['ODIN Registry', 'OBP-1 Records', 'Certificate Archive', 'Submission Logs'] },
-  { title: 'Execution Layer', items: ['Tools', 'Runtime APIs', 'App Bridge', 'Agent Console', 'Status Checks'] },
-  { title: 'Governance / Compliance Layer', items: ['Terms', 'IP Notices', 'System Records', 'Documentation', 'Audit Logs'] }
+  { title: 'Control Plane', items: ['Dashboard', 'Apps', 'Plugins', 'Registry'] },
+  { title: 'Operations', items: ['Members', 'Certificates', 'Tools', 'Media'] },
+  { title: 'Runtime', items: ['API Status', 'Manifest', 'Health', 'Stats'] }
 ];
 
-export const whatThisAppDoes = [
-  'Connects members to OneGodian identity and membership tools.',
-  'Provides access to certificates, verification, and registry records.',
-  'Organizes OneGodian systems into one operational dashboard.',
-  'Links the store, education platform, capital portal, media center, and public sites.',
-  'Supports campaign execution for THE ONEGODIAN: Remember Campaign.',
-  'Prepares the foundation for app bridge, agent tools, API runtime, and administrative control.'
-];
-
-export const appStatus = {
-  environment: 'Production Preparation',
-  appUrl: 'https://app.onegodian.com',
-  publicSite: 'https://onegodian.org',
-  store: 'https://onegodian.com',
-  api: 'https://api.onegodian.org',
-  activeCampaign: 'THE ONEGODIAN: Remember Campaign',
-  currentDateRecord: 'Wisdom 25, OT 0001 / May 11, 2026'
-};
-
-export const footerLinks = [
-  { label: 'OneGodian Store', href: 'https://onegodian.com' },
-  { label: 'Official Site', href: 'https://onegodian.org' },
-  { label: 'University', href: 'https://u.onegodian.org' },
-  { label: 'Capital Portal', href: 'https://capital.onegodian.com' },
-  { label: 'API Status', href: 'https://api.onegodian.org/api/health' }
-];
+export const appStatus = { app: 'OneGodian Control Plane', appUrl: 'https://app.onegodian.com', store: 'https://onegodian.com', publicSite: 'https://onegodian.org', api: 'https://app.onegodian.com/api/health', environment: 'Production', activeCampaign: 'THE ONEGODIAN: Remember Campaign', currentDateRecord: 'May 16, 2026' };

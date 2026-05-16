@@ -1,0 +1,1 @@
+import Link from 'next/link'; export default function CampaignsPage(){return <main><h1 className="text-3xl font-bold">Campaigns</h1><Link href="/campaigns/remember" className="text-cyan-300">THE ONEGODIAN: Remember Campaign</Link></main>}

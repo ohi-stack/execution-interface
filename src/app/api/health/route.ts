@@ -1,3 +1,1 @@
-export async function GET() {
-  return Response.json({ status: 'ok', service: 'onegodian-capital-web', runtime: 'hostinger-node' });
-}
+export async function GET() { return Response.json({ app: 'OneGodian Control Plane', status: 'ok', version: '0.1.0', environment: 'production' }); }

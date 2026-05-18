@@ -1,6 +1,6 @@
 export const appMeta = {
-  eyebrow: 'APP.ONEGODIAN.COM · CONTROL PLANE',
-  title: 'OneGodian Control Plane',
+  eyebrow: 'APP.ONEGODIAN.COM · MEMBER APP',
+  title: 'OneGodian App',
   description:
     'The unified command dashboard for OneGodian apps, plugins, registries, certificates, campaigns, media, tools, and ecosystem operations.',
   primaryCta: { label: 'Open Dashboard', href: '/dashboard' },
@@ -8,9 +8,15 @@ export const appMeta = {
 };
 
 export const appNavigation = [
-  { label: 'Dashboard', href: '/dashboard' }, { label: 'Ecosystem', href: '/ecosystem' }, { label: 'Apps', href: '/apps' }, { label: 'Plugins', href: '/plugins' },
-  { label: 'Registry', href: '/registry' }, { label: 'Certificates', href: '/certificates' }, { label: 'Members', href: '/members' }, { label: 'Tools', href: '/tools' },
-  { label: 'Campaigns', href: '/campaigns' }, { label: 'Media', href: '/media' }, { label: 'API Status', href: '/api-status' }, { label: 'Admin', href: '/admin' }
+  { label: 'Dashboard', href: '/dashboard' }, { label: 'Ecosystem', href: '/ecosystem' }, { label: 'Registry', href: '/registry' },
+  { label: 'Tools', href: '/tools' }, { label: 'Members', href: '/members' }, { label: 'Certificates', href: '/certificates' },
+  { label: 'Products', href: '/products' }, { label: 'Media', href: '/media' }, { label: 'Settings', href: '/settings' }, { label: 'Docs', href: '/docs' }
+];
+
+export const consoleNavigation = [
+  { label: 'Admin', href: '/admin' }, { label: 'Dashboard', href: '/dashboard' }, { label: 'Agents', href: '/agents' },
+  { label: 'Tasks', href: '/tasks' }, { label: 'Workflows', href: '/workflows' }, { label: 'OCP', href: '/ocp' },
+  { label: 'OEG', href: '/oeg' }, { label: 'Audit', href: '/audit' }, { label: 'Logs', href: '/logs' }, { label: 'Status', href: '/status' }
 ];
 
 export const ecosystemLinks = [
@@ -30,7 +36,7 @@ export const dashboardCards = [
 ];
 
 export const appStructureLayers = ['Public App', 'Dashboard', 'Admin', 'API / Bridge', 'Data', 'Security', 'UI / UX', 'Documentation', 'Compliance', 'Deployment'];
-export const coreRoutes = ['/dashboard', '/ecosystem', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/admin', '/api/health', '/api/manifest', '/api/tools', '/api/stats'];
+export const coreRoutes = ['/dashboard', '/ecosystem', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/docs', '/api/health', '/api/manifest', '/api/tools', '/api/stats'];
 
 export const pluginCategories = [{ title: 'Core Platform Plugins', plugins: ['OneGodian Platform Plugin', 'OneGodian App Bridge Plugin', 'OneGodian Members Plugin', 'OneGodian Certificates Plugin', 'OneGodian Registry Plugin'] }, { title: 'Commerce Plugins', plugins: ['OneGodian Store Plugin', 'OneGodian Products Plugin', 'OneGodian Contributor Plugin', 'OneGodian Affiliate Plugin', 'OneGodian Capital Plugin'] }, { title: 'Education Plugins', plugins: ['U OneGodian LMS Plugin', 'OneGodian Courses Plugin', 'OneGodian Certificates for Learning Plugin', 'OneGodian Student Portal Plugin'] }, { title: 'Media & Campaign Plugins', plugins: ['OneGodian Media Center Plugin', 'Remember Campaign Plugin', 'OneGodian Creator Network Plugin', 'OneGodian Press Kit Plugin'] }, { title: 'Runtime / API Plugins', plugins: ['OneGodian API Bridge Plugin', 'OneGodian Tools Runtime Plugin', 'OneGodian Manifest Plugin', 'OneGodian Status Monitor Plugin'] }];
 

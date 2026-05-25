@@ -15,16 +15,15 @@ export const appHomeHero = {
 
 export const appNavigation = [
   { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Membership', href: '/members' },
-  { label: 'Certificates', href: '/certificates' },
-  { label: 'Campaigns', href: '/campaigns' },
-  { label: 'Media', href: '/media' },
-  { label: 'Products', href: '/products' },
-  { label: 'Learning', href: '/learning' },
+  { label: 'OMOS', href: '/omos' },
+  { label: 'Architecture', href: '/architecture' },
+  { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Registry', href: '/registry' },
+  { label: 'Time', href: '/time' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Records', href: '/records' },
   { label: 'Tools', href: '/tools' },
-  { label: 'Profile', href: '/profile' },
-  { label: 'Settings', href: '/settings' }
+  { label: 'Sitemap', href: '/sitemap' }
 ];
 
 export const appDashboardCards = [

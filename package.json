@@ -5,14 +5,16 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js",
+    "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "check": "node --check server.js",
     "db:migrate": "node scripts/migrate.js",
     "prod:verify": "bash scripts/production-lock-check.sh",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:smoke",
+    "test:smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",

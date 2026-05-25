@@ -1,0 +1,11 @@
+[
+  {"slug":"","title":"Home","summary":"OMOS runtime home.","path":"/"},
+  {"slug":"omos","title":"What Is OMOS","summary":"Overview of OMOS.","path":"/omos"},
+  {"slug":"protocol","title":"Protocol","summary":"Protocol concepts and standards.","path":"/protocol"},
+  {"slug":"algorithm","title":"Algorithm","summary":"Algorithmic model and flow.","path":"/algorithm"},
+  {"slug":"ohi","title":"OHI","summary":"OHI and intelligence layers.","path":"/ohi"},
+  {"slug":"docs","title":"Docs","summary":"Runtime documentation.","path":"/docs"},
+  {"slug":"tools","title":"Tools","summary":"Tools and utilities.","path":"/tools"},
+  {"slug":"artifacts","title":"Artifacts","summary":"Artifacts and records.","path":"/artifacts"},
+  {"slug":"manifest","title":"Manifest","summary":"Runtime manifest details.","path":"/manifest"}
+]

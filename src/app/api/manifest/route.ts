@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
+import manifest from '@/data/manifest.json';
 
 export async function GET() {
+  return Response.json({ ...manifest, generated_at: new Date().toISOString() });
   const host = headers().get('host') ?? '';
   const isConsole = host.includes('console.onegodian.com');
 

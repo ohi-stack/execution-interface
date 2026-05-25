@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 
 const port = 4010;
 const base = `http://127.0.0.1:${port}`;
-const routes = ['/', '/omos', '/protocol', '/algorithm', '/ohi', '/docs', '/tools', '/artifacts', '/manifest', '/api/health', '/api/manifest', '/api/pages', '/api/sync/omos', '/api/properties', '/api/plugins', '/api/system-health'];
+const routes = ['/', '/sitemap', '/omos', '/omos/manifest', '/omos/pages', '/omos/health', '/omos/sync', '/omos/plugins', '/omos/properties', '/architecture', '/architecture/omos-sync', '/system-health', '/protocol', '/algorithm', '/ohi', '/docs', '/tools', '/artifacts', '/manifest', '/api/health', '/api/manifest', '/api/pages', '/api/sync/omos', '/api/properties', '/api/plugins', '/api/system-health'];
 
 const server = spawn('npx', ['next', 'dev', '-p', String(port)], { stdio: 'pipe' });
 

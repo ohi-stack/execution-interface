@@ -1,0 +1,1 @@
+{"id":"omos-runtime","version":"0.1.0","runtime":"express","environment":"production","federation":{"app":"https://app.onegodian.com","org":"https://onegodian.org","commerce":"https://onegodian.com","quantum":"https://quantumohi.com"}}

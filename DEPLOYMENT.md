@@ -56,3 +56,11 @@ Use this checklist for each release:
   - Deployment is reachable, but runtime/server-side failure exists.
 - **SSL warning/certificate error**
   - DNS may resolve, but HTTPS certificate has not been issued/attached yet.
+
+## Hostinger console recovery playbook
+
+If `console.onegodian.com` shows as detached or not attached to a running deployment, follow the dedicated runbook:
+
+- `docs/hostinger-console-deploy-checklist.md`
+
+This runbook explicitly preserves the live `app.onegodian.com` deployment and restores the console as a separate Node/Next.js Hostinger app.

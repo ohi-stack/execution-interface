@@ -1,0 +1,11 @@
+{
+  "tools": [
+    "dashboard",
+    "ecosystem",
+    "registry",
+    "members",
+    "certificates",
+    "campaigns",
+    "media"
+  ]
+}

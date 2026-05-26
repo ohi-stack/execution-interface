@@ -40,7 +40,6 @@ const API_ROUTES = ['/health', '/api/health', '/manifest', '/api/manifest', '/pr
 app.use(helmet({ crossOriginEmbedderPolicy: false }));
 app.use(express.json());
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
-app.use(express.static(path.join(__dirname, 'public')));
 
 function trackUsage(apiKeyName) {
   const count = usageMap.get(apiKeyName) || 0;
@@ -60,7 +59,10 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'omos-ru
 
 const manifestPayload = () => ({
   serviceId: 'omos-runtime',
-  name: 'OMOS Runtime',
+  name: 'OMOS™ — OneGodian Metaphysical Operating System™',
+  fullName: 'OneGodian Metaphysical Operating System™',
+  status: 'active',
+  classification: 'Node runtime, protocol documentation, and agent-facing integration site',
   version: VERSION,
   environment: ENVIRONMENT,
   canonicalHost: CANONICAL_HOST,
@@ -72,8 +74,8 @@ const manifestPayload = () => ({
     adminScreens: ['Forms', 'Submissions', 'Email Settings', 'Google Sync', 'Spam Protection', 'Export / Logs']
   },
   compatibleHosts: ['https://onegodian.com', 'https://onegodian.org', 'https://quantumohi.com'],
-  appBridge: 'https://app.onegodian.com',
-  commerceBridge: 'https://onegodian.com/product-category/omos/',
+  appBridge: ['https://app.onegodian.com'],
+  commerceBridge: ['https://onegodian.com'],
   tools
 });
 
@@ -82,6 +84,8 @@ app.get('/manifest', (_req, res) => {
   res.json(manifestPayload());
 });
 app.get('/api/manifest', (_req, res) => res.json(manifestPayload()));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/dashboard', (_req, res) => {
   res.json({

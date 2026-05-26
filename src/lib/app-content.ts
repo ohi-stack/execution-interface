@@ -15,14 +15,12 @@ export const appHomeHero = {
 
 export const appNavigation = [
   { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Time', href: '/time' },
+  { label: 'Dual Dating', href: '/time/dual-dating' },
+  { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Registry', href: '/registry' },
   { label: 'OMOS', href: '/omos' },
   { label: 'Architecture', href: '/architecture' },
-  { label: 'Algorithm', href: '/algorithm' },
-  { label: 'Registry', href: '/registry' },
-  { label: 'Time', href: '/time' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Records', href: '/records' },
-  { label: 'Tools', href: '/tools' },
   { label: 'Sitemap', href: '/sitemap' }
 ];
 

@@ -21,6 +21,7 @@ export const appNavigation = [
   { label: 'Registry', href: '/registry' },
   { label: 'OMOS', href: '/omos' },
   { label: 'Architecture', href: '/architecture' },
+  { label: 'About', href: '/about' },
   { label: 'Sitemap', href: '/sitemap' }
 ];
 

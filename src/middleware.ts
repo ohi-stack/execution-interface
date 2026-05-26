@@ -17,6 +17,14 @@ export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const role = roleForRequest(req);
 
+
+  if (host.startsWith('qrv.network') || host.startsWith('www.qrv.network')) {
+    if (path === '/') return NextResponse.next();
+    if (path === '/health.json') {
+      return NextResponse.rewrite(new URL('/api/system-health', req.url));
+    }
+    return NextResponse.next();
+  }
   if (host.startsWith('app.onegodian.com')) {
     if (path === '/' || path === '') return NextResponse.redirect(new URL('/dashboard', req.url));
     if (![...APP_ALLOWED].some((p) => path === p || path.startsWith(`${p}/`))) {

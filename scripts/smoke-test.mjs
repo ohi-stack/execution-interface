@@ -9,7 +9,7 @@ const routes = [
   '/architecture', '/architecture/ohi', '/architecture/runtime', '/architecture/interfaces', '/architecture/infrastructure', '/architecture/omos-sync',
   '/algorithm', '/algorithm/protocol', '/algorithm/experience', '/algorithm/community', '/algorithm/orientation',
   '/registry', '/time', '/portfolio', '/records', '/tools',
-  '/api/health', '/api/manifest', '/api/pages', '/api/sync/omos', '/api/properties', '/api/plugins', '/api/system-health'
+  '/api/health', '/api/manifest', '/api/pages', '/api/sync/omos', '/api/properties', '/api/plugins', '/api/system-health', '/api/plugin-consumers', '/api/plugin-shortcodes', '/api/plugin-sync', '/api/tools', '/api/artifacts', '/api/dashboard'
 ];
 
 const server = spawn('npx', ['next', 'dev', '-p', String(port)], { stdio: 'pipe' });
@@ -44,6 +44,14 @@ try {
   assert.equal(Array.isArray(plugins.plugins), true);
   assert.equal(plugins.total, 7);
 
+  const apiManifest = await (await fetch(`${base}/api/manifest`)).json();
+  assert.equal(Array.isArray(apiManifest.pluginSync?.endpoints), true);
+
+  const consumers = await (await fetch(`${base}/api/plugin-consumers`)).json();
+  assert.equal(consumers.consumers.length >= 3, true);
+
+  const shortcodes = await (await fetch(`${base}/api/plugin-shortcodes`)).json();
+  assert.equal(shortcodes.shortcodes.includes('[omos_manifest]'), true);
 
   console.log('Smoke tests passed');
 } finally {

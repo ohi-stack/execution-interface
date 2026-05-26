@@ -1,10 +1,30 @@
 {
   "name": "OMOS Runtime",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "status": "production",
   "canonical_domain": "omos.onegodian.com",
   "purpose": "Public runtime for OMOS routes, page registry, and manifest delivery.",
   "integrations": ["OneGodian App", "WordPress Bridge"],
   "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
-  "routes": ["/", "/omos", "/protocol", "/algorithm", "/ohi", "/docs", "/tools", "/artifacts", "/manifest", "/api/health", "/api/manifest", "/api/pages"]
+  "routes": [
+    "/",
+    "/omos",
+    "/protocol",
+    "/algorithm",
+    "/ohi",
+    "/docs",
+    "/tools",
+    "/artifacts",
+    "/manifest",
+    "/api/health",
+    "/api/manifest",
+    "/api/pages",
+    "/api/plugin-consumers",
+    "/api/plugin-shortcodes",
+    "/api/plugin-sync",
+    "/api/tools",
+    "/api/artifacts",
+    "/api/dashboard",
+    "/api/system-health"
+  ]
 }

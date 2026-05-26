@@ -1,0 +1,9 @@
+{
+  "shortcodes": [
+    "[omos_manifest]",
+    "[omos_runtime_status]",
+    "[omos_bridge_builder]",
+    "[omos_tool_grid]",
+    "[omos_docs_grid]"
+  ]
+}

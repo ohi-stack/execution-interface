@@ -1,31 +1,41 @@
 # OMOS Node Runtime
 
-Production-ready OMOS runtime for **OMOS.OneGodian.com**.
+Production runtime and documentation platform for **https://omos.onegodian.com**.
 
-## Routes
-Public:
+## Runtime
+- Node >=20
+- Express server entrypoint: `server.js`
+- Start: `npm start`
+
+## Public Endpoints
+- /health
+- /api/health
+- /manifest
+- /api/manifest
+- /process (requires `x-omos-key`)
+- /dashboard
+
+## Public Routes
 - /
 - /omos
-- /protocol
-- /algorithm
 - /ohi
-- /docs
+- /models
 - /tools
 - /artifacts
-- /manifest
+- /docs
+- /shop
+- /latest-news
+- /dashboard
+- /legal
+- /contact
+- /protocol
+- /algorithm
+- /digital-sanctuary
 
-API:
-- /api/health
-- /api/manifest
-- /api/pages
+## Validation
+- `npm run check`
+- `npm run smoke`
+- `npm run smoke:pages`
 
-## Development
-```bash
-npm install
-npm run dev
-```
-
-## Testing
-```bash
-npm run test:smoke
-```
+## Compliance Positioning
+ONEGODIAN, LLC is the commercial/IP/software entity. OMOS is a voluntary educational, documentation, runtime-support, protocol, and systems architecture layer.

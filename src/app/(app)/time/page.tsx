@@ -1,17 +1,12 @@
 export default function TimePage() {
   return (
-    <main className="p-6 text-slate-100 space-y-4">
-      <h1 className="text-3xl font-semibold">Time</h1>
-      <p className="text-slate-300">OTS-V5 is the internal OneGodian time framework used for synchronized application references.</p>
-      <div className="rounded-lg border border-slate-700 bg-slate-900/60 p-4 text-slate-300">Live clock placeholder.</div>
-      <div className="rounded-lg border border-slate-700 bg-slate-900/60 p-4 text-slate-300">Conversion tool placeholder.</div>
-      <a
-        href="/time/dual-dating"
-        className="inline-block rounded-lg border border-cyan-400/50 bg-slate-900/70 px-4 py-2 text-cyan-200 transition hover:bg-cyan-500/10"
-      >
-        Dual Dating System™
-      </a>
-      <p className="text-sm text-amber-200">Legal note: Gregorian Time remains the controlling legal time standard for formal and external matters.</p>
+    <main className="space-y-6 p-6 text-slate-100">
+      <h1 className="text-3xl font-semibold">OneGodian Time™ / OTS-V5</h1>
+      <section className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 text-slate-300 space-y-2">
+        <p>Dual-date display model: Gregorian civil date + OneGodian internal date notation for synchronized cultural references.</p>
+        <p>Example format: Gregorian Date (UTC) · OneGodian Date (OTS-V5 internal).</p>
+      </section>
+      <p className="text-sm text-amber-200">Legal safety: Gregorian calendar/time remains controlling for legal, financial, compliance, and external institutional matters.</p>
     </main>
   );
 }

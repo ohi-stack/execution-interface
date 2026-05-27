@@ -1,2 +1,12 @@
-import { ChecklistCard, ModuleHeader } from '@/components/module-ui';
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Institutional Dossier' description='Institutional-safe overview of legal structure, governance boundaries, and IP posture for OneGodian systems.'/><section className='rounded-xl border border-slate-700 bg-slate-900/60 p-5 text-sm text-slate-300'><p>ONEGODIAN, LLC is the commercial and intellectual-property entity for founder-defined OneGodian frameworks.</p><p className='mt-2'>The Indigenous Nation of Onegodia is a separate governance body and must not be merged into LLC legal framing.</p><p className='mt-2'>OneGodian is described here as a founder-defined belief identity framework and intellectual property system, not as a religion, sect, denomination, or cult.</p></section><ChecklistCard items={['Add positioning statement summary','Add copyright/IP references','Add valuation placeholder','Add investor, banking, and press inquiry routing']} /></main>}
+export default function InstitutionalPage() {
+  return (
+    <main className="space-y-6">
+      <h1 className="text-3xl font-bold">Institutional Clarity</h1>
+      <section className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 text-slate-300 space-y-3">
+        <p>ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity responsible for product operations, platforms, publishing, and technology execution.</p>
+        <p>INO is separate and should be described as a voluntary internal governance/religious association structure.</p>
+        <p>“Sovereign” means internal self-governance and voluntary participation, not exemption from U.S. law or governmental authority over non-members.</p>
+      </section>
+    </main>
+  );
+}

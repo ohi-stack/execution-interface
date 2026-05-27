@@ -8,6 +8,7 @@
   "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
   "routes": [
     "/",
+    "/dashboard",
     "/ecosystem",
     "/omos",
     "/remember",
@@ -17,7 +18,10 @@
     "/institutional",
     "/api/health",
     "/api/manifest",
-    "/api/pages"
+    "/api/pages",
+    "/api/tools",
+    "/api/artifacts",
+    "/api/system-health"
   ],
   "fullName": "OneGodian Metaphysical Operating System™",
   "classification": "Node runtime, protocol documentation, and agent-facing integration site",

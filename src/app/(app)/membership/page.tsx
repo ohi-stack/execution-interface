@@ -1,3 +1,4 @@
+export default function Page() { return <main className="space-y-6"><h1 className="text-3xl font-bold">Membership</h1><p className="text-slate-300">Membership provides dashboard-linked participation paths, identity services, and voluntary community features across the OneGodian ecosystem.</p></main>; }
 export default function MembershipPage() {
   return (
     <main className="space-y-6">

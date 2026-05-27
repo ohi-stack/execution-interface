@@ -1,20 +1,6 @@
 {
-  "name": "OMOS™ — OneGodian Metaphysical Operating System™",
-  "version": "1.0.0",
-  "status": "active",
-  "canonical_domain": "omos.onegodian.com",
-  "purpose": "Public runtime for OMOS routes, page registry, and manifest delivery.",
-  "integrations": [
-    "OneGodian App",
-    "WordPress Bridge"
-  ],
-  "wordpress_hosts": [
-    "OneGodian.com",
-    "OneGodian.org",
-    "QuantumOHI.com"
-  ],
   "name": "OMOS Runtime",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "status": "production",
   "canonical_domain": "omos.onegodian.com",
   "purpose": "Public runtime for OMOS routes, page registry, and manifest delivery.",
@@ -22,17 +8,20 @@
   "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
   "routes": [
     "/",
+    "/dashboard",
+    "/ecosystem",
     "/omos",
-    "/protocol",
-    "/algorithm",
-    "/ohi",
-    "/docs",
-    "/tools",
-    "/artifacts",
-    "/manifest",
+    "/remember",
+    "/membership",
+    "/time",
+    "/commerce",
+    "/institutional",
     "/api/health",
     "/api/manifest",
-    "/api/pages"
+    "/api/pages",
+    "/api/tools",
+    "/api/artifacts",
+    "/api/system-health"
   ],
   "fullName": "OneGodian Metaphysical Operating System™",
   "classification": "Node runtime, protocol documentation, and agent-facing integration site",
@@ -42,18 +31,6 @@
     "https://onegodian.org",
     "https://quantumohi.com"
   ],
-  "appBridge": [
-    "https://app.onegodian.com"
-  ],
-  "commerceBridge": [
-    "https://onegodian.com"
-    "/api/pages",
-    "/api/plugin-consumers",
-    "/api/plugin-shortcodes",
-    "/api/plugin-sync",
-    "/api/tools",
-    "/api/artifacts",
-    "/api/dashboard",
-    "/api/system-health"
-  ]
+  "appBridge": ["https://app.onegodian.com"],
+  "commerceBridge": ["https://onegodian.com"]
 }

@@ -1,0 +1,1 @@
+export default function Page() { return <main className="space-y-6"><h1 className="text-3xl font-bold">OneGodian: Remember</h1><p className="text-slate-300">OneGodian: Remember is a public campaign inviting people to reconnect with identity, dignity, unity, and responsibility through practical action and shared memory.</p></main>; }

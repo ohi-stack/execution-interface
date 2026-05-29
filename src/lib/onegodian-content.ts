@@ -17,12 +17,12 @@ export const dashboardCards = appDashboardCards;
 export { appDashboardCards, consoleDashboardCards };
 
 export const appStructureLayers = ['Public App', 'Member Dashboard', 'Membership', 'Certificates', 'Campaigns', 'Media', 'Products', 'Learning', 'Tools', 'Profile'];
-export const coreRoutes = ['/dashboard', '/ecosystem', '/members', '/certificates', '/campaigns', '/media', '/products', '/learning', '/tools', '/profile', '/settings', '/api/manifest'];
+export const coreRoutes = ['/', '/dashboard', '/ecosystem', '/omos', '/remember', '/membership', '/time', '/commerce', '/institutional', '/manifest', '/api/manifest'];
 
 export const footerSections = [
-  { title: 'OneGodian App', links: [{ label: 'Dashboard', href: '/dashboard' }, { label: 'Membership', href: '/members' }, { label: 'Certificates', href: '/certificates' }, { label: 'Profile', href: '/profile' }] },
-  { title: 'Ecosystem', links: [{ label: 'OneGodian.org', href: 'https://onegodian.org' }, { label: 'OneGodian.com', href: 'https://onegodian.com' }, { label: 'U OneGodian', href: 'https://u.onegodian.org' }, { label: 'Capital OneGodian', href: 'https://capital.onegodian.com' }] },
-  { title: 'More', links: [{ label: 'Media', href: '/media' }, { label: 'Products', href: '/products' }, { label: 'Learning', href: '/learning' }, { label: 'Tools', href: '/tools' }] }
+  { title: 'OneGodian App', links: [{ label: 'Home', href: '/' }, { label: 'Dashboard', href: '/dashboard' }, { label: 'Membership', href: '/membership' }, { label: 'Remember', href: '/remember' }] },
+  { title: 'Platform', links: [{ label: 'Ecosystem', href: '/ecosystem' }, { label: 'OMOS', href: '/omos' }, { label: 'Time', href: '/time' }, { label: 'Institutional', href: '/institutional' }] },
+  { title: 'External Nodes', links: [{ label: 'OneGodian.com', href: 'https://onegodian.com' }, { label: 'u.OneGodian.com', href: 'https://u.onegodian.com' }, { label: 'Galaxy.OneGodian.com', href: 'https://galaxy.onegodian.com' }, { label: 'QRV.Network', href: 'https://qrv.network' }] }
 ];
 
 export const systemsModel = [

@@ -1,9 +1,11 @@
 {
   "name": "OMOS Runtime",
+  "fullName": "OneGodian Metaphysical Operating System™",
+  "version": "1.1.0",
   "version": "1.0.2",
   "status": "production",
   "canonical_domain": "omos.onegodian.com",
-  "purpose": "Public runtime for OMOS routes, page registry, and manifest delivery.",
+  "purpose": "Public runtime for OneGodian routes, page registry, and manifest delivery.",
   "integrations": ["OneGodian App", "WordPress Bridge"],
   "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
   "routes": [
@@ -18,6 +20,8 @@
     "/institutional",
     "/api/health",
     "/api/manifest",
+    "/api/pages"
+  ]
     "/api/pages",
     "/api/tools",
     "/api/artifacts",

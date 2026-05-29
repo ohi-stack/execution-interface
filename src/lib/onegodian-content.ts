@@ -6,11 +6,12 @@ export { appNavigation, consoleNavigation, ecosystemPortals };
 export const ecosystemLinks = [
   { label: 'OneGodian.org', href: 'https://onegodian.org' },
   { label: 'OneGodian.com', href: 'https://onegodian.com' },
-  { label: 'U OneGodian', href: 'https://u.onegodian.org' },
+  { label: 'u.OneGodian.com', href: 'https://u.onegodian.com' },
   { label: 'Galaxy OneGodian', href: 'https://galaxy.onegodian.com' },
-  { label: 'Capital OneGodian', href: 'https://capital.onegodian.com' },
+  { label: 'app.OneGodian.com', href: 'https://app.onegodian.com' },
   { label: 'OMOS OneGodian', href: 'https://omos.onegodian.com' },
-  { label: 'OneGodian Console', href: 'https://console.onegodian.com' }
+  { label: 'QuantumOHI.com', href: 'https://quantumohi.com' },
+  { label: 'QRV.Network', href: 'https://qrv.network' }
 ];
 
 export const dashboardCards = appDashboardCards;
@@ -21,6 +22,11 @@ export const coreRoutes = ['/','/dashboard','/ecosystem','/omos','/remember','/m
 
 export const footerSections = [
   { title: 'OneGodian App', links: [{ label: 'Dashboard', href: '/dashboard' }, { label: 'Ecosystem', href: '/ecosystem' }, { label: 'OMOS', href: '/omos' }, { label: 'Remember', href: '/remember' }] },
+export const coreRoutes = ['/', '/dashboard', '/ecosystem', '/omos', '/remember', '/membership', '/time', '/commerce', '/institutional', '/api/manifest'];
+
+export const footerSections = [
+  { title: 'OneGodian App', links: [{ label: 'Dashboard', href: '/dashboard' }, { label: 'Ecosystem', href: '/ecosystem' }, { label: 'Remember', href: '/remember' }, { label: 'Membership', href: '/membership' }, { label: 'Commerce', href: '/commerce' }, { label: 'Institutional', href: '/institutional' }] },
+  { title: 'OneGodian App', links: [{ label: 'Dashboard', href: '/dashboard' }, { label: 'Membership', href: '/membership' }, { label: 'Remember', href: '/remember' }, { label: 'Institutional', href: '/institutional' }] },
   { title: 'Ecosystem', links: [{ label: 'OneGodian.org', href: 'https://onegodian.org' }, { label: 'OneGodian.com', href: 'https://onegodian.com' }, { label: 'U OneGodian', href: 'https://u.onegodian.org' }, { label: 'Capital OneGodian', href: 'https://capital.onegodian.com' }] },
   { title: 'More', links: [{ label: 'Membership', href: '/membership' }, { label: 'Time', href: '/time' }, { label: 'Commerce', href: '/commerce' }, { label: 'Institutional', href: '/institutional' }] }
 ];

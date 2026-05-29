@@ -1,0 +1,27 @@
+name: PHPCS
+
+on:
+  push:
+    paths:
+      - 'algonquian-real-estate/**'
+      - '.github/workflows/phpcs.yml'
+  pull_request:
+    paths:
+      - 'algonquian-real-estate/**'
+      - '.github/workflows/phpcs.yml'
+
+jobs:
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+      - name: Install coding standards
+        run: |
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require wp-coding-standards/wpcs dealerdirect/phpcodesniffer-composer-installer
+      - name: Run PHPCS
+        run: ~/.composer/vendor/bin/phpcs --standard=WordPress --extensions=php algonquian-real-estate/plugins

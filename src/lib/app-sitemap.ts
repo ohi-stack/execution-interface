@@ -46,6 +46,11 @@ export const appSitemap: AppRouteNode[] = [
   },
   { title: 'Registry', path: '/registry', group: 'Core', description: 'Public/member registry surface.', status: 'active' },
   { title: 'Time', path: '/time', group: 'Core', description: 'OneGodian Time tools.', status: 'active' },
+  { title: 'Remember', path: '/remember', group: 'Core', description: 'OneGodian: Remember campaign page.', status: 'active' },
+  { title: 'Membership', path: '/membership', group: 'Core', description: 'Membership entry route.', status: 'active' },
+  { title: 'Commerce', path: '/commerce', group: 'Core', description: 'OneGodian commerce and identity engine route.', status: 'active' },
+  { title: 'Institutional', path: '/institutional', group: 'Core', description: 'Institutional clarity and legal boundary route.', status: 'active' },
+
   { title: 'Portfolio', path: '/portfolio', group: 'Core', description: 'Public portfolio snapshot.', status: 'active' },
   { title: 'Records', path: '/records', group: 'Core', description: 'Public/member record index.', status: 'active' },
   { title: 'Tools', path: '/tools', group: 'Core', description: 'Public tools collection.', status: 'active' }

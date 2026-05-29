@@ -1,0 +1,35 @@
+.algq-mao-card {
+    background: #ffffff;
+    border: 1px solid #dcdcde;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    margin: 1rem 0;
+    padding: 1rem;
+}
+
+.algq-mao-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.algq-mao-grid label span {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+}
+
+.algq-mao-grid input {
+    max-width: 100%;
+    width: 100%;
+}
+
+.algq-mao-grid button {
+    align-self: end;
+}
+
+.algq-mao-result {
+    display: block;
+    font-weight: 700;
+    margin-top: 1rem;
+}

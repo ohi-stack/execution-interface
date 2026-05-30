@@ -1,45 +1,48 @@
 import Link from 'next/link';
-
-const routes = [
-  { href: '/ecosystem', label: 'Ecosystem' },
-  { href: '/omos', label: 'OMOS' },
-  { href: '/remember', label: 'Remember' },
-  { href: '/membership', label: 'Membership' },
-  { href: '/time', label: 'Time' },
-  { href: '/commerce', label: 'Commerce' },
-  { href: '/institutional', label: 'Institutional' },
-  { href: '/dashboard', label: 'Dashboard' }
-];
+import { appDashboardCards, appHomeHero } from '@/lib/app-content';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
-      <div className="mx-auto max-w-5xl space-y-6">
-        <section className="rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">OneGodian App</p>
-          <h1 className="mt-2 text-4xl font-bold">Live Public + Member Application Node</h1>
-          <p className="mt-3 text-slate-300">Production content routes for ecosystem, OMOS, remembrance, membership, time, commerce, and institutional clarity.</p>
-        </section>
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {routes.map((route) => (
-            <Link key={route.href} href={route.href} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 text-cyan-200 hover:border-cyan-400/50">
-              {route.label}
+      <div className="mx-auto max-w-6xl space-y-8">
+        <section className="rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-8 shadow-[0_0_60px_rgba(34,211,238,0.08)]">
+          <p className="text-xs uppercase tracking-[0.25em] text-cyan-300">{appHomeHero.eyebrow}</p>
+          <h1 className="mt-3 text-4xl font-bold sm:text-5xl">{appHomeHero.title}</h1>
+          <p className="mt-4 max-w-4xl text-lg text-slate-300">{appHomeHero.description}</p>
+          <p className="mt-4 max-w-4xl rounded-2xl border border-slate-700 bg-slate-950/60 p-4 text-sm leading-6 text-slate-200">
+            {appHomeHero.positioning}
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href={appHomeHero.primaryCta.href} className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200">
+              {appHomeHero.primaryCta.label}
             </Link>
-          ))}
+            <Link href={appHomeHero.secondaryCta.href} className="rounded-full border border-cyan-300/70 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/10">
+              {appHomeHero.secondaryCta.label}
+            </Link>
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-4">
+            <p className="text-xs uppercase tracking-[0.25em] text-cyan-300">Core Modules</p>
+            <h2 className="mt-2 text-2xl font-semibold">Central Access Dashboard</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {appDashboardCards.map((module) => (
+              <article key={module.href} className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-xl font-semibold text-slate-100">{module.title}</h3>
+                  <span className="rounded-full border border-cyan-400/50 px-2 py-1 text-xs text-cyan-200">{module.status}</span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{module.description}</p>
+                <Link href={module.href} className="mt-5 inline-flex rounded-full border border-cyan-400/70 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/10">
+                  {module.buttonLabel}
+                </Link>
+              </article>
+            ))}
+          </div>
         </section>
       </div>
     </main>
   );
-const links = [
-  { title: 'Ecosystem', href: '/ecosystem' },
-  { title: 'OMOS', href: '/omos' },
-  { title: 'Remember', href: '/remember' },
-  { title: 'Membership', href: '/membership' },
-  { title: 'Time', href: '/time' },
-  { title: 'Commerce', href: '/commerce' },
-  { title: 'Institutional', href: '/institutional' }
-];
-
-export default function HomePage() {
-  return <main className="space-y-8"><section className="rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-8"><p className="text-xs uppercase tracking-[0.2em] text-cyan-300">OneGodian App · Live</p><h1 className="mt-3 text-4xl font-bold">Public OneGodian App Node</h1><p className="mt-4 max-w-4xl text-slate-300">This production app provides public-safe ecosystem content, campaign access, membership entry points, time references, commerce routing, and institutional clarity.</p></section><section className="grid gap-4 md:grid-cols-2">{links.map((item) => <Link key={item.href} href={item.href} className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 hover:border-cyan-400/60"><h2 className="text-xl font-semibold text-cyan-200">{item.title}</h2><p className="mt-2 text-sm text-slate-300">Open {item.href}</p></Link>)}</section></main>;
 }

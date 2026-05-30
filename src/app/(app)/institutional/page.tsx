@@ -1,14 +1,20 @@
-export default function InstitutionalPage(){return <main className='space-y-6'><section className='rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6'><h1 className='text-3xl font-bold'>Institutional Clarity</h1><p className='mt-2 text-slate-300'>Clear separation between commercial operations and internal governance/religious association context.</p></section><section className='rounded-xl border border-slate-700 bg-slate-900/60 p-5 text-sm text-slate-300 space-y-2'><p>ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity.</p><p>INO is separate and should be described as a voluntary internal governance/religious association structure.</p><p>“Sovereign” means internal self-governance and voluntary participation, not exemption from U.S. law or governmental authority over non-members.</p></section></main>}
-export default function Page() {
-  return <main className="space-y-6"><h1 className="text-3xl font-bold">Institutional Clarity</h1><p className="text-slate-300">ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity operating products, platforms, and digital services.</p><p className="text-slate-300">INO is a separate voluntary internal governance/religious association structure used for internal community and cultural organization.</p><p className="text-slate-300">&quot;Sovereign&quot; in this context means internal self-governance and voluntary participation, not exemption from U.S. law or governmental authority over non-members.</p></main>;
 export default function InstitutionalPage() {
   return (
     <main className="space-y-6">
-      <h1 className="text-3xl font-bold">Institutional Clarity</h1>
-      <section className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 text-slate-300 space-y-3">
-        <p>ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity responsible for product operations, platforms, publishing, and technology execution.</p>
-        <p>INO is separate and should be described as a voluntary internal governance/religious association structure.</p>
-        <p>“Sovereign” means internal self-governance and voluntary participation, not exemption from U.S. law or governmental authority over non-members.</p>
+      <section className="glass-panel p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">Institutional Clarity</p>
+        <h1 className="mt-3 text-3xl font-black tracking-[-0.03em] text-white">OneGodian Institutional Boundaries</h1>
+        <p className="mt-3 max-w-3xl text-slate-300">Clear public-facing language for commercial operations, educational/media activity, community participation, and verification infrastructure.</p>
+      </section>
+      <section className="grid gap-4 md:grid-cols-2">
+        <article className="mobile-card">
+          <h2 className="text-xl font-semibold text-white">ONEGODIAN, LLC</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300">Private commercial/IP/software/media/education/e-commerce operations, products, and platform services.</p>
+        </article>
+        <article className="mobile-card">
+          <h2 className="text-xl font-semibold text-white">Public + Member App</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300">Public-safe routes, member entry points, campaign resources, content context, and status surfaces remain separate from admin/control tools.</p>
+        </article>
       </section>
     </main>
   );

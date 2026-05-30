@@ -15,5 +15,32 @@ export default function DashboardPage() {
     { label: 'Failing services', value: sync.errors.length ? sync.errors.join('; ') : 'none' }
   ];
 
-  return <main className="space-y-8"><header className="rounded-2xl border border-cyan-400/30 bg-slate-950 p-6"><h1 className="text-3xl font-bold text-cyan-200">ONEGODIAN MEMBER DASHBOARD</h1></header><section className="grid gap-4 md:grid-cols-2">{dashboardCards.map((card) => <article key={card.title} className="rounded-xl border border-slate-700 bg-slate-900/60 p-5"><div className="flex items-center justify-between"><h2 className="text-xl font-semibold">{card.title}</h2><span className="text-xs text-cyan-300">{card.status}</span></div><p className="mt-2 text-sm text-slate-300">{card.description}</p><Link href={card.href} className="mt-3 inline-block text-cyan-300">Open</Link></article>)}</section><section className="grid gap-4 md:grid-cols-3">{widgets.map((widget) => <article key={widget.label} className="rounded-xl border border-cyan-700/40 bg-slate-900/40 p-4"><h3 className="text-sm text-cyan-200">{widget.label}</h3><p className="mt-2 break-all text-lg font-semibold text-slate-100">{widget.value}</p></article>)}</section></main>;
+  return (
+    <main className="space-y-8">
+      <header className="glass-panel p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">Member Command Surface</p>
+        <h1 className="mt-3 text-3xl font-black tracking-[-0.035em] text-white">ONEGODIAN MEMBER DASHBOARD</h1>
+      </header>
+      <section className="grid gap-4 md:grid-cols-2">
+        {dashboardCards.map((card) => (
+          <article key={card.title} className="mobile-card">
+            <div className="flex items-start justify-between gap-4">
+              <h2 className="text-xl font-bold text-white">{card.title}</h2>
+              <span className="rounded-full border border-gold-300/40 bg-gold-300/10 px-2.5 py-1 text-xs font-bold text-gold-100">{card.status}</span>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-slate-300">{card.description}</p>
+            <Link href={card.href} className="mt-5 inline-block text-xs font-black uppercase tracking-[0.22em] text-gold-300">Open →</Link>
+          </article>
+        ))}
+      </section>
+      <section className="grid gap-4 md:grid-cols-3">
+        {widgets.map((widget) => (
+          <article key={widget.label} className="rounded-3xl border border-purple-300/15 bg-white/[0.045] p-4 shadow-sovereign backdrop-blur-xl">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-100/80">{widget.label}</h3>
+            <p className="mt-3 break-all text-lg font-bold text-white">{widget.value}</p>
+          </article>
+        ))}
+      </section>
+    </main>
+  );
 }

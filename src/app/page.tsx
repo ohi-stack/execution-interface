@@ -1,45 +1,43 @@
 import Link from 'next/link';
+import { appMeta } from '@/lib/onegodian-content';
 
 const routes = [
-  { href: '/ecosystem', label: 'Ecosystem' },
-  { href: '/omos', label: 'OMOS' },
-  { href: '/remember', label: 'Remember' },
-  { href: '/membership', label: 'Membership' },
-  { href: '/time', label: 'Time' },
-  { href: '/commerce', label: 'Commerce' },
-  { href: '/institutional', label: 'Institutional' },
-  { href: '/dashboard', label: 'Dashboard' }
+  { href: '/ecosystem', label: 'Ecosystem', detail: 'Connected domain and platform map' },
+  { href: '/omos', label: 'OMOS', detail: 'Operating model and runtime context' },
+  { href: '/remember', label: 'Remember', detail: 'Campaign access and participation' },
+  { href: '/membership', label: 'Membership', detail: 'Member pathways and records entry' },
+  { href: '/time', label: 'Time', detail: 'OneGodian Time and UTC clarity' },
+  { href: '/commerce', label: 'Commerce', detail: 'Products, memberships, and checkout routing' },
+  { href: '/institutional', label: 'Institutional', detail: 'Public boundary and clarity language' },
+  { href: '/dashboard', label: 'Dashboard', detail: 'Member node overview and module status' }
 ];
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
-      <div className="mx-auto max-w-5xl space-y-6">
-        <section className="rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">OneGodian App</p>
-          <h1 className="mt-2 text-4xl font-bold">Live Public + Member Application Node</h1>
-          <p className="mt-3 text-slate-300">Production content routes for ecosystem, OMOS, remembrance, membership, time, commerce, and institutional clarity.</p>
+    <main className="onegodian-surface min-h-screen px-4 py-10 text-slate-100 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <section className="glass-panel relative overflow-hidden p-6 sm:p-8 lg:p-10">
+          <div className="absolute right-6 top-6 hidden h-28 w-28 rounded-full border border-gold-300/30 bg-gold-300/10 blur-sm sm:block" />
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-gold-300">{appMeta.eyebrow}</p>
+          <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">{appMeta.title}</h1>
+          <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">{appMeta.description}</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href={appMeta.primaryCta.href} className="premium-button">{appMeta.primaryCta.label}</Link>
+            <Link href={appMeta.secondaryCta.href} className="premium-button-secondary">{appMeta.secondaryCta.label}</Link>
+          </div>
         </section>
+
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {routes.map((route) => (
-            <Link key={route.href} href={route.href} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 text-cyan-200 hover:border-cyan-400/50">
-              {route.label}
+            <Link key={route.href} href={route.href} className="mobile-card group">
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-purple-200/80">Node</span>
+              <h2 className="mt-3 text-xl font-bold text-white group-hover:text-gold-200">{route.label}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-300">{route.detail}</p>
+              <span className="mt-5 inline-flex text-xs font-semibold uppercase tracking-[0.22em] text-gold-300">Open →</span>
             </Link>
           ))}
         </section>
       </div>
     </main>
   );
-const links = [
-  { title: 'Ecosystem', href: '/ecosystem' },
-  { title: 'OMOS', href: '/omos' },
-  { title: 'Remember', href: '/remember' },
-  { title: 'Membership', href: '/membership' },
-  { title: 'Time', href: '/time' },
-  { title: 'Commerce', href: '/commerce' },
-  { title: 'Institutional', href: '/institutional' }
-];
-
-export default function HomePage() {
-  return <main className="space-y-8"><section className="rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-8"><p className="text-xs uppercase tracking-[0.2em] text-cyan-300">OneGodian App · Live</p><h1 className="mt-3 text-4xl font-bold">Public OneGodian App Node</h1><p className="mt-4 max-w-4xl text-slate-300">This production app provides public-safe ecosystem content, campaign access, membership entry points, time references, commerce routing, and institutional clarity.</p></section><section className="grid gap-4 md:grid-cols-2">{links.map((item) => <Link key={item.href} href={item.href} className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 hover:border-cyan-400/60"><h2 className="text-xl font-semibold text-cyan-200">{item.title}</h2><p className="mt-2 text-sm text-slate-300">Open {item.href}</p></Link>)}</section></main>;
 }

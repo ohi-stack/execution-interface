@@ -53,4 +53,35 @@
     "OneGodian.org",
     "QuantumOHI.com"
   ]
+  "name": "OneGodian App Runtime",
+  "fullName": "OneGodian App Central Access Layer",
+  "version": "1.1.0",
+  "status": "production",
+  "canonical_domain": "app.onegodian.com",
+  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, operational interfaces, account systems, and member infrastructure.",
+  "integrations": ["OneGodian App", "OMOS", "WordPress Bridge"],
+  "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
+  "routes": [
+    "/",
+    "/dashboard",
+    "/members",
+    "/campaigns",
+    "/campaigns/remember",
+    "/registry",
+    "/tools",
+    "/media",
+    "/learn",
+    "/certificates",
+    "/support",
+    "/settings",
+    "/account",
+    "/api/health",
+    "/api/manifest",
+    "/api/modules"
+  ],
+  "classification": "Public/member app node, central dashboard, and ecosystem access interface",
+  "canonicalHost": "https://app.onegodian.com",
+  "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://omos.onegodian.com", "https://quantumohi.com"],
+  "appBridge": ["https://app.onegodian.com"],
+  "commerceBridge": ["https://onegodian.com"]
 }

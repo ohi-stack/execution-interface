@@ -22,6 +22,8 @@ export default function TimePage() {
           {timeRules.map((rule) => <li key={rule}>{rule}</li>)}
         </ul>
         <a href="/time/dual-dating" className="mt-4 inline-block rounded-lg border border-cyan-400/50 px-4 py-2 text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/10">Open Dual Dating System</a>
+        <h1 className="text-3xl font-bold">OneGodian Time</h1>
+        <p className="mt-2 text-slate-300">OneGodian Time tools provide chronology references with public-safe context and conventional date compatibility.</p>
       </section>
     </main>
   );

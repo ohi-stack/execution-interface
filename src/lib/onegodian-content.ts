@@ -18,8 +18,80 @@ import { consoleDashboardCards, consoleFooterBoundary, consoleNavigation } from 
 export const appMeta = appHomeHero;
 export const dashboardCards = appDashboardCards;
 export const ecosystemLinks = ecosystemPortals.map((portal) => ({ label: portal.name, href: portal.url }));
+import { appDashboardCards, appFooterBoundary, appHomeHero, appNavigation, ecosystemPortals } from '@/lib/app-content';
+
+export const appMeta = appHomeHero;
+export { appNavigation, ecosystemPortals, appDashboardCards };
+
+export const ecosystemLinks = ecosystemPortals.map((portal) => ({ label: portal.name, href: portal.url }));
+
+export const dashboardCards = appDashboardCards;
+
+export const appStructureLayers = [
+  'Public App',
+  'Central Access Dashboard',
+  'Member Dashboard',
+  'Identity Systems',
+  'Registries',
+  'Campaigns',
+  'Media',
+  'Learning',
+  'Certificates',
+  'Tools',
+  'Account Systems',
+  'Member Infrastructure'
+];
+
+export const coreRoutes = [
+  '/',
+  '/dashboard',
+  '/members',
+  '/campaigns',
+  '/campaigns/remember',
+  '/registry',
+  '/tools',
+  '/media',
+  '/learn',
+  '/certificates',
+  '/support',
+  '/settings',
+  '/account',
+  '/api/health',
+  '/api/manifest',
+  '/api/modules'
+];
+
+export const footerSections = [
+  { title: 'App', links: appNavigation },
+  {
+    title: 'Ecosystem',
+    links: ecosystemPortals.map((portal) => ({ label: portal.name, href: portal.url }))
+  }
+];
+
+export const systemsModel = [
+  { title: 'Access', items: ['Dashboard', 'Members', 'Account', 'Settings'] },
+  { title: 'Ecosystem Use', items: ['Campaigns', 'Registry', 'Tools', 'Support'] },
+  { title: 'Knowledge & Records', items: ['Media', 'Learning', 'Certificates'] }
+];
+
+export const apiStatus = {
+  app: 'OneGodian App',
+  appUrl: 'https://app.onegodian.com',
+  consoleUrl: 'https://console.onegodian.com',
+  environment: 'Production',
+  currentDateRecord: 'May 30, 2026'
+};
+
+export const appStatus = {
+  ...apiStatus,
+  store: 'https://onegodian.com',
+  publicSite: 'https://onegodian.org',
+  api: 'https://app.onegodian.com/api/health',
+  activeCampaign: 'THE ONEGODIAN: Remember Campaign'
+};
+
 export const appBoundaryCopy = appFooterBoundary;
-export const consoleBoundaryCopy = consoleFooterBoundary;
 
 export {
   appDashboardCards,
@@ -40,3 +112,32 @@ export {
 };
 
 export const appStructureLayers = ['Public Dashboard', 'Ecosystem', 'Overview', 'OMOS', 'Algorithm', 'Time', 'Commerce', 'Identity', 'Remember', 'Status'];
+export const rememberCampaign = {
+  officialStartDate: 'May 9, 2026',
+  onegodianDate: 'Wisdom 23, OT 0001',
+  message: 'You were always One — you simply forgot. Remember who you are.',
+  purpose:
+    'Preserve memory, identity, origin, purpose, dignity, unity, and disciplined growth through the OneGodian Remember Campaign.',
+  dashboardFunctions: [
+    'Campaign overview',
+    'Remember materials',
+    'Contribution and support pathways',
+    'Public outreach resources',
+    'Media and captions',
+    'Member participation tools',
+    'Campaign certificate pathways'
+  ]
+};
+
+export const pluginCategories = [
+  {
+    title: 'Core Platform Plugins',
+    plugins: [
+      'OneGodian Platform Plugin',
+      'OneGodian App Bridge Plugin',
+      'OneGodian Members Plugin',
+      'OneGodian Certificates Plugin',
+      'OneGodian Registry Plugin'
+    ]
+  }
+];

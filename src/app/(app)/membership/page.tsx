@@ -14,7 +14,10 @@ export default function MembershipPage() {
           <Link href="/identity" className="font-semibold text-cyan-300">Open identity route</Link>
           <Link href="/dashboard" className="font-semibold text-cyan-300">Open dashboard</Link>
         </div>
+        <h1 className="text-3xl font-bold">Membership</h1>
+        <p className="mt-2 text-slate-300">Access OneGodian membership pathways, member records, benefits, onboarding, and participation options.</p>
       </section>
+      <Link href="/members" className="inline-flex rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950">Open Members</Link>
     </main>
   );
 }

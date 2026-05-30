@@ -21,6 +21,8 @@ export default function OmosPage() {
             <p className="mt-2 text-sm leading-6 text-slate-300">{item.detail}</p>
           </article>
         ))}
+        <h1 className="text-3xl font-bold">OMOS</h1>
+        <p className="mt-2 text-slate-300">The OneGodian Metaphysical Operating System documents structure, protocols, routes, and operating context for the ecosystem.</p>
       </section>
     </main>
   );

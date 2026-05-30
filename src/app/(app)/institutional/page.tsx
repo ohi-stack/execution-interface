@@ -19,6 +19,8 @@ export default function InstitutionalPage() {
           <h2 className="text-xl font-semibold">Sovereign Language</h2>
           <p className="mt-2 text-sm leading-6 text-slate-300">Sovereign means internal self-governance and voluntary participation, not exemption from U.S. law, nation-state status, or governmental authority over non-members.</p>
         </article>
+        <h1 className="text-3xl font-bold">Institutional Clarity</h1>
+        <p className="mt-2 text-slate-300">OneGodian.org explains. OneGodian.com sells. OMOS.OneGodian.com documents the operating system. app.OneGodian.com lets people use the ecosystem.</p>
       </section>
     </main>
   );

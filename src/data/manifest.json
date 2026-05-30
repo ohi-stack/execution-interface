@@ -1,6 +1,6 @@
 {
-  "name": "OMOS Runtime",
-  "fullName": "OneGodian Metaphysical Operating System™",
+  "name": "OneGodian App",
+  "fullName": "OneGodian App Public/Member Dashboard",
   "version": "1.1.0",
   "status": "production",
   "canonical_domain": "omos.onegodian.com",
@@ -12,16 +12,28 @@
   "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://quantumohi.com"],
   "appBridge": ["https://app.onegodian.com"],
   "commerceBridge": ["https://onegodian.com"],
+  "canonical_domain": "app.onegodian.com",
+  "purpose": "Unified public/member application dashboard for OneGodian ecosystem content, OMOS, timekeeping, commerce, identity, institutional clarity, campaign pages, and status routes.",
+  "integrations": [
+    "OneGodian.com",
+    "OneGodian.org",
+    "OMOS",
+    "QRV.Network"
+  ],
   "routes": [
     "/",
-    "/dashboard",
     "/ecosystem",
+    "/overview",
     "/omos",
+    "/algorithm",
     "/remember",
-    "/membership",
     "/time",
     "/commerce",
+    "/identity",
     "/institutional",
+    "/status"
+  ],
+  "apiRoutes": [
     "/api/health",
     "/api/manifest",
     "/api/pages",
@@ -29,4 +41,57 @@
     "/api/artifacts",
     "/api/system-health"
   ]
+  ],
+  "commerceEngine": "https://onegodian.com",
+  "interpretationPlatform": "https://onegodian.org",
+  "compatibleHosts": [
+    "https://onegodian.com",
+    "https://onegodian.org",
+    "https://omos.onegodian.com",
+    "https://quantumohi.com"
+  ],
+  "appBridge": [
+    "https://app.onegodian.com"
+  ],
+  "publicSafety": {
+    "commercialEntity": "ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity.",
+    "internalAssociation": "INO is separate and described as a voluntary internal governance/religious association structure.",
+    "sovereignMeaning": "Sovereign means internal self-governance and voluntary participation, not exemption from U.S. law, nation-state status, or governmental authority over non-members."
+  },
+  "wordpress_hosts": [
+    "OneGodian.com",
+    "OneGodian.org",
+    "QuantumOHI.com"
+  ]
+  "name": "OneGodian App Runtime",
+  "fullName": "OneGodian App Central Access Layer",
+  "version": "1.1.0",
+  "status": "production",
+  "canonical_domain": "app.onegodian.com",
+  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, operational interfaces, account systems, and member infrastructure.",
+  "integrations": ["OneGodian App", "OMOS", "WordPress Bridge"],
+  "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
+  "routes": [
+    "/",
+    "/dashboard",
+    "/members",
+    "/campaigns",
+    "/campaigns/remember",
+    "/registry",
+    "/tools",
+    "/media",
+    "/learn",
+    "/certificates",
+    "/support",
+    "/settings",
+    "/account",
+    "/api/health",
+    "/api/manifest",
+    "/api/modules"
+  ],
+  "classification": "Public/member app node, central dashboard, and ecosystem access interface",
+  "canonicalHost": "https://app.onegodian.com",
+  "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://omos.onegodian.com", "https://quantumohi.com"],
+  "appBridge": ["https://app.onegodian.com"],
+  "commerceBridge": ["https://onegodian.com"]
 }

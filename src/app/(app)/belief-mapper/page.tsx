@@ -1,4 +1,36 @@
 import Link from 'next/link';
-import { ChecklistCard, ModuleHeader } from '@/components/module-ui';
-const questions=['Which statement best reflects your current search for truth?','How structured do you want your current guidance path?','Are you seeking private learning or community connection?'];
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Belief Mapper Lite' description='Consent-first 3–5 question entry tool mapping users to Seeker, Believer, Onegodian, or Elder journey stages.'/><section className='rounded-xl border border-amber-400/40 bg-amber-500/10 p-4 text-sm text-amber-100'>Consent Notice: Responses are for immediate guidance only and must not be stored without explicit user consent.</section><section className='rounded-xl border border-slate-700 bg-slate-900/60 p-5'><h2 className='text-lg font-semibold'>Starter Questions</h2><ul className='mt-3 list-disc pl-6 text-sm text-slate-300'>{questions.map(q=><li key={q}>{q}</li>)}</ul></section><ChecklistCard items={['Build question flow','Create result states','Do not store belief data without explicit consent','Route users to Learn, OneGodian U, or membership pathways']} /><Link href='https://u.onegodian.org' className='inline-flex rounded-lg border border-cyan-400/70 px-4 py-2 text-sm text-cyan-200'>Continue to OneGodian U</Link></main>}
+import { BeliefMapperHero } from '@/components/belief-mapper/BeliefMapperHero';
+import { PremiumUpgradeCard } from '@/components/belief-mapper/PremiumUpgradeCard';
+import { ResultCard } from '@/components/belief-mapper/ResultCard';
+import { beliefMapperResults } from '@/lib/beliefMapper/scoring';
+
+const routes = [
+  ['/belief-mapper/start', 'Start'],
+  ['/belief-mapper/results', 'Results'],
+  ['/belief-mapper/profile', 'Profile'],
+  ['/belief-mapper/journal', 'Journal'],
+  ['/belief-mapper/certificate', 'Certificate'],
+  ['/belief-mapper/timeline', 'Timeline'],
+  ['/belief-mapper/premium', 'Premium']
+];
+
+export default function BeliefMapperPage() {
+  return (
+    <main className="space-y-8">
+      <BeliefMapperHero />
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {routes.map(([href, label]) => (
+          <Link key={href} href={href} className="rounded-2xl border border-slate-700 bg-slate-900/70 p-4 text-sm font-semibold text-slate-100 hover:border-cyan-300">
+            {label} <span className="block pt-1 font-mono text-xs text-cyan-300">{href}</span>
+          </Link>
+        ))}
+      </section>
+      <section className="grid gap-4 lg:grid-cols-[1fr_0.75fr]">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {beliefMapperResults.map((result) => <ResultCard key={result.id} result={result} />)}
+        </div>
+        <PremiumUpgradeCard />
+      </section>
+    </main>
+  );
+}

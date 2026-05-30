@@ -121,17 +121,24 @@ export const pluginCategories = [
 ];
 
 export {
+  apiStatus,
+  appBoundaryCopy,
   appDashboardCards,
   appFooterBoundary,
   appHomeHero,
   appNavigation,
-  consoleDashboardCards,
-  consoleNavigation,
+  appStatus,
+  appStructureLayers,
+  beliefMapperRoutes,
   coreRoutes,
+  ecosystemLinks,
   ecosystemPortals,
   footerSections,
+  pluginCategories,
   rememberCampaign,
   routeStatusRows,
+  systemsModel
+} from '@/lib/app-content';
   systemsModel,
   apiStatus,
   appStatus,

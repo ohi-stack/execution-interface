@@ -1,3 +1,5 @@
+import { routeStatusRows } from '@/lib/app-content';
+
 export type AppRouteNode = {
   title: string;
   path: string;
@@ -7,6 +9,13 @@ export type AppRouteNode = {
   children?: AppRouteNode[];
 };
 
+export const appSitemap: AppRouteNode[] = routeStatusRows.map((route) => ({
+  title: route.title,
+  path: route.path,
+  group: route.path === '/' || route.path === '/status' ? 'Core' : 'Production Content',
+  description: route.purpose,
+  status: 'active'
+}));
 export const appSitemap: AppRouteNode[] = [
   { title: 'Home', path: '/', group: 'Core', description: 'OneGodian App public entry.', status: 'active' },
   { title: 'Dashboard', path: '/dashboard', group: 'Core', description: 'Central access dashboard.', status: 'active' },

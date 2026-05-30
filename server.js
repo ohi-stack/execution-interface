@@ -19,24 +19,16 @@ const CANONICAL_HOST = process.env.OMOS_CANONICAL_HOST || 'https://omos.onegodia
 
 const PUBLIC_ROUTES = [
   '/',
+  '/ecosystem',
+  '/overview',
   '/omos',
-  '/ohi',
-  '/models',
-  '/tools',
-  '/artifacts',
-  '/docs',
-  '/shop',
-  '/latest-news',
-  '/dashboard',
-  '/legal',
-  '/contact',
-  '/protocol',
   '/algorithm',
-  '/digital-sanctuary',
-  '/sciences',
-  '/discoveries',
+  '/remember',
   '/time',
-  '/new-year'
+  '/commerce',
+  '/identity',
+  '/institutional',
+  '/status'
 ];
 
 const API_ROUTES = ['/health', '/api/health', '/manifest', '/api/manifest', '/process'];

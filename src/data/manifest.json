@@ -3,6 +3,15 @@
   "fullName": "OneGodian App Central Access Layer",
   "version": "1.2.0",
   "status": "production",
+  "canonical_domain": "omos.onegodian.com",
+  "canonicalHost": "https://omos.onegodian.com",
+  "classification": "Node runtime, protocol documentation, and agent-facing integration site",
+  "purpose": "Public runtime for OneGodian routes, page registry, and manifest delivery.",
+  "integrations": ["OneGodian App", "WordPress Bridge"],
+  "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
+  "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://quantumohi.com"],
+  "appBridge": ["https://app.onegodian.com"],
+  "commerceBridge": ["https://onegodian.com"],
   "canonical_domain": "app.onegodian.com",
   "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, Belief Mapper\u2122, operational interfaces, account systems, and member infrastructure.",
   "integrations": [
@@ -51,6 +60,11 @@
     "/api/health",
     "/api/manifest",
     "/api/modules"
+    "/api/pages",
+    "/api/tools",
+    "/api/artifacts",
+    "/api/system-health"
+  ]
   ],
   "modules": [
     {

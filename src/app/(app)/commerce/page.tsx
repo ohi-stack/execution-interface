@@ -1,6 +1,21 @@
 export default function CommercePage() {
   return (
     <main className="space-y-6">
+      <section className="glass-panel p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">Commerce Node</p>
+        <h1 className="mt-3 text-3xl font-black tracking-[-0.03em] text-white">Commerce & Identity Engine</h1>
+        <p className="mt-3 max-w-3xl text-slate-300">OneGodian.com is the commerce and identity product engine for merchandise, memberships, digital products, and checkout workflows.</p>
+      </section>
+      <section className="grid gap-4 md:grid-cols-2">
+        <article className="mobile-card">
+          <h2 className="text-xl font-semibold text-white">Commercial Operations</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300">ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity operating commerce surfaces and product rails.</p>
+        </article>
+        <article className="mobile-card">
+          <h2 className="text-xl font-semibold text-white">Commerce Node</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300">Product identity, fulfillment, checkout, and campaign integration route through the production commerce property.</p>
+          <a href="https://onegodian.com" target="_blank" rel="noreferrer" className="mt-4 inline-flex text-sm font-semibold text-gold-300 hover:text-gold-100">https://onegodian.com</a>
+        </article>
       <section className="rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6">
         <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Commerce Engine</p>
         <h1 className="mt-2 text-3xl font-bold">OneGodian.com Commerce + Identity Product Engine</h1>

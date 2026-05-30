@@ -17,17 +17,17 @@ export function ModuleShellPage({ slug, pageTitle }: ModuleShellPageProps) {
 
   return (
     <main className="space-y-6 text-slate-100">
-      <section className="rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">{appModule.category} Module</p>
-        <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{pageTitle ?? appModule.title}</h1>
+      <section className="glass-panel p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">{appModule.category} Module</p>
+        <h1 className="mt-3 text-3xl font-black tracking-[-0.035em] text-white sm:text-4xl">{pageTitle ?? appModule.title}</h1>
       </section>
-      <section className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
-        <h2 className="text-lg font-semibold text-cyan-200">Connected Systems</h2>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mobile-card">
+        <h2 className="text-lg font-bold text-white">Connected Systems</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {connectedSystems.map((connected) => (
-            <Link key={connected.slug} href={connected.route} className="rounded-xl border border-slate-700 bg-slate-950/70 p-4 transition hover:border-cyan-400/70">
-              <p className="text-sm font-semibold text-slate-100">{connected.title}</p>
-              <p className="mt-1 text-xs text-slate-400">{connected.route}</p>
+            <Link key={connected.slug} href={connected.route} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition hover:border-gold-300/40 hover:bg-gold-300/10">
+              <p className="text-sm font-semibold text-white">{connected.title}</p>
+              <p className="mt-1 text-xs text-purple-100/75">{connected.route}</p>
             </Link>
           ))}
         </div>

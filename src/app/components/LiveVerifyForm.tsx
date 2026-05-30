@@ -18,13 +18,13 @@ export function LiveVerifyForm({ demoRecordId }: { demoRecordId: string }) {
     <form className="mt-5 flex flex-col gap-3 sm:flex-row" onSubmit={onSubmit}>
       <input
         aria-label="Enter QRVID"
-        className="w-full rounded-xl border border-slate-600 bg-slate-950 px-4 py-3 text-slate-100 outline-none ring-cyan-300/40 placeholder:text-slate-500 focus:ring"
+        className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-slate-100 outline-none ring-gold-300/30 placeholder:text-slate-500 focus:border-gold-300/50 focus:ring"
         onChange={(event) => setQrvid(event.target.value)}
         placeholder="Enter QRVID"
         value={qrvid}
       />
-      <button className="rounded-xl border border-cyan-400/40 bg-cyan-500/20 px-5 py-3 text-sm font-semibold text-cyan-100" type="submit">Verify</button>
-      <a className="rounded-xl border border-slate-500/60 px-5 py-3 text-center text-sm font-semibold text-slate-100" href={`${VERIFY_BASE_URL}/${demoRecordId}`}>Try Demo Record</a>
+      <button className="premium-button" type="submit">Verify</button>
+      <a className="premium-button-secondary text-center" href={`${VERIFY_BASE_URL}/${demoRecordId}`}>Try Demo Record</a>
     </form>
   );
 }

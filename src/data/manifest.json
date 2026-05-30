@@ -1,40 +1,56 @@
 {
-  "name": "OMOS Runtime",
-  "fullName": "OneGodian Metaphysical Operating System™",
+  "name": "OneGodian App",
+  "fullName": "OneGodian App Public/Member Dashboard",
   "version": "1.1.0",
-  "version": "1.0.2",
   "status": "production",
-  "canonical_domain": "omos.onegodian.com",
-  "purpose": "Public runtime for OneGodian routes, page registry, and manifest delivery.",
-  "integrations": ["OneGodian App", "WordPress Bridge"],
-  "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
+  "canonical_domain": "app.onegodian.com",
+  "purpose": "Unified public/member application dashboard for OneGodian ecosystem content, OMOS, timekeeping, commerce, identity, institutional clarity, campaign pages, and status routes.",
+  "integrations": [
+    "OneGodian.com",
+    "OneGodian.org",
+    "OMOS",
+    "QRV.Network"
+  ],
   "routes": [
     "/",
-    "/dashboard",
     "/ecosystem",
+    "/overview",
     "/omos",
+    "/algorithm",
     "/remember",
-    "/membership",
     "/time",
     "/commerce",
+    "/identity",
     "/institutional",
+    "/status"
+  ],
+  "apiRoutes": [
     "/api/health",
     "/api/manifest",
-    "/api/pages"
-  ]
     "/api/pages",
     "/api/tools",
     "/api/artifacts",
     "/api/system-health"
   ],
-  "fullName": "OneGodian Metaphysical Operating System™",
-  "classification": "Node runtime, protocol documentation, and agent-facing integration site",
-  "canonicalHost": "https://omos.onegodian.com",
+  "commerceEngine": "https://onegodian.com",
+  "interpretationPlatform": "https://onegodian.org",
   "compatibleHosts": [
     "https://onegodian.com",
     "https://onegodian.org",
+    "https://omos.onegodian.com",
     "https://quantumohi.com"
   ],
-  "appBridge": ["https://app.onegodian.com"],
-  "commerceBridge": ["https://onegodian.com"]
+  "appBridge": [
+    "https://app.onegodian.com"
+  ],
+  "publicSafety": {
+    "commercialEntity": "ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity.",
+    "internalAssociation": "INO is separate and described as a voluntary internal governance/religious association structure.",
+    "sovereignMeaning": "Sovereign means internal self-governance and voluntary participation, not exemption from U.S. law, nation-state status, or governmental authority over non-members."
+  },
+  "wordpress_hosts": [
+    "OneGodian.com",
+    "OneGodian.org",
+    "QuantumOHI.com"
+  ]
 }

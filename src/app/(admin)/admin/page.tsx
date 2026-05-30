@@ -7,11 +7,13 @@ export const metadata = {
 
 export default function AdminPage() {
   return (
-    <ControlPlanePlaceholder
-      title="Admin"
-      layer="admin"
-      description="Reserved operator surface for future authenticated administration, policy controls, approvals, audit review, and system operations."
-      modules={['Authenticated administration', 'Policy controls', 'Approvals', 'Audit review']}
-    />
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <ControlPlanePlaceholder
+        title="Admin"
+        layer="admin"
+        description="Reserved operator surface for future authenticated administration, policy controls, approvals, audit review, and system operations."
+        modules={['Authenticated administration', 'Policy controls', 'Approvals', 'Audit review']}
+      />
+    </main>
   );
 }

@@ -1,3 +1,5 @@
+import { controlPlanePlaceholderLabels } from '@/lib/control-plane';
+
 type ControlPlanePlaceholderProps = {
   title: string;
   description: string;
@@ -5,25 +7,22 @@ type ControlPlanePlaceholderProps = {
   modules: string[];
 };
 
-const labels = ['Coming Soon', 'Planned Module', 'Operational Layer', 'Requires Admin Integration'];
 
 export function ControlPlanePlaceholder({ title, description, layer, modules }: ControlPlanePlaceholderProps) {
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-10 text-slate-100">
-      <section className="rounded-3xl border border-cyan-400/30 bg-slate-950/80 p-6 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
-        <div className="flex flex-wrap gap-2">
-          {labels.map((label) => (
-            <span key={label} className="rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100">
-              {label}
-            </span>
-          ))}
-        </div>
-        <p className="mt-6 text-sm font-semibold uppercase tracking-[0.25em] text-amber-200">OneGodian App Control Plane</p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">{title}</h1>
-        <p className="mt-3 max-w-3xl text-base leading-7 text-slate-300">{description}</p>
-      </section>
+    <section className="rounded-3xl border border-cyan-400/30 bg-slate-950/80 p-6 text-slate-100 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
+      <div className="flex flex-wrap gap-2">
+        {controlPlanePlaceholderLabels.map((label) => (
+          <span key={label} className="rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100">
+            {label}
+          </span>
+        ))}
+      </div>
+      <p className="mt-6 text-sm font-semibold uppercase tracking-[0.25em] text-amber-200">OneGodian App Control Plane</p>
+      <h1 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">{title}</h1>
+      <p className="mt-3 max-w-3xl text-base leading-7 text-slate-300">{description}</p>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
         <article className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 md:col-span-2">
           <h2 className="text-xl font-semibold text-white">Production-safe placeholder infrastructure</h2>
           <p className="mt-3 text-sm leading-6 text-slate-300">
@@ -36,9 +35,9 @@ export function ControlPlanePlaceholder({ title, description, layer, modules }: 
             Actions, metrics, records, mutations, and administrative controls are intentionally withheld when they are not already backed by production services.
           </p>
         </article>
-      </section>
+      </div>
 
-      <section className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
+      <div className="mt-5 rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
         <h2 className="text-lg font-semibold text-white">Planned module boundaries</h2>
         <ul className="mt-4 grid gap-3 md:grid-cols-2">
           {modules.map((module) => (
@@ -48,7 +47,7 @@ export function ControlPlanePlaceholder({ title, description, layer, modules }: 
             </li>
           ))}
         </ul>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

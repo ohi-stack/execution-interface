@@ -7,11 +7,13 @@ export const metadata = {
 
 export default function MembersPage() {
   return (
-    <ControlPlanePlaceholder
-      title="Members"
-      layer="member"
-      description="Reserved operational layer for future member identity, access levels, onboarding status, and administrative member support."
-      modules={['Member identity', 'Access levels', 'Onboarding status', 'Member support queue']}
-    />
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <ControlPlanePlaceholder
+        title="Members"
+        layer="member"
+        description="Reserved operational layer for future member identity, access levels, onboarding status, and administrative member support."
+        modules={['Member identity', 'Access levels', 'Onboarding status', 'Member support queue']}
+      />
+    </main>
   );
 }

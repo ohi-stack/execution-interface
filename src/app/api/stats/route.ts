@@ -1,6 +1,5 @@
 import { jsonResponse } from '@/lib/api-json';
-
-const labels = ['Coming Soon', 'Planned Module', 'Operational Layer', 'Requires Admin Integration'];
+import { controlPlanePlaceholderLabels } from '@/lib/control-plane';
 
 export async function GET(request: Request) {
   return jsonResponse(
@@ -8,7 +7,7 @@ export async function GET(request: Request) {
       app: 'OneGodian App Control Plane',
       route: '/api/stats',
       status: 'placeholder',
-      labels,
+      labels: controlPlanePlaceholderLabels,
       statsAvailable: false,
       modules: [
         { name: 'Usage metrics', status: 'planned' },

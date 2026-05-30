@@ -7,11 +7,13 @@ export const metadata = {
 
 export default function SettingsPage() {
   return (
-    <ControlPlanePlaceholder
-      title="Settings"
-      layer="settings"
-      description="Reserved operational layer for future tenant configuration, user preferences, security controls, and admin-managed defaults."
-      modules={['Tenant configuration', 'User preferences', 'Security controls', 'Admin-managed defaults']}
-    />
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <ControlPlanePlaceholder
+        title="Settings"
+        layer="settings"
+        description="Reserved operational layer for future tenant configuration, user preferences, security controls, and admin-managed defaults."
+        modules={['Tenant configuration', 'User preferences', 'Security controls', 'Admin-managed defaults']}
+      />
+    </main>
   );
 }

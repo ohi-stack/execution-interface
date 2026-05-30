@@ -34,3 +34,5 @@ export const requiredEnvVars = [
   'MEMBERS_REST_BASE_URL=https://onegodian.org/wp-json/onegodian-members/v1',
   'CAPITAL_REST_BASE_URL=https://capital.onegodian.com/wp-json/onegodian-capital/v1'
 ];
+
+export const controlPlanePlaceholderLabels = ['Coming Soon', 'Planned Module', 'Operational Layer', 'Requires Admin Integration'];

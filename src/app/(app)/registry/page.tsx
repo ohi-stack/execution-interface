@@ -7,11 +7,13 @@ export const metadata = {
 
 export default function RegistryPage() {
   return (
-    <ControlPlanePlaceholder
-      title="Registry"
-      layer="registry"
-      description="Reserved operational layer for future entity, module, artifact, certificate, and ecosystem registry administration."
-      modules={['Entity registry', 'Module registry', 'Artifact registry', 'Ecosystem registry']}
-    />
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <ControlPlanePlaceholder
+        title="Registry"
+        layer="registry"
+        description="Reserved operational layer for future entity, module, artifact, certificate, and ecosystem registry administration."
+        modules={['Entity registry', 'Module registry', 'Artifact registry', 'Ecosystem registry']}
+      />
+    </main>
   );
 }

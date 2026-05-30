@@ -8,11 +8,11 @@ const routes = [
   '/omos', '/omos/manifest', '/omos/pages', '/omos/health', '/omos/sync', '/omos/plugins', '/omos/properties',
   '/architecture', '/architecture/ohi', '/architecture/runtime', '/architecture/interfaces', '/architecture/infrastructure', '/architecture/omos-sync',
   '/algorithm', '/algorithm/protocol', '/algorithm/experience', '/algorithm/community', '/algorithm/orientation',
-  '/registry', '/time', '/portfolio', '/records', '/tools',
-  '/api/health', '/api/manifest', '/api/pages', '/api/sync/omos', '/api/properties', '/api/plugins', '/api/system-health', '/api/plugin-consumers', '/api/plugin-shortcodes', '/api/plugin-sync', '/api/tools', '/api/artifacts', '/api/dashboard'
+  '/registry', '/time', '/portfolio', '/records', '/tools', '/certificates', '/members', '/settings', '/admin',
+  '/api/health', '/api/manifest', '/api/pages', '/api/sync/omos', '/api/properties', '/api/plugins', '/api/system-health', '/api/plugin-consumers', '/api/plugin-shortcodes', '/api/plugin-sync', '/api/tools', '/api/stats', '/api/artifacts', '/api/dashboard'
 ];
 
-const server = spawn('npx', ['next', 'dev', '-p', String(port)], { stdio: 'pipe' });
+const server = spawn('npx', ['next', 'dev', '-p', String(port)], { stdio: 'pipe', detached: true });
 
 await new Promise((resolve, reject) => {
   const timer = setTimeout(() => reject(new Error('server start timeout')), 30000);
@@ -55,5 +55,5 @@ try {
 
   console.log('Smoke tests passed');
 } finally {
-  server.kill('SIGTERM');
+  process.kill(-server.pid, 'SIGTERM');
 }

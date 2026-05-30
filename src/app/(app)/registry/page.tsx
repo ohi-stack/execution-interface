@@ -1,7 +1,17 @@
-export const metadata = { title: 'OneGodian App | Registry', description: 'The official OneGodian App dashboard for identity, membership, certificates, systems, tools, campaigns, products, and ecosystem access.' };
+import { ControlPlanePlaceholder } from '@/components/control-plane-placeholder';
 
-import { AppShell } from '@/components/app-shell';
+export const metadata = {
+  title: 'OneGodian App | Registry',
+  description: 'Production-safe control plane placeholder for the OneGodian registry.'
+};
 
 export default function RegistryPage() {
-  return <AppShell title="ODIN Registry" modules={[{ title: 'ODIN Registry™', description: 'Open the ODIN landing and navigation hub.', href: '/odin' }, { title: 'ODIN-PR Planetary Registry', description: 'Browse PR-001 through PR-025 worlds.', href: '/odin/planetary-registry' }, { title: 'PaaP™ Platforms', description: 'Review the 3-layer Canon / Platform / Store model.', href: '/odin/platforms' }]} />;
+  return (
+    <ControlPlanePlaceholder
+      title="Registry"
+      layer="registry"
+      description="Reserved operational layer for future entity, module, artifact, certificate, and ecosystem registry administration."
+      modules={['Entity registry', 'Module registry', 'Artifact registry', 'Ecosystem registry']}
+    />
+  );
 }

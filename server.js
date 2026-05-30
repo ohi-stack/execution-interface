@@ -32,7 +32,11 @@ const PUBLIC_ROUTES = [
   '/contact',
   '/protocol',
   '/algorithm',
-  '/digital-sanctuary'
+  '/digital-sanctuary',
+  '/sciences',
+  '/discoveries',
+  '/time',
+  '/new-year'
 ];
 
 const API_ROUTES = ['/health', '/api/health', '/manifest', '/api/manifest', '/process'];

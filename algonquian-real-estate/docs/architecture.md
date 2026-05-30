@@ -4,7 +4,7 @@ The platform is organized as independent WordPress plugins so teams can ship, ac
 
 ## Module boundaries
 
-- **Deal Intake** owns seller/property lead capture and the canonical `wp_algq_deals` table.
+- **Deal Intake** owns seller/property lead capture, lead source attribution, motivation scoring, property tagging, CSV operations, REST intake routes, and the canonical `wp_algq_deals` table.
 - **MAO Engine** owns underwriting calculations and exposes an underwriter service class.
 - **Offer Generator** owns seller-finance scenario UX, amortization schedules, legacy visualizations, and document generation placeholders.
 - **Pipeline CRM** owns deal stage state and activity events.

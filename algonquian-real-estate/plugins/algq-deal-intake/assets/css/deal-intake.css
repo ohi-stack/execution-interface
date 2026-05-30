@@ -1,0 +1,50 @@
+.algq-deal-intake {
+    display: grid;
+    gap: 1rem;
+    max-width: 760px;
+}
+
+.algq-deal-intake label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 600;
+}
+
+.algq-deal-intake input,
+.algq-deal-intake select,
+.algq-deal-intake textarea {
+    width: 100%;
+    border: 1px solid #c9ced6;
+    border-radius: 6px;
+    padding: 0.7rem;
+}
+
+.algq-deal-intake textarea {
+    min-height: 100px;
+}
+
+.algq-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.algq-honeypot {
+    display: none !important;
+}
+
+.algq-success,
+.algq-error {
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+}
+
+.algq-success {
+    background: #ecfdf3;
+    border: 1px solid #7bd69a;
+}
+
+.algq-error {
+    background: #fff1f2;
+    border: 1px solid #f7a6b2;
+}

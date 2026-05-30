@@ -6,7 +6,7 @@ This directory contains the modular WordPress plugin architecture for the Algonq
 
 | Plugin | Purpose | Status |
 | --- | --- | --- |
-| `algq-deal-intake` | Lead capture, validation, scoring, tagging, and import/export workflows. | Planned |
+| `algq-deal-intake` | Lead capture, validation, scoring, tagging, REST endpoints, and import/export workflows. | Scaffolded |
 | `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, and audit trail workflows. | Planned |
 | `algq-mao-engine` | Maximum Allowable Offer calculations, scenario storage, REST endpoints, and shortcodes. | Scaffolded |
 | `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Planned |

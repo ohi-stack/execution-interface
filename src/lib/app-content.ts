@@ -1,110 +1,132 @@
-export const appHomeHero = {
-  eyebrow: 'APP.ONEGODIAN.COM',
-  title: 'OneGodian App',
-  description:
-    'Unified OneGodian public/member application for ecosystem navigation, OMOS content, time systems, campaign pages, and dashboard access.',
-  primaryCta: { label: 'Open Dashboard', href: '/dashboard' },
-  secondaryCta: { label: 'Explore Ecosystem', href: '/ecosystem' }
-    'Your unified OneGodian dashboard for membership, campaigns, commerce, OMOS, time, and ecosystem access.',
-  primaryCta: {
-    label: 'Open Dashboard',
-    href: '/dashboard'
-  },
-  secondaryCta: {
-    label: 'Explore Ecosystem',
-    href: '/ecosystem'
-  }
+export type AppRoute = {
+  label: string;
+  href: string;
 };
 
-export const appNavigation = [
+export type DashboardModule = {
+  title: string;
+  description: string;
+  href: string;
+  buttonLabel: string;
+  status: string;
+  accent: 'cyan' | 'gold' | 'violet' | 'emerald' | 'magenta' | 'orange' | 'red' | 'silver';
+};
+
+export const appHomeHero = {
+  eyebrow: 'APP.ONEGODIAN.COM',
+  title: 'Welcome to the OneGodian App',
+  description:
+    'Unified access to the OneGodian ecosystem, member tools, registries, campaigns, media, learning, certificates, and operational resources.',
+  positioning:
+    'The OneGodian App is the central access layer for the OneGodian ecosystem. It connects members, campaigns, registries, tools, certificates, media, learning resources, and operational systems into one structured interface.',
+  primaryCta: { label: 'Open Dashboard', href: '/dashboard' },
+  secondaryCta: { label: 'Open Members', href: '/members' }
+};
+
+export const appNavigation: AppRoute[] = [
   { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'OMOS', href: '/omos' },
-  { label: 'Remember', href: '/remember' },
-  { label: 'Membership', href: '/membership' },
-  { label: 'Time', href: '/time' },
-  { label: 'Commerce', href: '/commerce' },
-  { label: 'Institutional', href: '/institutional' },
-  { label: 'Sitemap', href: '/sitemap' }
+  { label: 'Members', href: '/members' },
+  { label: 'Campaigns', href: '/campaigns' },
+  { label: 'Registry', href: '/registry' },
+  { label: 'Tools', href: '/tools' },
+  { label: 'Media', href: '/media' },
+  { label: 'Learning', href: '/learn' },
+  { label: 'Certificates', href: '/certificates' },
+  { label: 'Support', href: '/support' },
+  { label: 'Account', href: '/account' },
+  { label: 'Settings', href: '/settings' }
 ];
 
-export const appDashboardCards = [
-  { title: 'Ecosystem', description: 'Platform map spanning public, app, commerce, education, OMOS, and verification nodes.', href: '/ecosystem', status: 'Active' },
-  { title: 'OMOS', description: 'OneGodian Metaphysical Operating System mind map, protocol, and runtime context.', href: '/omos', status: 'Live' },
-  { title: 'Remember', description: 'OneGodian: Remember campaign page and participant resource entry.', href: '/remember', status: 'Live' },
-  { title: 'Membership', description: 'Membership entry route for public and dashboard handoff.', href: '/membership', status: 'Available' },
-  { title: 'Time', description: 'OneGodian Time™ / OTS-V5 route with dual-date and legal safety language.', href: '/time', status: 'Active' },
-  { title: 'Commerce', description: 'OneGodian.com commerce and identity product engine route.', href: '/commerce', status: 'Active' },
-  { title: 'Institutional Clarity', description: 'Separation of ONEGODIAN, LLC operations and INO internal governance context.', href: '/institutional', status: 'Active' }
+export const appDashboardCards: DashboardModule[] = [
+  {
+    title: 'Members',
+    description:
+      'Access your OneGodian member profile, membership status, digital ID, certificate records, and community tools.',
+    href: '/members',
+    buttonLabel: 'Open Members',
+    status: 'Active',
+    accent: 'cyan'
+  },
+  {
+    title: 'Campaigns',
+    description:
+      'View active OneGodian support campaigns, contribution drives, Remember Campaign materials, and public outreach resources.',
+    href: '/campaigns',
+    buttonLabel: 'View Campaigns',
+    status: 'Active',
+    accent: 'gold'
+  },
+  {
+    title: 'Remember Campaign',
+    description:
+      'Preserve memory, identity, origin, purpose, dignity, unity, and disciplined growth through the OneGodian Remember Campaign.',
+    href: '/campaigns/remember',
+    buttonLabel: 'Open Remember Campaign',
+    status: 'Featured',
+    accent: 'violet'
+  },
+  {
+    title: 'Registry',
+    description: 'Access ODIN records, verification entries, certificates, archived filings, and system records.',
+    href: '/registry',
+    buttonLabel: 'Open Registry',
+    status: 'Active',
+    accent: 'emerald'
+  },
+  {
+    title: 'Tools',
+    description: 'Use OneGodian utilities, forms, calculators, onboarding tools, conversion tools, and internal app resources.',
+    href: '/tools',
+    buttonLabel: 'Open Tools',
+    status: 'Active',
+    accent: 'orange'
+  },
+  {
+    title: 'Media',
+    description: 'Access OneGodian media, videos, music, publications, campaigns, and visual assets.',
+    href: '/media',
+    buttonLabel: 'Open Media',
+    status: 'Active',
+    accent: 'magenta'
+  },
+  {
+    title: 'Learning',
+    description: 'Enter OneGodian education pathways, courses, onboarding, resources, and certification materials.',
+    href: '/learn',
+    buttonLabel: 'Start Learning',
+    status: 'Connected',
+    accent: 'silver'
+  },
+  {
+    title: 'Certificates',
+    description:
+      'View, request, or verify OneGodian certificates, membership confirmations, campaign certificates, and digital credentials.',
+    href: '/certificates',
+    buttonLabel: 'Open Certificates',
+    status: 'Active',
+    accent: 'emerald'
+  },
+  {
+    title: 'Support / Contributions',
+    description:
+      'Support the continued development of OneGodian infrastructure, publishing, systems, media, and community tools.',
+    href: '/support',
+    buttonLabel: 'Support OneGodian',
+    status: 'Active',
+    accent: 'red'
+  }
 ];
 
 export const ecosystemPortals = [
-  { name: 'OneGodian.org', role: 'Public identity and writings.', url: 'https://onegodian.org' },
+  { name: 'OneGodian.org', role: 'Public explanation, writings, remembrance, and institutional context.', url: 'https://onegodian.org' },
   { name: 'OneGodian.com', role: 'Commerce and identity product engine.', url: 'https://onegodian.com' },
-  { name: 'u.OneGodian.com', role: 'Education and LMS node.', url: 'https://u.onegodian.org' },
-  { name: 'app.OneGodian.com', role: 'Public/member app node.', url: 'https://app.onegodian.com' },
-  { name: 'galaxy.OneGodian.com', role: 'Galaxy platform surface.', url: 'https://galaxy.onegodian.com' },
-  { name: 'OMOS.OneGodian.com', role: 'OMOS protocol and runtime docs.', url: 'https://omos.onegodian.com' },
-  { name: 'QuantumOHI.com', role: 'OHI systems positioning.', url: 'https://quantumohi.com' },
-  { name: 'QRV.Network', role: 'Verification network.', url: 'https://qrv.network' }
-];
-
-export const appFooterBoundary =
-  'OneGodian App is the public/member-facing surface. Admin/control panel operations remain separate and compatible through dedicated internal surfaces.';
-];
-
-export const appDashboardCards = [
-  { title: 'Ecosystem', description: 'See live OneGodian ecosystem domains and operating roles.', href: '/ecosystem', status: 'Live' },
-  { title: 'OMOS', description: 'Review the OneGodian Metaphysical Operating System structure and modules.', href: '/omos', status: 'Live' },
-  { title: 'Remember Campaign', description: 'Read the public OneGodian: Remember campaign story and participation guidance.', href: '/remember', status: 'Live' },
-  { title: 'Membership', description: 'Access member pathways, dashboard entry, and community participation options.', href: '/membership', status: 'Live' },
-  { title: 'Time · OTS-V5', description: 'Use OneGodian Time™ with dual-date display and legal-safe chronology notes.', href: '/time', status: 'Live' },
-  { title: 'Commerce Engine', description: 'Open OneGodian.com as the commerce and identity product engine.', href: '/commerce', status: 'Live' },
-  { title: 'Institutional Clarity', description: 'See the legal and operational distinction between ONEGODIAN, LLC and INO.', href: '/institutional', status: 'Live' }
-];
-
-export const ecosystemPortals = [
-  { name: 'OneGodian.org', role: 'Public presence, education, and institutional identity.', url: 'https://onegodian.org' },
-  { name: 'OneGodian.com', role: 'Commerce and identity product engine for memberships and products.', url: 'https://onegodian.com' },
   { name: 'u.OneGodian.com', role: 'Learning pathways, course delivery, and student services.', url: 'https://u.onegodian.com' },
-  { name: 'app.OneGodian.com', role: 'Public/member app dashboard and route layer.', url: 'https://app.onegodian.com' },
-  { name: 'galaxy.OneGodian.com', role: 'World, platform, and story navigation surfaces.', url: 'https://galaxy.onegodian.com' },
-  { name: 'OMOS.OneGodian.com', role: 'Protocol and operating system specification node.', url: 'https://omos.onegodian.com' },
-  { name: 'QuantumOHI.com', role: 'OHI architecture and model context.', url: 'https://quantumohi.com' },
-  { name: 'QRV.Network', role: 'Verification network and record trust infrastructure.', url: 'https://qrv.network' }
-  { label: 'Architecture', href: '/architecture' },
-  { label: 'About', href: '/about' },
-  { label: 'Sitemap', href: '/sitemap' },
-  { label: 'Membership', href: '/membership' },
-  { label: 'Commerce', href: '/commerce' },
-  { label: 'Remember', href: '/remember' },
-  { label: 'Institutional', href: '/institutional' }
-];
-
-export const appDashboardCards = [
-  { title: 'My OneGodian Profile', description: 'View your profile, identity details, membership status, and dashboard access.', href: '/profile', status: 'Active' },
-  { title: 'Membership', description: 'Access OneGodian membership records, benefits, onboarding, and participation tools.', href: '/members', status: 'Available' },
-  { title: 'Certificates', description: 'View and verify OneGodian certificates, completion records, and issued documents.', href: '/certificates', status: 'Available' },
-  { title: 'Remember Campaign', description: 'Access THE ONEGODIAN: Remember Campaign resources, media, captions, and participation tools.', href: '/remember', status: 'Live' },
-  { title: 'Membership Hub', description: 'Open membership records, onboarding, benefits, and participation routes.', href: '/membership', status: 'Live' },
-  { title: 'Commerce Engine', description: 'Open OneGodian.com commerce and identity engine context.', href: '/commerce', status: 'Live' },
-  { title: 'Institutional Clarity', description: 'Review institutional boundary language for LLC and INO contexts.', href: '/institutional', status: 'Live' },
-  { title: 'Media Center', description: 'Access OneGodian media, campaign visuals, music, videos, and brand assets.', href: '/media', status: 'Available' },
-  { title: 'Products', description: 'Explore OneGodian products, digital downloads, apparel, books, and ecosystem offerings.', href: '/products', status: 'Available' },
-  { title: 'Learning', description: 'Connect to U OneGodian courses, learning paths, student tools, and educational programs.', href: '/learning', status: 'Connected' },
-  { title: 'Ecosystem', description: 'Navigate OneGodian.org, OneGodian.com, U OneGodian, Galaxy, Capital, OMOS, and Console.', href: '/ecosystem', status: 'Active' }
-];
-
-export const ecosystemPortals = [
-  { name: 'OneGodian.org', role: 'Official public identity, writings, remembrance, articles, and institutional explanation.', url: 'https://onegodian.org' },
-  { name: 'OneGodian.com', role: 'Store, products, memberships, commerce, apparel, books, and digital downloads.', url: 'https://onegodian.com' },
-  { name: 'u.OneGodian.com', role: 'Education, LMS, learning paths, student tools, and certificates.', url: 'https://u.onegodian.com' },
-  { name: 'Galaxy OneGodian', role: 'Galaxy interface, planet navigator, planet-store gateway, and immersive ecosystem layer.', url: 'https://galaxy.onegodian.com' },
-  { name: 'OMOS OneGodian', role: 'OMOS protocol, specification, alignment system, and consciousness-centered operating model.', url: 'https://omos.onegodian.com' },
-  { name: 'app.OneGodian.com', role: 'Public and member-facing dashboard for membership, certificates, campaigns, media, tools, and ecosystem access.', url: 'https://app.onegodian.com' },
-  { name: 'QuantumOHI.com', role: 'Advanced systems and intelligence architecture context for OneGodian ecosystem design.', url: 'https://quantumohi.com' },
-  { name: 'QRV.Network', role: 'Verification and trust infrastructure connected to OneGodian records and identity workflows.', url: 'https://qrv.network' }
+  { name: 'app.OneGodian.com', role: 'Unified ecosystem app for members, dashboards, registries, tools, certificates, media, and campaigns.', url: 'https://app.onegodian.com' },
+  { name: 'OMOS.OneGodian.com', role: 'Operating system documentation and protocol structure.', url: 'https://omos.onegodian.com' },
+  { name: 'Galaxy OneGodian', role: 'Immersive ecosystem and world navigation layer.', url: 'https://galaxy.onegodian.com' },
+  { name: 'QuantumOHI.com', role: 'Advanced systems and intelligence architecture context.', url: 'https://quantumohi.com' },
+  { name: 'QRV.Network', role: 'Verification and trust infrastructure.', url: 'https://qrv.network' }
 ];
 
 export const appFooterBoundary =
-  'OneGodian App is the public/member node. Admin/control functions remain in designated console and control panel surfaces.';
+  'OneGodian App is the public/member node. Admin and control functions remain in designated console and control panel surfaces.';

@@ -2,7 +2,23 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const APP_ALLOWED = new Set([
-  '/dashboard','/ecosystem','/registry','/tools','/members','/certificates','/products','/media','/settings','/docs','/api/health','/api/manifest','/api/tools','/api/stats'
+  '/',
+  '/dashboard',
+  '/members',
+  '/campaigns',
+  '/registry',
+  '/tools',
+  '/media',
+  '/learn',
+  '/certificates',
+  '/support',
+  '/settings',
+  '/account',
+  '/api/health',
+  '/api/manifest',
+  '/api/modules',
+  '/api/tools',
+  '/api/stats'
 ]);
 
 const CONSOLE_ALLOWED_PREFIXES = ['/admin','/dashboard','/agents','/tasks','/workflows','/ocp','/oeg','/adapters','/approvals','/audit','/logs','/settings','/status','/api/health','/api/manifest','/api/agents','/api/tasks','/api/workflows','/api/ocp/authorize','/api/oeg/execute','/api/audit'];
@@ -26,7 +42,6 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
   if (host.startsWith('app.onegodian.com')) {
-    if (path === '/' || path === '') return NextResponse.redirect(new URL('/dashboard', req.url));
     if (![...APP_ALLOWED].some((p) => path === p || path.startsWith(`${p}/`))) {
       return NextResponse.rewrite(new URL('/dashboard', req.url));
     }

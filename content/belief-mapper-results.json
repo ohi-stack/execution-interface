@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "results": [
+    {
+      "id": "seeker",
+      "title": "Seeker",
+      "summary": "You are gathering language, safety, and orientation before locking into a formal rhythm.",
+      "guidance": "Begin with private reflection, introductory learning, and a no-pressure journal checkpoint.",
+      "color": "cyan",
+      "recommendedRoutes": ["/belief-mapper/start", "/belief-mapper/journal", "/learn"]
+    },
+    {
+      "id": "believer",
+      "title": "Believer",
+      "summary": "You are ready for clearer structure and repeated practices that turn belief into understanding.",
+      "guidance": "Follow a guided learning path and capture weekly reflections before requesting credentials.",
+      "color": "violet",
+      "recommendedRoutes": ["/belief-mapper/profile", "/learn", "/belief-mapper/timeline"]
+    },
+    {
+      "id": "onegodian",
+      "title": "Onegodian",
+      "summary": "You are integrating belief, identity, practice, and service into a responsible life rhythm.",
+      "guidance": "Connect your profile, journal, certificate readiness, and member-facing next steps.",
+      "color": "emerald",
+      "recommendedRoutes": ["/belief-mapper/profile", "/belief-mapper/certificate", "/members"]
+    },
+    {
+      "id": "elder",
+      "title": "Elder",
+      "summary": "You are oriented toward stewardship, facilitation, and helping others move with care.",
+      "guidance": "Use premium facilitation tools, timeline reviews, and certificate previews to support a group responsibly.",
+      "color": "amber",
+      "recommendedRoutes": ["/belief-mapper/timeline", "/belief-mapper/premium", "/belief-mapper/certificate"]
+    }
+  ]
+}

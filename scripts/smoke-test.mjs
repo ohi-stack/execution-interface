@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 
 const port = 4010;
 const base = `http://127.0.0.1:${port}`;
-const routes = ['/', '/ecosystem', '/overview', '/omos', '/algorithm', '/remember', '/time', '/commerce', '/identity', '/institutional', '/status'];
+const routes = ['/', '/dashboard', '/members', '/campaigns', '/campaigns/remember', '/registry', '/tools', '/media', '/learn', '/certificates', '/support', '/settings', '/account', '/ecosystem', '/overview', '/omos', '/algorithm', '/remember', '/time', '/commerce', '/identity', '/institutional', '/status', '/belief-mapper', '/belief-mapper/start', '/belief-mapper/results', '/belief-mapper/profile', '/belief-mapper/journal', '/belief-mapper/certificate', '/belief-mapper/timeline', '/belief-mapper/premium', '/api/health', '/api/manifest', '/api/modules'];
 
 const server = spawn('npx', ['next', 'dev', '-p', String(port)], { stdio: 'pipe', detached: true });
 

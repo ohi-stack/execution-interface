@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "title": "Belief Mapper™ Core Questions",
+  "consentNotice": "Your answers are used to calculate an immediate guidance profile. Save or share only with explicit consent.",
+  "questions": [
+    {
+      "id": "origin",
+      "prompt": "When you think about truth, what do you most want right now?",
+      "hint": "Tap an answer or swipe through the card deck.",
+      "options": [
+        { "id": "explore", "label": "Room to explore", "description": "I want language and space before choosing a path.", "scores": { "seeker": 3, "believer": 1 } },
+        { "id": "structure", "label": "Clear structure", "description": "I want a grounded framework I can practice.", "scores": { "believer": 3, "onegodian": 1 } },
+        { "id": "service", "label": "Purposeful service", "description": "I want to turn belief into disciplined action.", "scores": { "onegodian": 3, "elder": 1 } },
+        { "id": "mentor", "label": "Wisdom stewardship", "description": "I want to guide others responsibly.", "scores": { "elder": 3, "onegodian": 1 } }
+      ]
+    },
+    {
+      "id": "practice",
+      "prompt": "What kind of practice feels sustainable this season?",
+      "hint": "Choose the response closest to your current rhythm.",
+      "options": [
+        { "id": "private", "label": "Private reflection", "description": "Quiet study, journaling, and personal checkpoints.", "scores": { "seeker": 2, "believer": 2 } },
+        { "id": "guided", "label": "Guided lessons", "description": "A pathway with milestones, readings, and reminders.", "scores": { "believer": 3, "onegodian": 1 } },
+        { "id": "community", "label": "Community action", "description": "Learning through conversation, projects, and accountability.", "scores": { "onegodian": 3, "elder": 1 } },
+        { "id": "leadership", "label": "Leadership rhythm", "description": "Mentoring, teaching, and protecting shared standards.", "scores": { "elder": 3, "onegodian": 1 } }
+      ]
+    },
+    {
+      "id": "questioning",
+      "prompt": "How do questions function in your belief journey?",
+      "hint": "Questions can be a doorway, discipline, or teaching tool.",
+      "options": [
+        { "id": "many", "label": "I have many", "description": "My questions are active and still taking shape.", "scores": { "seeker": 3 } },
+        { "id": "testing", "label": "I test answers", "description": "I compare teachings against lived experience.", "scores": { "believer": 2, "seeker": 1 } },
+        { "id": "integrating", "label": "I integrate them", "description": "Questions help refine practice and purpose.", "scores": { "onegodian": 3 } },
+        { "id": "holding", "label": "I hold them for others", "description": "I help others ask safely and responsibly.", "scores": { "elder": 3 } }
+      ]
+    },
+    {
+      "id": "support",
+      "prompt": "Which support would help you move forward?",
+      "hint": "Belief Mapper™ can route you without storing sensitive answers.",
+      "options": [
+        { "id": "map", "label": "A simple map", "description": "Show me the next few steps.", "scores": { "seeker": 2, "believer": 1 } },
+        { "id": "resources", "label": "Learning resources", "description": "Give me readings, lessons, and checkpoints.", "scores": { "believer": 3 } },
+        { "id": "membership", "label": "Member pathway", "description": "Connect my profile, journal, and certificate path.", "scores": { "onegodian": 3 } },
+        { "id": "facilitation", "label": "Facilitation tools", "description": "Help me support a household, group, or community.", "scores": { "elder": 3 } }
+      ]
+    },
+    {
+      "id": "commitment",
+      "prompt": "What commitment level feels honest today?",
+      "hint": "Honest placement is more useful than a perfect score.",
+      "options": [
+        { "id": "curious", "label": "Curious", "description": "I am present but still discerning.", "scores": { "seeker": 3 } },
+        { "id": "ready", "label": "Ready to learn", "description": "I can follow a short structured path.", "scores": { "believer": 3 } },
+        { "id": "committed", "label": "Committed", "description": "I want an accountable OneGodian rhythm.", "scores": { "onegodian": 3 } },
+        { "id": "responsible", "label": "Responsible to guide", "description": "I am preparing to steward people and standards.", "scores": { "elder": 3 } }
+      ]
+    }
+  ]
+}

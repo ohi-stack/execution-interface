@@ -39,3 +39,29 @@ Production runtime and documentation platform for **https://omos.onegodian.com**
 
 ## Compliance Positioning
 ONEGODIAN, LLC is the commercial/IP/software entity. OMOS is a voluntary educational, documentation, runtime-support, protocol, and systems architecture layer.
+
+## WordPress plugin shortcode list
+
+- `[algq_deal_intake]`
+- `[algq_mao_engine]`
+- `[algq_offer_generator]`
+- `[algq_pipeline_crm]`
+- `[algq_buyer_portal]`
+- `[algq_product_library]`
+- `[omos_manifest]`
+- `[omos_runtime_status]`
+- `[omos_bridge_builder]`
+- `[omos_tool_grid]`
+- `[omos_docs_grid]`
+
+## Algonquian Offer Generator module layout
+
+- `algq-offer-generator/` — standalone Offer Generator module package with `plugin/`, `docs/`, and `tests/` source areas.
+
+## WPBakery shortcode usage
+
+```text
+[vc_column_text]
+[algq_offer_generator]
+[/vc_column_text]
+```

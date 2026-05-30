@@ -4,6 +4,7 @@
     "[omos_runtime_status]",
     "[omos_bridge_builder]",
     "[omos_tool_grid]",
-    "[omos_docs_grid]"
+    "[omos_docs_grid]",
+    "[algq_offer_generator]"
   ]
 }

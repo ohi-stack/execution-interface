@@ -9,7 +9,7 @@ This directory contains the modular WordPress plugin architecture for the Algonq
 | `algq-deal-intake` | Lead capture, validation, scoring, tagging, and import/export workflows. | Planned |
 | `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, and audit trail workflows. | Planned |
 | `algq-mao-engine` | Maximum Allowable Offer calculations, scenario storage, REST endpoints, and shortcodes. | Scaffolded |
-| `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Planned |
+| `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Scaffolded |
 | `algq-buyer-portal` | Buyer onboarding, NDA gating, downloads, and interest submissions. | Planned |
 | `algq-funding-tracker` | Lenders, commitments, funding status, and deal-to-lender mapping. | Planned |
 | `algq-automation-engine` | Trigger/action automation, notifications, document triggers, and closeout workflows. | Planned |
@@ -71,3 +71,14 @@ bash algonquian-real-estate/scripts/build-plugin-zips.sh
 - `[algq_pipeline_crm]`
 - `[algq_buyer_portal]`
 - `[algq_product_library]`
+
+## WPBakery usage
+
+Use the Offer Generator shortcode inside a valid WPBakery text block wrapper:
+
+```text
+[vc_column_text]
+[algq_offer_generator]
+[/vc_column_text]
+```
+

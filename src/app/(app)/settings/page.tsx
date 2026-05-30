@@ -1,10 +1,17 @@
-export const metadata = { title: 'OneGodian App | Settings', description: 'The official OneGodian App dashboard for identity, membership, certificates, systems, tools, campaigns, products, and ecosystem access.' };
+import { ControlPlanePlaceholder } from '@/components/control-plane-placeholder';
+
+export const metadata = {
+  title: 'OneGodian App | Settings',
+  description: 'Production-safe control plane placeholder for OneGodian settings.'
+};
 
 export default function SettingsPage() {
   return (
-    <main className="px-6 py-8">
-      <h1 className="text-3xl font-semibold text-slate-100">Settings</h1>
-      <p className="mt-3 max-w-2xl text-slate-300">Configure your OneGodian app preferences, module defaults, and notification settings.</p>
-    </main>
+    <ControlPlanePlaceholder
+      title="Settings"
+      layer="settings"
+      description="Reserved operational layer for future tenant configuration, user preferences, security controls, and admin-managed defaults."
+      modules={['Tenant configuration', 'User preferences', 'Security controls', 'Admin-managed defaults']}
+    />
   );
 }

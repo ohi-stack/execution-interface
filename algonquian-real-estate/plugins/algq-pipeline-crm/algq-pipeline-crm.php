@@ -4,10 +4,25 @@
  * Description: Deal Kanban board, stage movement foundation, and activity logging.
  * Version: 0.1.0
  * Author: Algonquian Real Estate
+ * Requires Plugins: algq-core
  */
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+
+function algq_pipeline_crm_core_available(): bool
+{
+    if (function_exists('algq_core')) {
+        return true;
+    }
+
+    add_action('admin_notices', static function (): void {
+        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Pipeline CRM requires the Algonquian Core plugin to be active.', 'algq-pipeline-crm') . '</p></div>';
+    });
+
+    return false;
 }
 
 final class ALGQ_Pipeline_CRM
@@ -61,10 +76,25 @@ final class ALGQ_Pipeline_CRM
 
     private function log_activity(string $deal_id, string $type, string $note): void
     {
+        if (function_exists('algq_core')) {
+            algq_core()->activity()->log($type, $note, [
+                'object_type' => 'deal',
+                'object_id' => $deal_id,
+                'deal_id' => $deal_id,
+            ]);
+            return;
+        }
+
         global $wpdb;
         $wpdb->insert($wpdb->prefix . self::ACTIVITY_TABLE, ['deal_id' => $deal_id, 'activity_type' => $type, 'activity_note' => $note, 'created_at' => current_time('mysql')], ['%s', '%s', '%s', '%s']);
     }
 }
 
 register_activation_hook(__FILE__, ['ALGQ_Pipeline_CRM', 'activate']);
-new ALGQ_Pipeline_CRM();
+add_action('plugins_loaded', static function (): void {
+    if (!algq_pipeline_crm_core_available()) {
+        return;
+    }
+
+    new ALGQ_Pipeline_CRM();
+});

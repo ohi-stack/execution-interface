@@ -4,10 +4,25 @@
  * Description: Executive command center for KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting.
  * Version: 0.2.0
  * Author: Algonquian Real Estate
+ * Requires Plugins: algq-core
  */
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+
+function algq_command_center_core_available(): bool
+{
+    if (function_exists('algq_core')) {
+        return true;
+    }
+
+    add_action('admin_notices', static function (): void {
+        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Command Center requires the Algonquian Core plugin to be active.', 'algq-command-center') . '</p></div>';
+    });
+
+    return false;
 }
 
 final class ALGQ_Command_Center
@@ -307,4 +322,10 @@ final class ALGQ_Command_Center
     }
 }
 
-new ALGQ_Command_Center();
+add_action('plugins_loaded', static function (): void {
+    if (!algq_command_center_core_available()) {
+        return;
+    }
+
+    new ALGQ_Command_Center();
+});

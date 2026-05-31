@@ -5,6 +5,7 @@
  * Description: Maximum Allowable Offer calculator and underwriting API for Algonquian Real Estate acquisition workflows.
  * Version: 0.1.0
  * Author: Algonquian Real Estate
+ * Requires Plugins: algq-core
  * Text Domain: algq-mao-engine
  * Domain Path: /languages
  * Requires at least: 6.4
@@ -43,4 +44,10 @@ function algq_mao_engine(): ALGQ_MAO_Plugin
     return $plugin;
 }
 
-add_action('plugins_loaded', array(algq_mao_engine(), 'run'));
+add_action('plugins_loaded', static function (): void {
+    if (!algq_mao_core_available()) {
+        return;
+    }
+
+    algq_mao_engine()->run();
+});

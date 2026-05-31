@@ -1,0 +1,33 @@
+.algq-core-admin .algq-core-card-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin-top: 20px;
+}
+
+.algq-core-card,
+.algq-core-notice {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    padding: 16px;
+}
+
+.algq-core-card h3 {
+    margin: 0 0 8px;
+}
+
+.algq-core-card strong {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.algq-core-notice--error {
+    border-left: 4px solid #d63638;
+}
+
+.algq-core-notice--success {
+    border-left: 4px solid #00a32a;
+}

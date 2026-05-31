@@ -34,6 +34,27 @@ final class ALGQ_Command_Center
         add_action('wp_dashboard_setup', [$this, 'register_dashboard_widget']);
         add_action('admin_menu', [$this, 'register_admin_page']);
         add_shortcode('algq_command_center', [$this, 'render_shortcode']);
+        add_action('rest_api_init', [$this, 'register_rest_routes']);
+    }
+
+
+    public function register_rest_routes(): void
+    {
+        register_rest_route('algq/v1', '/command-center/metrics', [
+            'methods' => 'GET',
+            'callback' => [$this, 'rest_metrics'],
+            'permission_callback' => static function (): bool {
+                return current_user_can('manage_options');
+            },
+        ]);
+    }
+
+    public function rest_metrics(): WP_REST_Response
+    {
+        return new WP_REST_Response([
+            'generated_at' => gmdate('c'),
+            'metrics' => $this->collect_metrics(),
+        ]);
     }
 
     public function register_dashboard_widget(): void
@@ -118,6 +139,8 @@ final class ALGQ_Command_Center
                 <?php endforeach; ?>
             </div>
 
+            <?php $this->render_metrics_dashboard($metrics); ?>
+
             <?php if ($expanded) : ?>
                 <?php $this->render_pipeline_stages($metrics['stage_metrics']); ?>
                 <?php $this->render_automation_chain($metrics['automation_chain']); ?>
@@ -147,6 +170,29 @@ final class ALGQ_Command_Center
      * @param array<int,array{label:string,value:string}> $rows
      */
     private function render_financial_snapshot(array $rows): void
+     * @param array<string,mixed> $metrics
+     */
+    private function render_metrics_dashboard(array $metrics): void
+    {
+        $cards = array_merge($metrics['pipeline'], $metrics['deals'], $metrics['funding'], $metrics['buyers']);
+        ?>
+        <div class="algq-metrics-dashboard">
+            <h3><?php esc_html_e('Metrics Dashboard', 'algq-command-center'); ?></h3>
+            <div class="algq-metric-bars">
+                <?php foreach ($cards as $index => $card) : ?>
+                    <?php $width = 20 + (($index + 1) * 9 % 70); ?>
+                    <div class="algq-metric-bar-row">
+                        <span><?php echo esc_html($card['label']); ?></span>
+                        <strong><?php echo esc_html($card['value']); ?></strong>
+                        <em style="width: <?php echo esc_attr((string) $width); ?>%"></em>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function render_panel(string $title, array $rows): void
     {
         ?>
         <article id="executive" class="algq-financial-snapshot">
@@ -343,6 +389,7 @@ final class ALGQ_Command_Center
         ?>
         <style>
             .algq-command-center{margin:18px 0;color:#172033}.algq-command-hero{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;padding:22px;border:1px solid #d9e2ef;border-radius:20px;background:linear-gradient(135deg,#f8fbff,#edf4ff)}.algq-command-eyebrow{margin:0 0 6px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#45607f}.algq-command-hero h2{margin:0 0 8px;font-size:30px;line-height:1.1}.algq-command-hero p{margin:0;max-width:860px;color:#4b5870}.algq-command-status,.algq-panel-header span{display:inline-flex;white-space:nowrap;border-radius:999px;background:#0f766e;color:#fff;padding:7px 12px;font-weight:800;font-size:12px}.algq-command-nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.algq-command-nav a,.algq-action-grid a{display:inline-flex;text-decoration:none;border-radius:999px;border:1px solid #cbd7e8;background:#fff;color:#1e3a5f;padding:8px 11px;font-weight:800;font-size:12px}.algq-command-nav a:hover,.algq-action-grid a:hover{border-color:#0f766e;color:#0f766e}.algq-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0}.algq-kpi-card,.algq-command-panel,.algq-reporting-engine,.algq-financial-snapshot{border:1px solid #d9e2ef;border-radius:16px;background:#fff;padding:16px;box-shadow:0 10px 24px rgba(20,39,67,.06)}.algq-kpi-card span,.algq-kpi-card small{display:block;color:#64748b}.algq-kpi-card strong{display:block;margin:6px 0;font-size:24px;color:#0f172a}.algq-financial-snapshot{margin-bottom:14px}.algq-financial-snapshot h3,.algq-panel-header h3,.algq-reporting-engine h3{margin:0}.algq-snapshot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}.algq-snapshot-grid div,.algq-stage-grid div{border:1px solid #e5edf6;border-radius:12px;background:#f8fafc;padding:12px}.algq-snapshot-grid span,.algq-snapshot-grid strong{display:block}.algq-snapshot-grid span{color:#64748b}.algq-snapshot-grid strong{margin-top:4px;color:#0f172a}.algq-command-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.algq-command-module{scroll-margin-top:24px}.algq-panel-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}.algq-command-list{margin:0}.algq-command-list div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid #edf2f7}.algq-command-list div:first-child{border-top:0}.algq-command-list dt{color:#64748b}.algq-command-list dd{margin:0;font-weight:800;text-align:right}.algq-chip-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.algq-chip-list span{border-radius:999px;background:#eef6ff;color:#27496d;padding:5px 9px;font-size:12px;font-weight:700}.algq-action-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.algq-reporting-engine{margin-top:14px}.algq-report-grid,.algq-stage-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.algq-report-grid article{border:1px solid #e5edf6;border-radius:12px;padding:12px;background:#f8fafc}.algq-report-grid strong,.algq-report-grid span,.algq-report-grid small,.algq-stage-grid strong,.algq-stage-grid span,.algq-stage-grid small{display:block}.algq-report-grid span,.algq-stage-grid span{margin:5px 0;color:#475569}.algq-report-grid small,.algq-stage-grid small{color:#64748b}.algq-automation-chain ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.algq-automation-chain li{display:flex;gap:8px;align-items:center;border:1px solid #e5edf6;border-radius:12px;background:#f8fafc;padding:10px}.algq-ai-layer ul{margin:8px 0 0 18px;padding:0;color:#475569}@media (max-width:1100px){.algq-kpi-grid,.algq-snapshot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.algq-command-panels,.algq-report-grid,.algq-stage-grid,.algq-automation-chain ol{grid-template-columns:1fr}}@media (max-width:700px){.algq-kpi-grid,.algq-snapshot-grid{grid-template-columns:1fr}.algq-command-hero,.algq-panel-header{display:block}.algq-command-status,.algq-panel-header span{margin-top:12px}.algq-command-list div{display:block}.algq-command-list dd{text-align:left;margin-top:3px}}
+            .algq-command-center{margin:18px 0;color:#172033}.algq-command-hero{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;padding:20px;border:1px solid #d9e2ef;border-radius:18px;background:linear-gradient(135deg,#f8fbff,#edf4ff)}.algq-command-eyebrow{margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#45607f}.algq-command-hero h2{margin:0 0 8px;font-size:28px;line-height:1.1}.algq-command-hero p{margin:0;max-width:760px;color:#4b5870}.algq-command-status{display:inline-flex;white-space:nowrap;border-radius:999px;background:#0f766e;color:#fff;padding:7px 12px;font-weight:700;font-size:12px}.algq-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0}.algq-kpi-card,.algq-command-panel,.algq-reporting-engine{border:1px solid #d9e2ef;border-radius:16px;background:#fff;padding:16px;box-shadow:0 10px 24px rgba(20,39,67,.06)}.algq-kpi-card span,.algq-kpi-card small{display:block;color:#64748b}.algq-kpi-card strong{display:block;margin:6px 0;font-size:24px;color:#0f172a}.algq-command-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.algq-command-panel h3,.algq-reporting-engine h3{margin:0 0 12px}.algq-command-panel dl{margin:0}.algq-command-panel dl div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid #edf2f7}.algq-command-panel dl div:first-child{border-top:0}.algq-command-panel dt{color:#64748b}.algq-command-panel dd{margin:0;font-weight:700;text-align:right}.algq-reporting-engine{margin-top:14px}.algq-report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.algq-report-grid article{border:1px solid #e5edf6;border-radius:12px;padding:12px;background:#f8fafc}.algq-report-grid strong,.algq-report-grid span,.algq-report-grid small{display:block}.algq-report-grid span{margin:5px 0;color:#475569}.algq-report-grid small{color:#64748b}.algq-metrics-dashboard{margin-top:18px;border:1px solid rgba(180,135,35,.28);border-radius:18px;padding:18px;background:rgba(255,255,255,.72)}.algq-metric-bars{display:grid;gap:10px}.algq-metric-bar-row{position:relative;overflow:hidden;border-radius:12px;background:#fff;padding:12px 14px}.algq-metric-bar-row span,.algq-metric-bar-row strong{position:relative;z-index:1}.algq-metric-bar-row strong{float:right}.algq-metric-bar-row em{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(180,135,35,.28),rgba(34,197,94,.18))}@media (max-width:900px){.algq-kpi-grid,.algq-command-panels,.algq-report-grid{grid-template-columns:1fr}.algq-command-hero{display:block}.algq-command-status{margin-top:12px}}
         </style>
         <?php
     }

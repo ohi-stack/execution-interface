@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 - 2026-05-31
+
+- Added the ARE Marketplace scaffold for wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings.
+- Documented the marketplace shortcode, REST snapshot, plugin catalog entry, and roadmap epic.
+
 ## 0.1.0 - 2026-05-29
 
 - Created the Algonquian Real Estate repository foundation.

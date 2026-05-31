@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Algonquian Revenue Systems
- * Description: WooCommerce monetization rails for digital products, subscription tiers, protected downloads, license keys, and Stripe readiness.
- * Version: 0.1.0
+ * Description: WooCommerce revenue operating system for digital products, licensing, memberships, subscriptions, protected downloads, dashboards, and SaaS billing.
+ * Version: 0.2.0
  * Author: Algonquian Real Estate
  * Text Domain: algq-revenue-systems
  *

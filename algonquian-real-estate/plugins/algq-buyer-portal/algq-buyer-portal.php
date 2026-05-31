@@ -4,10 +4,25 @@
  * Description: Buyer registration, NDA gating, download permissions, deal package delivery, and interest submission workflows.
  * Version: 0.2.0
  * Author: Algonquian Real Estate
+ * Requires Plugins: algq-core
  */
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+
+function algq_buyer_portal_core_available(): bool
+{
+    if (function_exists('algq_core')) {
+        return true;
+    }
+
+    add_action('admin_notices', static function (): void {
+        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Buyer Portal requires the Algonquian Core plugin to be active.', 'algq-buyer-portal') . '</p></div>';
+    });
+
+    return false;
 }
 
 final class ALGQ_Buyer_Portal
@@ -411,4 +426,10 @@ final class ALGQ_Buyer_Portal
 }
 
 register_activation_hook(__FILE__, ['ALGQ_Buyer_Portal', 'activate']);
-new ALGQ_Buyer_Portal();
+add_action('plugins_loaded', static function (): void {
+    if (!algq_buyer_portal_core_available()) {
+        return;
+    }
+
+    new ALGQ_Buyer_Portal();
+});

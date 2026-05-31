@@ -24,11 +24,16 @@ function parseConfiguredKeys() {
     .filter((entry) => entry.name && entry.hash);
 }
 
+function safeEqualHex(a, b) {
+  if (!/^[a-f0-9]{64}$/i.test(a || '') || !/^[a-f0-9]{64}$/i.test(b || '')) return false;
+  return crypto.timingSafeEqual(Buffer.from(a, 'hex'), Buffer.from(b, 'hex'));
+}
+
 function verifyApiKey(apiKey) {
   const hashed = hashApiKey(apiKey);
   if (!hashed) return null;
 
-  return parseConfiguredKeys().find((entry) => entry.hash === hashed) || null;
+  return parseConfiguredKeys().find((entry) => safeEqualHex(entry.hash, hashed)) || null;
 }
 
 module.exports = {

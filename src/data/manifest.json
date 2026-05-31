@@ -3,28 +3,15 @@
   "fullName": "OneGodian App Central Access Layer",
   "version": "1.2.0",
   "status": "production",
-  "canonical_domain": "omos.onegodian.com",
-  "canonicalHost": "https://omos.onegodian.com",
-  "classification": "Node runtime, protocol documentation, and agent-facing integration site",
-  "purpose": "Public runtime for OneGodian routes, page registry, and manifest delivery.",
-  "integrations": ["OneGodian App", "WordPress Bridge"],
+  "canonical_domain": "app.onegodian.com",
+  "canonicalHost": "https://app.onegodian.com",
+  "classification": "Public/member app node, central dashboard, and ecosystem access interface",
+  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, Belief Mapper™, operational interfaces, account systems, and member infrastructure.",
+  "integrations": ["OneGodian App", "OMOS", "WordPress Bridge", "Belief Mapper™"],
   "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
-  "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://quantumohi.com"],
+  "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://omos.onegodian.com", "https://quantumohi.com"],
   "appBridge": ["https://app.onegodian.com"],
   "commerceBridge": ["https://onegodian.com"],
-  "canonical_domain": "app.onegodian.com",
-  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, Belief Mapper\u2122, operational interfaces, account systems, and member infrastructure.",
-  "integrations": [
-    "OneGodian App",
-    "OMOS",
-    "WordPress Bridge",
-    "Belief Mapper\u2122"
-  ],
-  "wordpress_hosts": [
-    "OneGodian.com",
-    "OneGodian.org",
-    "QuantumOHI.com"
-  ],
   "routes": [
     "/",
     "/dashboard",
@@ -59,16 +46,15 @@
     "/belief-mapper/premium",
     "/api/health",
     "/api/manifest",
-    "/api/modules"
+    "/api/modules",
     "/api/pages",
     "/api/tools",
     "/api/artifacts",
     "/api/system-health"
-  ]
   ],
   "modules": [
     {
-      "name": "Belief Mapper\u2122",
+      "name": "Belief Mapper™",
       "route": "/belief-mapper",
       "status": "live",
       "features": [
@@ -78,20 +64,6 @@
         "Journal, certificate, timeline, and premium surfaces"
       ]
     }
-  ],
-  "classification": "Public/member app node, central dashboard, and ecosystem access interface",
-  "canonicalHost": "https://app.onegodian.com",
-  "compatibleHosts": [
-    "https://onegodian.com",
-    "https://onegodian.org",
-    "https://omos.onegodian.com",
-    "https://quantumohi.com"
-  ],
-  "appBridge": [
-    "https://app.onegodian.com"
-  ],
-  "commerceBridge": [
-    "https://onegodian.com"
   ],
   "publicSafety": {
     "commercialEntity": "ONEGODIAN, LLC is a private commercial/IP/software/media/education/e-commerce entity.",

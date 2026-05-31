@@ -4,10 +4,25 @@
  * Description: Institutional document library aligned to entity, lender, acquisition, financial controls, risk management, and property management categories.
  * Version: 0.1.0
  * Author: Algonquian Real Estate
+ * Requires Plugins: algq-core
  */
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+
+function algq_document_library_core_available(): bool
+{
+    if (function_exists('algq_core')) {
+        return true;
+    }
+
+    add_action('admin_notices', static function (): void {
+        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Document Library requires the Algonquian Core plugin to be active.', 'algq-document-library') . '</p></div>';
+    });
+
+    return false;
 }
 
 final class ALGQ_Document_Library
@@ -170,4 +185,10 @@ final class ALGQ_Document_Library
 
 register_activation_hook(__FILE__, ['ALGQ_Document_Library', 'activate']);
 register_deactivation_hook(__FILE__, ['ALGQ_Document_Library', 'deactivate']);
-new ALGQ_Document_Library();
+add_action('plugins_loaded', static function (): void {
+    if (!algq_document_library_core_available()) {
+        return;
+    }
+
+    new ALGQ_Document_Library();
+});

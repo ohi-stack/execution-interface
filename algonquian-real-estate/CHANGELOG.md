@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 - 2026-05-31
+
+- Expanded the ARE Command Center into a full operating headquarters with executive KPIs, financial snapshot, acquisition, underwriting, offers, pipeline, buyer, funding, marketplace, revenue, document, automation, technology, compliance, reporting, and future AI command layers.
+
 ## 0.1.1 - 2026-05-31
 
 - Added the ARE Marketplace scaffold for wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings.

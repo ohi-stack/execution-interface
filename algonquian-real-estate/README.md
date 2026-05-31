@@ -15,7 +15,7 @@ This directory contains the modular WordPress plugin architecture for the Algonq
 | `algq-automation-engine` | Trigger/action automation, notifications, document triggers, and closeout workflows. | Planned |
 | `algq-pdf-signature` | PDF rendering, signature workflow, archive, and execution status. | Planned |
 | `algq-document-library` | Institutional document library by entity, lender, acquisition, financial, risk, and property categories. | Planned |
-| `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting. | Planned |
+| `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting engine. | Scaffolded |
 
 ## Repository Areas
 
@@ -71,6 +71,7 @@ bash algonquian-real-estate/scripts/build-plugin-zips.sh
 - `[algq_pipeline_crm]`
 - `[algq_buyer_portal]`
 - `[algq_product_library]`
+- `[algq_command_center]`
 
 ## WPBakery usage
 

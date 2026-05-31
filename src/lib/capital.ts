@@ -51,6 +51,45 @@ export type CapitalTransaction = { id: string; source: string; amount: string; s
 export type CapitalLicense = { name: string; description: string; monthlyPrice: string; apiLimit: string; status: CapitalStatus; cta: string };
 export type CapitalApiStatus = { health: string; usageThisMonth: string; endpoints: string[]; webhookLogs: string; docs: { label: string; href: string }[] };
 
+export type FundingStage = 'Prospecting' | 'Introduced' | 'Diligence' | 'Commitment' | 'Funded' | 'Paused';
+
+export type LenderRelationship = {
+  id: string;
+  name: string;
+  lenderType: 'Bank' | 'CDFI' | 'Private Credit' | 'Family Office' | 'Strategic Partner' | 'Grant / Program';
+  relationshipOwner: string;
+  priority: 'High' | 'Medium' | 'Low';
+  stage: FundingStage;
+  targetCommitment: string;
+  committedAmount: string;
+  fundedAmount: string;
+  lastTouch: string;
+  nextStep: string;
+  relationshipNotes: string;
+  mappedDeals: string[];
+};
+
+export type FundingDeal = {
+  id: string;
+  name: string;
+  capitalNeed: string;
+  fundingStatus: FundingStage;
+  targetClose: string;
+  mappedLenderIds: string[];
+};
+
+export type FundingTracker = {
+  totals: {
+    lenderCount: number;
+    targetCommitments: string;
+    committedCapital: string;
+    fundedCapital: string;
+    activeDeals: number;
+  };
+  lenders: LenderRelationship[];
+  deals: FundingDeal[];
+};
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_ONEGODIAN_API_URL ?? 'https://api.onegodian.org';
 
 async function safeFetch<T>(path: string, init?: RequestInit): Promise<T | null> {
@@ -77,3 +116,142 @@ export async function submitCapitalIntake(payload: CapitalIntakePayload) { const
 export async function getCapitalPayments() { return (await safeFetch<CapitalTransaction[]>('/api/capital/payments')) ?? []; }
 export async function getCapitalLicenses() { return (await safeFetch<CapitalLicense[]>('/api/capital/licensing')) ?? [ { name: 'Free Developer Preview', description: 'Sandbox access for development-stage API exploration.', monthlyPrice: '$0/mo', apiLimit: '10k requests/mo', status: 'Active', cta: 'Start Preview' }, { name: 'Builder API Plan', description: 'API subscription for early production apps.', monthlyPrice: '$99/mo', apiLimit: '250k requests/mo', status: 'Planned', cta: 'Request Access' }, { name: 'Pro API Plan', description: 'Higher-throughput API subscription with webhook support.', monthlyPrice: '$399/mo', apiLimit: '1M requests/mo', status: 'Planned', cta: 'Join Waitlist' }, { name: 'Enterprise License', description: 'Platform license for enterprise integration workflows.', monthlyPrice: 'Custom', apiLimit: 'Custom', status: 'Compliance Review', cta: 'Contact Team' }, { name: 'Institutional Integration', description: 'Institutional platform license and onboarding pathway.', monthlyPrice: 'Custom', apiLimit: 'Custom', status: 'Needs API', cta: 'Schedule Intake' } ]; }
 export async function getCapitalApiStatus() { return (await safeFetch<CapitalApiStatus>('/api/capital/status')) ?? { health: 'Needs API', usageThisMonth: '0 requests (fallback)', endpoints: ['/api/capital/summary', '/api/capital/valuation', '/api/capital/instruments', '/api/capital/intake'], webhookLogs: 'No webhook logs connected.', docs: [{ label: 'OneGodian API Gateway', href: 'https://api.onegodian.org' }] }; }
+
+
+export const defaultFundingTracker: FundingTracker = {
+  totals: {
+    lenderCount: 6,
+    targetCommitments: '$5,650,000',
+    committedCapital: '$1,075,000',
+    fundedCapital: '$417,000',
+    activeDeals: 4
+  },
+  lenders: [
+    {
+      id: 'LDR-CDFI-001',
+      name: 'Community Development Credit Desk',
+      lenderType: 'CDFI',
+      relationshipOwner: 'Capital Lead',
+      priority: 'High',
+      stage: 'Diligence',
+      targetCommitment: '$850,000',
+      committedAmount: '$250,000',
+      fundedAmount: '$100,000',
+      lastTouch: '2026-05-24',
+      nextStep: 'Send updated use-of-funds schedule and collateral checklist.',
+      relationshipNotes: 'Mission-aligned lender for land restoration and community infrastructure phases.',
+      mappedDeals: ['DEAL-GENESIS-ROAD', 'DEAL-FOREST-RESTORE']
+    },
+    {
+      id: 'LDR-PC-002',
+      name: 'Sovereign Growth Private Credit',
+      lenderType: 'Private Credit',
+      relationshipOwner: 'Founder Office',
+      priority: 'High',
+      stage: 'Commitment',
+      targetCommitment: '$1,500,000',
+      committedAmount: '$625,000',
+      fundedAmount: '$235,000',
+      lastTouch: '2026-05-27',
+      nextStep: 'Finalize closing checklist and reporting cadence.',
+      relationshipNotes: 'Primary candidate for note financing and bridge tranche participation.',
+      mappedDeals: ['DEAL-NOTES-2026', 'DEAL-OHI-CLOUD']
+    },
+    {
+      id: 'LDR-FO-003',
+      name: 'Heritage Family Capital',
+      lenderType: 'Family Office',
+      relationshipOwner: 'Relationship Manager',
+      priority: 'Medium',
+      stage: 'Introduced',
+      targetCommitment: '$1,000,000',
+      committedAmount: '$0',
+      fundedAmount: '$0',
+      lastTouch: '2026-05-18',
+      nextStep: 'Schedule values-fit briefing and platform demo.',
+      relationshipNotes: 'Interested in cultural infrastructure and education-linked revenue systems.',
+      mappedDeals: ['DEAL-OHI-CLOUD', 'DEAL-FOREST-RESTORE']
+    },
+    {
+      id: 'LDR-BANK-004',
+      name: 'Regional Relationship Bank',
+      lenderType: 'Bank',
+      relationshipOwner: 'Finance Ops',
+      priority: 'Medium',
+      stage: 'Prospecting',
+      targetCommitment: '$750,000',
+      committedAmount: '$0',
+      fundedAmount: '$0',
+      lastTouch: '2026-05-12',
+      nextStep: 'Confirm account package and credit policy fit.',
+      relationshipNotes: 'Potential operating line and treasury relationship once reporting matures.',
+      mappedDeals: ['DEAL-NOTES-2026']
+    },
+    {
+      id: 'LDR-STRAT-005',
+      name: 'Infrastructure Integration Partner',
+      lenderType: 'Strategic Partner',
+      relationshipOwner: 'Partnerships',
+      priority: 'High',
+      stage: 'Diligence',
+      targetCommitment: '$1,200,000',
+      committedAmount: '$200,000',
+      fundedAmount: '$82,000',
+      lastTouch: '2026-05-29',
+      nextStep: 'Map technical milestones to capital release gates.',
+      relationshipNotes: 'Strategic non-dilutive capital tied to API, verification, and cloud infrastructure.',
+      mappedDeals: ['DEAL-OHI-CLOUD']
+    },
+    {
+      id: 'LDR-GRANT-006',
+      name: 'Restoration Program Grant Pipeline',
+      lenderType: 'Grant / Program',
+      relationshipOwner: 'Programs',
+      priority: 'Low',
+      stage: 'Paused',
+      targetCommitment: '$350,000',
+      committedAmount: '$0',
+      fundedAmount: '$0',
+      lastTouch: '2026-04-30',
+      nextStep: 'Reopen after eligibility and fiscal sponsorship review.',
+      relationshipNotes: 'Tracked for future grant alignment; not modeled as repayable capital.',
+      mappedDeals: ['DEAL-FOREST-RESTORE']
+    }
+  ],
+  deals: [
+    {
+      id: 'DEAL-NOTES-2026',
+      name: 'OneGodian Notes 2026 Bridge',
+      capitalNeed: '$1,500,000',
+      fundingStatus: 'Commitment',
+      targetClose: '2026-07-15',
+      mappedLenderIds: ['LDR-PC-002', 'LDR-BANK-004']
+    },
+    {
+      id: 'DEAL-GENESIS-ROAD',
+      name: 'Genesis Road Land Reclamation',
+      capitalNeed: '$900,000',
+      fundingStatus: 'Diligence',
+      targetClose: '2026-08-30',
+      mappedLenderIds: ['LDR-CDFI-001']
+    },
+    {
+      id: 'DEAL-OHI-CLOUD',
+      name: 'OHI Cloud Runtime Expansion',
+      capitalNeed: '$1,850,000',
+      fundingStatus: 'Diligence',
+      targetClose: '2026-09-20',
+      mappedLenderIds: ['LDR-PC-002', 'LDR-FO-003', 'LDR-STRAT-005']
+    },
+    {
+      id: 'DEAL-FOREST-RESTORE',
+      name: 'Turtleback Forest Restoration',
+      capitalNeed: '$650,000',
+      fundingStatus: 'Introduced',
+      targetClose: '2026-10-05',
+      mappedLenderIds: ['LDR-CDFI-001', 'LDR-FO-003', 'LDR-GRANT-006']
+    }
+  ]
+};
+
+export async function getFundingTracker() { return (await safeFetch<FundingTracker>('/api/capital/funding-tracker')) ?? defaultFundingTracker; }

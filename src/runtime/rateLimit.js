@@ -1,5 +1,9 @@
 const requests = new Map();
 
+function secondsUntil(resetAt, now) {
+  return Math.max(1, Math.ceil((resetAt - now) / 1000));
+}
+
 function rateLimit({ limit, windowMs }) {
   return (req, res, next) => {
     const key = req.apiKeyMeta?.name || req.ip;
@@ -14,12 +18,19 @@ function rateLimit({ limit, windowMs }) {
     item.count += 1;
     requests.set(key, item);
 
+    const remaining = Math.max(0, limit - item.count);
+    res.setHeader('RateLimit-Limit', String(limit));
+    res.setHeader('RateLimit-Remaining', String(remaining));
+    res.setHeader('RateLimit-Reset', String(secondsUntil(item.resetAt, now)));
+
     if (item.count > limit) {
+      res.setHeader('Retry-After', String(secondsUntil(item.resetAt, now)));
       return res.status(429).json({
         error: 'rate_limited',
         message: 'Rate limit exceeded',
         limit,
-        windowMs
+        windowMs,
+        requestId: req.requestId
       });
     }
 
@@ -27,4 +38,4 @@ function rateLimit({ limit, windowMs }) {
   };
 }
 
-module.exports = { rateLimit };
+module.exports = { rateLimit, requests };

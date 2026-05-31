@@ -25,24 +25,39 @@ final class ALGQ_Deal_Intake_CSV
 
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=algq-deals-' . gmdate('Ymd-His') . '.csv');
-        $out = fopen('php://output', 'w');
-        fputcsv($out, ['deal_id', 'seller_name', 'seller_phone', 'seller_email', 'address', 'asking_price', 'lead_source', 'motivation_score', 'property_tags', 'status', 'created_at']);
-        foreach ($this->repository->all(200) as $deal) {
+        echo $this->to_string($this->repository->all(200));
+        exit;
+    }
+
+    /**
+     * @param array<int,array<string,mixed>> $deals
+     */
+    public function to_string(array $deals): string
+    {
+        $out = fopen('php://temp', 'r+');
+        fputcsv($out, $this->headers());
+        foreach ($deals as $deal) {
             fputcsv($out, [
-                $deal['deal_id'],
-                $deal['seller_name'],
-                $deal['seller_phone'],
-                $deal['seller_email'],
-                $deal['address'],
-                $deal['asking_price'],
-                $deal['lead_source'],
-                $deal['motivation_score'],
-                implode('|', $deal['property_tags']),
-                $deal['status'],
-                $deal['created_at'],
+                $deal['deal_id'] ?? '',
+                $deal['seller_name'] ?? '',
+                $deal['seller_phone'] ?? '',
+                $deal['seller_email'] ?? '',
+                $deal['address'] ?? '',
+                $deal['asking_price'] ?? 0,
+                $deal['estimated_arv'] ?? 0,
+                $deal['lead_source'] ?? '',
+                $deal['source_campaign'] ?? '',
+                $deal['source_medium'] ?? '',
+                $deal['source_referrer'] ?? '',
+                $deal['source_landing_page'] ?? '',
+                $deal['motivation_score'] ?? 0,
+                implode('|', $deal['property_tags'] ?? []),
+                $deal['status'] ?? '',
+                $deal['created_at'] ?? '',
             ]);
         }
-        exit;
+        rewind($out);
+        return (string) stream_get_contents($out);
     }
 
     public function import(array $file): array
@@ -95,5 +110,13 @@ final class ALGQ_Deal_Intake_CSV
         fclose($handle);
 
         return ['imported' => $imported, 'errors' => $errors];
+    }
+
+    /**
+     * @return array<int,string>
+     */
+    private function headers(): array
+    {
+        return ['deal_id', 'seller_name', 'seller_phone', 'seller_email', 'address', 'asking_price', 'estimated_arv', 'lead_source', 'source_campaign', 'source_medium', 'source_referrer', 'source_landing_page', 'motivation_score', 'property_tags', 'status', 'created_at'];
     }
 }

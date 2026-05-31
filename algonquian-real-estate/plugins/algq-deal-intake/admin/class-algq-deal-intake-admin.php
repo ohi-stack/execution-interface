@@ -62,7 +62,7 @@ final class ALGQ_Deal_Intake_Admin
 
             <h2><?php esc_html_e('Recent Deals', 'algq-deal-intake'); ?></h2>
             <table class="widefat striped">
-                <thead><tr><th><?php esc_html_e('Deal ID', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Seller', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Phone', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Address', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Source', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Score', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Tags', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Status', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Created', 'algq-deal-intake'); ?></th></tr></thead>
+                <thead><tr><th><?php esc_html_e('Deal ID', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Seller', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Phone', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Address', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Source', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Campaign', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Score', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Tags', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Status', 'algq-deal-intake'); ?></th><th><?php esc_html_e('Created', 'algq-deal-intake'); ?></th></tr></thead>
                 <tbody>
                 <?php foreach ($rows as $row) : ?>
                     <tr>
@@ -71,6 +71,7 @@ final class ALGQ_Deal_Intake_Admin
                         <td><?php echo esc_html($row['seller_phone']); ?></td>
                         <td><?php echo esc_html($row['address']); ?></td>
                         <td><?php echo esc_html($row['lead_source']); ?></td>
+                        <td><?php echo esc_html($row['source_campaign'] ?? ''); ?></td>
                         <td><?php echo esc_html((string) $row['motivation_score']); ?></td>
                         <td><?php echo esc_html(implode(', ', $row['property_tags'])); ?></td>
                         <td><?php echo esc_html($row['status']); ?></td>

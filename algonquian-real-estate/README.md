@@ -45,13 +45,22 @@ Version 1.0 targets the modules that move a lead from capture to monetization:
 
 ```text
 algonquian-real-estate/
-├── assets/      # Shared images, screenshots, and static assets
-├── docs/        # Architecture and implementation documentation
 ├── plugins/     # WordPress plugins, one module per directory
-├── roadmap/     # Epic/task backlog and release plans
-├── scripts/     # Build and maintenance scripts
-├── templates/   # Shared template snippets
-└── tests/       # Test scaffolding and fixtures
+│   ├── algq-deal-intake
+│   ├── algq-pipeline-crm
+│   ├── algq-mao-engine
+│   ├── algq-offer-generator
+│   ├── algq-buyer-portal
+│   ├── algq-funding-tracker
+│   ├── algq-automation-engine
+│   ├── algq-pdf-signature
+│   ├── algq-document-library
+│   └── algq-command-center
+├── docs/        # Architecture and implementation documentation
+├── wpbakery/    # Page-builder snippets, shortcode wrappers, and layout exports
+├── assets/      # Shared images, screenshots, and static assets
+├── licensing/   # Licensing, entitlement, and productization materials
+└── deployment/  # Packaging, release, hosting, and deployment runbooks
 ```
 
 ## Local validation

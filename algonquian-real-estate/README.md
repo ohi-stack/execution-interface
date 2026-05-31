@@ -6,16 +6,18 @@ This directory contains the modular WordPress plugin architecture for the Algonq
 
 | Plugin | Purpose | Status |
 | --- | --- | --- |
-| `algq-deal-intake` | Lead capture, validation, scoring, tagging, REST endpoints, and import/export workflows. | Scaffolded |
-| `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, and audit trail workflows. | Planned |
+| `algq-deal-intake` | Lead capture, validation, scoring, tagging, REST endpoints, and import/export workflows. | Production |
+| `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, and audit trail workflows. | Production |
 | `algq-mao-engine` | Maximum Allowable Offer calculations, scenario storage, REST endpoints, and shortcodes. | Scaffolded |
-| `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Scaffolded |
-| `algq-buyer-portal` | Buyer onboarding, NDA gating, downloads, and interest submissions. | Planned |
-| `algq-funding-tracker` | Lenders, commitments, funding status, and deal-to-lender mapping. | Planned |
-| `algq-automation-engine` | Trigger/action automation, notifications, document triggers, and closeout workflows. | Planned |
-| `algq-pdf-signature` | PDF rendering, signature workflow, archive, and execution status. | Planned |
-| `algq-document-library` | Institutional document library by entity, lender, acquisition, financial, risk, and property categories. | Planned |
-| `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting. | Planned |
+| `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Production |
+| `algq-buyer-portal` | Buyer onboarding, NDA gating, downloads, and interest submissions. | Production |
+| `algq-funding-tracker` | Lenders, commitments, funding status, and deal-to-lender mapping. | Production |
+| `algq-automation-engine` | Trigger/action automation, notifications, document triggers, and closeout workflows. | Production |
+| `algq-pdf-signature` | PDF rendering, signature workflow, archive, and execution status. | Production |
+| `algq-document-library` | Institutional document library by entity, lender, acquisition, financial, risk, and property categories. | Production |
+| `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting. | Production |
+| `algq-digital-products` | WooCommerce licensing, subscriptions, download protection, and Stripe metadata. | Production |
+| `algq-are-marketplace` | Wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings. | Production |
 
 ## Repository Areas
 
@@ -35,11 +37,16 @@ Version 1.0 targets the modules that move a lead from capture to monetization:
 
 - Deal Intake (`algq-deal-intake`) — seller/property capture, deal IDs, notifications, and admin review.
 - MAO Engine (`algq-mao-engine`) — ARV, rehab, assignment fee, max allowable offer, spread, and risk score.
-- Creative Offer Generator (`algq-offer-generator`) — seller-finance offer UI, amortization, legacy visualization, and document placeholders.
-- Pipeline CRM (`algq-pipeline-crm`) — Kanban stages and activity logging.
-- Buyer Portal (`algq-buyer-portal`) — buyer registration profile, NDA acceptance, downloads, and interest tracking foundations.
-- Digital Product Store (`algq-digital-products`) — WooCommerce-aware product library shortcode and gated download foundations.
-- Admin Command Center (`algq-command-center`) — dashboard widgets for operating metrics.
+- Creative Offer Generator (`algq-offer-generator`) — purchase agreement, LOI, seller-financing, print/PDF, version history, and merge-field workflows.
+- Pipeline CRM (`algq-pipeline-crm`) — Kanban stages, drag-and-drop movements, assignments, notes, activity logs, and audit history.
+- Buyer Portal (`algq-buyer-portal`) — buyer registration profile, NDA acceptance, download permissions, deal package delivery, and interest submissions.
+- Digital Product Store (`algq-digital-products`) — WooCommerce licensing, subscription tiers, protected downloads, and Stripe metadata.
+- Funding Tracker (`algq-funding-tracker`) — lender database, commitments, funding status, deal mappings, and relationship touch logs.
+- Automation Engine (`algq-automation-engine`) — trigger/action rules, status automations, notifications, document triggers, and closeout workflows.
+- PDF & Signature (`algq-pdf-signature`) — PDF rendering, signature requests, document archive, and execution statuses.
+- Document Library (`algq-document-library`) — entity, lender, acquisition, financial control, risk, and property management documents.
+- Admin Command Center (`algq-command-center`) — KPI dashboard and reporting engine for deals, pipeline value, funding, buyer activity, and documents.
+- ARE Marketplace (`algq-are-marketplace`) — wholesale listings, investor access, syndication, buyer subscriptions, and premium placements.
 
 ## Repository layout
 
@@ -71,6 +78,12 @@ bash algonquian-real-estate/scripts/build-plugin-zips.sh
 - `[algq_pipeline_crm]`
 - `[algq_buyer_portal]`
 - `[algq_product_library]`
+- `[algq_funding_tracker]`
+- `[algq_automation_engine]`
+- `[algq_document_archive]`
+- `[algq_document_library]`
+- `[algq_command_center]`
+- `[algq_are_marketplace]`
 
 ## WPBakery usage
 

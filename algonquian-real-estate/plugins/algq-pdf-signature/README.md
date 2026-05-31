@@ -1,3 +1,12 @@
-# Algonquian PDF & Signature
+# Algonquian PDF & Signature Engine
 
-Planned v1.1+ module for PDF generation, signature requests, audit logs, purchase agreements, LOIs, assignment contracts, and seller-financing agreements.
+Production document execution module for PDF rendering and signature status tracking.
+
+## Features
+
+- PDF/document rendering archive in `algq_documents`.
+- Signature workflow in `algq_signature_requests` with tokenized requests.
+- Document archive shortcode `[algq_document_archive]`.
+- Execution status tracking: Draft, Rendered, Sent for Signature, Viewed, Signed, Voided, Archived.
+- Audit log storage for signature events.
+- REST endpoints under `/wp-json/algq/v1/documents`, `/documents/render`, and `/signatures/request`.

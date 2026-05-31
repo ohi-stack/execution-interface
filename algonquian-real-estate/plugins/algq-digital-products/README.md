@@ -1,6 +1,6 @@
-# Algonquian Revenue Systems
+# Algonquian WooCommerce Monetization
 
-Production monetization is implemented through `algq-digital-products`.
+Production monetization module for WooCommerce-powered digital products and software licensing.
 
 ## Features
 
@@ -9,4 +9,4 @@ Production monetization is implemented through `algq-digital-products`.
 - Subscription tiers: Investor, Buyer, Pro, Enterprise.
 - Download protection in `algq_protected_downloads`.
 - Stripe customer/subscription metadata fields.
-- WooCommerce product data integration hook.
+- WooCommerce product data integration hook for protected downloads.

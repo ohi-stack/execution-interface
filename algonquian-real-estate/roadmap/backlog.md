@@ -70,3 +70,11 @@
 - **ARE-120**: Build subscription tiers: Investor, Buyer, Pro, Enterprise.
 - **ARE-121**: Build recurring billing with WooCommerce Subscriptions and Stripe.
 - **ARE-122**: Create SaaS licensing for Single Site, Agency, and Enterprise.
+
+
+## Epic 14 — ARE Marketplace
+
+- **ARE-130**: Build marketplace foundations for wholesale deal rooms, investor access rules, and private deal visibility.
+- **ARE-131**: Add deal syndication workflows for buyer lists, investor channels, and partner distribution.
+- **ARE-132**: Build buyer subscription tiers for priority deal alerts, downloads, and saved buy-box preferences.
+- **ARE-133**: Add premium listing controls for featured placement, enhanced underwriting summaries, and upgraded deal media.

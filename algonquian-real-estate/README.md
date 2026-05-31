@@ -10,13 +10,15 @@ This directory contains the modular WordPress plugin architecture for the Algonq
 | `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, and audit trail workflows. | Planned |
 | `algq-mao-engine` | Maximum Allowable Offer calculations, scenario storage, REST endpoints, and shortcodes. | Scaffolded |
 | `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Scaffolded |
-| `algq-buyer-portal` | Buyer onboarding, NDA gating, downloads, and interest submissions. | Planned |
+| `algq-buyer-portal` | Buyer onboarding, NDA gating, downloads, and interest submissions. | Scaffolded |
 | `algq-funding-tracker` | Lenders, commitments, funding status, and deal-to-lender mapping. | Planned |
 | `algq-automation-engine` | Trigger/action automation, notifications, document triggers, and closeout workflows. | Planned |
 | `algq-pdf-signature` | PDF rendering, signature workflow, archive, and execution status. | Planned |
 | `algq-document-library` | Institutional document library by entity, lender, acquisition, financial, risk, and property categories. | Planned |
+| `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting engine. | Scaffolded |
 | `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting. | Planned |
 | `algq-revenue-systems` | WooCommerce monetization for licensing, digital products, subscription tiers, protected downloads, and Stripe-ready checkout. | Scaffolded |
+| `algq-marketplace` | Wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings. | Scaffolded |
 
 ## Repository Areas
 
@@ -42,6 +44,7 @@ Version 1.0 targets the modules that move a lead from capture to monetization:
 - Digital Product Store (`algq-digital-products`) — WooCommerce-aware product library shortcode and gated download foundations.
 - Admin Command Center (`algq-command-center`) — dashboard widgets for operating metrics.
 - Revenue Systems (`algq-revenue-systems`) — WooCommerce product maps, subscription tiers, license status, protected downloads, and Stripe gateway readiness.
+- ARE Marketplace (`algq-marketplace`) — wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings.
 
 ## Repository layout
 
@@ -77,6 +80,8 @@ bash algonquian-real-estate/scripts/build-plugin-zips.sh
 - `[algq_subscription_tiers]`
 - `[algq_protected_downloads]`
 - `[algq_license_status]`
+- `[algq_command_center]`
+- `[algq_marketplace]`
 
 ## WPBakery usage
 

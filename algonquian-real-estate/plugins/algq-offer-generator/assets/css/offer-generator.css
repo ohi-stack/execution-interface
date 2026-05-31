@@ -1,3 +1,32 @@
 .algq-offer-generator { border: 1px solid #d7dee8; border-radius: 12px; padding: 1rem; max-width: 760px; }
 .algq-offer-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 .algq-offer-card { background: #f8fafc; border-radius: 10px; padding: 1rem; }
+
+.algq-offer-document-tools {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #d7c9a5;
+  border-radius: 16px;
+  background: #fffdf7;
+}
+
+.algq-offer-document-tools form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.algq-offer-document-tools input,
+.algq-offer-document-tools select,
+.algq-offer-document-tools textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.algq-navigation-overlay,
+.algq-pattern-offer-command {
+  border-radius: 20px;
+  padding: 24px;
+  background: linear-gradient(135deg, #111827, #3b2f12);
+  color: #fff7df;
+}

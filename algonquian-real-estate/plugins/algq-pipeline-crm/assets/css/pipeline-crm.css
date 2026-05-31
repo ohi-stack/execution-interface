@@ -1,0 +1,116 @@
+.algq-pipeline-crm {
+  color: #172033;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.algq-pipeline-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.algq-pipeline-header h2 {
+  margin: 0 0 .25rem;
+}
+
+.algq-pipeline-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.algq-pipeline-kpis span {
+  background: #eef4ff;
+  border: 1px solid #cbdbff;
+  border-radius: 999px;
+  padding: .35rem .65rem;
+}
+
+.algq-kanban {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.algq-kanban-stage {
+  background: #f7f8fb;
+  border: 1px solid #dfe5ef;
+  border-radius: 14px;
+  min-height: 260px;
+  padding: .85rem;
+}
+
+.algq-kanban-stage header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: .75rem;
+}
+
+.algq-kanban-stage h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.algq-card-dropzone {
+  display: grid;
+  gap: .75rem;
+  min-height: 180px;
+}
+
+.algq-card-dropzone.is-over {
+  outline: 2px dashed #4169e1;
+  outline-offset: 4px;
+}
+
+.algq-deal-card {
+  background: #fff;
+  border: 1px solid #d8deea;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(21, 35, 61, .08);
+  cursor: grab;
+  padding: .85rem;
+}
+
+.algq-deal-card.is-dragging {
+  opacity: .55;
+}
+
+.algq-deal-card p,
+.algq-deal-card dl {
+  margin: .5rem 0;
+}
+
+.algq-deal-card dl {
+  display: grid;
+  gap: .2rem .5rem;
+  grid-template-columns: auto 1fr;
+}
+
+.algq-deal-card dt {
+  color: #566276;
+  font-weight: 700;
+}
+
+.algq-deal-card textarea,
+.algq-deal-card select {
+  box-sizing: border-box;
+  display: block;
+  margin-top: .25rem;
+  width: 100%;
+}
+
+.algq-deal-card button {
+  margin-top: .4rem;
+}
+
+.algq-card-error,
+.algq-pipeline-notice {
+  background: #fff4f4;
+  border: 1px solid #f3b4b4;
+  border-radius: 8px;
+  color: #8a1f1f;
+  padding: .5rem;
+}

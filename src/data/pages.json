@@ -7,5 +7,6 @@
   {"slug":"docs","title":"Docs","summary":"Runtime documentation.","path":"/docs"},
   {"slug":"tools","title":"Tools","summary":"Tools and utilities.","path":"/tools"},
   {"slug":"artifacts","title":"Artifacts","summary":"Artifacts and records.","path":"/artifacts"},
-  {"slug":"manifest","title":"Manifest","summary":"Runtime manifest details.","path":"/manifest"}
+  {"slug":"manifest","title":"Manifest","summary":"Runtime manifest details.","path":"/manifest"},
+  {"slug":"offer-generator","title":"Offer Generator","summary":"LOI, purchase agreement, seller-financing offer, PDF, version history, and deal merge-field workspace.","path":"/offer-generator"}
 ]

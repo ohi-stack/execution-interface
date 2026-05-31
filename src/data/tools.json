@@ -6,6 +6,7 @@
     "members",
     "certificates",
     "campaigns",
-    "media"
+    "media",
+    "offer-generator"
   ]
 }

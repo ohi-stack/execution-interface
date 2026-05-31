@@ -8,6 +8,17 @@ const { enforcePlanLimits } = require('./src/runtime/billingStub');
 const { OMOSProcess } = require('./src/runtime/omos');
 const { logEvent } = require('./src/runtime/logger');
 const { tools } = require('./src/runtime/toolRegistry');
+const {
+  DEFAULT_JSON_LIMIT,
+  requestIdMiddleware,
+  corsMiddleware,
+  noStoreApiMiddleware,
+  validateProcessInput,
+  readinessSnapshot,
+  notFoundHandler,
+  errorHandler,
+  utcNow
+} = require('./src/runtime/security');
 
 const app = express();
 const usageMap = new Map();
@@ -31,11 +42,32 @@ const PUBLIC_ROUTES = [
   '/status'
 ];
 
-const API_ROUTES = ['/health', '/api/health', '/manifest', '/api/manifest', '/process'];
+const API_ROUTES = ['/health', '/api/health', '/ready', '/api/ready', '/version', '/api/version', '/api/system-health', '/manifest', '/api/manifest', '/api/stats', '/process'];
 
-app.use(helmet({ crossOriginEmbedderPolicy: false }));
-app.use(express.json());
-app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+
+app.use(requestIdMiddleware);
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      "default-src": ["'self'"],
+      "script-src": ["'self'", "'unsafe-inline'"],
+      "style-src": ["'self'", "'unsafe-inline'"],
+      "img-src": ["'self'", 'data:', 'https:'],
+      "connect-src": ["'self'", 'https:'],
+      "frame-ancestors": ["'none'"]
+    }
+  },
+  hsts: ENVIRONMENT === 'production' ? { maxAge: 15552000, includeSubDomains: true } : false,
+  referrerPolicy: { policy: 'no-referrer' }
+}));
+app.use(corsMiddleware);
+app.use(noStoreApiMiddleware);
+app.use(express.json({ limit: DEFAULT_JSON_LIMIT, strict: true }));
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets'), { immutable: true, maxAge: '1d' }));
 
 function trackUsage(apiKeyName) {
   const count = usageMap.get(apiKeyName) || 0;
@@ -43,15 +75,39 @@ function trackUsage(apiKeyName) {
 }
 
 function requireApiKey(req, res, next) {
-  const apiKey = req.headers['x-omos-key'] || req.headers.authorization?.replace('Bearer ', '');
-  const keyMeta = verifyApiKey(apiKey);
-  if (!keyMeta) return res.status(401).json({ error: 'unauthorized', message: 'Valid OMOS API key required' });
+  const authorization = req.headers.authorization;
+  const bearer = typeof authorization === 'string' && authorization.startsWith('Bearer ') ? authorization.slice(7) : undefined;
+  const apiKey = req.headers['x-omos-key'] || bearer;
+  const keyMeta = verifyApiKey(Array.isArray(apiKey) ? apiKey[0] : apiKey);
+  if (!keyMeta) {
+    logEvent('auth.denied', { route: req.path, requestId: req.requestId });
+    return res.status(401).json({ error: 'unauthorized', message: 'Valid OMOS API key required', requestId: req.requestId });
+  }
   req.apiKeyMeta = keyMeta;
   return next();
 }
 
-app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'omos-runtime', version: VERSION }));
-app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'omos-runtime', version: VERSION }));
+const healthPayload = () => ({
+  status: 'ok',
+  service: 'omos-runtime',
+  version: VERSION,
+  environment: ENVIRONMENT,
+  timestampUtc: utcNow()
+});
+
+app.get('/health', (_req, res) => res.json(healthPayload()));
+app.get('/api/health', (_req, res) => res.json(healthPayload()));
+app.get('/version', (_req, res) => res.json({ service: 'omos-runtime', version: VERSION, environment: ENVIRONMENT, timestampUtc: utcNow() }));
+app.get('/api/version', (_req, res) => res.json({ service: 'omos-runtime', version: VERSION, environment: ENVIRONMENT, timestampUtc: utcNow() }));
+app.get('/ready', (_req, res) => {
+  const snapshot = readinessSnapshot({ version: VERSION, environment: ENVIRONMENT, usageMap });
+  res.status(snapshot.status === 'ready' ? 200 : 503).json(snapshot);
+});
+app.get('/api/ready', (_req, res) => {
+  const snapshot = readinessSnapshot({ version: VERSION, environment: ENVIRONMENT, usageMap });
+  res.status(snapshot.status === 'ready' ? 200 : 503).json(snapshot);
+});
+app.get('/api/system-health', (_req, res) => res.json(readinessSnapshot({ version: VERSION, environment: ENVIRONMENT, usageMap })));
 
 const manifestPayload = () => ({
   serviceId: 'omos-runtime',
@@ -93,9 +149,23 @@ app.get('/dashboard', (_req, res) => {
   });
 });
 
+app.get('/api/stats', requireApiKey, (_req, res) => {
+  res.json({
+    service: 'omos-runtime',
+    version: VERSION,
+    environment: ENVIRONMENT,
+    uptimeSeconds: Math.floor(process.uptime()),
+    processRequests: Array.from(usageMap.values()).reduce((sum, count) => sum + count, 0),
+    timestampUtc: utcNow()
+  });
+});
+
 app.post('/process', requireApiKey, rateLimit({ limit: 100, windowMs: 60000 }), (req, res) => {
-  const input = req.body;
-  if (!input || !input.content?.raw) return res.status(400).json({ error: 'invalid_input', message: 'content.raw is required' });
+  const validation = validateProcessInput(req.body);
+  if (!validation.ok) {
+    return res.status(validation.status).json({ error: validation.error, message: validation.message, requestId: req.requestId });
+  }
+  const input = validation.value;
   const plan = req.apiKeyMeta.plan;
   const limits = enforcePlanLimits(plan);
   if (limits.rpm < 100) {
@@ -103,7 +173,8 @@ app.post('/process', requireApiKey, rateLimit({ limit: 100, windowMs: 60000 }), 
   }
   const data = OMOSProcess(input);
   trackUsage(req.apiKeyMeta.name);
-  return res.json({ status: 'ok', plan, limits, data });
+  logEvent('process.completed', { apiKeyName: req.apiKeyMeta.name, plan, requestId: req.requestId });
+  return res.json({ status: 'ok', plan, limits, data, requestId: req.requestId });
 });
 
 for (const route of PUBLIC_ROUTES) {
@@ -111,8 +182,20 @@ for (const route of PUBLIC_ROUTES) {
   app.get(route, (_req, res) => res.sendFile(path.join(__dirname, `src/pages${route === '/' ? '/index' : route}.html`)));
 }
 
+app.use(notFoundHandler);
+app.use(errorHandler);
+
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`OMOS runtime listening on http://localhost:${PORT}`));
+  const server = app.listen(PORT, () => console.log(`OMOS runtime listening on http://localhost:${PORT}`));
+
+  const shutdown = (signal) => {
+    logEvent('runtime.shutdown', { signal });
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(1), 10000).unref();
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
 module.exports = { app, usageMap, trackUsage, requireApiKey, PUBLIC_ROUTES, API_ROUTES };

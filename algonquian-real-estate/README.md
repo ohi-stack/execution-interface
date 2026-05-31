@@ -48,6 +48,7 @@ Version 1.0 targets the modules that move a lead from capture to monetization:
 - Product Vault (`algq-product-vault`) — protected product catalog, license-gated downloads, and training asset foundations.
 - Affiliate Engine (`algq-affiliate-engine`) — referral partner attribution and commission-event foundations.
 - Admin Command Center (`algq-command-center`) — dashboard widgets for operating metrics.
+- Admin Command Center (`algq-command-center`) — executive operating hub for acquisitions, underwriting, offers, pipeline, buyers, funding, marketplace, revenue, documents, automation, technology, compliance, and reporting.
 - Revenue Systems (`algq-revenue-systems`) — WooCommerce product maps, subscription tiers, license status, protected downloads, and Stripe gateway readiness.
 - ARE Marketplace (`algq-marketplace`) — wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings.
 

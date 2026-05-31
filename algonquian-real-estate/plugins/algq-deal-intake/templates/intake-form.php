@@ -7,6 +7,10 @@ if (!defined('ABSPATH')) {
     <?php wp_nonce_field('algq_deal_intake_submit', 'algq_deal_intake_nonce'); ?>
     <input type="text" name="algq_website" value="" class="algq-honeypot" tabindex="-1" autocomplete="off" />
     <input type="hidden" name="lead_source" value="<?php echo esc_attr($atts['source'] ?? 'website'); ?>" />
+    <input type="hidden" name="source_campaign" value="<?php echo esc_attr(sanitize_text_field(wp_unslash($_GET['utm_campaign'] ?? ''))); ?>" />
+    <input type="hidden" name="source_medium" value="<?php echo esc_attr(sanitize_key(wp_unslash($_GET['utm_medium'] ?? ''))); ?>" />
+    <input type="hidden" name="source_referrer" value="<?php echo esc_url($_SERVER['HTTP_REFERER'] ?? ''); ?>" />
+    <input type="hidden" name="source_landing_page" value="<?php echo esc_url(home_url(wp_unslash($_SERVER['REQUEST_URI'] ?? ''))); ?>" />
     <?php echo wp_kses_post($message); ?>
 
     <div class="algq-grid">
@@ -14,6 +18,7 @@ if (!defined('ABSPATH')) {
         <p><label><?php esc_html_e('Seller Phone', 'algq-deal-intake'); ?> <input required name="seller_phone" type="tel" /></label></p>
         <p><label><?php esc_html_e('Seller Email', 'algq-deal-intake'); ?> <input name="seller_email" type="email" /></label></p>
         <p><label><?php esc_html_e('Asking Price', 'algq-deal-intake'); ?> <input name="asking_price" type="number" min="0" step="0.01" /></label></p>
+        <p><label><?php esc_html_e('Estimated ARV', 'algq-deal-intake'); ?> <input name="estimated_arv" type="number" min="0" step="0.01" /></label></p>
     </div>
 
     <p><label><?php esc_html_e('Property Address', 'algq-deal-intake'); ?> <textarea required name="address"></textarea></label></p>
@@ -26,6 +31,7 @@ if (!defined('ABSPATH')) {
                 <option value="asap"><?php esc_html_e('ASAP', 'algq-deal-intake'); ?></option>
                 <option value="30_days"><?php esc_html_e('Within 30 days', 'algq-deal-intake'); ?></option>
                 <option value="90_days"><?php esc_html_e('Within 90 days', 'algq-deal-intake'); ?></option>
+                <option value="6_months"><?php esc_html_e('Within 6 months', 'algq-deal-intake'); ?></option>
             </select>
         </label></p>
         <p><label><?php esc_html_e('Occupancy', 'algq-deal-intake'); ?>

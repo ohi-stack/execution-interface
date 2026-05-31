@@ -21,7 +21,7 @@ final class ALGQ_Deal_Intake_Plugin
         $this->validator = new ALGQ_Deal_Intake_Validator();
         $this->scorer = new ALGQ_Deal_Intake_Scorer();
         $this->csv = new ALGQ_Deal_Intake_CSV($this->repository, $this->validator, $this->scorer);
-        $this->rest = new ALGQ_Deal_Intake_REST_Controller($this->repository, $this->validator, $this->scorer);
+        $this->rest = new ALGQ_Deal_Intake_REST_Controller($this->repository, $this->validator, $this->scorer, $this->csv);
         $this->admin = new ALGQ_Deal_Intake_Admin($this->repository, $this->csv);
         $this->public = new ALGQ_Deal_Intake_Public($this->repository, $this->validator, $this->scorer);
     }

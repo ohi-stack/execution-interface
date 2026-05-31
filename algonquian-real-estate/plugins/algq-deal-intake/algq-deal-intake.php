@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Algonquian Deal Intake
  * Description: Production seller lead intake, validation, scoring, tagging, REST API, and CSV workflows for Algonquian Real Estate.
- * Version: 0.2.0
+ * Version: 0.3.0
  * Author: Algonquian Real Estate
  * Text Domain: algq-deal-intake
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ALGQ_DEAL_INTAKE_VERSION', '0.2.0');
+define('ALGQ_DEAL_INTAKE_VERSION', '0.3.0');
 define('ALGQ_DEAL_INTAKE_FILE', __FILE__);
 define('ALGQ_DEAL_INTAKE_DIR', plugin_dir_path(__FILE__));
 

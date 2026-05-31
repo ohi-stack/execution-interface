@@ -20,8 +20,13 @@ final class ALGQ_Deal_Intake_Activator
             seller_email varchar(191) DEFAULT '',
             address text NOT NULL,
             asking_price decimal(12,2) DEFAULT 0,
+            estimated_arv decimal(12,2) DEFAULT 0,
             condition_notes longtext NULL,
             lead_source varchar(120) DEFAULT 'website',
+            source_campaign varchar(191) DEFAULT '',
+            source_medium varchar(120) DEFAULT '',
+            source_referrer text NULL,
+            source_landing_page text NULL,
             motivation_score tinyint(3) unsigned DEFAULT 0,
             motivation_signals longtext NULL,
             property_tags longtext NULL,
@@ -32,6 +37,7 @@ final class ALGQ_Deal_Intake_Activator
             UNIQUE KEY deal_id (deal_id),
             KEY status (status),
             KEY lead_source (lead_source),
+            KEY source_medium (source_medium),
             KEY motivation_score (motivation_score)
         ) {$charset};";
 

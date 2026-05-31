@@ -53,6 +53,8 @@ final class ALGQ_Deal_Intake_Public
 
         $payload = $_POST;
         $payload['lead_source'] = $payload['lead_source'] ?? $fallback_source;
+        $payload['source_referrer'] = $payload['source_referrer'] ?? ($_SERVER['HTTP_REFERER'] ?? '');
+        $payload['source_landing_page'] = $payload['source_landing_page'] ?? home_url(wp_unslash($_SERVER['REQUEST_URI'] ?? ''));
         $validation = $this->validator->validate($payload);
         if (!$validation['valid']) {
             $items = '';

@@ -1,100 +1,32 @@
 <?php
 /**
  * Plugin Name: Algonquian Pipeline CRM
- * Description: Deal Kanban board, stage movement foundation, and activity logging.
- * Version: 0.1.0
- * Author: Algonquian Real Estate
- * Requires Plugins: algq-core
+ * Description: Production-ready acquisition lifecycle CRM for managing deals from lead capture through close.
+ * Version: 1.0.0
+ * Author: Onegodian
+ * Text Domain: algq-pipeline-crm
  */
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
+define('ALGQ_PIPELINE_CRM_VERSION', '1.0.0');
+define('ALGQ_PIPELINE_CRM_FILE', __FILE__);
+define('ALGQ_PIPELINE_CRM_DIR', plugin_dir_path(__FILE__));
+define('ALGQ_PIPELINE_CRM_URL', plugin_dir_url(__FILE__));
 
-function algq_pipeline_crm_core_available(): bool
-{
-    if (function_exists('algq_core')) {
-        return true;
-    }
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-database.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-activity.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-activator.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-board.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-rest-controller.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-admin.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-integrations.php';
+require_once ALGQ_PIPELINE_CRM_DIR . 'includes/class-algq-pipeline-crm.php';
 
-    add_action('admin_notices', static function (): void {
-        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Pipeline CRM requires the Algonquian Core plugin to be active.', 'algq-pipeline-crm') . '</p></div>';
-    });
+register_activation_hook(__FILE__, ['ALGQ_Pipeline_Activator', 'activate']);
 
-    return false;
-}
-
-final class ALGQ_Pipeline_CRM
-{
-    private const ACTIVITY_TABLE = 'algq_activity_log';
-    private const STAGES = ['Lead Captured', 'Underwriting', 'Offer Sent', 'Under Contract', 'Buyer Assigned', 'Closed'];
-
-    public function __construct()
-    {
-        add_shortcode('algq_pipeline_crm', [$this, 'render_board']);
-        add_action('wp_ajax_algq_move_deal_stage', [$this, 'move_stage']);
-    }
-
-    public static function activate(): void
-    {
-        global $wpdb;
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta("CREATE TABLE {$wpdb->prefix}" . self::ACTIVITY_TABLE . " (
-            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-            deal_id varchar(32) NOT NULL,
-            activity_type varchar(64) NOT NULL,
-            activity_note text NOT NULL,
-            created_at datetime NOT NULL,
-            PRIMARY KEY (id),
-            KEY deal_id (deal_id)
-        ) {$wpdb->get_charset_collate()};");
-    }
-
-    public function render_board(): string
-    {
-        ob_start();
-        echo '<div class="algq-kanban">';
-        foreach (self::STAGES as $stage) {
-            echo '<section class="algq-kanban-stage" data-stage="' . esc_attr($stage) . '"><h3>' . esc_html($stage) . '</h3><p>Drag-and-drop deal cards will appear here.</p></section>';
-        }
-        echo '</div>';
-        return (string) ob_get_clean();
-    }
-
-    public function move_stage(): void
-    {
-        check_ajax_referer('algq_pipeline_move', 'nonce');
-        $deal_id = sanitize_text_field(wp_unslash($_POST['deal_id'] ?? ''));
-        $stage = sanitize_text_field(wp_unslash($_POST['stage'] ?? ''));
-        if (!in_array($stage, self::STAGES, true)) {
-            wp_send_json_error(['message' => 'Invalid stage'], 400);
-        }
-        $this->log_activity($deal_id, 'stage_moved', 'Moved to ' . $stage);
-        wp_send_json_success(['stage' => $stage]);
-    }
-
-    private function log_activity(string $deal_id, string $type, string $note): void
-    {
-        if (function_exists('algq_core')) {
-            algq_core()->activity()->log($type, $note, [
-                'object_type' => 'deal',
-                'object_id' => $deal_id,
-                'deal_id' => $deal_id,
-            ]);
-            return;
-        }
-
-        global $wpdb;
-        $wpdb->insert($wpdb->prefix . self::ACTIVITY_TABLE, ['deal_id' => $deal_id, 'activity_type' => $type, 'activity_note' => $note, 'created_at' => current_time('mysql')], ['%s', '%s', '%s', '%s']);
-    }
-}
-
-register_activation_hook(__FILE__, ['ALGQ_Pipeline_CRM', 'activate']);
 add_action('plugins_loaded', static function (): void {
-    if (!algq_pipeline_crm_core_available()) {
-        return;
-    }
-
-    new ALGQ_Pipeline_CRM();
+    ALGQ_Pipeline_CRM::instance()->run();
 });

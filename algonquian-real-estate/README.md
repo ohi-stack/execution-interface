@@ -8,7 +8,7 @@ This directory contains the modular WordPress plugin architecture for the Algonq
 | --- | --- | --- |
 | `algq-core` | Shared roles, permissions, database tables, REST namespace, settings, activity logging, notifications, licensing, UI primitives, and integration registry. | Scaffolded |
 | `algq-deal-intake` | Lead capture, validation, scoring, tagging, REST endpoints, and import/export workflows. | Scaffolded |
-| `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, and audit trail workflows. | Scaffolded |
+| `algq-pipeline-crm` | Kanban pipeline, activity history, assignment, REST movement endpoints, and audit trail workflows. | Implemented |
 | `algq-mao-engine` | Maximum Allowable Offer calculations, scenario storage, REST endpoints, and shortcodes. | Scaffolded |
 | `algq-command-center` | KPI dashboard, pipeline value, deal counts, funding status, buyer activity, and reporting engine. | Scaffolded |
 | `algq-offer-generator` | LOI, purchase agreement, seller-financing, PDF, and merge-field workflows. | Scaffolded |
@@ -42,7 +42,7 @@ Version 1.0 targets the modules that move a lead from capture to monetization:
 - Deal Intake (`algq-deal-intake`) — seller/property capture, deal IDs, notifications, and admin review.
 - MAO Engine (`algq-mao-engine`) — ARV, rehab, assignment fee, max allowable offer, spread, and risk score.
 - Creative Offer Generator (`algq-offer-generator`) — seller-finance offer UI, amortization, legacy visualization, and document placeholders.
-- Pipeline CRM (`algq-pipeline-crm`) — Kanban stages and activity logging.
+- Pipeline CRM (`algq-pipeline-crm`) — Kanban stages, drag/drop REST movement, assignment, metrics, and activity logging.
 - Buyer Portal (`algq-buyer-portal`) — buyer registration profile, NDA acceptance, downloads, and interest tracking foundations.
 - Digital Product Store (`algq-digital-products`) — WooCommerce-aware product library shortcode and gated download foundations.
 - Product Vault (`algq-product-vault`) — protected product catalog, license-gated downloads, and training asset foundations.
@@ -92,6 +92,7 @@ bash algonquian-real-estate/scripts/build-plugin-zips.sh
 - `[algq_deal_intake]`
 - `[algq_mao_engine]`
 - `[algq_offer_generator]`
+- `[algq_pipeline_board]`
 - `[algq_pipeline_crm]`
 - `[algq_buyer_portal]`
 - `[algq_product_library]`
@@ -105,6 +106,10 @@ bash algonquian-real-estate/scripts/build-plugin-zips.sh
 - `[algq_license_status]`
 - `[algq_command_center]`
 - `[algq_marketplace]`
+
+## REST endpoint summary
+
+Pipeline CRM exposes `/wp-json/algq/v1/pipeline/deals`, `/wp-json/algq/v1/pipeline/deals/{id}`, `/wp-json/algq/v1/pipeline/deals/{id}/stage`, `/wp-json/algq/v1/pipeline/activity`, and `/wp-json/algq/v1/pipeline/metrics` for deal listing, detail, stage movement, activity, and metrics workflows.
 
 ## WPBakery usage
 

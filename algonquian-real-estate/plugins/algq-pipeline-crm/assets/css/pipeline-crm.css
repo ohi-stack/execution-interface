@@ -1,0 +1,128 @@
+.algq-pipeline-wrap {
+  max-width: 100%;
+}
+
+.algq-pipeline-board {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+.algq-pipeline-column {
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  min-width: 240px;
+}
+
+.algq-pipeline-column__header {
+  align-items: center;
+  border-bottom: 1px solid #dcdcde;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+
+.algq-pipeline-column__header h2 {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.algq-pipeline-count {
+  background: #1d2327;
+  border-radius: 999px;
+  color: #fff;
+  display: inline-block;
+  font-size: 12px;
+  min-width: 24px;
+  padding: 3px 8px;
+  text-align: center;
+}
+
+.algq-pipeline-dropzone {
+  min-height: 180px;
+  padding: 12px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.algq-pipeline-dropzone.is-drag-over {
+  background: #e7f5ff;
+}
+
+.algq-pipeline-card {
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-left: 4px solid #2271b1;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  cursor: grab;
+  margin-bottom: 12px;
+  padding: 12px;
+}
+
+.algq-pipeline-card.is-dragging {
+  opacity: 0.5;
+}
+
+.algq-pipeline-card h3 {
+  font-size: 14px;
+  margin: 8px 0 10px;
+}
+
+.algq-pipeline-card__topline {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.algq-pipeline-priority {
+  background: #f0f0f1;
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 2px 7px;
+}
+
+.algq-pipeline-priority--high,
+.algq-pipeline-priority--urgent {
+  background: #d63638;
+  color: #fff;
+}
+
+.algq-pipeline-card__meta {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.algq-pipeline-card__meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.algq-pipeline-card__meta dt {
+  color: #646970;
+  font-size: 12px;
+}
+
+.algq-pipeline-card__meta dd {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  text-align: right;
+}
+
+.algq-pipeline-detail-table th {
+  width: 200px;
+}
+
+@media (max-width: 1200px) {
+  .algq-pipeline-board {
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+  }
+}

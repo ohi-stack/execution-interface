@@ -42,7 +42,7 @@ Version 1.0 targets the modules that move a lead from capture to monetization:
 - Pipeline CRM (`algq-pipeline-crm`) — Kanban stages and activity logging.
 - Buyer Portal (`algq-buyer-portal`) — buyer registration profile, NDA acceptance, downloads, and interest tracking foundations.
 - Digital Product Store (`algq-digital-products`) — WooCommerce-aware product library shortcode and gated download foundations.
-- Admin Command Center (`algq-command-center`) — dashboard widgets for operating metrics.
+- Admin Command Center (`algq-command-center`) — executive operating hub for acquisitions, underwriting, offers, pipeline, buyers, funding, marketplace, revenue, documents, automation, technology, compliance, and reporting.
 - Revenue Systems (`algq-revenue-systems`) — WooCommerce product maps, subscription tiers, license status, protected downloads, and Stripe gateway readiness.
 - ARE Marketplace (`algq-marketplace`) — wholesale deals, investor access, deal syndication, buyer subscriptions, and premium listings.
 

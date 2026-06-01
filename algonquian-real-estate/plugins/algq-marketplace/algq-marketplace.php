@@ -132,6 +132,14 @@ function algq_deal_marketplace_bootstrap(): void
 
 add_action('plugins_loaded', 'algq_deal_marketplace_bootstrap', 20);
 
+if (!function_exists('algq_marketplace_core_available')) {
+    /**
+     * Determine whether the optional Algonquian core runtime is available for legacy hooks.
+     */
+    function algq_marketplace_core_available(): bool
+    {
+        return function_exists('algq_core') || class_exists('ALGQ_Core_Plugin');
+    }
 /**
  * Determine whether optional Algonquian core services are available.
  */

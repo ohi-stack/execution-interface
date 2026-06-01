@@ -24,14 +24,14 @@ final class ALGQ_Deal_Marketplace_Assets
     {
         wp_register_style(
             'algq-deal-marketplace',
-            ALGQ_DEAL_MARKETPLACE_URL . 'assets/css/deal-marketplace.css',
+            ALGQ_DEAL_MARKETPLACE_URL . 'assets/css/algq-marketplace-public.css',
             [],
             ALGQ_DEAL_MARKETPLACE_VERSION
         );
 
         wp_register_script(
             'algq-deal-marketplace',
-            ALGQ_DEAL_MARKETPLACE_URL . 'assets/js/deal-marketplace.js',
+            ALGQ_DEAL_MARKETPLACE_URL . 'assets/js/algq-marketplace-public.js',
             [],
             ALGQ_DEAL_MARKETPLACE_VERSION,
             true
@@ -56,9 +56,17 @@ final class ALGQ_Deal_Marketplace_Assets
 
         wp_enqueue_style(
             'algq-deal-marketplace-admin',
-            ALGQ_DEAL_MARKETPLACE_URL . 'assets/css/deal-marketplace-admin.css',
+            ALGQ_DEAL_MARKETPLACE_URL . 'assets/css/algq-marketplace-admin.css',
             [],
             ALGQ_DEAL_MARKETPLACE_VERSION
+        );
+
+        wp_enqueue_script(
+            'algq-deal-marketplace-admin',
+            ALGQ_DEAL_MARKETPLACE_URL . 'assets/js/algq-marketplace-admin.js',
+            [],
+            ALGQ_DEAL_MARKETPLACE_VERSION,
+            true
         );
     }
 }

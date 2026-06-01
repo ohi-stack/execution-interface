@@ -94,6 +94,20 @@ final class ALGQ_Deal_Marketplace_Admin
     public function handle_clear_cache(): void
     {
         if (!$this->security->can_manage()) {
+            wp_die(esc_html__('You do not have permission to clear marketplace cache.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN));
+        }
+
+        check_admin_referer(ALGQ_Deal_Marketplace_Security::NONCE_ACTION, ALGQ_Deal_Marketplace_Security::NONCE_NAME);
+
+        $this->cache->flush_marketplace();
+
+        wp_safe_redirect(add_query_arg(
+            [
+                'page' => 'algq-deal-marketplace',
+                'algq_cache_cleared' => '1',
+            ],
+            admin_url('admin.php')
+        ));
             wp_die(esc_html__('You do not have permission to clear marketplace cache.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN), '', ['response' => 403]);
         }
 

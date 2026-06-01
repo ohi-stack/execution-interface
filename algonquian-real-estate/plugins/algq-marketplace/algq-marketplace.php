@@ -131,7 +131,13 @@ function algq_deal_marketplace_bootstrap(): void
 }
 
 add_action('plugins_loaded', 'algq_deal_marketplace_bootstrap', 20);
-    return Algq_Marketplace_Plugin::modules();
+
+/**
+ * Determine whether optional Algonquian core services are available.
+ */
+function algq_marketplace_core_available(): bool
+{
+    return function_exists('algq_core') || class_exists('ALGQ_Core');
 }
 
 /**

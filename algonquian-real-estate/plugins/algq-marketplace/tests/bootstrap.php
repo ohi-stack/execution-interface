@@ -53,6 +53,35 @@ function tests_add_wordpress_shims(): void
         }
     }
 
+
+    if (!function_exists('plugin_basename')) {
+        function plugin_basename($file): string
+        {
+            return basename(dirname($file)) . '/' . basename($file);
+        }
+    }
+
+    if (!function_exists('is_admin')) {
+        function is_admin(): bool
+        {
+            return false;
+        }
+    }
+
+    if (!function_exists('load_plugin_textdomain')) {
+        function load_plugin_textdomain($domain, $deprecated = false, $plugin_rel_path = false): bool
+        {
+            return true;
+        }
+    }
+
+    if (!function_exists('register_deactivation_hook')) {
+        function register_deactivation_hook($file, $callback): void
+        {
+            $GLOBALS['algq_marketplace_deactivation_hooks'][$file] = $callback;
+        }
+    }
+
     if (!function_exists('trailingslashit')) {
         function trailingslashit($value): string
         {

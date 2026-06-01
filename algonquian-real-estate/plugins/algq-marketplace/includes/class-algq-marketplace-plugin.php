@@ -1,0 +1,90 @@
+<?php
+/**
+ * Runtime plugin registration for Algonquian Marketplace.
+ *
+ * @package AlgqMarketplace
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class Algq_Marketplace_Plugin
+{
+    public function register(): void
+    {
+        add_shortcode('algq_marketplace', [$this, 'render_shortcode']);
+        add_action('rest_api_init', [$this, 'register_rest_routes']);
+    }
+
+    public function render_shortcode(): string
+    {
+        ob_start();
+        ?>
+        <section class="algq-marketplace" aria-labelledby="algq-marketplace-title">
+            <h2 id="algq-marketplace-title">ARE Marketplace</h2>
+            <p>Wholesale deal distribution, investor access, buyer subscriptions, and premium listing controls for the Algonquian Real Estate platform.</p>
+            <div class="algq-marketplace-grid">
+                <?php foreach (self::modules() as $module) : ?>
+                    <article class="algq-marketplace-card">
+                        <h3><?php echo esc_html($module['label']); ?></h3>
+                        <p><?php echo esc_html($module['description']); ?></p>
+                        <span><?php echo esc_html($module['status']); ?></span>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php
+        return (string) ob_get_clean();
+    }
+
+    public function register_rest_routes(): void
+    {
+        register_rest_route('algq/v1', '/marketplace', [
+            'methods' => 'GET',
+            'permission_callback' => '__return_true',
+            'callback' => function (): WP_REST_Response {
+                return new WP_REST_Response([
+                    'name' => 'ARE Marketplace',
+                    'shortcode' => '[algq_marketplace]',
+                    'modules' => self::modules(),
+                    'pages' => Algq_Marketplace_Activator::generated_pages(),
+                ]);
+            },
+        ]);
+    }
+
+    /**
+     * @return array<int, array{label: string, description: string, status: string}>
+     */
+    public static function modules(): array
+    {
+        return [
+            [
+                'label' => 'Wholesale deals',
+                'description' => 'Curated off-market assignment opportunities with deal highlights, pricing guidance, and diligence checkpoints.',
+                'status' => 'Deal room ready',
+            ],
+            [
+                'label' => 'Investor access',
+                'description' => 'Permissioned access tiers for vetted investors, capital partners, and acquisition collaborators.',
+                'status' => 'Access gated',
+            ],
+            [
+                'label' => 'Deal syndication',
+                'description' => 'Distribution workflows for sending qualified listings to buyer lists, investor circles, and private partner channels.',
+                'status' => 'Distribution mapped',
+            ],
+            [
+                'label' => 'Buyer subscriptions',
+                'description' => 'Recurring buyer membership tiers for priority deal alerts, downloads, market preferences, and saved buy boxes.',
+                'status' => 'Subscription-ready',
+            ],
+            [
+                'label' => 'Premium listings',
+                'description' => 'Featured placement for high-value opportunities with enhanced media, underwriting summaries, and urgency indicators.',
+                'status' => 'Featured inventory',
+            ],
+        ];
+    }
+}

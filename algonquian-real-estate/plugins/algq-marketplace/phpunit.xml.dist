@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Algonquian Marketplace Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="WP_DEVELOP_DIR" value="/tmp/wordpress-develop"/>
+        <env name="WP_TESTS_DIR" value="/tmp/wordpress-tests-lib"/>
+    </php>
+    <coverage>
+        <include>
+            <directory suffix=".php">includes</directory>
+            <file>algq-marketplace.php</file>
+        </include>
+    </coverage>
+</phpunit>

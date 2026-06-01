@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.1-production-hardening
+
+- PHPUnit scaffold
+- phpunit.xml.dist
+- enterprise class loader updates
+- performance cache layer
+- deployment documentation
+- architecture documentation
+- cache documentation
+- security documentation
+- integration documentation
+- final admin UI polish
+- final public UI polish
+- branding assets
+
 ## 0.1.2 - 2026-05-31
 
 - Expanded the ARE Command Center into a full operating headquarters with executive KPIs, financial snapshot, acquisition, underwriting, offers, pipeline, buyer, funding, marketplace, revenue, document, automation, technology, compliance, reporting, and future AI command layers.

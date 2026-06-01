@@ -29,7 +29,7 @@ final class ALGQ_Deal_Marketplace
     private function __construct()
     {
         $this->cache = new ALGQ_Deal_Marketplace_Cache();
-        $this->repository = new ALGQ_Deal_Marketplace_Repository();
+        $this->repository = new ALGQ_Deal_Marketplace_Repository($this->cache);
         $this->security = new ALGQ_Deal_Marketplace_Security();
         $this->assets = new ALGQ_Deal_Marketplace_Assets();
         $this->renderer = new ALGQ_Deal_Marketplace_Renderer($this->repository, $this->security);
@@ -60,6 +60,7 @@ final class ALGQ_Deal_Marketplace
 
         load_plugin_textdomain(ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN, false, dirname(ALGQ_DEAL_MARKETPLACE_BASENAME) . '/languages');
 
+        $this->cache->register_hooks();
         $this->assets->register_hooks();
         $this->admin->register_hooks();
         $this->interest->register_hooks();

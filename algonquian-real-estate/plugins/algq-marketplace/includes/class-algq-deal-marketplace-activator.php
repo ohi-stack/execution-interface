@@ -28,6 +28,9 @@ final class ALGQ_Deal_Marketplace_Activator
 
         add_option('algq_deal_marketplace_options', [
             'access_mode' => 'private',
+            'caching_enabled' => '1',
+            'default_cache_ttl' => (string) ALGQ_Deal_Marketplace_Cache::TTL_LISTINGS,
+            'delete_data_on_uninstall' => '0',
         ]);
 
         flush_rewrite_rules();

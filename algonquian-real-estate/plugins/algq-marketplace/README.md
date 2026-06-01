@@ -28,6 +28,12 @@ Activation declares and creates the public ARE Marketplace page when a WordPress
 
 - `are-marketplace` — renders `[algq_marketplace]`
 
+## Release validation
+
+See [`RELEASE_VALIDATION.md`](RELEASE_VALIDATION.md) for the final production-hardening checklist covering PHP lint, PHPUnit smoke testing, activation, generated pages, shortcodes, buyer flows, marketplace listings, deal detail access, NDA gates, interested-buyer submission, admin dashboard, cache clearing, optional suite-plugin inactivity, and uninstall behavior.
+
+Uninstall is non-destructive by default. Marketplace tables and generated options are deleted only when an administrator explicitly enables **Delete marketplace tables and generated options during uninstall** before uninstalling.
+
 ## PHPUnit tests
 
 The plugin includes a safe PHPUnit suite in `tests/` with `phpunit.xml.dist`. The suite is designed to avoid production database access and external network calls.

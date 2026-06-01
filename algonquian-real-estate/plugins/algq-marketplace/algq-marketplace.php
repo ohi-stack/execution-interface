@@ -140,6 +140,12 @@ if (!function_exists('algq_marketplace_core_available')) {
     {
         return function_exists('algq_core') || class_exists('ALGQ_Core_Plugin');
     }
+/**
+ * Determine whether optional Algonquian core services are available.
+ */
+function algq_marketplace_core_available(): bool
+{
+    return function_exists('algq_core') || class_exists('ALGQ_Core');
 }
 
 /**

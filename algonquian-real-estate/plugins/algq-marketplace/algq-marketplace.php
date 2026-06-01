@@ -1,102 +1,125 @@
 <?php
 /**
- * Plugin Name: Algonquian Marketplace
- * Description: Marketplace foundations for wholesale deals, investor access, syndication, buyer subscriptions, and premium listings.
- * Version: 0.1.0
+ * Plugin Name: Algonquian Deal Marketplace
+ * Description: Enterprise marketplace foundations for wholesale deals, investor access, syndication, buyer subscriptions, and premium listings.
+ * Version: 1.0.0
  * Author: Algonquian Real Estate
  * Requires Plugins: algq-core
+ * Text Domain: algq-deal-marketplace
  */
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
+if (!defined('ALGQ_DEAL_MARKETPLACE_VERSION')) {
+    define('ALGQ_DEAL_MARKETPLACE_VERSION', '1.0.0');
+}
 
-function algq_marketplace_core_available(): bool
+if (!defined('ALGQ_DEAL_MARKETPLACE_FILE')) {
+    define('ALGQ_DEAL_MARKETPLACE_FILE', __FILE__);
+}
+
+if (!defined('ALGQ_DEAL_MARKETPLACE_PATH')) {
+    define('ALGQ_DEAL_MARKETPLACE_PATH', plugin_dir_path(__FILE__));
+}
+
+if (!defined('ALGQ_DEAL_MARKETPLACE_URL')) {
+    define('ALGQ_DEAL_MARKETPLACE_URL', plugin_dir_url(__FILE__));
+}
+
+if (!defined('ALGQ_DEAL_MARKETPLACE_BASENAME')) {
+    define('ALGQ_DEAL_MARKETPLACE_BASENAME', plugin_basename(__FILE__));
+}
+
+if (!defined('ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN')) {
+    define('ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN', 'algq-deal-marketplace');
+}
+
+/**
+ * Safely require a marketplace plugin file if it exists.
+ */
+function algq_deal_marketplace_require_file(string $relative_path): bool
 {
-    if (function_exists('algq_core')) {
+    $file = ALGQ_DEAL_MARKETPLACE_PATH . ltrim($relative_path, '/');
+
+    if (file_exists($file)) {
+        require_once $file;
         return true;
     }
-
-    add_action('admin_notices', static function (): void {
-        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Marketplace requires the Algonquian Core plugin to be active.', 'algq-marketplace') . '</p></div>';
-    });
 
     return false;
 }
 
+$algq_deal_marketplace_files = [
+    'includes/class-algq-deal-marketplace-capabilities.php',
+    'includes/class-algq-deal-marketplace-security.php',
+    'includes/class-algq-deal-marketplace-cache.php',
+    'includes/class-algq-deal-marketplace-repository.php',
+    'includes/class-algq-deal-marketplace-renderer.php',
+    'includes/class-algq-deal-marketplace-pages.php',
+    'includes/class-algq-deal-marketplace-shortcodes.php',
+    'includes/class-algq-deal-marketplace-admin.php',
+    'includes/class-algq-deal-marketplace-assets.php',
+    'includes/class-algq-deal-marketplace-audit-log.php',
+    'includes/class-algq-deal-marketplace-nda.php',
+    'includes/class-algq-deal-marketplace-interest.php',
+    'includes/class-algq-deal-marketplace-integrations.php',
+    'includes/class-algq-deal-marketplace-activator.php',
+    'includes/class-algq-deal-marketplace-deactivator.php',
+    'includes/class-algq-deal-marketplace.php',
+];
+
+foreach ($algq_deal_marketplace_files as $algq_deal_marketplace_file) {
+    algq_deal_marketplace_require_file($algq_deal_marketplace_file);
+}
+
+unset($algq_deal_marketplace_file, $algq_deal_marketplace_files);
+
+if (class_exists('ALGQ_Deal_Marketplace_Activator')) {
+    register_activation_hook(__FILE__, ['ALGQ_Deal_Marketplace_Activator', 'activate']);
+}
+
+if (class_exists('ALGQ_Deal_Marketplace_Deactivator')) {
+    register_deactivation_hook(__FILE__, ['ALGQ_Deal_Marketplace_Deactivator', 'deactivate']);
+}
+
+
 /**
- * Return the marketplace module definitions used by the public shortcode and REST snapshot.
+ * Backward-compatible module snapshot for legacy consumers.
  *
  * @return array<int, array{label: string, description: string, status: string}>
  */
 function algq_marketplace_modules(): array
 {
-    return [
-        [
-            'label' => 'Wholesale deals',
-            'description' => 'Curated off-market assignment opportunities with deal highlights, pricing guidance, and diligence checkpoints.',
-            'status' => 'Deal room ready',
-        ],
-        [
-            'label' => 'Investor access',
-            'description' => 'Permissioned access tiers for vetted investors, capital partners, and acquisition collaborators.',
-            'status' => 'Access gated',
-        ],
-        [
-            'label' => 'Deal syndication',
-            'description' => 'Distribution workflows for sending qualified listings to buyer lists, investor circles, and private partner channels.',
-            'status' => 'Distribution mapped',
-        ],
-        [
-            'label' => 'Buyer subscriptions',
-            'description' => 'Recurring buyer membership tiers for priority deal alerts, downloads, market preferences, and saved buy boxes.',
-            'status' => 'Subscription-ready',
-        ],
-        [
-            'label' => 'Premium listings',
-            'description' => 'Featured placement for high-value opportunities with enhanced media, underwriting summaries, and urgency indicators.',
-            'status' => 'Featured inventory',
-        ],
-    ];
+    if (!class_exists('ALGQ_Deal_Marketplace_Repository')) {
+        return [];
+    }
+
+    $repository = new ALGQ_Deal_Marketplace_Repository();
+
+    return array_map(
+        static function (array $module): array {
+            return [
+                'label' => (string) ($module['label'] ?? $module['title'] ?? ''),
+                'description' => (string) ($module['description'] ?? ''),
+                'status' => (string) ($module['status'] ?? ''),
+            ];
+        },
+        $repository->default_modules()
+    );
 }
 
-add_action('plugins_loaded', static function (): void {
-    if (!algq_marketplace_core_available()) {
+/**
+ * Boot the marketplace once WordPress and other plugins have loaded.
+ */
+function algq_deal_marketplace_bootstrap(): void
+{
+    if (!class_exists('ALGQ_Deal_Marketplace')) {
         return;
     }
 
-    add_shortcode('algq_marketplace', function (): string {
-        ob_start();
-        ?>
-        <section class="algq-marketplace" aria-labelledby="algq-marketplace-title">
-            <h2 id="algq-marketplace-title">ARE Marketplace</h2>
-            <p>Wholesale deal distribution, investor access, buyer subscriptions, and premium listing controls for the Algonquian Real Estate platform.</p>
-            <div class="algq-marketplace-grid">
-                <?php foreach (algq_marketplace_modules() as $module) : ?>
-                    <article class="algq-marketplace-card">
-                        <h3><?php echo esc_html($module['label']); ?></h3>
-                        <p><?php echo esc_html($module['description']); ?></p>
-                        <span><?php echo esc_html($module['status']); ?></span>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </section>
-        <?php
-        return (string) ob_get_clean();
-    });
+    ALGQ_Deal_Marketplace::instance()->run();
+}
 
-    add_action('rest_api_init', function (): void {
-        register_rest_route('algq/v1', '/marketplace', [
-            'methods' => 'GET',
-            'permission_callback' => '__return_true',
-            'callback' => function (): WP_REST_Response {
-                return new WP_REST_Response([
-                    'name' => 'ARE Marketplace',
-                    'shortcode' => '[algq_marketplace]',
-                    'modules' => algq_marketplace_modules(),
-                ]);
-            },
-        ]);
-    });
-});
+add_action('plugins_loaded', 'algq_deal_marketplace_bootstrap', 20);

@@ -34,7 +34,7 @@ final class ALGQ_Deal_Marketplace
         $this->assets = new ALGQ_Deal_Marketplace_Assets();
         $this->renderer = new ALGQ_Deal_Marketplace_Renderer($this->repository, $this->security);
         $this->shortcodes = new ALGQ_Deal_Marketplace_Shortcodes($this->renderer, $this->assets);
-        $this->admin = new ALGQ_Deal_Marketplace_Admin($this->renderer, $this->security);
+        $this->admin = new ALGQ_Deal_Marketplace_Admin($this->renderer, $this->security, $this->cache);
         $this->audit_log = new ALGQ_Deal_Marketplace_Audit_Log($this->repository);
         $this->nda = new ALGQ_Deal_Marketplace_NDA($this->repository, $this->audit_log);
         $this->interest = new ALGQ_Deal_Marketplace_Interest($this->repository, $this->security, $this->audit_log);

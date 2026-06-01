@@ -45,6 +45,7 @@ final class ALGQ_Deal_Marketplace_Interest
         ]);
 
         $this->audit_log->record('interest_submitted', 'interest', $interest_id);
+        do_action('algq_deal_marketplace_interest_submitted', $interest_id, absint($_POST['listing_id'] ?? 0), get_current_user_id());
         wp_safe_redirect(wp_get_referer() ?: home_url('/'));
         exit;
     }

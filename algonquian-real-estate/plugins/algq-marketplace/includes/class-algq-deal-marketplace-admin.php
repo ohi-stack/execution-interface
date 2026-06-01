@@ -55,6 +55,7 @@ final class ALGQ_Deal_Marketplace_Admin
                 'access_mode' => 'private',
                 'caching_enabled' => '1',
                 'default_cache_ttl' => (string) ALGQ_Deal_Marketplace_Cache::TTL_LISTINGS,
+                'delete_data_on_uninstall' => '0',
             ],
         ]);
     }
@@ -86,6 +87,7 @@ final class ALGQ_Deal_Marketplace_Admin
             'access_mode' => $this->security->sanitize_allowed($options['access_mode'] ?? $existing['access_mode'] ?? '', ['private', 'members', 'public'], 'private'),
             'caching_enabled' => !empty($options['caching_enabled']) ? '1' : '0',
             'default_cache_ttl' => (string) $ttl,
+            'delete_data_on_uninstall' => !empty($options['delete_data_on_uninstall']) ? '1' : '0',
         ];
     }
 
@@ -142,6 +144,15 @@ final class ALGQ_Deal_Marketplace_Admin
                         <td>
                             <input id="algq-default-cache-ttl" type="number" min="30" max="86400" step="30" name="algq_deal_marketplace_options[default_cache_ttl]" value="<?php echo esc_attr((string) $ttl); ?>" />
                             <p class="description"><?php echo esc_html__('Time to keep listing cache entries, in seconds. Dashboard summaries use 120 seconds, settings use 1800 seconds, and NDA status uses 600 seconds.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php echo esc_html__('Uninstall behavior', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="algq_deal_marketplace_options[delete_data_on_uninstall]" value="1" <?php checked(!empty($options['delete_data_on_uninstall']) && '1' === (string) $options['delete_data_on_uninstall']); ?> />
+                                <?php echo esc_html__('Delete marketplace tables and generated options during uninstall. Leave unchecked for non-destructive release-safe uninstalls.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>
+                            </label>
                         </td>
                     </tr>
                 </table>

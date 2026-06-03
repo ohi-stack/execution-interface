@@ -57,6 +57,8 @@ function request(port, route, options = {}) {
     assert.deepEqual(manifest.publicRoutes, PUBLIC_ROUTES);
     assert.deepEqual(manifest.apiRoutes, API_ROUTES);
     assert.ok(manifest.apiRoutes.includes('/api/system-health'));
+    assert.ok(manifest.apiRoutes.includes('/api/process'));
+
 
     const systemHealth = JSON.parse((await request(port, '/api/system-health')).body);
     assert.ok(['ready', 'degraded'].includes(systemHealth.status));
@@ -85,6 +87,14 @@ function request(port, route, options = {}) {
     assert.equal(validProcess.status, 200);
     assert.equal(JSON.parse(validProcess.body).status, 'ok');
     assert.ok(validProcess.headers['ratelimit-limit']);
+
+    const validCanonicalProcess = await request(port, '/api/process', {
+      method: 'POST',
+      headers: { 'x-omos-key': testApiKey },
+      body: { content: { raw: 'canonical api process smoke' }, metadata: { source: 'smoke' } }
+    });
+    assert.equal(validCanonicalProcess.status, 200);
+    assert.equal(JSON.parse(validCanonicalProcess.body).status, 'ok');
 
     const disallowedOrigin = await request(port, '/api/health', { headers: { origin: 'https://evil.example' } });
     assert.equal(disallowedOrigin.status, 403);

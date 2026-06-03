@@ -1,25 +1,18 @@
-const useCases = [
-  { title: 'Certificate Verification', body: 'Validate training, academic, and professional certificates in real time.' },
-  { title: 'Identity Verification', body: 'Prove identity claims without exposing sensitive personal data.' },
-  { title: 'Product Verification', body: 'Confirm product authenticity across supply chain checkpoints.' },
-  { title: 'Property Verification', body: 'Verify ownership and title history for physical or digital property assets.' }
+import { CardGrid, InfoCard, OmosPage } from '../components/omos-docs-ui';
+
+const cases = [
+  ['Website content', 'Transform source notes into structured page drafts, summaries, cards, CTAs, and release-safe copy.'],
+  ['AI governance docs', 'Document prompts, boundaries, status labels, endpoint behavior, and review checkpoints for AI-assisted systems.'],
+  ['Developer tooling', 'Provide repeatable API examples, response schemas, operational notes, and status manifests for integration teams.'],
+  ['Membership infrastructure', 'Support member-facing explanations, intake summaries, route maps, and dashboard documentation without overstating authority.'],
+  ['Compliance-safe summaries', 'Create concise interpretations that preserve source intent while avoiding legal immunity, governmental, tax, or non-participant jurisdiction claims.'],
+  ['Multi-model synthesis', 'Compare and distill outputs from multiple model workflows into one aligned, documented, reviewable result.']
 ];
 
 export default function UseCasesPage() {
   return (
-    <main className="onegodian-surface mx-auto max-w-6xl px-4 py-10">
-      <section className="glass-panel p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">Trust Rails</p>
-        <h1 className="mt-3 text-3xl font-black tracking-[-0.035em] text-white">Verification Use Cases</h1>
-      </section>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {useCases.map((item) => (
-          <section key={item.title} className="mobile-card">
-            <h2 className="text-xl font-bold text-white">{item.title}</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-300">{item.body}</p>
-          </section>
-        ))}
-      </div>
-    </main>
+    <OmosPage eyebrow="Use cases" title="Practical OMOS deployment patterns." description="OMOS supports documentation-heavy workflows where clarity, repeatability, and boundary-safe interpretation matter.">
+      <CardGrid>{cases.map(([title, detail], i) => <InfoCard key={title} title={title} accent={i % 2 ? 'green' : 'cyan'}><p>{detail}</p></InfoCard>)}</CardGrid>
+    </OmosPage>
   );
 }

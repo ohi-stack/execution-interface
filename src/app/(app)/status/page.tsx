@@ -1,40 +1,27 @@
-import Link from 'next/link';
-import { coreRoutes, routeStatusRows } from '@/lib/app-content';
+import { CardGrid, InfoCard, OmosPage, StatusPill } from '@/app/components/omos-docs-ui';
+
+const features = [
+  ['Global navigation', 'Active', 'Responsive public routes for the documentation node.'],
+  ['Documentation pages', 'Active', 'Home, protocol, algorithm, dashboard, API, docs, use cases, roadmap, and status content.'],
+  ['POST /api/process public docs', 'Active', 'Canonical documentation path using x-omos-key.'],
+  ['Legacy /process runtime concept', 'Active', 'Preserved for compatibility with current runtime integrations.'],
+  ['SDK packages', 'Planned', 'Not active until released, documented, and repeatable.'],
+  ['Webhook delivery', 'Planned', 'Not active until operational verification exists.'],
+  ['Multi-tenant console', 'Planned', 'Future dashboard work; no active claim is made.']
+];
 
 export default function StatusPage() {
   return (
-    <main className="space-y-6">
-      <section className="rounded-2xl border border-cyan-500/30 bg-slate-900/70 p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">System Status</p>
-        <h1 className="mt-2 text-3xl font-bold">OneGodian App Route Status</h1>
-        <p className="mt-3 max-w-4xl text-slate-300">Production route table for the public OneGodian App content release. The manifest route list tracks these same public-safe routes for smoke testing and status review.</p>
+    <OmosPage eyebrow="Status" title="Runtime status and feature classification." description="This page states what is active, what is planned, and which version of the node is being documented.">
+      <CardGrid cols="lg:grid-cols-3">
+        <InfoCard title="Runtime status" accent="green"><StatusPill active>active documentation node</StatusPill><p className="mt-3">Public documentation, route content, and API examples are available.</p></InfoCard>
+        <InfoCard title="Version" accent="gold"><p className="font-mono text-cyan-100">0.1.0 documentation-node</p><p className="mt-3">Version follows the package runtime until a dedicated OMOS release marker is configured.</p></InfoCard>
+        <InfoCard title="Production rule" accent="cyan"><p>If a feature is not operational, documented, and repeatable, it is planned, not active.</p></InfoCard>
+      </CardGrid>
+      <section className="overflow-hidden rounded-3xl border border-gold-300/20 bg-black/45">
+        <div className="p-5"><h2 className="text-2xl font-black text-white">Live / planned feature table</h2></div>
+        <div className="overflow-x-auto"><table className="min-w-full text-left text-sm"><thead className="bg-white/[0.05] text-xs uppercase tracking-[0.16em] text-gold-200"><tr><th className="px-5 py-3">Feature</th><th className="px-5 py-3">Status</th><th className="px-5 py-3">Notes</th></tr></thead><tbody className="divide-y divide-white/10">{features.map(([feature, status, notes]) => <tr key={feature}><td className="px-5 py-4 font-semibold text-white">{feature}</td><td className="px-5 py-4"><StatusPill active={status === 'Active'}>{status}</StatusPill></td><td className="px-5 py-4 text-slate-300">{notes}</td></tr>)}</tbody></table></div>
       </section>
-      <section className="overflow-hidden rounded-xl border border-slate-700 bg-slate-900/60">
-        <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="bg-slate-900 text-xs uppercase tracking-[0.16em] text-slate-400">
-            <tr>
-              <th className="px-4 py-3">Route</th>
-              <th className="px-4 py-3">Page</th>
-              <th className="px-4 py-3">Purpose</th>
-              <th className="px-4 py-3">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800">
-            {routeStatusRows.map((row) => (
-              <tr key={row.path} className="align-top">
-                <td className="px-4 py-3 font-mono text-cyan-300"><Link href={row.path}>{row.path}</Link></td>
-                <td className="px-4 py-3 text-slate-100">{row.title}</td>
-                <td className="px-4 py-3 text-slate-300">{row.purpose}</td>
-                <td className="px-4 py-3"><span className="rounded-full border border-emerald-400/40 px-2 py-1 text-xs text-emerald-200">{row.status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-      <section className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
-        <h2 className="text-xl font-semibold">Manifest Coverage</h2>
-        <p className="mt-2 text-sm text-slate-300">Current route manifest: {coreRoutes.join(', ')}</p>
-      </section>
-    </main>
+    </OmosPage>
   );
 }

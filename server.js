@@ -30,19 +30,17 @@ const CANONICAL_HOST = process.env.OMOS_CANONICAL_HOST || 'https://omos.onegodia
 
 const PUBLIC_ROUTES = [
   '/',
-  '/ecosystem',
-  '/overview',
-  '/omos',
+  '/protocol',
   '/algorithm',
-  '/remember',
-  '/time',
-  '/commerce',
-  '/identity',
-  '/institutional',
+  '/dashboard',
+  '/api',
+  '/docs',
+  '/use-cases',
+  '/roadmap',
   '/status'
 ];
 
-const API_ROUTES = ['/health', '/api/health', '/ready', '/api/ready', '/version', '/api/version', '/api/system-health', '/manifest', '/api/manifest', '/api/stats', '/process'];
+const API_ROUTES = ['/health', '/api/health', '/ready', '/api/ready', '/version', '/api/version', '/api/system-health', '/manifest', '/api/manifest', '/api/stats', '/api/process', '/process'];
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
@@ -139,16 +137,6 @@ app.get('/api/manifest', (_req, res) => res.json(manifestPayload()));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/dashboard', (_req, res) => {
-  res.json({
-    runtime: 'express',
-    mode: ENVIRONMENT,
-    status: 'active',
-    uptimeSeconds: Math.floor(process.uptime()),
-    processRequests: Array.from(usageMap.values()).reduce((sum, count) => sum + count, 0)
-  });
-});
-
 app.get('/api/stats', requireApiKey, (_req, res) => {
   res.json({
     service: 'omos-runtime',
@@ -160,7 +148,7 @@ app.get('/api/stats', requireApiKey, (_req, res) => {
   });
 });
 
-app.post('/process', requireApiKey, rateLimit({ limit: 100, windowMs: 60000 }), (req, res) => {
+function handleProcessRequest(req, res) {
   const validation = validateProcessInput(req.body);
   if (!validation.ok) {
     return res.status(validation.status).json({ error: validation.error, message: validation.message, requestId: req.requestId });
@@ -173,12 +161,14 @@ app.post('/process', requireApiKey, rateLimit({ limit: 100, windowMs: 60000 }), 
   }
   const data = OMOSProcess(input);
   trackUsage(req.apiKeyMeta.name);
-  logEvent('process.completed', { apiKeyName: req.apiKeyMeta.name, plan, requestId: req.requestId });
+  logEvent('process.completed', { apiKeyName: req.apiKeyMeta.name, plan, requestId: req.requestId, route: req.path });
   return res.json({ status: 'ok', plan, limits, data, requestId: req.requestId });
-});
+}
+
+app.post('/api/process', requireApiKey, rateLimit({ limit: 100, windowMs: 60000 }), handleProcessRequest);
+app.post('/process', requireApiKey, rateLimit({ limit: 100, windowMs: 60000 }), handleProcessRequest);
 
 for (const route of PUBLIC_ROUTES) {
-  if (route === '/dashboard') continue;
   app.get(route, (_req, res) => res.sendFile(path.join(__dirname, `src/pages${route === '/' ? '/index' : route}.html`)));
 }
 

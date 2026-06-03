@@ -1,26 +1,21 @@
-const layers = [
-  { title: 'Protocol', detail: 'The rules, route definitions, manifests, vocabulary, safety boundaries, and structured references that make OneGodian systems interoperable.' },
-  { title: 'Experience', detail: 'The user-facing dashboard, content, tools, campaigns, identity flows, and time displays that make the system understandable and usable.' },
-  { title: 'Community', detail: 'The voluntary participation layer for shared memory, membership, cultural context, public education, and human support.' },
-  { title: 'Orientation', detail: 'The alignment layer that keeps language, AI behavior, public claims, legal boundaries, and institutional roles pointed in the correct direction.' }
+import { CardGrid, InfoCard, OmosPage } from '@/app/components/omos-docs-ui';
+
+const stages = [
+  ['Observe', 'Receive raw content, metadata, route context, and operator intent without expanding claims beyond the provided source.'],
+  ['Distill', 'Extract purpose, audience, terms, risks, and required output format into a compact working context.'],
+  ['Align', 'Apply protocol language, compliance-safe wording, production status rules, and participant boundaries.'],
+  ['Select', 'Choose the appropriate endpoint class, template, summary mode, or documentation pattern for the request.'],
+  ['Execute', 'Generate the repeatable output, response object, route content, or operational summary.'],
+  ['Verify', 'Check authentication, input validation, response shape, wording boundaries, and active/planned status before publication.']
 ];
 
 export default function AlgorithmPage() {
   return (
-    <main className="space-y-6">
-      <section className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-200">Operating Algorithm</p>
-        <h1 className="mt-2 text-3xl font-black">The OneGodian Algorithm</h1>
-        <p className="mt-3 max-w-4xl text-slate-300">The OneGodian Algorithm is summarized as a four-layer operating model: Protocol, Experience, Community, and Orientation. Together they describe how the ecosystem names things, presents them, invites participation, and keeps claims aligned.</p>
-      </section>
-      <section className="grid gap-4 md:grid-cols-2">
-        {layers.map((layer) => (
-          <article key={layer.title} className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
-            <h2 className="text-xl font-semibold text-cyan-100">{layer.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">{layer.detail}</p>
-          </article>
-        ))}
-      </section>
-    </main>
+    <OmosPage eyebrow="Algorithm" title="Observe → Distill → Align → Select → Execute → Verify." description="The OMOS runtime model converts source material into structured, compliance-aware documentation and API responses through a six-step operating loop.">
+      <CardGrid cols="lg:grid-cols-3">
+        {stages.map(([title, detail], index) => <InfoCard key={title} title={`${index + 1}. ${title}`} accent={index < 2 ? 'cyan' : index < 4 ? 'gold' : 'green'}><p>{detail}</p></InfoCard>)}
+      </CardGrid>
+      <InfoCard title="Runtime invariant" accent="gold"><p>The algorithm is not a legal status engine. It is an operational interpretation loop that helps produce documented, reviewable, repeatable outputs.</p></InfoCard>
+    </OmosPage>
   );
 }

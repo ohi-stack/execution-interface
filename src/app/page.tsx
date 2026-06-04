@@ -1,44 +1,40 @@
-import Link from 'next/link';
-import { CardGrid, InfoCard, OmosPage, StatusPill } from './components/omos-docs-ui';
+import { CapitalCard, CapitalCardGrid, CapitalPage, NoticePanel } from './components/CapitalPage';
 
-const systems = [
-  ['Protocol kernel', 'Defines human, semantic, agent, interface, and compliance boundaries before any automation is labeled active.'],
-  ['Runtime model', 'Observe, distill, align, select, execute, and verify steps convert raw context into repeatable system outputs.'],
-  ['Developer surface', 'Documents base URL, x-omos-key authentication, endpoint classes, examples, errors, and deployment notes.'],
-  ['Governance layer', 'Separates operational documentation from legal, governmental, tax, or participant-jurisdiction claims.'],
-  ['Status discipline', 'Publishes active versus planned features with a rule that only operational, documented, repeatable functions are active.'],
-  ['Integration node', 'Normalizes public process documentation to POST /api/process while preserving the existing /process runtime concept.']
+const boundaryCards = [
+  ['Public Information Layer', 'Website pages, explanatory content, general education, summaries, and public-facing capital documentation.'],
+  ['Commerce / Checkout Layer', 'WooCommerce or Stripe-powered checkout access for approved products, documents, services, or permitted payment flows.'],
+  ['Capital Records Layer', 'Contributor records, instrument references, readiness status, document history, and internal recordkeeping.'],
+  ['Disclosure Review Layer', 'Disclosure acknowledgement, investor/contributor notices, risk language, required confirmations, and participation gates.'],
+  ['Certificate Verification Layer', 'Certificate IDs, OBP-1 references, QR verification, downloadable records, and status confirmation.'],
+  ['Compliance Boundary', 'The portal does not independently create, approve, validate, or guarantee any securities offering. All capital participation must be supported by appropriate review, disclosures, documentation, and applicable legal compliance.']
 ];
 
 export default function HomePage() {
   return (
-    <OmosPage
-      eyebrow="OMOS.ONEGODIAN.COM"
-      title="Production systems documentation for the OMOS runtime."
-      description="OMOS™ is a documentation and integration node for operational interpretation, API-assisted processing, semantic alignment, and compliance-safe system summaries."
-      cta={[{ href: '/docs', label: 'Read docs' }, { href: '/dashboard', label: 'Open dashboard' }]}
+    <CapitalPage
+      title="ONEGODIAN CAPITAL PORTAL™"
+      subtitle="Private capital infrastructure for records, disclosures, certificates, contributor intake, and verification."
+      actions={[
+        { href: '/offerings', label: 'View Offerings' },
+        { href: '/disclosures', label: 'Review Disclosures' },
+        { href: '/verification', label: 'Verify Certificate' },
+        { href: '/readiness', label: 'Check Readiness' }
+      ]}
     >
-      <CardGrid>
-        {systems.map(([title, detail], index) => (
-          <InfoCard key={title} title={title} accent={index % 3 === 0 ? 'gold' : index % 3 === 1 ? 'cyan' : 'green'}>
-            <p>{detail}</p>
-          </InfoCard>
-        ))}
-      </CardGrid>
-      <section className="grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
-        <article className="glass-panel p-5 sm:p-6">
-          <StatusPill active>Documentation node active</StatusPill>
-          <h2 className="mt-4 text-2xl font-black text-white">Built for readers, builders, and governance reviewers.</h2>
-          <p className="mt-3 leading-7 text-slate-300">The node explains what OMOS does, how requests are shaped, where compliance boundaries live, and which capabilities are available today versus planned for later phases.</p>
-        </article>
-        <article className="rounded-3xl border border-cyan-300/25 bg-cyan-300/10 p-5 sm:p-6">
-          <h2 className="text-xl font-black text-white">Primary actions</h2>
-          <div className="mt-4 flex flex-col gap-3">
-            <Link href="/api" className="premium-button">Integrate API</Link>
-            <Link href="/roadmap" className="premium-button-secondary">Review roadmap</Link>
-          </div>
-        </article>
+      <NoticePanel>
+        <p>The ONEGODIAN Capital Portal is a controlled recordkeeping and capital-documentation interface for ONEGODIAN, LLC. It supports offerings documentation, disclosure review, contributor records, certificate verification, readiness tracking, and capital-related platform workflows.</p>
+        <p className="mt-3 font-semibold text-gold-100">It does not independently create, approve, validate, market, or guarantee any securities offering.</p>
+      </NoticePanel>
+      <section className="glass-panel p-5 sm:p-6">
+        <h2 className="text-2xl font-black text-white">Operating Boundary Model</h2>
+        <div className="mt-3 space-y-3 leading-7 text-slate-300">
+          <p>The ONEGODIAN Capital Portal separates public information, checkout activity, capital records, disclosure review, certificate issuance, and verification into distinct operating layers.</p>
+          <p>WordPress and WooCommerce may present public-facing information or checkout access where appropriate. The Capital Portal manages capital records, disclosure status, contributor intake records, certificate references, verification workflows, and readiness documentation.</p>
+        </div>
       </section>
-    </OmosPage>
+      <CapitalCardGrid>
+        {boundaryCards.map(([title, detail]) => <CapitalCard key={title} title={title}><p>{detail}</p></CapitalCard>)}
+      </CapitalCardGrid>
+    </CapitalPage>
   );
 }

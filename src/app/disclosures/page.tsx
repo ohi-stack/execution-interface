@@ -1,11 +1,15 @@
-export default function Page() {
+import { CapitalCard, CapitalCardGrid, CapitalPage, NoticePanel } from '../components/CapitalPage';
+
+const cards = ['General Disclosure Notice', 'Risk Factors', 'No Guarantee Notice', 'Forward-Looking Statements', 'Private Records Notice', 'Acknowledgement History'];
+
+export default function DisclosuresPage() {
   return (
-    <main className="onegodian-surface mx-auto max-w-6xl px-4 py-10 text-slate-100">
-      <section className="glass-panel p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">Administrative Records</p>
-        <h1 className="mt-3 text-3xl font-black tracking-[-0.035em] text-white">Disclosures</h1>
-        <p className="mt-3 leading-7 text-slate-300">Administrative record workspace for disclosures with disclosure review and acknowledgement workflow support.</p>
-      </section>
-    </main>
+    <CapitalPage title="Disclosure Center" subtitle="All capital participation requires disclosure review and acknowledgement.">
+      <NoticePanel>
+        <p>This page provides access to general notices, risk language, participation disclaimers, review requirements, and acknowledgement records.</p>
+        <p className="mt-3">Nothing on this page is legal, financial, tax, or investment advice. Participation decisions should be reviewed with qualified advisors where appropriate.</p>
+      </NoticePanel>
+      <CapitalCardGrid>{cards.map((card) => <CapitalCard key={card} title={card}><p>Disclosure material and acknowledgement recordkeeping for controlled capital workflows.</p></CapitalCard>)}</CapitalCardGrid>
+    </CapitalPage>
   );
 }

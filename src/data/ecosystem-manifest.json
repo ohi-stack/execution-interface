@@ -1,0 +1,90 @@
+{
+  "name": "Onegodian App Ecosystem Manifest",
+  "version": "0.1.0",
+  "owner": "ONEGODIAN, LLC",
+  "primaryHost": "app.onegodian.com",
+  "role": "control-plane",
+  "requiredRoutes": [
+    "/dashboard",
+    "/ecosystem",
+    "/registry",
+    "/tools",
+    "/members",
+    "/certificates",
+    "/products",
+    "/media",
+    "/settings",
+    "/admin",
+    "/api/health",
+    "/api/manifest",
+    "/api/tools",
+    "/api/stats"
+  ],
+  "domains": [
+    {
+      "id": "app",
+      "host": "app.onegodian.com",
+      "runtime": "node-app",
+      "role": "command center and ecosystem control plane",
+      "syncMode": "source"
+    },
+    {
+      "id": "omos",
+      "host": "omos.onegodian.com",
+      "runtime": "node",
+      "role": "OMOS protocol, specification, alignment, and documentation node",
+      "syncMode": "pull"
+    },
+    {
+      "id": "capital",
+      "host": "capital.onegodian.com",
+      "runtime": "node-plus-wordpress-plugin",
+      "role": "capital, disclosure, ODC, Zolfi, and Instryx consolidation node",
+      "syncMode": "pull",
+      "modules": ["odc", "disclosure-center", "zolfi", "instryx", "capital-dashboard"]
+    },
+    {
+      "id": "onegodian-org",
+      "host": "onegodian.org",
+      "runtime": "wordpress-plugin",
+      "role": "organization, public identity, education, archives, and institutional home",
+      "syncMode": "plugin"
+    },
+    {
+      "id": "onegodian-com",
+      "host": "onegodian.com",
+      "runtime": "wordpress-woocommerce-plugin",
+      "role": "store, products, downloads, certificates, memberships, campaigns, and commerce",
+      "syncMode": "plugin"
+    },
+    {
+      "id": "u-onegodian",
+      "host": "u.onegodian.com",
+      "runtime": "wordpress-lms-plugin",
+      "role": "courses, lessons, enrollments, certificates, and learning paths",
+      "syncMode": "plugin"
+    },
+    {
+      "id": "galaxy",
+      "host": "galaxy.onegodian.com",
+      "runtime": "plugin-or-node-app",
+      "role": "galaxy console, planet navigator, media gateway, and planet store routing",
+      "syncMode": "plugin"
+    },
+    {
+      "id": "quantumohi",
+      "host": "quantumohi.com",
+      "runtime": "platform-plugin",
+      "role": "QOHI/OHI services, platform positioning, and technical service pages",
+      "syncMode": "plugin"
+    }
+  ],
+  "productionDefinitionOfDone": [
+    "domain has manifest or status endpoint",
+    "domain has page and route registry",
+    "domain has health status",
+    "domain has deployment/build record",
+    "domain has revenue or operational purpose documented",
+    "domain can be indexed by app.onegodian.com"
+  ]
+}

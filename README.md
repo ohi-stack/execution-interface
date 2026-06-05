@@ -65,3 +65,16 @@ ONEGODIAN, LLC is the commercial/IP/software entity. OMOS is a voluntary educati
 [algq_offer_generator]
 [/vc_column_text]
 ```
+
+## Production ZIP Build
+
+Build and verify the OneGodian Platform Plugin production ZIP locally before publishing a release artifact:
+
+```bash
+chmod +x scripts/build-onegodian-platform-plugin.sh
+chmod +x scripts/verify-onegodian-platform-plugin.sh
+./scripts/build-onegodian-platform-plugin.sh
+./scripts/verify-onegodian-platform-plugin.sh
+```
+
+The generated `onegodian-platform-plugin-v1.0.0.zip` file is a release artifact and should not be committed unless the repository release policy explicitly changes to allow generated ZIP files.

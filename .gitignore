@@ -5,3 +5,6 @@ build/
 .env
 .env.local
 .DS_Store
+
+# Generated WordPress plugin packages
+onegodian-platform-plugin-v*.zip

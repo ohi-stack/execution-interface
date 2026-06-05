@@ -17,6 +17,7 @@ define('OGM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('OGM_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 require_once OGM_PLUGIN_DIR . 'includes/class-onegodian-members-shortcodes.php';
+require_once OGM_PLUGIN_DIR . 'includes/class-onegodian-belief-mapper.php';
 require_once OGM_PLUGIN_DIR . 'includes/class-onegodian-members-contributors-affiliates.php';
 
 final class Onegodian_Members_Plugin
@@ -48,6 +49,7 @@ final class Onegodian_Members_Plugin
         $plugin = new self();
         add_action('admin_menu', array($plugin, 'register_admin_menu'));
         add_action('admin_enqueue_scripts', array($plugin, 'enqueue_admin_assets'));
+        add_action('wp_enqueue_scripts', array($plugin, 'enqueue_public_assets'));
         add_action('admin_init', array($plugin, 'handle_admin_actions'));
         add_action('rest_api_init', array($plugin, 'register_rest_routes'));
         add_action('init', array($plugin, 'register_shortcodes'));
@@ -120,6 +122,17 @@ final class Onegodian_Members_Plugin
         );
     }
 
+
+    public function enqueue_public_assets(): void
+    {
+        wp_enqueue_style(
+            'ogm-public',
+            OGM_PLUGIN_URL . 'assets/css/ogm-public.css',
+            array(),
+            OGM_VERSION
+        );
+    }
+
     public function handle_admin_actions(): void
     {
         if (!is_admin() || !current_user_can('manage_options') || empty($_POST['ogm_action'])) {
@@ -150,6 +163,11 @@ final class Onegodian_Members_Plugin
         if ('generate_pages' === $action) {
             $created = $this->generate_required_pages();
             $redirect = add_query_arg(array('ogm_notice' => 'pages_generated', 'ogm_count' => $created), $redirect);
+        }
+
+        if ('generate_belief_mapper_pages' === $action) {
+            $created = $this->generate_belief_mapper_pages();
+            $redirect = add_query_arg(array('ogm_notice' => 'belief_mapper_pages_generated', 'ogm_count' => $created), $redirect);
         }
 
         if ('flush_rewrites' === $action) {
@@ -197,6 +215,8 @@ final class Onegodian_Members_Plugin
         $shortcodes = new Onegodian_Members_Shortcodes(array($this, 'get_public_settings'));
         $shortcodes->register();
 
+        $belief_mapper = new Onegodian_Belief_Mapper_Module();
+        $belief_mapper->register();
         $contributors_affiliates = new Onegodian_Members_Contributors_Affiliates(array($this, 'get_public_settings'));
         $contributors_affiliates->register();
     }
@@ -230,6 +250,7 @@ final class Onegodian_Members_Plugin
                     <h2><?php esc_html_e('Quick Actions', 'onegodian-members'); ?></h2>
                     <div class="ogm-actions">
                         <?php $this->action_form('generate_pages', __('Generate Pages', 'onegodian-members'), 'onegodian-members'); ?>
+                        <?php $this->action_form('generate_belief_mapper_pages', __('Create Belief Mapper Pages', 'onegodian-members'), 'onegodian-members', 'button-secondary'); ?>
                         <?php $this->action_form('rotate_bridge_key', __('Rotate Bridge Key', 'onegodian-members'), 'onegodian-members'); ?>
                         <a class="button button-secondary" href="<?php echo esc_url($this->admin_url('onegodian-members-members')); ?>"><?php esc_html_e('View Members', 'onegodian-members'); ?></a>
                         <a class="button button-primary" href="<?php echo esc_url($this->get_setting('app_dashboard_url')); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Open App Dashboard', 'onegodian-members'); ?></a>
@@ -392,7 +413,7 @@ final class Onegodian_Members_Plugin
         $this->render_admin_shell('onegodian-members-tools', function (): void {
             ?>
             <div class="ogm-grid ogm-grid-2">
-                <section class="ogm-card"><h2><?php esc_html_e('Page & Shortcode Tools', 'onegodian-members'); ?></h2><div class="ogm-actions"><?php $this->action_form('generate_pages', __('Generate required pages', 'onegodian-members'), 'onegodian-members-tools'); ?><button class="button button-secondary" disabled><?php esc_html_e('Regenerate shortcodes', 'onegodian-members'); ?></button><?php $this->action_form('flush_rewrites', __('Flush rewrite rules', 'onegodian-members'), 'onegodian-members-tools', 'button-secondary'); ?></div></section>
+                <section class="ogm-card"><h2><?php esc_html_e('Page & Shortcode Tools', 'onegodian-members'); ?></h2><div class="ogm-actions"><?php $this->action_form('generate_pages', __('Generate required pages', 'onegodian-members'), 'onegodian-members-tools'); ?><?php $this->action_form('generate_belief_mapper_pages', __('Create Belief Mapper Pages', 'onegodian-members'), 'onegodian-members-tools', 'button-secondary'); ?><button class="button button-secondary" disabled><?php esc_html_e('Regenerate shortcodes', 'onegodian-members'); ?></button><?php $this->action_form('flush_rewrites', __('Flush rewrite rules', 'onegodian-members'), 'onegodian-members-tools', 'button-secondary'); ?></div></section>
                 <section class="ogm-card"><h2><?php esc_html_e('Member Data Tools', 'onegodian-members'); ?></h2><div class="ogm-actions"><?php $this->action_form('repair_member_metadata', __('Repair member metadata', 'onegodian-members'), 'onegodian-members-tools', 'button-secondary'); ?><button class="button button-secondary" disabled><?php esc_html_e('Export members CSV', 'onegodian-members'); ?></button><button class="button button-secondary" disabled><?php esc_html_e('Import tools', 'onegodian-members'); ?></button></div></section>
             </div>
             <?php
@@ -517,6 +538,7 @@ final class Onegodian_Members_Plugin
             'bridge_saved' => __('App bridge settings saved.', 'onegodian-members'),
             'bridge_key_rotated' => __('Bridge key generated. Copy the one-time value now.', 'onegodian-members'),
             'pages_generated' => sprintf(__('Required pages checked. %d page(s) created.', 'onegodian-members'), isset($_GET['ogm_count']) ? absint($_GET['ogm_count']) : 0),
+            'belief_mapper_pages_generated' => sprintf(__('Belief Mapper pages checked. %d page(s) created.', 'onegodian-members'), isset($_GET['ogm_count']) ? absint($_GET['ogm_count']) : 0),
             'rewrites_flushed' => __('Rewrite rules flushed.', 'onegodian-members'),
             'metadata_repaired' => __('Member metadata repair completed.', 'onegodian-members'),
         );
@@ -587,6 +609,15 @@ final class Onegodian_Members_Plugin
 
     private function generate_required_pages(): int
     {
+        $pages = array(
+            'Membership' => '[onegodian_membership_cta]',
+            'Membership Pricing' => '[onegodian_members_pricing]',
+            'Member Resources' => '[onegodian_membership_resources]',
+            'Member Certificates' => '[onegodian_member_certificates]',
+            'Member Dashboard' => '[onegodian_member_dashboard]',
+            'Member Support' => '[onegodian_member_support]',
+        );
+        $pages = array_merge($pages, Onegodian_Belief_Mapper_Module::pages());
         $created = 0;
         foreach ($this->generated_page_definitions() as $page) {
             $shortcode = trim($page['shortcode'], '[]');
@@ -605,6 +636,23 @@ final class Onegodian_Members_Plugin
         return $created;
     }
 
+    private function generate_belief_mapper_pages(): int
+    {
+        $created = 0;
+        foreach (Onegodian_Belief_Mapper_Module::pages() as $title => $shortcode) {
+            if ($this->page_exists_with_shortcode(trim($shortcode, '[]'))) {
+                continue;
+            }
+            wp_insert_post(array(
+                'post_title' => $title,
+                'post_name' => sanitize_title($title),
+                'post_content' => $shortcode,
+                'post_status' => 'publish',
+                'post_type' => 'page',
+            ));
+            $created++;
+        }
+        return $created;
     /** @return array<int, array{title:string, slug:string, shortcode:string}> */
     private function generated_page_definitions(): array
     {
@@ -681,6 +729,7 @@ final class Onegodian_Members_Plugin
 
     public function rest_manifest(): WP_REST_Response
     {
+        return rest_ensure_response(array('module' => $this->get_setting('module_slug'), 'rest_base' => rest_url(self::REST_NAMESPACE), 'shortcodes' => array('onegodian_membership_cta', 'onegodian_members_pricing', 'onegodian_membership_resources', 'onegodian_member_certificates', 'onegodian_member_dashboard', 'onegodian_member_support', 'onegodian_belief_mapper', 'onegodian_belief_mapper_lite', 'onegodian_belief_mapper_results', 'onegodian_belief_mapper_certificate', 'onegodian_belief_mapper_resources', 'onegodian_belief_mapper_dashboard')));
         return rest_ensure_response(array('module' => $this->get_setting('module_slug'), 'rest_base' => rest_url(self::REST_NAMESPACE), 'shortcodes' => $this->public_shortcodes(), 'generated_pages' => array_values($this->generated_page_definitions())));
     }
 

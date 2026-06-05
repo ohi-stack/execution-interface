@@ -78,12 +78,15 @@ Activation creates styled pages using the reusable template library, including h
 
 The plugin does not remove existing functionality. Legacy shortcode tags are registered only when another plugin has not already registered them, allowing dedicated modules for WooCommerce, Belief Mapper, member resources, and contributor systems to continue taking precedence.
 
-## Packaging
+## Production ZIP Build
 
-The distributable ZIP is intentionally generated locally and ignored by Git so repository pushes do not include binary release artifacts. Build it with:
+The distributable ZIP is intentionally generated locally and ignored by Git so repository pushes do not include binary release artifacts. Build and verify it with:
 
 ```bash
+chmod +x scripts/build-onegodian-platform-plugin.sh
+chmod +x scripts/verify-onegodian-platform-plugin.sh
 ./scripts/build-onegodian-platform-plugin.sh
+./scripts/verify-onegodian-platform-plugin.sh
 ```
 
-The script produces `onegodian-platform-plugin-v1.0.0.zip` at the repository root and verifies it with `unzip -t`.
+The build script produces `onegodian-platform-plugin-v1.0.0.zip` at the repository root and verifies archive integrity with `unzip -t`. The verification script confirms plugin structure, version metadata, required files, class registrations, REST route strings, and the one-folder ZIP layout.

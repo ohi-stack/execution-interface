@@ -1,4 +1,3 @@
-import { headers } from 'next/headers';
 import runtimeManifest from '@/data/manifest.json';
 import appPages from '@/data/app-pages.json';
 import ecosystemManifest from '@/data/ecosystem-manifest.json';
@@ -11,16 +10,13 @@ const productionRoutes = ['/dashboard', '/ecosystem', '/registry', '/members', '
 const productionApis = ['/api/health', '/api/manifest', '/api/tools', '/api/stats'];
 
 export async function GET(request: Request) {
-  const host = headers().get('host') ?? '';
-  const isConsole = host.includes('console.onegodian.com');
-
   return jsonResponse(
     {
       ...runtimeManifest,
       app: appPages.app,
       ecosystem: ecosystemManifest,
       generated_at: new Date().toISOString(),
-      app_profile: isConsole ? 'internal-control-plane' : 'member-facing-app',
+      app_profile: 'member-facing-app',
       canonicalHost: 'https://app.onegodian.com',
       productionRoutes,
       productionApis,

@@ -28,6 +28,26 @@ export const consoleNavigation = [
   { label: 'Settings', href: '/settings' }
 ];
 
+
+export const consoleControlPlaneSystems = [
+  {
+    title: 'ACC™ / Control Plane',
+    description:
+      'Internal operations, workflow command, approvals, audits, adapters, deployment controls, and kill-switch governance for authorized operators only.',
+    boundary: 'Control-panel files only; do not list as a public/member-facing ecosystem destination.'
+  },
+  {
+    title: 'OCP',
+    description: 'Internal policy and decision coordination surface for operator governance.',
+    boundary: 'Console-only operational system.'
+  },
+  {
+    title: 'OEG',
+    description: 'Internal execution graph and route orchestration reference for approved workflows.',
+    boundary: 'Console-only operational system.'
+  }
+];
+
 export const consoleDashboardCards = [
   { title: 'Apps', description: 'Manage OneGodian apps, modules, route structures, deployment status, and app configuration.', href: '/apps', status: 'Active' },
   { title: 'Plugins', description: 'Manage platform plugins, WordPress bridges, app bridges, commerce tools, LMS tools, and registry extensions.', href: '/plugins', status: 'Active' },

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "owner": "ONEGODIAN, LLC",
   "primaryHost": "app.onegodian.com",
-  "role": "control-plane",
+  "role": "member-facing-application",
   "requiredRoutes": [
     "/dashboard",
     "/ecosystem",
@@ -25,7 +25,7 @@
       "id": "app",
       "host": "app.onegodian.com",
       "runtime": "node-app",
-      "role": "command center and ecosystem control plane",
+      "role": "public and member-facing app gateway",
       "syncMode": "source"
     },
     {

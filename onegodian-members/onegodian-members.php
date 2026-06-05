@@ -16,6 +16,8 @@ define('OGM_PLUGIN_FILE', __FILE__);
 define('OGM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('OGM_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+require_once OGM_PLUGIN_DIR . 'includes/class-onegodian-members-shortcodes.php';
+
 final class Onegodian_Members_Plugin
 {
     private const OPTION_SETTINGS = 'ogm_settings';
@@ -189,20 +191,8 @@ final class Onegodian_Members_Plugin
 
     public function register_shortcodes(): void
     {
-        $shortcodes = array(
-            'onegodian_member_dashboard' => __('Member dashboard content will appear here.', 'onegodian-members'),
-            'onegodian_member_certificate' => __('Member certificate tools will appear here.', 'onegodian-members'),
-            'onegodian_member_resources' => __('Member resources will appear here.', 'onegodian-members'),
-            'onegodian_membership_pricing' => __('Membership pricing will appear here.', 'onegodian-members'),
-            'onegodian_member_account' => __('Member account details will appear here.', 'onegodian-members'),
-            'onegodian_member_directory' => __('Member directory will appear here.', 'onegodian-members'),
-        );
-
-        foreach ($shortcodes as $tag => $message) {
-            add_shortcode($tag, static function () use ($message): string {
-                return '<div class="ogm-shortcode-placeholder">' . esc_html($message) . '</div>';
-            });
-        }
+        $shortcodes = new Onegodian_Members_Shortcodes(array($this, 'get_public_settings'));
+        $shortcodes->register();
     }
 
     public function render_dashboard_page(): void
@@ -454,7 +444,7 @@ final class Onegodian_Members_Plugin
         $this->render_admin_shell('onegodian-members-docs', function (): void {
             ?>
             <div class="ogm-grid ogm-grid-2">
-                <?php $this->code_list_card(__('Available shortcodes', 'onegodian-members'), array('[onegodian_member_dashboard]', '[onegodian_member_certificate]', '[onegodian_member_resources]', '[onegodian_membership_pricing]', '[onegodian_member_account]', '[onegodian_member_directory]')); ?>
+                <?php $this->code_list_card(__('Available shortcodes', 'onegodian-members'), array('[onegodian_membership_cta]', '[onegodian_members_pricing]', '[onegodian_membership_resources]', '[onegodian_member_certificates]', '[onegodian_member_dashboard]', '[onegodian_member_support]')); ?>
                 <?php $this->code_list_card(__('REST endpoints', 'onegodian-members'), array('/wp-json/onegodian-members/v1/health', '/wp-json/onegodian-members/v1/manifest', '/wp-json/onegodian-members/v1/me', '/wp-json/onegodian-members/v1/admin/summary')); ?>
                 <?php $this->code_list_card(__('Environment variable setup', 'onegodian-members'), array('NEXT_PUBLIC_MEMBERS_WORDPRESS_BASE_URL', 'MEMBERS_REST_BASE_URL', 'MEMBERS_APP_BRIDGE_KEY', 'MEMBERS_MODULE_SLUG')); ?>
                 <section class="ogm-card"><h2><?php esc_html_e('App bridge instructions', 'onegodian-members'); ?></h2><p><?php esc_html_e('Set the WordPress base URL, REST base URL, module slug, and bridge key in the OneGodian app environment. Rotate the bridge key after every exposed deployment artifact.', 'onegodian-members'); ?></p></section>
@@ -507,6 +497,11 @@ final class Onegodian_Members_Plugin
         if (isset($messages[$notice])) {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html($messages[$notice]) . '</p></div>';
         }
+    }
+
+    public function get_public_settings(): array
+    {
+        return $this->get_settings();
     }
 
     private function get_settings(): array
@@ -567,12 +562,12 @@ final class Onegodian_Members_Plugin
     private function generate_required_pages(): int
     {
         $pages = array(
+            'Membership' => '[onegodian_membership_cta]',
+            'Membership Pricing' => '[onegodian_members_pricing]',
+            'Member Resources' => '[onegodian_membership_resources]',
+            'Member Certificates' => '[onegodian_member_certificates]',
             'Member Dashboard' => '[onegodian_member_dashboard]',
-            'Member Certificate' => '[onegodian_member_certificate]',
-            'Member Resources' => '[onegodian_member_resources]',
-            'Membership Pricing' => '[onegodian_membership_pricing]',
-            'Member Account' => '[onegodian_member_account]',
-            'Member Directory' => '[onegodian_member_directory]',
+            'Member Support' => '[onegodian_member_support]',
         );
         $created = 0;
         foreach ($pages as $title => $shortcode) {
@@ -629,7 +624,7 @@ final class Onegodian_Members_Plugin
 
     public function rest_manifest(): WP_REST_Response
     {
-        return rest_ensure_response(array('module' => $this->get_setting('module_slug'), 'rest_base' => rest_url(self::REST_NAMESPACE), 'shortcodes' => array('onegodian_member_dashboard', 'onegodian_member_certificate', 'onegodian_member_resources', 'onegodian_membership_pricing', 'onegodian_member_account', 'onegodian_member_directory')));
+        return rest_ensure_response(array('module' => $this->get_setting('module_slug'), 'rest_base' => rest_url(self::REST_NAMESPACE), 'shortcodes' => array('onegodian_membership_cta', 'onegodian_members_pricing', 'onegodian_membership_resources', 'onegodian_member_certificates', 'onegodian_member_dashboard', 'onegodian_member_support')));
     }
 
     public function rest_me(): WP_REST_Response

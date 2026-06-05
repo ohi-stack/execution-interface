@@ -1,3 +1,19 @@
+# OneGodian App Deploy
+
+Production deployment repository for **https://app.onegodian.com**.
+
+## Production repository lock
+
+- `ohi-stack/onegodian-app-deploy` is the single production deployment repository for the public/member-facing OneGodian App.
+- Hostinger deploys from this repository only. Do not point the production Hostinger app at `ohi-stack/onegodian-app` or the legacy `ohi-stack/execution-interface` repository.
+- If a local or Hostinger checkout cannot push or pull because `origin` points at the wrong repository, reset it with:
+
+```bash
+git remote set-url origin https://github.com/ohi-stack/onegodian-app-deploy.git
+git checkout main
+git pull --ff-only origin main
+```
+
 # OMOS Node Runtime
 
 Production runtime and documentation platform for **https://omos.onegodian.com**.

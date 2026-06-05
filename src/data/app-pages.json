@@ -33,7 +33,7 @@
       "title": "Dashboard",
       "eyebrow": "Member Command View",
       "headline": "Your OneGodian ecosystem overview.",
-      "body": "The dashboard brings together current access, saved tools, active records, certificates, membership status, and recommended next steps. This is the member-facing experience layer, not the internal control plane. Operator-only controls belong outside the app.",
+      "body": "The dashboard brings together current access, saved tools, active records, certificates, membership status, and recommended next steps. This is the member-facing experience layer. Operator-only controls belong outside the app and stay in the separate console environment.",
       "sections": ["Profile Snapshot", "Active Tools", "Certificates", "Membership", "Recommended Next Steps", "System Status"]
     },
     "/ecosystem": {

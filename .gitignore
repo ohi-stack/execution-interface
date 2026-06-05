@@ -5,3 +5,6 @@ build/
 .env
 .env.local
 .DS_Store
+
+# Generated WordPress release archives
+onegodian-members-v*.zip

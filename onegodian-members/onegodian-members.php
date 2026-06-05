@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Onegodian Members
  * Description: Membership tools, app bridge, shortcodes, and admin operations for OneGodian members.
- * Version: 1.0.0
+ * Version: 1.7.0
  * Author: OneGodian
  * Text Domain: onegodian-members
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('OGM_VERSION', '1.0.0');
+define('OGM_VERSION', '1.7.0');
 define('OGM_PLUGIN_FILE', __FILE__);
 define('OGM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('OGM_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -36,6 +36,13 @@ final class Onegodian_Members_Plugin
         'onegodian-members-tools' => array('label' => 'Tools', 'title' => 'Tools'),
         'onegodian-members-status' => array('label' => 'Status', 'title' => 'Status'),
         'onegodian-members-checklist' => array('label' => 'Checklist', 'title' => 'Production Checklist'),
+        'onegodian-members-contributors' => array('label' => 'Contributors', 'title' => 'Contributors'),
+        'onegodian-members-creator-network' => array('label' => 'Creator Network', 'title' => 'Creator Network'),
+        'onegodian-members-affiliate-settings' => array('label' => 'Affiliate Settings', 'title' => 'Affiliate Settings'),
+        'onegodian-members-referral-links' => array('label' => 'Referral Links', 'title' => 'Referral Links'),
+        'onegodian-members-contributor-wall' => array('label' => 'Contributor Wall', 'title' => 'Contributor Wall'),
+        'onegodian-members-campaign-assets' => array('label' => 'Campaign Assets', 'title' => 'Campaign Assets'),
+        'onegodian-members-compliance-notices' => array('label' => 'Compliance Notices', 'title' => 'Compliance Notices'),
         'onegodian-members-docs' => array('label' => 'Docs', 'title' => 'Documentation'),
     );
 
@@ -86,6 +93,13 @@ final class Onegodian_Members_Plugin
             'onegodian-members-tools' => 'render_tools_page',
             'onegodian-members-status' => 'render_status_page',
             'onegodian-members-checklist' => 'render_checklist_page',
+            'onegodian-members-contributors' => 'render_contributors_admin_page',
+            'onegodian-members-creator-network' => 'render_creator_network_admin_page',
+            'onegodian-members-affiliate-settings' => 'render_affiliate_settings_admin_page',
+            'onegodian-members-referral-links' => 'render_referral_links_admin_page',
+            'onegodian-members-contributor-wall' => 'render_contributor_wall_admin_page',
+            'onegodian-members-campaign-assets' => 'render_campaign_assets_admin_page',
+            'onegodian-members-compliance-notices' => 'render_compliance_notices_admin_page',
             'onegodian-members-docs' => 'render_docs_page',
         );
 
@@ -203,6 +217,14 @@ final class Onegodian_Members_Plugin
                 return '<div class="ogm-shortcode-placeholder">' . esc_html($message) . '</div>';
             });
         }
+
+        add_shortcode('onegodian_contributors_page', array($this, 'shortcode_contributors_page'));
+        add_shortcode('onegodian_contributor_tiers', array($this, 'shortcode_contributor_tiers'));
+        add_shortcode('onegodian_creator_network', array($this, 'shortcode_creator_network'));
+        add_shortcode('onegodian_affiliate_dashboard', array($this, 'shortcode_affiliate_dashboard'));
+        add_shortcode('onegodian_referral_link', array($this, 'shortcode_referral_link'));
+        add_shortcode('onegodian_contributor_wall', array($this, 'shortcode_contributor_wall'));
+        add_shortcode('onegodian_contributor_disclaimer', array($this, 'shortcode_contributor_disclaimer'));
     }
 
     public function render_dashboard_page(): void
@@ -261,6 +283,11 @@ final class Onegodian_Members_Plugin
                     <?php $this->checkbox_field('enable_woocommerce', __('WooCommerce settings', 'onegodian-members'), (bool) $settings['enable_woocommerce'], __('Enable WooCommerce membership commerce when available.', 'onegodian-members')); ?>
                     <?php $this->input_field('app_url', __('App URL settings', 'onegodian-members'), $settings['app_url'], __('Base URL of the OneGodian app.', 'onegodian-members'), 'url'); ?>
                     <?php $this->input_field('module_slug', __('Module slug settings', 'onegodian-members'), $settings['module_slug'], __('Module slug used by the app bridge.', 'onegodian-members')); ?>
+                    <?php $this->input_field('contribute_url', __('Contribute URL', 'onegodian-members'), $settings['contribute_url'], __('Public contribution checkout or landing page URL.', 'onegodian-members'), 'url'); ?>
+                    <?php $this->input_field('creator_network_url', __('Creator Network URL', 'onegodian-members'), $settings['creator_network_url'], __('Public creator network landing page URL.', 'onegodian-members'), 'url'); ?>
+                    <?php $this->input_field('affiliate_signup_url', __('Affiliate Signup URL', 'onegodian-members'), $settings['affiliate_signup_url'], __('Affiliate or creator application signup URL.', 'onegodian-members'), 'url'); ?>
+                    <?php $this->checkbox_field('enable_contributors_module', __('Enable Contributors Module', 'onegodian-members'), (bool) $settings['enable_contributors_module'], __('Display contributor pages and contributor calls to action.', 'onegodian-members')); ?>
+                    <?php $this->checkbox_field('enable_creator_network', __('Enable Creator Network', 'onegodian-members'), (bool) $settings['enable_creator_network'], __('Display creator network pages and calls to action.', 'onegodian-members')); ?>
                 </div>
                 <?php submit_button(__('Save Settings', 'onegodian-members')); ?>
             </form>
@@ -449,12 +476,91 @@ final class Onegodian_Members_Plugin
         });
     }
 
+
+    public function render_contributors_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-contributors', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Contributors Module', 'onegodian-members'), 'onegodian-members-contributors', array(
+                array('type' => 'checkbox', 'name' => 'enable_contributors_module', 'label' => __('Enable Contributors Module', 'onegodian-members'), 'description' => __('Enable the contributors page, tiers, compliance notice, and contribution calls to action.', 'onegodian-members')),
+                array('type' => 'url', 'name' => 'contribute_url', 'label' => __('Contribute URL', 'onegodian-members'), 'description' => __('Primary contribution checkout or landing page URL.', 'onegodian-members')),
+                array('type' => 'url', 'name' => 'woo_contribution_category_url', 'label' => __('Woo Contribution Category URL', 'onegodian-members'), 'description' => __('Optional WooCommerce category URL for contribution products.', 'onegodian-members')),
+                array('type' => 'textarea', 'name' => 'default_disclaimer_text', 'label' => __('Default Disclaimer Text', 'onegodian-members'), 'description' => __('Shown by contributor compliance shortcodes and page sections.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
+    public function render_creator_network_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-creator-network', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Creator Network Module', 'onegodian-members'), 'onegodian-members-creator-network', array(
+                array('type' => 'checkbox', 'name' => 'enable_creator_network', 'label' => __('Enable Creator Network', 'onegodian-members'), 'description' => __('Enable creator participation pages and application calls to action.', 'onegodian-members')),
+                array('type' => 'url', 'name' => 'creator_network_url', 'label' => __('Creator Network URL', 'onegodian-members'), 'description' => __('Public creator network landing page URL.', 'onegodian-members')),
+                array('type' => 'number', 'name' => 'woo_creator_application_product_id', 'label' => __('Woo Creator Application Product ID', 'onegodian-members'), 'description' => __('Optional WooCommerce product ID for creator applications.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
+    public function render_affiliate_settings_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-affiliate-settings', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Affiliate Settings', 'onegodian-members'), 'onegodian-members-affiliate-settings', array(
+                array('type' => 'checkbox', 'name' => 'enable_affiliate_dashboard', 'label' => __('Enable Affiliate Dashboard', 'onegodian-members'), 'description' => __('Enable the affiliate dashboard placeholder shortcode.', 'onegodian-members')),
+                array('type' => 'url', 'name' => 'affiliate_signup_url', 'label' => __('Affiliate Signup URL', 'onegodian-members'), 'description' => __('Application or signup URL for creator/affiliate participation.', 'onegodian-members')),
+                array('type' => 'url', 'name' => 'affiliate_dashboard_url', 'label' => __('Affiliate Dashboard URL', 'onegodian-members'), 'description' => __('Optional external affiliate dashboard URL.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
+    public function render_referral_links_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-referral-links', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Referral Links', 'onegodian-members'), 'onegodian-members-referral-links', array(
+                array('type' => 'checkbox', 'name' => 'enable_referral_links', 'label' => __('Enable Referral Links', 'onegodian-members'), 'description' => __('Enable logged-in referral link display and dashboard referral placeholders.', 'onegodian-members')),
+                array('type' => 'url', 'name' => 'affiliate_signup_url', 'label' => __('Apply URL for Logged-Out Visitors', 'onegodian-members'), 'description' => __('Used when visitors need to apply before receiving a referral link.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
+    public function render_contributor_wall_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-contributor-wall', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Contributor Wall', 'onegodian-members'), 'onegodian-members-contributor-wall', array(
+                array('type' => 'checkbox', 'name' => 'enable_public_contributor_wall', 'label' => __('Enable Public Contributor Wall', 'onegodian-members'), 'description' => __('Show the public contributor wall placeholder shortcode.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
+    public function render_campaign_assets_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-campaign-assets', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Campaign Assets', 'onegodian-members'), 'onegodian-members-campaign-assets', array(
+                array('type' => 'checkbox', 'name' => 'enable_campaign_assets', 'label' => __('Enable Campaign Assets', 'onegodian-members'), 'description' => __('Show campaign asset placeholders in the affiliate dashboard.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
+    public function render_compliance_notices_admin_page(): void
+    {
+        $this->render_admin_shell('onegodian-members-compliance-notices', function (): void {
+            $settings = $this->get_settings();
+            $this->render_settings_card(__('Compliance Notices', 'onegodian-members'), 'onegodian-members-compliance-notices', array(
+                array('type' => 'textarea', 'name' => 'default_disclaimer_text', 'label' => __('Default Disclaimer Text', 'onegodian-members'), 'description' => __('Keep contribution language focused on voluntary support, education, community, creator resources, and infrastructure.', 'onegodian-members')),
+            ), $settings);
+        });
+    }
+
     public function render_docs_page(): void
     {
         $this->render_admin_shell('onegodian-members-docs', function (): void {
             ?>
             <div class="ogm-grid ogm-grid-2">
-                <?php $this->code_list_card(__('Available shortcodes', 'onegodian-members'), array('[onegodian_member_dashboard]', '[onegodian_member_certificate]', '[onegodian_member_resources]', '[onegodian_membership_pricing]', '[onegodian_member_account]', '[onegodian_member_directory]')); ?>
+                <?php $this->code_list_card(__('Available shortcodes', 'onegodian-members'), array('[onegodian_member_dashboard]', '[onegodian_member_certificate]', '[onegodian_member_resources]', '[onegodian_membership_pricing]', '[onegodian_member_account]', '[onegodian_member_directory]', '[onegodian_contributors_page]', '[onegodian_contributor_tiers]', '[onegodian_creator_network]', '[onegodian_affiliate_dashboard]', '[onegodian_referral_link]', '[onegodian_contributor_wall]', '[onegodian_contributor_disclaimer]')); ?>
                 <?php $this->code_list_card(__('REST endpoints', 'onegodian-members'), array('/wp-json/onegodian-members/v1/health', '/wp-json/onegodian-members/v1/manifest', '/wp-json/onegodian-members/v1/me', '/wp-json/onegodian-members/v1/admin/summary')); ?>
                 <?php $this->code_list_card(__('Environment variable setup', 'onegodian-members'), array('NEXT_PUBLIC_MEMBERS_WORDPRESS_BASE_URL', 'MEMBERS_REST_BASE_URL', 'MEMBERS_APP_BRIDGE_KEY', 'MEMBERS_MODULE_SLUG')); ?>
                 <section class="ogm-card"><h2><?php esc_html_e('App bridge instructions', 'onegodian-members'); ?></h2><p><?php esc_html_e('Set the WordPress base URL, REST base URL, module slug, and bridge key in the OneGodian app environment. Rotate the bridge key after every exposed deployment artifact.', 'onegodian-members'); ?></p></section>
@@ -463,6 +569,131 @@ final class Onegodian_Members_Plugin
             </div>
             <?php
         });
+    }
+
+
+    public function shortcode_contributors_page(): string
+    {
+        if (!$this->is_enabled('enable_contributors_module')) {
+            return '<div class="ogm-shortcode-placeholder">' . esc_html__('The contributors module is currently unavailable.', 'onegodian-members') . '</div>';
+        }
+
+        $contribute_url = $this->get_setting('contribute_url') ?: $this->get_setting('woo_contribution_category_url') ?: home_url('/');
+        $creator_url = $this->get_setting('creator_network_url') ?: home_url('/');
+
+        ob_start();
+        ?>
+        <div class="ogm-front ogm-contributors-page">
+            <section class="ogm-front-hero">
+                <p class="ogm-kicker"><?php esc_html_e('Contributors', 'onegodian-members'); ?></p>
+                <h2><?php esc_html_e('Support ONEGODIAN public resources and community infrastructure.', 'onegodian-members'); ?></h2>
+                <p><?php esc_html_e('Contributors provide voluntary support for public-facing products, education, media, technology, membership resources, creator documentation, and community infrastructure.', 'onegodian-members'); ?></p>
+                <div class="ogm-actions">
+                    <a class="button button-primary" href="<?php echo esc_url($contribute_url); ?>"><?php esc_html_e('Contribute Now', 'onegodian-members'); ?></a>
+                    <a class="button button-secondary" href="<?php echo esc_url($creator_url); ?>"><?php esc_html_e('Creator Network', 'onegodian-members'); ?></a>
+                </div>
+            </section>
+            <section><h3><?php esc_html_e('What Contributors Support', 'onegodian-members'); ?></h3><p><?php esc_html_e('Education, media, community tools, technical documentation, creator resources, member resources, and platform infrastructure.', 'onegodian-members'); ?></p></section>
+            <section><h3><?php esc_html_e('Contributor Pathways', 'onegodian-members'); ?></h3><ul><li><?php esc_html_e('One-time contribution support.', 'onegodian-members'); ?></li><li><?php esc_html_e('Recurring community support.', 'onegodian-members'); ?></li><li><?php esc_html_e('Creator participation and affiliate/referral participation.', 'onegodian-members'); ?></li></ul></section>
+            <section><h3><?php esc_html_e('Contribution Tiers', 'onegodian-members'); ?></h3><?php echo wp_kses_post($this->shortcode_contributor_tiers()); ?></section>
+            <section><h3><?php esc_html_e('Contributor Benefits', 'onegodian-members'); ?></h3><ul><li><?php esc_html_e('Contributor recognition where public wall participation is enabled.', 'onegodian-members'); ?></li><li><?php esc_html_e('Access to community updates and creator resources as available.', 'onegodian-members'); ?></li><li><?php esc_html_e('Supporter-friendly documentation and campaign materials.', 'onegodian-members'); ?></li></ul></section>
+            <section><h3><?php esc_html_e('Compliance Notice', 'onegodian-members'); ?></h3><?php echo wp_kses_post($this->shortcode_contributor_disclaimer()); ?></section>
+        </div>
+        <?php
+        return (string) ob_get_clean();
+    }
+
+    public function shortcode_contributor_tiers(): string
+    {
+        $tiers = array(
+            __('Supporter', 'onegodian-members') => '$11',
+            __('Builder', 'onegodian-members') => '$33',
+            __('Sustainer', 'onegodian-members') => '$77',
+            __('Founder Circle', 'onegodian-members') => '$111',
+            __('Infrastructure Partner', 'onegodian-members') => '$333+',
+            __('Custom Contribution', 'onegodian-members') => __('Any amount', 'onegodian-members'),
+        );
+
+        $html = '<div class="ogm-front ogm-tier-grid">';
+        foreach ($tiers as $label => $amount) {
+            $html .= '<article class="ogm-tier-card"><strong>' . esc_html($label) . '</strong><span>' . esc_html($amount) . '</span></article>';
+        }
+        return $html . '</div>';
+    }
+
+    public function shortcode_creator_network(): string
+    {
+        if (!$this->is_enabled('enable_creator_network')) {
+            return '<div class="ogm-shortcode-placeholder">' . esc_html__('The creator network is currently unavailable.', 'onegodian-members') . '</div>';
+        }
+
+        $join_url = $this->get_setting('creator_network_url') ?: home_url('/');
+        $apply_url = $this->get_setting('affiliate_signup_url') ?: $join_url;
+        ob_start();
+        ?>
+        <div class="ogm-front ogm-creator-network">
+            <section class="ogm-front-hero"><p class="ogm-kicker"><?php esc_html_e('Creator Network', 'onegodian-members'); ?></p><h2><?php esc_html_e('Create, educate, share, and participate with ONEGODIAN.', 'onegodian-members'); ?></h2><p><?php esc_html_e('The Creator Network supports education, media, documentation, community programming, and affiliate/referral participation for approved creators.', 'onegodian-members'); ?></p></section>
+            <section><h3><?php esc_html_e('Creator / Affiliate Pathway', 'onegodian-members'); ?></h3><p><?php esc_html_e('Apply to participate, receive referral infrastructure when approved, and use available campaign assets to share public resources.', 'onegodian-members'); ?></p></section>
+            <section><h3><?php esc_html_e('Benefits', 'onegodian-members'); ?></h3><ul><li><?php esc_html_e('Creator resources and campaign assets.', 'onegodian-members'); ?></li><li><?php esc_html_e('Referral links and code placeholders.', 'onegodian-members'); ?></li><li><?php esc_html_e('Community education and documentation support.', 'onegodian-members'); ?></li></ul></section>
+            <div class="ogm-actions"><a class="button button-primary" href="<?php echo esc_url($join_url); ?>"><?php esc_html_e('Join the Creator Network', 'onegodian-members'); ?></a><a class="button button-secondary" href="<?php echo esc_url($apply_url); ?>"><?php esc_html_e('Apply Now', 'onegodian-members'); ?></a></div>
+        </div>
+        <?php
+        return (string) ob_get_clean();
+    }
+
+    public function shortcode_affiliate_dashboard(): string
+    {
+        if (!$this->is_enabled('enable_affiliate_dashboard')) {
+            return '<div class="ogm-shortcode-placeholder">' . esc_html__('The affiliate dashboard is currently unavailable.', 'onegodian-members') . '</div>';
+        }
+
+        $user = wp_get_current_user();
+        $referral_link = is_user_logged_in() ? $this->get_user_referral_link($user) : '';
+        $referral_code = is_user_logged_in() ? $user->user_login : __('Log in to view', 'onegodian-members');
+        ob_start();
+        ?>
+        <div class="ogm-front ogm-affiliate-dashboard">
+            <?php if (!is_user_logged_in()) : ?><p class="ogm-notice"><?php esc_html_e('Please log in to view referral details, or apply to participate in the creator/affiliate pathway.', 'onegodian-members'); ?></p><?php endif; ?>
+            <div class="ogm-definition-grid">
+                <strong><?php esc_html_e('Referral Link', 'onegodian-members'); ?></strong><span><?php echo $referral_link ? '<a href="' . esc_url($referral_link) . '">' . esc_html($referral_link) . '</a>' : esc_html__('Available after login.', 'onegodian-members'); ?></span>
+                <strong><?php esc_html_e('Referral Code', 'onegodian-members'); ?></strong><span><?php echo esc_html($referral_code); ?></span>
+                <strong><?php esc_html_e('Campaign Assets', 'onegodian-members'); ?></strong><span><?php echo esc_html($this->is_enabled('enable_campaign_assets') ? __('Campaign asset placeholders will appear here.', 'onegodian-members') : __('Campaign assets are currently disabled.', 'onegodian-members')); ?></span>
+                <strong><?php esc_html_e('Earnings Placeholder', 'onegodian-members'); ?></strong><span><?php esc_html_e('Earnings data placeholder.', 'onegodian-members'); ?></span>
+                <strong><?php esc_html_e('Status Placeholder', 'onegodian-members'); ?></strong><span><?php esc_html_e('Participation status placeholder.', 'onegodian-members'); ?></span>
+            </div>
+        </div>
+        <?php
+        return (string) ob_get_clean();
+    }
+
+    public function shortcode_referral_link(): string
+    {
+        if (!$this->is_enabled('enable_referral_links')) {
+            return '<div class="ogm-shortcode-placeholder">' . esc_html__('Referral links are currently unavailable.', 'onegodian-members') . '</div>';
+        }
+
+        if (!is_user_logged_in()) {
+            $apply_url = $this->get_setting('affiliate_signup_url');
+            $message = __('Please log in to view your referral link, or apply to participate.', 'onegodian-members');
+            return '<div class="ogm-front ogm-referral-link"><p>' . esc_html($message) . '</p>' . ($apply_url ? '<a class="button button-primary" href="' . esc_url($apply_url) . '">' . esc_html__('Apply', 'onegodian-members') . '</a>' : '') . '</div>';
+        }
+
+        $link = $this->get_user_referral_link(wp_get_current_user());
+        return '<div class="ogm-front ogm-referral-link"><strong>' . esc_html__('Your Referral Link', 'onegodian-members') . '</strong><a href="' . esc_url($link) . '">' . esc_html($link) . '</a></div>';
+    }
+
+    public function shortcode_contributor_wall(): string
+    {
+        if (!$this->is_enabled('enable_public_contributor_wall')) {
+            return '<div class="ogm-shortcode-placeholder">' . esc_html__('The public contributor wall is currently disabled.', 'onegodian-members') . '</div>';
+        }
+
+        return '<div class="ogm-front ogm-contributor-wall"><h2>' . esc_html__('Contributor Wall', 'onegodian-members') . '</h2><p>' . esc_html__('Public contributor recognition placeholder. Approved public acknowledgements can appear here when the wall is configured.', 'onegodian-members') . '</p></div>';
+    }
+
+    public function shortcode_contributor_disclaimer(): string
+    {
+        return '<p class="ogm-front ogm-contributor-disclaimer">' . esc_html($this->get_setting('default_disclaimer_text')) . '</p>';
     }
 
     private function render_admin_shell(string $active_slug, callable $content): void
@@ -520,6 +751,19 @@ final class Onegodian_Members_Plugin
             'app_url' => '',
             'app_dashboard_url' => '',
             'module_slug' => 'members',
+            'contribute_url' => '',
+            'creator_network_url' => '',
+            'affiliate_signup_url' => '',
+            'affiliate_dashboard_url' => '',
+            'woo_contribution_category_url' => '',
+            'woo_creator_application_product_id' => '',
+            'enable_contributors_module' => '1',
+            'enable_creator_network' => '1',
+            'enable_affiliate_dashboard' => '1',
+            'enable_referral_links' => '1',
+            'enable_public_contributor_wall' => '1',
+            'enable_campaign_assets' => '1',
+            'default_disclaimer_text' => 'Contributions are voluntary support payments for ONEGODIAN, LLC public-facing products, education, media, technology, membership, creator resources, documentation, and community infrastructure. Contributions are not equity, securities, loans, bonds, investment contracts, or promises of financial return.',
         );
         $settings = get_option(self::OPTION_SETTINGS, array());
         return wp_parse_args(is_array($settings) ? $settings : array(), $defaults);
@@ -537,10 +781,13 @@ final class Onegodian_Members_Plugin
         $settings['site_label'] = isset($_POST['site_label']) ? sanitize_text_field(wp_unslash($_POST['site_label'])) : $settings['site_label'];
         $settings['membership_tiers'] = isset($_POST['membership_tiers']) ? sanitize_text_field(wp_unslash($_POST['membership_tiers'])) : $settings['membership_tiers'];
         $settings['certificate_prefix'] = isset($_POST['certificate_prefix']) ? sanitize_key(wp_unslash($_POST['certificate_prefix'])) : $settings['certificate_prefix'];
-        $settings['enable_buddypress'] = !empty($_POST['enable_buddypress']) ? '1' : '0';
-        $settings['enable_woocommerce'] = !empty($_POST['enable_woocommerce']) ? '1' : '0';
+        if ('onegodian-members-settings' === (isset($_POST['ogm_redirect']) ? sanitize_key(wp_unslash($_POST['ogm_redirect'])) : '')) {
+            $settings['enable_buddypress'] = !empty($_POST['enable_buddypress']) ? '1' : '0';
+            $settings['enable_woocommerce'] = !empty($_POST['enable_woocommerce']) ? '1' : '0';
+        }
         $settings['app_url'] = isset($_POST['app_url']) ? esc_url_raw(wp_unslash($_POST['app_url'])) : $settings['app_url'];
         $settings['module_slug'] = isset($_POST['module_slug']) ? sanitize_title(wp_unslash($_POST['module_slug'])) : $settings['module_slug'];
+        $settings = $this->sanitize_contributors_affiliate_settings($settings);
         update_option(self::OPTION_SETTINGS, $settings, false);
     }
 
@@ -573,6 +820,13 @@ final class Onegodian_Members_Plugin
             'Membership Pricing' => '[onegodian_membership_pricing]',
             'Member Account' => '[onegodian_member_account]',
             'Member Directory' => '[onegodian_member_directory]',
+            'Contributors' => '[onegodian_contributors_page]',
+            'Contributor Tiers' => '[onegodian_contributor_tiers]',
+            'Creator Network' => '[onegodian_creator_network]',
+            'Affiliate Dashboard' => '[onegodian_affiliate_dashboard]',
+            'Referral Link' => '[onegodian_referral_link]',
+            'Contributor Wall' => '[onegodian_contributor_wall]',
+            'Contributor Disclaimer' => '[onegodian_contributor_disclaimer]',
         );
         $created = 0;
         foreach ($pages as $title => $shortcode) {
@@ -629,7 +883,7 @@ final class Onegodian_Members_Plugin
 
     public function rest_manifest(): WP_REST_Response
     {
-        return rest_ensure_response(array('module' => $this->get_setting('module_slug'), 'rest_base' => rest_url(self::REST_NAMESPACE), 'shortcodes' => array('onegodian_member_dashboard', 'onegodian_member_certificate', 'onegodian_member_resources', 'onegodian_membership_pricing', 'onegodian_member_account', 'onegodian_member_directory')));
+        return rest_ensure_response(array('module' => $this->get_setting('module_slug'), 'rest_base' => rest_url(self::REST_NAMESPACE), 'shortcodes' => array('onegodian_member_dashboard', 'onegodian_member_certificate', 'onegodian_member_resources', 'onegodian_membership_pricing', 'onegodian_member_account', 'onegodian_member_directory', 'onegodian_contributors_page', 'onegodian_contributor_tiers', 'onegodian_creator_network', 'onegodian_affiliate_dashboard', 'onegodian_referral_link', 'onegodian_contributor_wall', 'onegodian_contributor_disclaimer')));
     }
 
     public function rest_me(): WP_REST_Response
@@ -744,6 +998,91 @@ final class Onegodian_Members_Plugin
     private function checkbox_field(string $name, string $label, bool $checked, string $description): void
     {
         echo '<label class="ogm-field ogm-checkbox"><span>' . esc_html($label) . '</span><input type="checkbox" name="' . esc_attr($name) . '" value="1" ' . checked($checked, true, false) . ' /> <small>' . esc_html($description) . '</small></label>';
+    }
+
+
+    private function sanitize_contributors_affiliate_settings(array $settings): array
+    {
+        $url_fields = array('contribute_url', 'creator_network_url', 'affiliate_signup_url', 'affiliate_dashboard_url', 'woo_contribution_category_url');
+        foreach ($url_fields as $field) {
+            if (isset($_POST[$field])) {
+                $settings[$field] = esc_url_raw(wp_unslash($_POST[$field]));
+            }
+        }
+
+        if (isset($_POST['woo_creator_application_product_id'])) {
+            $settings['woo_creator_application_product_id'] = (string) absint(wp_unslash($_POST['woo_creator_application_product_id']));
+        }
+
+        if (isset($_POST['default_disclaimer_text'])) {
+            $settings['default_disclaimer_text'] = sanitize_textarea_field(wp_unslash($_POST['default_disclaimer_text']));
+        }
+
+        $checkbox_fields_by_page = array(
+            'onegodian-members-settings' => array('enable_contributors_module', 'enable_creator_network'),
+            'onegodian-members-contributors' => array('enable_contributors_module'),
+            'onegodian-members-creator-network' => array('enable_creator_network'),
+            'onegodian-members-affiliate-settings' => array('enable_affiliate_dashboard'),
+            'onegodian-members-referral-links' => array('enable_referral_links'),
+            'onegodian-members-contributor-wall' => array('enable_public_contributor_wall'),
+            'onegodian-members-campaign-assets' => array('enable_campaign_assets'),
+        );
+        $redirect = isset($_POST['ogm_redirect']) ? sanitize_key(wp_unslash($_POST['ogm_redirect'])) : '';
+        $checkbox_fields = $checkbox_fields_by_page[$redirect] ?? array();
+        foreach ($checkbox_fields as $field) {
+            if (array_key_exists($field, $settings)) {
+                $settings[$field] = !empty($_POST[$field]) ? '1' : '0';
+            }
+        }
+
+        return $settings;
+    }
+
+    private function is_enabled(string $key): bool
+    {
+        return '1' === $this->get_setting($key);
+    }
+
+    private function get_user_referral_link(WP_User $user): string
+    {
+        return add_query_arg('og_ref', $user->user_login, site_url('/'));
+    }
+
+    private function render_settings_card(string $title, string $redirect, array $fields, array $settings): void
+    {
+        echo '<form method="post" class="ogm-card ogm-form">';
+        wp_nonce_field(self::NONCE_ACTION, 'ogm_nonce');
+        echo '<input type="hidden" name="ogm_action" value="save_settings" />';
+        echo '<input type="hidden" name="ogm_redirect" value="' . esc_attr($redirect) . '" />';
+        echo '<h2>' . esc_html($title) . '</h2><div class="ogm-settings-grid">';
+        foreach ($fields as $field) {
+            $name = (string) $field['name'];
+            $label = (string) $field['label'];
+            $description = isset($field['description']) ? (string) $field['description'] : '';
+            $type = isset($field['type']) ? (string) $field['type'] : 'text';
+            $value = isset($settings[$name]) ? (string) $settings[$name] : '';
+            if ('checkbox' === $type) {
+                $this->checkbox_field($name, $label, '1' === $value, $description);
+                continue;
+            }
+            if ('textarea' === $type) {
+                $this->textarea_field($name, $label, $value, $description);
+                continue;
+            }
+            $this->input_field($name, $label, $value, $description, 'url' === $type || 'number' === $type ? $type : 'text');
+        }
+        echo '</div>';
+        submit_button(__('Save Settings', 'onegodian-members'));
+        echo '</form>';
+    }
+
+    private function textarea_field(string $name, string $label, string $value, string $description = ''): void
+    {
+        echo '<label class="ogm-field ogm-field-wide"><span>' . esc_html($label) . '</span><textarea class="large-text" rows="5" name="' . esc_attr($name) . '">' . esc_textarea($value) . '</textarea>';
+        if ($description) {
+            echo '<small>' . esc_html($description) . '</small>';
+        }
+        echo '</label>';
     }
 
     private function render_definition_card(string $title, array $rows): void

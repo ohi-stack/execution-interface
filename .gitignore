@@ -5,6 +5,8 @@ build/
 .env
 .env.local
 .DS_Store
+*.zip
+algonquian-real-estate/dist/
 
 # Generated WordPress release archives
 onegodian-members-v*.zip

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 - 2026-06-01
+
+- Finalized the Algonquian Deal Marketplace production package with versioned plugin metadata, generated page declarations, dual shortcodes, buyer interest forms, NDA gate messaging, admin cache clearing, inactive optional plugin safeguards, and non-destructive uninstall behavior.
+- Added release validation documentation and production packaging guidance for locally generated `algq-deal-marketplace-1.0.1-production.zip` artifacts without committing binary ZIP files.
+- Added text-based public/admin UI polish assets covering the branded marketplace hero, buyer summary cards, premium and locked deal states, NDA badges, admin executive cards, cache and health panels, integration cards, settings quick view, shortcode copy controls, and responsive tables.
 ## 1.0.1-production-hardening
 
 - PHPUnit scaffold

@@ -84,6 +84,8 @@ final class ALGQ_Deal_Marketplace_Admin
         }
 
         return [
+            'access_mode' => $this->security->sanitize_allowed($options['access_mode'] ?? '', ['private', 'members', 'public'], 'private'),
+            'cleanup_on_uninstall' => !empty($options['cleanup_on_uninstall']) ? '1' : '0',
             'access_mode' => $this->security->sanitize_allowed($options['access_mode'] ?? $existing['access_mode'] ?? '', ['private', 'members', 'public'], 'private'),
             'caching_enabled' => !empty($options['caching_enabled']) ? '1' : '0',
             'default_cache_ttl' => (string) $ttl,
@@ -112,6 +114,9 @@ final class ALGQ_Deal_Marketplace_Admin
         }
 
         check_admin_referer('algq_deal_marketplace_clear_cache');
+        $this->cache->flush_marketplace();
+
+        wp_safe_redirect(add_query_arg('algq_deal_marketplace_cache_cleared', '1', wp_get_referer() ?: admin_url('admin.php?page=algq-deal-marketplace')));
         $this->cache->flush_group();
 
         wp_safe_redirect(add_query_arg('algq_cache_cleared', '1', wp_get_referer() ?: admin_url('admin.php?page=algq-deal-marketplace')));

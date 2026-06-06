@@ -276,3 +276,11 @@
   .ogm-card-header,
   .ogm-copy-row { align-items: flex-start; flex-direction: column; }
 }
+
+.ogm-field-wide {
+  grid-column: 1 / -1;
+}
+
+.ogm-field textarea {
+  max-width: 100%;
+}

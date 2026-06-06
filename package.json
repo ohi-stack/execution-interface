@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js",
+    "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -16,7 +16,8 @@
     "test": "npm run test:smoke",
     "test:smoke": "node scripts/smoke-test.mjs",
     "smoke": "node tests/smoke.test.js",
-    "smoke:pages": "node scripts/smoke-pages.mjs"
+    "smoke:pages": "node scripts/smoke-pages.mjs",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",

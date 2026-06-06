@@ -5,13 +5,15 @@ const EnvSchema = z.object({
   PORT: z.coerce.number().default(3000),
 
   APP_NAME: z.string().default('onegodian-api'),
-  APP_URL: z.string().url(),
-  PUBLIC_APP_URL: z.string().url(),
-  API_BASE_URL: z.string().url(),
+  APP_URL: z.string().url().default('https://app.onegodian.com'),
+  PUBLIC_APP_URL: z.string().url().default('https://app.onegodian.com'),
+  API_BASE_URL: z.string().url().default('https://app.onegodian.com/api'),
 
-  API_KEY: z.string().min(10),
-  JWT_SECRET: z.string().min(16),
-  CORS_ORIGIN: z.string(),
+  API_KEY: z.string().min(10).optional(),
+  OMOS_APP_KEY: z.string().min(10).optional(),
+  WORDPRESS_API_URL: z.string().url().optional(),
+  JWT_SECRET: z.string().min(16).default('development-jwt-secret'),
+  CORS_ORIGIN: z.string().default('https://app.onegodian.com'),
 
   DATABASE_URL: z.string().optional(),
   ENABLE_DATABASE: z.coerce.boolean().default(false),
@@ -20,7 +22,7 @@ const EnvSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
   OT_STANDARD: z.literal('OTS-V5').default('OTS-V5'),
-  OT_EPOCH: z.string().date(),
+  OT_EPOCH: z.string().date().default('2025-01-01'),
   OT_WEEK_START: z.literal('SKENRA_SUNDAY').default('SKENRA_SUNDAY'),
   OT_DEFAULT_TIMEZONE: z.string().default('America/New_York'),
   OT_STORE_UTC: z.coerce.boolean().default(true),

@@ -7,3 +7,8 @@ build/
 .DS_Store
 *.zip
 algonquian-real-estate/dist/
+
+# Generated WordPress release archives
+onegodian-members-v*.zip
+# Generated WordPress plugin packages
+onegodian-platform-plugin-v*.zip

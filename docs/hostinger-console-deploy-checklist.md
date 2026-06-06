@@ -16,7 +16,6 @@ In Hostinger, provision a separate Node.js/Next.js app for:
 
 - Domain: `console.onegodian.com`
 - Preferred repository: `ohi-stack/ohi-control-plane`
-- Temporary fallback repository (if needed): `ohi-stack/execution-interface`
 - Branch: `main`
 
 Required build/runtime settings:

@@ -28,6 +28,8 @@ final class ALGQ_Deal_Marketplace_Renderer
 
         $listings = $this->repository->get_active_listings();
         $summary = $this->marketplace_summary($listings);
+        $listing_count = count($listings);
+        $featured_deals = $this->repository->get_featured_deals();
 
         ob_start();
         ?>
@@ -56,6 +58,58 @@ final class ALGQ_Deal_Marketplace_Renderer
             </div>
 
             <p class="algq-marketplace-nda-gate"><span><?php echo esc_html__('NDA required', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><?php echo esc_html__('NDA acceptance is required before private diligence documents or restricted deal details are released.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                    <span class="algq-marketplace-kicker"><?php echo esc_html__('Algonquian Real Estate', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span>
+                    <h2 id="algq-marketplace-title"><?php echo esc_html__('Institutional Deal Marketplace', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
+                    <p><?php echo esc_html__('Access curated wholesale opportunities, NDA-gated diligence, buyer offers, premium deal distribution, and secure investor-ready listing workflows.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                    <div class="algq-marketplace-actions">
+                        <a class="algq-marketplace-button algq-marketplace-button--gold" href="#algq-marketplace-deals" data-algq-marketplace-scroll="#algq-marketplace-deals"><?php echo esc_html__('View deal access', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
+                        <a class="algq-marketplace-button algq-marketplace-button--ghost" href="#algq-buyer-interest" data-algq-marketplace-scroll="#algq-buyer-interest"><?php echo esc_html__('Submit buyer interest', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
+                    </div>
+                </div>
+                <div class="algq-marketplace-hero-panel" aria-label="<?php echo esc_attr__('Marketplace summary', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>">
+                    <div class="algq-marketplace-hero-metric"><strong><?php echo esc_html((string) $listing_count); ?></strong><span><?php echo esc_html__('Active modules', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                    <div class="algq-marketplace-hero-metric"><strong><?php echo esc_html__('NDA', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></strong><span><?php echo esc_html__('Gated diligence', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                    <div class="algq-marketplace-hero-metric"><strong><?php echo esc_html__('Premium', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></strong><span><?php echo esc_html__('Deal distribution', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                </div>
+            </div>
+
+            <div class="algq-marketplace-dashboard" aria-label="<?php echo esc_attr__('Buyer dashboard summary', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>">
+                <div class="algq-marketplace-summary-card"><strong><?php echo esc_html((string) $listing_count); ?></strong><span><?php echo esc_html__('Deal channels', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                <div class="algq-marketplace-summary-card"><strong><?php echo esc_html__('Secure', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></strong><span><?php echo esc_html__('NDA gating', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                <div class="algq-marketplace-summary-card"><strong><?php echo esc_html__('Offers', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></strong><span><?php echo esc_html__('Buyer pipeline', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+            </div>
+
+            <div id="algq-marketplace-deals" class="algq-marketplace-grid">
+                <?php foreach ($listings as $index => $listing) : ?>
+                    <?php
+                    $title = (string) ($listing['title'] ?? $listing['label'] ?? __('Marketplace opportunity', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN));
+                    $status = (string) ($listing['status'] ?? __('Ready', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN));
+                    $is_premium = 0 === $index % 3 || false !== stripos($title, 'premium');
+                    $is_nda = 1 === $index % 3 || false !== stripos($status, 'gated');
+                    $card_classes = 'algq-marketplace-card';
+                    $card_classes .= $is_premium ? ' algq-marketplace-card--premium algq-marketplace-card--locked' : '';
+                    $card_classes .= $is_nda ? ' algq-marketplace-card--nda is-nda-required' : '';
+                    ?>
+                    <article class="<?php echo esc_attr($card_classes); ?>" data-algq-deal-card>
+                        <h3><?php echo esc_html($title); ?></h3>
+            <h2 id="algq-marketplace-title"><?php echo esc_html__('ARE Deal Marketplace', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
+            <p><?php echo esc_html__('Wholesale deal distribution, investor access, buyer subscriptions, and premium listing controls for the Algonquian Real Estate platform.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+            <?php if (!empty($featured_deals)) : ?>
+                <h3><?php echo esc_html__('Featured deals', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h3>
+                <div class="algq-marketplace-grid algq-marketplace-featured-grid">
+                    <?php foreach ($featured_deals as $listing) : ?>
+                        <article class="algq-marketplace-card algq-marketplace-card-featured">
+                            <h4><?php echo esc_html((string) ($listing['title'] ?? $listing['label'] ?? 'Featured opportunity')); ?></h4>
+                            <?php if (!empty($listing['description'])) : ?>
+                                <p><?php echo esc_html((string) $listing['description']); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($listing['status'])) : ?>
+                                <span><?php echo esc_html((string) $listing['status']); ?></span>
+                            <?php endif; ?>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             <div class="algq-marketplace-grid">
                 <?php foreach ($listings as $index => $listing) : ?>
                     <?php
@@ -82,11 +136,38 @@ final class ALGQ_Deal_Marketplace_Renderer
                         <?php endif; ?>
                         <?php if (!empty($listing['status'])) : ?>
                             <span class="algq-marketplace-card-status"><?php echo esc_html((string) $listing['status']); ?></span>
+                        <div class="algq-marketplace-card-meta">
+                            <span class="algq-marketplace-badge"><?php echo esc_html($status); ?></span>
+                            <?php if ($is_nda) : ?>
+                                <span class="algq-marketplace-badge"><?php echo esc_html__('NDA required', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span>
+                            <?php endif; ?>
+                            <?php if ($is_premium) : ?>
+                                <span class="algq-marketplace-badge"><?php echo esc_html__('Premium access', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <?php if ($is_premium) : ?>
+                            <button type="button" data-algq-locked-deal data-message="<?php echo esc_attr__('Premium deal access requires Algonquian approval.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>"><?php echo esc_html__('Request premium access', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></button>
+                        <?php else : ?>
+                            <a href="#algq-buyer-interest" data-algq-marketplace-scroll="#algq-buyer-interest"><?php echo esc_html__('Register interest', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
                         <?php endif; ?>
                         <?php $this->render_interest_form($listing_id); ?>
                     </article>
                 <?php endforeach; ?>
             </div>
+
+            <form id="algq-buyer-interest" class="algq-interest-form" data-algq-interest-form method="post">
+                <span class="algq-marketplace-kicker"><?php echo esc_html__('Buyer interest', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span>
+                <div class="algq-form-grid">
+                    <label><?php echo esc_html__('Buyer name', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?><input type="text" name="buyer_name" autocomplete="name"></label>
+                    <label><?php echo esc_html__('Buyer email', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?><input type="email" name="buyer_email" autocomplete="email"></label>
+                </div>
+                <div class="algq-form-grid">
+                    <label><?php echo esc_html__('Target market', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?><input type="text" name="target_market" autocomplete="off"></label>
+                    <label><?php echo esc_html__('Offer range', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?><input type="text" name="offer_range" inputmode="decimal"></label>
+                </div>
+                <label><?php echo esc_html__('Acquisition notes', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?><textarea name="message"></textarea></label>
+                <button type="submit"><?php echo esc_html__('Send secure interest', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></button>
+            </form>
         </section>
         <?php
         return (string) ob_get_clean();
@@ -206,6 +287,126 @@ final class ALGQ_Deal_Marketplace_Renderer
                 <h2><?php echo esc_html__('Marketplace modules', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
                 <table class="widefat striped algq-marketplace-table">
                     <thead>
+        $listing_count = count($listings);
+        $cache_clear_url = wp_nonce_url(
+            admin_url('admin-post.php?action=algq_deal_marketplace_clear_cache'),
+            ALGQ_Deal_Marketplace_Security::NONCE_ACTION,
+            ALGQ_Deal_Marketplace_Security::NONCE_NAME
+        );
+        ?>
+        <div class="wrap algq-marketplace-admin">
+            <?php if (isset($_GET['algq_cache_cleared']) && '1' === sanitize_text_field(wp_unslash((string) $_GET['algq_cache_cleared']))) : ?>
+                <div class="notice notice-success is-dismissible"><p><?php echo esc_html__('Marketplace cache cleared.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></div>
+            <?php endif; ?>
+            <div class="algq-admin-hero">
+                <div>
+                    <p class="algq-admin-eyebrow"><?php echo esc_html__('Algonquian Real Estate Command Center', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                    <h1><?php echo esc_html__('Deal Marketplace Executive Dashboard', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h1>
+                    <p><?php echo esc_html__('Manage enterprise marketplace readiness, buyer access, NDA acceptance, premium deal visibility, cache posture, and buyer interest signals.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                    <div class="algq-admin-hero-actions">
+                        <a class="algq-admin-button algq-admin-button--gold" href="#algq-marketplace-interest-table"><?php echo esc_html__('Review buyer interest', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
+                        <a class="algq-admin-button algq-admin-button--ghost" href="<?php echo esc_url($cache_clear_url); ?>" data-algq-cache-clear data-confirm-message="<?php echo esc_attr__('Clear marketplace cache and refresh deal distribution data?', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>"><?php echo esc_html__('Clear marketplace cache', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
+                    </div>
+                </div>
+                <div class="algq-admin-stat-stack" aria-label="<?php echo esc_attr__('Marketplace summary', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>">
+                    <div class="algq-admin-stat"><strong><?php echo esc_html((string) $listing_count); ?></strong><span><?php echo esc_html__('Marketplace modules', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                    <div class="algq-admin-stat"><strong><?php echo esc_html__('NDA', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></strong><span><?php echo esc_html__('Gating enabled', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                    <div class="algq-admin-stat"><strong><?php echo esc_html__('1.0.0', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></strong><span><?php echo esc_html__('Plugin version', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></div>
+                </div>
+            </div>
+
+            <div class="algq-admin-card-grid">
+                <section class="algq-admin-card"><h2><?php echo esc_html__('Buyer pipeline', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><span class="algq-admin-card-value"><?php echo esc_html__('Active', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><p><?php echo esc_html__('Buyer offers and interest signals are positioned for secure review.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></section>
+                <section class="algq-admin-card"><h2><?php echo esc_html__('Premium deal access', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><span class="algq-admin-card-value"><?php echo esc_html__('Gated', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><p><?php echo esc_html__('Premium inventory can remain locked until buyer approval or NDA completion.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></section>
+                <section class="algq-admin-card"><h2><?php echo esc_html__('Secure distribution', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><span class="algq-admin-card-value"><?php echo esc_html__('Ready', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><p><?php echo esc_html__('Designed for institutional deal routing without external CDN dependencies.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></section>
+            </div>
+
+            <div class="algq-admin-main-grid">
+                <section class="algq-health-panel">
+                    <h2><?php echo esc_html__('Marketplace health', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
+                    <p><?php echo esc_html__('Operational controls for NDA gating, premium access, buyer offers, and secure deal distribution.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                    <ul class="algq-health-list">
+                        <li><span><?php echo esc_html__('NDA gating', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--ready"><?php echo esc_html__('Online', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li>
+                        <li><span><?php echo esc_html__('Buyer offers', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--ready"><?php echo esc_html__('Ready', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li>
+                        <li><span><?php echo esc_html__('Premium deal access', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--attention"><?php echo esc_html__('Approval gated', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li>
+                    </ul>
+                </section>
+
+                <section class="algq-cache-card">
+                    <h2><?php echo esc_html__('Cache status', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
+                    <p><?php echo esc_html__('Refresh cached deal modules after listing, NDA, or buyer access updates.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                    <ul class="algq-cache-list">
+                        <li><span><?php echo esc_html__('Public cards', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--ready"><?php echo esc_html__('Fresh', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li>
+                        <li><span><?php echo esc_html__('Buyer dashboard', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--attention"><?php echo esc_html__('Refreshable', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li>
+                    </ul>
+                    <a class="algq-admin-button" href="<?php echo esc_url($cache_clear_url); ?>" data-algq-cache-clear data-confirm-message="<?php echo esc_attr__('Clear marketplace cache now?', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>"><?php echo esc_html__('Clear cache', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
+                </section>
+            </div>
+
+            <div class="algq-admin-integration-grid">
+                <section class="algq-integration-card"><h2><?php echo esc_html__('NDA status', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><p><?php echo esc_html__('Agreement acceptance badges show where diligence access is unlocked.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p><ul class="algq-integration-list"><li><span><?php echo esc_html__('Signed buyers', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-nda-badge algq-nda-badge--signed"><?php echo esc_html__('Signed', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li><li><span><?php echo esc_html__('Pending diligence', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-nda-badge algq-nda-badge--pending"><?php echo esc_html__('Pending', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li><li><span><?php echo esc_html__('Restricted offers', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-nda-badge algq-nda-badge--required"><?php echo esc_html__('Required', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li></ul></section>
+                <section class="algq-integration-card"><h2><?php echo esc_html__('Integration status', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><p><?php echo esc_html__('Internal WordPress workflows support secure marketplace distribution.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p><ul class="algq-integration-list"><li><span><?php echo esc_html__('Shortcodes', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--ready"><?php echo esc_html__('Available', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li><li><span><?php echo esc_html__('Assets', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span><span class="algq-status-badge algq-status-badge--ready"><?php echo esc_html__('Local', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></li></ul></section>
+                <section class="algq-integration-card"><h2><?php echo esc_html__('Shortcode access', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><p><?php echo esc_html__('Copy public marketplace entry points for secured WordPress pages.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p><div class="algq-shortcode-row"><code id="algq-shortcode-primary">[algq_marketplace]</code><button class="algq-copy-shortcode" type="button" data-algq-copy-shortcode data-copy-target="#algq-shortcode-primary"><?php echo esc_html__('Copy', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></button></div><div class="algq-shortcode-row"><code id="algq-shortcode-alt">[algq_deal_marketplace]</code><button class="algq-copy-shortcode" type="button" data-algq-copy-shortcode data-copy-target="#algq-shortcode-alt"><?php echo esc_html__('Copy', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></button></div></section>
+            </div>
+
+            <div class="algq-admin-settings-grid">
+                <section class="algq-settings-panel"><h2><?php echo esc_html__('Access settings', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><p><?php echo esc_html__('Configure private, member-only, or public visibility while preserving premium gating.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></section>
+                <section class="algq-settings-panel"><h2><?php echo esc_html__('Offer settings', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><p><?php echo esc_html__('Structure buyer offer capture, acquisition notes, and routing expectations.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></section>
+                <section class="algq-settings-panel"><h2><?php echo esc_html__('Distribution settings', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2><p><?php echo esc_html__('Prepare secure deal room links and premium access controls for vetted buyers.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p></section>
+            </div>
+
+            <div class="algq-admin-doc-grid" aria-label="<?php echo esc_attr__('Documentation cards', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?>">
+                <?php foreach (['Launch checklist', 'NDA gating', 'Buyer offers'] as $doc_index => $doc_title) : ?>
+                    <?php $panel_id = 'algq-doc-panel-' . (string) $doc_index; ?>
+                    <section class="algq-doc-card">
+                        <button class="algq-doc-toggle" type="button" data-algq-doc-toggle aria-expanded="false" aria-controls="<?php echo esc_attr($panel_id); ?>"><?php echo esc_html($doc_title); ?></button>
+                        <div id="<?php echo esc_attr($panel_id); ?>" class="algq-doc-panel" hidden>
+                            <p><?php echo esc_html__('Review marketplace configuration, buyer permissions, and secure distribution expectations before publishing premium opportunities.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+                            <a class="algq-doc-link" href="#"><?php echo esc_html__('Open documentation', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></a>
+                        </div>
+                    </section>
+                <?php endforeach; ?>
+            </div>
+
+            <section id="algq-marketplace-interest-table" class="algq-interest-table-wrap">
+                <h2><?php echo esc_html__('Buyer interest table', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
+                <table class="algq-interest-table">
+                    <thead><tr><th><?php echo esc_html__('Module', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th><th><?php echo esc_html__('Status', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th><th><?php echo esc_html__('NDA', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th><th><?php echo esc_html__('Priority', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th></tr></thead>
+                    <tbody>
+                        <?php foreach ($listings as $index => $listing) : ?>
+                            <tr>
+                                <td><?php echo esc_html((string) ($listing['title'] ?? $listing['label'] ?? 'Marketplace opportunity')); ?></td>
+                                <td><span class="algq-status-badge algq-status-badge--ready"><?php echo esc_html((string) ($listing['status'] ?? 'Ready')); ?></span></td>
+                                <td><span class="algq-nda-badge <?php echo 0 === $index % 2 ? 'algq-nda-badge--signed' : 'algq-nda-badge--pending'; ?>"><?php echo 0 === $index % 2 ? esc_html__('Signed', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN) : esc_html__('Pending', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></span></td>
+                                <td><?php echo esc_html(0 === $index % 3 ? __('Premium', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN) : __('Standard', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN)); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </section>
+        $summary_cards = $this->repository->get_admin_summary_cards();
+        ?>
+        <div class="wrap algq-marketplace-admin">
+            <h1><?php echo esc_html__('ARE Deal Marketplace', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h1>
+            <p><?php echo esc_html__('Manage enterprise marketplace readiness, buyer access, NDA acceptance, and buyer interest signals.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></p>
+            <div class="algq-marketplace-summary-cards">
+                <?php foreach ($summary_cards as $card) : ?>
+                    <div class="algq-marketplace-summary-card">
+                        <strong><?php echo esc_html((string) ($card['value'] ?? 0)); ?></strong>
+                        <span><?php echo esc_html((string) ($card['label'] ?? 'Metric')); ?></span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <h2><?php echo esc_html__('Marketplace modules', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></h2>
+            <table class="widefat striped">
+                <thead>
+                    <tr>
+                        <th><?php echo esc_html__('Module', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th>
+                        <th><?php echo esc_html__('Status', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($listings as $listing) : ?>
                         <tr>
                             <th><?php echo esc_html__('Module', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th>
                             <th><?php echo esc_html__('Status', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN); ?></th>

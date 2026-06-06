@@ -27,5 +27,6 @@ final class ALGQ_Deal_Marketplace_NDA
 
         $this->repository->record_nda_acceptance($listing_id, $user_id, $ip_hash);
         $this->audit_log->record('nda_accepted', 'listing', $listing_id, ['user_id' => $user_id]);
+        do_action('algq_deal_marketplace_nda_accepted', $listing_id, $user_id);
     }
 }

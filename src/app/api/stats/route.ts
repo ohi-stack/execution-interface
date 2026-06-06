@@ -5,13 +5,13 @@ import { getCapitalBridgeStatus } from '@/lib/bridges/capital';
 import { getMembersBridgeStatus } from '@/lib/bridges/members';
 import { getPlatformBridgeStatus } from '@/lib/bridges/platform';
 
-const productionRoutes = ['/dashboard', '/ecosystem', '/registry', '/members', '/products', '/media', '/capital', '/omos', '/learning'];
+const productionRoutes = ['/dashboard', '/ecosystem', '/omos', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/docs'];
 const productionApis = ['/api/health', '/api/manifest', '/api/tools', '/api/stats'];
 
 export async function GET(request: Request) {
   return jsonResponse(
     {
-      app: 'OneGodian App Deploy',
+      app: 'The OneGodian App',
       healthy: true,
       canonicalHost: 'https://app.onegodian.com',
       generatedAt: new Date().toISOString(),

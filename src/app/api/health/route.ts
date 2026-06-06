@@ -1,15 +1,15 @@
 import { jsonResponse } from '@/lib/api-json';
 
-const productionRoutes = ['/dashboard', '/ecosystem', '/registry', '/members', '/products', '/media', '/capital', '/omos', '/learning'];
+const productionRoutes = ['/dashboard', '/ecosystem', '/omos', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/docs'];
 const productionApis = ['/api/health', '/api/manifest', '/api/tools', '/api/stats'];
 
 export async function GET(request: Request) {
   return jsonResponse(
     {
-      app: 'OneGodian App Deploy',
+      app: 'The OneGodian App',
       status: 'ok',
       environment: process.env.NODE_ENV ?? 'development',
-      version: '1.0.1',
+      version: '1.0.2',
       canonicalHost: 'https://app.onegodian.com',
       publicRouteCount: productionRoutes.length,
       productionRoutes,

@@ -104,6 +104,10 @@ final class ALGQ_Deal_Marketplace_Repository
     {
         global $wpdb;
 
+        if (!isset($wpdb) || !method_exists($wpdb, 'get_results') || !method_exists($wpdb, 'prepare')) {
+            return $this->default_modules();
+        }
+
         $rows = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM {$this->listings_table()} WHERE status = %s ORDER BY updated_at DESC LIMIT 50",
@@ -160,6 +164,10 @@ final class ALGQ_Deal_Marketplace_Repository
     {
         global $wpdb;
 
+        if (!isset($wpdb) || !method_exists($wpdb, 'insert')) {
+            return 0;
+        }
+
         $wpdb->insert(
             $this->interests_table(),
             [
@@ -182,6 +190,10 @@ final class ALGQ_Deal_Marketplace_Repository
     {
         global $wpdb;
 
+        if (!isset($wpdb) || !method_exists($wpdb, 'replace')) {
+            return;
+        }
+
         $wpdb->replace(
             $this->nda_table(),
             [
@@ -200,6 +212,10 @@ final class ALGQ_Deal_Marketplace_Repository
     public function insert_audit_log(string $action, string $object_type = '', int $object_id = 0, array $context = []): int
     {
         global $wpdb;
+
+        if (!isset($wpdb) || !method_exists($wpdb, 'insert')) {
+            return 0;
+        }
 
         $wpdb->insert(
             $this->audit_table(),

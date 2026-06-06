@@ -121,3 +121,8 @@ Use the Offer Generator shortcode inside a valid WPBakery text block wrapper:
 [/vc_column_text]
 ```
 
+
+
+## Deal Marketplace 1.0.1 production package
+
+The Algonquian Deal Marketplace plugin is packaged for production as `algq-deal-marketplace-1.0.1-production.zip`, but ZIP artifacts are generated locally and intentionally not committed so binary package files do not block branch pushes. This release validates PHP syntax across the ARE PHP tree, the plugin smoke-test path when PHPUnit is available, WordPress activation expectations, generated pages, shortcodes, admin menu registration, buyer interest submission, NDA gate copy, cache clearing, optional plugin inactivity, and non-destructive uninstall defaults. Detailed validation steps and the package command are documented in `docs/deal-marketplace-validation.md`.

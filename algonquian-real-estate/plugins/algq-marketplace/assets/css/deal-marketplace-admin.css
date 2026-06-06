@@ -1,3 +1,219 @@
-.algq-marketplace-admin table {
-    margin-top: 1rem;
+.algq-marketplace-admin {
+    --algq-admin-ink: #102033;
+    --algq-admin-muted: #64748b;
+    --algq-admin-line: #dbe6f3;
+    --algq-admin-soft: #f7fafc;
+    --algq-admin-gold: #b48723;
+    --algq-admin-green: #047857;
+    --algq-admin-violet: #6d28d9;
+    color: var(--algq-admin-ink);
+}
+
+.algq-marketplace-admin .notice {
+    margin-left: 0;
+}
+
+.algq-admin-hero,
+.algq-admin-panel,
+.algq-admin-card {
+    background: #fff;
+    border: 1px solid var(--algq-admin-line);
+    border-radius: 18px;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+}
+
+.algq-admin-hero {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin: 1rem 0;
+    padding: 1.35rem;
+}
+
+.algq-admin-hero h1 {
+    margin: 0 0 0.35rem;
+}
+
+.algq-admin-hero p {
+    color: var(--algq-admin-muted);
+    margin: 0;
+    max-width: 760px;
+}
+
+.algq-admin-eyebrow {
+    color: var(--algq-admin-gold);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    margin: 0 0 0.35rem;
+    text-transform: uppercase;
+}
+
+.algq-admin-card-grid,
+.algq-admin-panel-grid,
+.algq-integration-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.algq-admin-card-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 1rem 0;
+}
+
+.algq-admin-panel-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    margin-bottom: 1rem;
+}
+
+.algq-admin-card,
+.algq-admin-panel {
+    padding: 1rem;
+}
+
+.algq-admin-card span,
+.algq-admin-card strong,
+.algq-admin-card small {
+    display: block;
+}
+
+.algq-admin-card span {
+    color: var(--algq-admin-muted);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.algq-admin-card strong {
+    font-size: 1.7rem;
+    margin: 0.35rem 0;
+}
+
+.algq-admin-card small,
+.algq-admin-panel p,
+.algq-settings-panel dd {
+    color: var(--algq-admin-muted);
+}
+
+.algq-panel-heading {
+    align-items: flex-start;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.algq-panel-heading h2,
+.algq-admin-panel h2 {
+    margin-top: 0;
+}
+
+.algq-panel-heading span,
+.algq-table-pill,
+.algq-integration-card span {
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.32rem 0.58rem;
+    text-transform: uppercase;
+}
+
+.algq-panel-heading span,
+.algq-table-pill.is-nda,
+.algq-integration-card.is-active span {
+    background: rgba(4, 120, 87, 0.12);
+    color: var(--algq-admin-green);
+}
+
+.algq-table-pill,
+.algq-integration-card.is-inactive span {
+    background: rgba(100, 116, 139, 0.12);
+    color: var(--algq-admin-muted);
+}
+
+.algq-settings-panel dl {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+}
+
+.algq-settings-panel dl div {
+    border-top: 1px solid var(--algq-admin-line);
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding-top: 0.7rem;
+}
+
+.algq-settings-panel dl div:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.algq-settings-panel dt {
+    font-weight: 800;
+}
+
+.algq-settings-panel dd {
+    margin: 0;
+    text-align: right;
+}
+
+.algq-integration-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.algq-integration-card {
+    background: var(--algq-admin-soft);
+    border: 1px solid var(--algq-admin-line);
+    border-radius: 14px;
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.9rem;
+}
+
+.algq-integration-card strong {
+    font-size: 0.95rem;
+}
+
+.algq-marketplace-table {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.algq-copy-shortcode.is-copied {
+    background: var(--algq-admin-violet) !important;
+    border-color: var(--algq-admin-violet) !important;
+    color: #fff !important;
+}
+
+@media (max-width: 1200px) {
+    .algq-admin-card-grid,
+    .algq-integration-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 782px) {
+    .algq-admin-hero,
+    .algq-panel-heading,
+    .algq-settings-panel dl div {
+        display: block;
+    }
+
+    .algq-admin-card-grid,
+    .algq-admin-panel-grid,
+    .algq-integration-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .algq-copy-shortcode {
+        margin-top: 1rem !important;
+    }
+
+    .algq-settings-panel dd {
+        margin-top: 0.25rem;
+        text-align: left;
+    }
 }

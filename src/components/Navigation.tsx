@@ -6,10 +6,10 @@ import appPages from '@/data/app-pages.json';
 
 const bottomTabs = [
   { label: 'Home', href: '/', icon: '⌂' },
-  { label: 'Dashboard', href: '/dashboard', icon: '◈' },
-  { label: 'OMOS', href: '/omos', icon: '◎' },
-  { label: 'Tools', href: '/tools', icon: '✦' },
-  { label: 'More', href: '/docs', icon: '☰' }
+  { label: 'Systems', href: '/odin', icon: '◎' },
+  { label: 'Learn', href: '/learn', icon: '✦' },
+  { label: 'Community', href: '/membership', icon: '◇' },
+  { label: 'Identity', href: '/identity', icon: '◈' }
 ];
 
 function isActive(pathname: string, href: string) {
@@ -19,8 +19,7 @@ function isActive(pathname: string, href: string) {
 
 export function Navigation() {
   const pathname = usePathname() || '/';
-  const primary = appPages.navigation.slice(0, 7);
-  const secondary = appPages.navigation.slice(7);
+  const primary = appPages.navigation;
 
   return (
     <>
@@ -35,11 +34,11 @@ export function Navigation() {
           </Link>
 
           <nav className="ml-auto hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
-            {[...primary, ...secondary].map((item) => (
+            {primary.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
-                className={`rounded-full px-3 py-2 text-sm font-semibold transition ${
+                className={`rounded-full px-2.5 py-2 text-xs font-semibold transition xl:px-3 xl:text-sm ${
                   isActive(pathname, item.path)
                     ? 'border border-gold-300/45 bg-gold-300/15 text-gold-100'
                     : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'

@@ -11,68 +11,73 @@
     {
       "label": "Dashboard",
       "path": "/dashboard",
-      "description": "Member overview, account status, active tools, and ecosystem progress."
+      "description": "Central member dashboard for updates, tools, profile access, records, and member actions."
     },
     {
       "label": "Ecosystem",
       "path": "/ecosystem",
-      "description": "Map of OneGodian domains, platforms, systems, and operating layers."
-    },
-    {
-      "label": "OMOS",
-      "path": "/omos",
-      "description": "Connection layer to OMOS.OneGodian.com, the protocol and runtime node."
+      "description": "Map the role of Onegodian.org, Onegodian.com, u.Onegodian.org, and app.OneGodian.com."
     },
     {
       "label": "Registry",
       "path": "/registry",
-      "description": "Public-facing registry access for records, certificates, identifiers, and verification links."
+      "description": "Registry access for records, certificates, identifiers, ODIN references, and verification links."
     },
     {
-      "label": "Tools",
-      "path": "/tools",
-      "description": "Belief Mapper Lite, OneGodian Time tools, system utilities, and identity reflection tools."
+      "label": "ODIN",
+      "path": "/odin",
+      "description": "Open ODIN registry systems, canon references, platform records, and system interfaces."
     },
     {
-      "label": "Members",
-      "path": "/members",
-      "description": "Membership pathways, contributor access, profile infrastructure, and participation options."
+      "label": "Planets",
+      "path": "/odin/planetary-registry",
+      "description": "Access the planetary registry and canon-linked world records."
     },
     {
-      "label": "Certificates",
-      "path": "/certificates",
-      "description": "Certificates, badges, QRV verification links, and credential records."
+      "label": "Learn",
+      "path": "/learn",
+      "description": "Bridge to learning paths, Onegodianese\u2122 resources, curriculum, and u.Onegodian.org courses."
     },
     {
-      "label": "Products",
-      "path": "/products",
-      "description": "Books, downloads, courses, founder products, memberships, and digital tools."
+      "label": "Identity",
+      "path": "/identity",
+      "description": "Member identity explanations, profile context, participation records, and access resources."
+    },
+    {
+      "label": "Verification",
+      "path": "/verification",
+      "description": "Certificate tools, record references, verification pathways, and document lookup."
     },
     {
       "label": "Media",
       "path": "/media",
-      "description": "Videos, music, visual campaigns, founder updates, and public media assets."
+      "description": "Media center for videos, campaigns, cultural assets, founder updates, and platform content."
     },
     {
-      "label": "Settings",
-      "path": "/settings",
-      "description": "Profile settings, preferences, notification controls, and account configuration."
+      "label": "Store",
+      "path": "/store",
+      "description": "Bridge to Onegodian.com products, services, digital downloads, certificates, and branded goods."
     },
     {
-      "label": "Docs",
-      "path": "/docs",
-      "description": "Documentation, white papers, platform guides, and integration references."
+      "label": "Capital",
+      "path": "/capital",
+      "description": "Capital access tools, funding tracker modules, instruments, and business infrastructure."
+    },
+    {
+      "label": "Time",
+      "path": "/time",
+      "description": "OneGodian Time tools for internal/system chronology with Gregorian and UTC compatibility."
     }
   ],
   "pages": {
     "/": {
-      "title": "The OneGodian App",
-      "eyebrow": "Unified Ecosystem Interface",
-      "headline": "Unified access for identity, systems, records, education, commerce, media, and verification.",
-      "body": "The OneGodian App is the central experience layer for the OneGodian ecosystem. It connects public information, member tools, digital products, OMOS runtime services, registry access, certificates, education pathways, and media into one structured interface.",
+      "title": "OneGodian Everything App",
+      "eyebrow": "ONEGODIAN APP \u00b7 APP.ONEGODIAN.COM",
+      "headline": "The operational launcher and dashboard layer for the OneGodian ecosystem.",
+      "body": "app.OneGodian.com connects ODIN registry systems, planetary canon, moon systems, products, certificates, media tools, identity access, education bridges, verification, and synchronized platform infrastructure.",
       "primaryCta": {
         "label": "Open Dashboard",
-        "href": "/dashboard"
+        "href": "/"
       },
       "secondaryCta": {
         "label": "Explore Ecosystem",
@@ -81,31 +86,30 @@
     },
     "/dashboard": {
       "title": "Dashboard",
-      "eyebrow": "Member Command View",
-      "headline": "Your OneGodian ecosystem overview.",
-      "body": "The dashboard brings together current access, saved tools, active records, certificates, membership status, and recommended next steps. This is the member-facing experience layer. Operator-only controls belong outside the app and stay in the separate console environment.",
+      "eyebrow": "Command Center",
+      "headline": "Central dashboard for OneGodian updates, tools, profile access, records, and member-only actions.",
+      "body": "Use the dashboard as the operational home for identity resources, certificates, platform links, education bridges, system status, ODIN access, and recommended next steps.",
       "sections": [
-        "Profile Snapshot",
-        "Active Tools",
+        "Member Profile",
+        "Identity Access",
         "Certificates",
-        "Membership",
-        "Recommended Next Steps",
+        "Education Bridge",
+        "ODIN Shortcuts",
         "System Status"
       ]
     },
     "/ecosystem": {
       "title": "Ecosystem",
-      "eyebrow": "Platform Map",
-      "headline": "Understand how each OneGodian domain works together.",
-      "body": "The ecosystem is organized by role: OneGodian.org for public explanation and education, OneGodian.com for commerce and memberships, OMOS.OneGodian.com for runtime systems, QuantumOHI.com for enterprise positioning, capital.OneGodian.com for capital infrastructure, u.OneGodian.com for education, galaxy.OneGodian.com for lore and exploration, and QRV.Network for verification infrastructure.",
+      "eyebrow": "Platform Separation",
+      "headline": "See how the OneGodian platform domains work together without replacing each other.",
+      "body": "Onegodian.org explains identity, belief, community, education, and public history. Onegodian.com powers commerce. u.Onegodian.org runs education. app.OneGodian.com connects dashboards, tools, registries, identity access, verification, and system infrastructure.",
       "sections": [
-        "Public Layer",
-        "Commerce Layer",
-        "Runtime Layer",
-        "Education Layer",
-        "Capital Layer",
-        "Verification Layer",
-        "Media Layer"
+        "Onegodian.org",
+        "Onegodian.com",
+        "u.Onegodian.org",
+        "app.OneGodian.com",
+        "ODIN",
+        "Verification"
       ]
     },
     "/omos": {
@@ -129,14 +133,14 @@
     "/registry": {
       "title": "Registry",
       "eyebrow": "Records & Verification",
-      "headline": "Access OneGodian records, certificates, and verification pathways.",
-      "body": "The registry page organizes identity records, certificate references, public identifiers, QRV verification links, and documentation pathways. Legal and financial records should retain Gregorian dates as the controlling reference, with OneGodian Time displayed as supplemental internal sequencing where applicable.",
+      "headline": "Access OneGodian records, certificates, registry pathways, and ODIN references.",
+      "body": "The registry organizes certificate references, identity records, public identifiers, verification links, and ODIN registry pathways for app-based lookup and navigation.",
       "sections": [
         "Certificate Registry",
         "QRV Verification",
         "ODIN References",
-        "Public Records",
-        "Chronology Links"
+        "Planetary Registry",
+        "Identity Records"
       ]
     },
     "/tools": {
@@ -194,13 +198,13 @@
     },
     "/media": {
       "title": "Media",
-      "eyebrow": "Public Communication",
-      "headline": "Watch, listen, read, and share OneGodian media.",
-      "body": "The media area organizes videos, music, campaign assets, founder updates, educational clips, and branded visuals. It supports cultural recognition and public engagement without turning the app into an internal control surface.",
+      "eyebrow": "Media Center",
+      "headline": "Use the media center for OneGodian platform content, education assets, campaigns, and public communication.",
+      "body": "The media area organizes videos, campaign assets, educational clips, founder updates, and shareable ecosystem media while keeping dashboards and commerce in their dedicated layers.",
       "sections": [
         "Featured Videos",
-        "Music",
         "Campaigns",
+        "Education Clips",
         "Founder Updates",
         "Press Assets"
       ]
@@ -231,6 +235,97 @@
         "OneGodian Time",
         "Plugin Guides",
         "API References"
+      ]
+    },
+    "/store": {
+      "title": "Store Bridge",
+      "eyebrow": "Commerce Access",
+      "headline": "Connect to Onegodian.com products, services, downloads, certificates, and branded goods.",
+      "body": "The app provides store navigation and product-category access while checkout, purchases, and commercial fulfillment stay on Onegodian.com.",
+      "sections": [
+        "Digital Downloads",
+        "Books & Guides",
+        "Membership Resources",
+        "Certificates",
+        "Apparel & Goods",
+        "Services"
+      ]
+    },
+    "/learn": {
+      "title": "Learn",
+      "eyebrow": "Education Bridge",
+      "headline": "Connect to guided materials, learning paths, Onegodianese\u2122 resources, curriculum, and student portals.",
+      "body": "Learning content is bridged from the app into public educational pages and u.Onegodian.org, the dedicated course and certification portal.",
+      "sections": [
+        "Identity & Meaning",
+        "Onegodianese\u2122",
+        "Courses",
+        "Curriculum",
+        "Certification"
+      ]
+    },
+    "/identity": {
+      "title": "Identity",
+      "eyebrow": "Member Identity",
+      "headline": "Access member profile information, identity explanations, status, and participation records.",
+      "body": "Identity resources explain the OneGodian framework, membership context, records, certificates, and voluntary participation pathways without implying governmental status or exemption from applicable law.",
+      "sections": [
+        "Profile",
+        "Identity Meaning",
+        "Member Records",
+        "Participation",
+        "Certificates"
+      ]
+    },
+    "/verification": {
+      "title": "Verification",
+      "eyebrow": "Records Lookup",
+      "headline": "View certificate tools, record references, verification pathways, and document lookup.",
+      "body": "Verification tools help users locate references and records across the OneGodian app while keeping legal, commercial, and educational context clearly separated.",
+      "sections": [
+        "Certificate Lookup",
+        "Record References",
+        "Document Lookup",
+        "ODIN Verification",
+        "QRV Links"
+      ]
+    },
+    "/capital": {
+      "title": "Capital",
+      "eyebrow": "Capital Access",
+      "headline": "Access capital tools, funding trackers, instruments, licensing, and business infrastructure.",
+      "body": "Capital modules provide operational visibility for funding, instruments, valuation, licensing, and platform business infrastructure with appropriate disclosures.",
+      "sections": [
+        "Funding Tracker",
+        "Instruments",
+        "Valuation",
+        "Licensing",
+        "Payments"
+      ]
+    },
+    "/time": {
+      "title": "OneGodian Time",
+      "eyebrow": "Internal/System Chronology",
+      "headline": "Use OneGodian Time tools as an internal presentation layer with Gregorian and UTC compatibility.",
+      "body": "OneGodian Time supports internal cultural and system chronology. Gregorian dates and UTC timestamps remain controlling for legal, financial, regulatory, contractual, and technical records.",
+      "sections": [
+        "Today in OneGodian Time",
+        "Dual Dating",
+        "UTC Compatibility",
+        "Legal-Safe Display"
+      ]
+    },
+    "/membership": {
+      "title": "Membership",
+      "eyebrow": "Member Pathway",
+      "headline": "Explore member education, community participation, resources, and structured access.",
+      "body": "Membership routes support voluntary participation, member education, profile records, community updates, certificates, and guided access within the OneGodian framework.",
+      "sections": [
+        "Membership Overview",
+        "Community Pathway",
+        "Member Education",
+        "Certificates",
+        "Dashboard Access"
       ]
     }
   }

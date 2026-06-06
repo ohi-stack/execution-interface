@@ -17,7 +17,8 @@
     "test:smoke": "node scripts/smoke-test.mjs",
     "smoke": "node tests/smoke.test.js",
     "smoke:pages": "node scripts/smoke-pages.mjs",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "deploy": "bash scripts/deploy-prod.sh"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",

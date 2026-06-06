@@ -94,3 +94,14 @@ chmod +x scripts/verify-onegodian-platform-plugin.sh
 ```
 
 The generated `onegodian-platform-plugin-v1.0.0.zip` file is a release artifact and should not be committed unless the repository release policy explicitly changes to allow generated ZIP files.
+
+## OneGodian Capital Plugin ZIP Build
+
+Build and verify the OneGodian Capital Plugin v0.3.1 product sync ZIP locally before publishing it as a release artifact:
+
+```bash
+chmod +x scripts/build-onegodian-capital-plugin.sh
+./scripts/build-onegodian-capital-plugin.sh
+```
+
+The generated `onegodian-capital-plugin-v0.3.1-product-sync.zip` file is intentionally ignored by Git so push/PR workflows carry source code only while release packaging remains reproducible.

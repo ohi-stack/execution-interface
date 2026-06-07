@@ -209,6 +209,11 @@ algonquian-real-estate/
 
 ## REST Endpoint Summary
 
+
+
+## Deal Marketplace 1.0.1 production package
+
+The Algonquian Deal Marketplace plugin is packaged for production as `algq-deal-marketplace-1.0.1-production.zip`, but ZIP artifacts are generated locally and intentionally not committed so binary package files do not block branch pushes. This release validates PHP syntax across the ARE PHP tree, the plugin smoke-test path when PHPUnit is available, WordPress activation expectations, generated pages, shortcodes, admin menu registration, buyer interest submission, NDA gate copy, cache clearing, optional plugin inactivity, and non-destructive uninstall defaults. Detailed validation steps and the package command are documented in `docs/deal-marketplace-validation.md`.
 - Pipeline CRM exposes `/wp-json/algq/v1/pipeline/deals`, `/wp-json/algq/v1/pipeline/deals/{id}`, `/wp-json/algq/v1/pipeline/deals/{id}/stage`, `/wp-json/algq/v1/pipeline/activity`, and `/wp-json/algq/v1/pipeline/metrics` for deal listing, detail, stage movement, activity, and metrics workflows.
 - Marketplace exposes `/wp-json/algq/v1/marketplace` for marketplace module and integration status.
 - MAO Engine exposes `/wp-json/algq-mao/v1` routes for calculations and saved underwriting scenarios.

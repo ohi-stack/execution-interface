@@ -63,6 +63,7 @@ final class ALGQ_Deal_Marketplace_Assets
 
         wp_enqueue_script(
             'algq-deal-marketplace-admin',
+            ALGQ_DEAL_MARKETPLACE_URL . 'assets/js/deal-marketplace-admin.js',
             ALGQ_DEAL_MARKETPLACE_URL . 'assets/js/algq-marketplace-admin.js',
             [],
             ALGQ_DEAL_MARKETPLACE_VERSION,

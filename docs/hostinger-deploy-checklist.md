@@ -6,6 +6,7 @@ Use this checklist when promoting the latest `main` build to production.
 
 - SSH into the Hostinger/VPS machine.
 - Open the project directory containing this repo.
+- Confirm the production checkout origin is `https://github.com/ohi-stack/onegodian-app-deploy.git`; reset any legacy `execution-interface` or source-app origin before deploying.
 - Confirm required environment variables are set (for example `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and OMOS bridge values).
 
 ## 2) Deploy latest code

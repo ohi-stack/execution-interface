@@ -96,12 +96,15 @@ final class ALGQ_Deal_Marketplace_Cache
      */
     public function delete($key, $group = self::GROUP): void
     {
+        $cache_key = self::PREFIX . $key;
+        $value = function_exists('wp_cache_get') ? wp_cache_get($cache_key, self::GROUP) : false;
         $cache_key = $this->build_key($key);
 
         if (function_exists('wp_cache_delete')) {
             wp_cache_delete($cache_key, $group);
         }
 
+        return function_exists('get_transient') ? get_transient($cache_key) : false;
         if (function_exists('delete_transient')) {
             delete_transient($cache_key);
         }
@@ -162,6 +165,12 @@ final class ALGQ_Deal_Marketplace_Cache
      */
     public function build_key($parts): string
     {
+        $cache_key = self::PREFIX . $key;
+        if (function_exists('wp_cache_set')) {
+            wp_cache_set($cache_key, $value, self::GROUP, $ttl);
+        }
+
+        return function_exists('set_transient') ? set_transient($cache_key, $value, $ttl) : true;
         if (is_array($parts)) {
             $parts = implode('_', array_map(function ($part): string {
                 if (is_scalar($part) || null === $part) {
@@ -185,6 +194,13 @@ final class ALGQ_Deal_Marketplace_Cache
 
     public function ttl_for(string $type): int
     {
+        $cache_key = self::PREFIX . $key;
+        if (function_exists('wp_cache_delete')) {
+            wp_cache_delete($cache_key, self::GROUP);
+        }
+
+        if (function_exists('delete_transient')) {
+            delete_transient($cache_key);
         switch ($type) {
             case 'settings':
                 return self::TTL_SETTINGS;

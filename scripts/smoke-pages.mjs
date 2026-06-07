@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 const server = spawn('node', ['server.js'], { env: { ...process.env, PORT: '4020' }, detached: true });
-const routes = ['/', '/ecosystem', '/overview', '/omos', '/algorithm', '/remember', '/time', '/commerce', '/identity', '/institutional', '/status'];
+const routes = ['/', '/protocol', '/algorithm', '/dashboard', '/api', '/docs', '/use-cases', '/roadmap', '/status'];
 await new Promise((resolve) => setTimeout(resolve, 1500));
 try {
   for (const route of routes) {

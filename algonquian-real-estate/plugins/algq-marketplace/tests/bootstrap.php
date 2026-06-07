@@ -29,6 +29,7 @@ if (!function_exists('algq_core')) {
 
 require_once ALGQ_MARKETPLACE_TESTS_PLUGIN_FILE;
 algq_marketplace_tests_do_action('plugins_loaded');
+algq_marketplace_tests_do_action('init');
 
 function tests_add_wordpress_shims(): void
 {
@@ -126,6 +127,185 @@ function tests_add_wordpress_shims(): void
         }
     }
 
+    if (!function_exists('register_deactivation_hook')) {
+        function register_deactivation_hook($file, $callback): void
+        {
+            $GLOBALS['algq_marketplace_deactivation_hooks'][$file] = $callback;
+        }
+    }
+
+    if (!function_exists('plugin_basename')) {
+        function plugin_basename($file): string
+        {
+            return basename(dirname($file)) . '/' . basename($file);
+        }
+    }
+
+    if (!function_exists('is_admin')) {
+        function is_admin(): bool
+        {
+            return true;
+        }
+    }
+
+    if (!function_exists('current_user_can')) {
+        function current_user_can($capability): bool
+        {
+            return true;
+        }
+    }
+
+    if (!function_exists('load_plugin_textdomain')) {
+        function load_plugin_textdomain($domain, $deprecated = false, $plugin_rel_path = false): bool
+        {
+            return true;
+        }
+    }
+
+    if (!function_exists('wp_register_style')) {
+        function wp_register_style($handle, $src, $deps = [], $ver = false, $media = 'all'): bool
+        {
+            $GLOBALS['algq_marketplace_registered_styles'][$handle] = compact('src', 'deps', 'ver', 'media');
+            return true;
+        }
+    }
+
+    if (!function_exists('wp_register_script')) {
+        function wp_register_script($handle, $src, $deps = [], $ver = false, $in_footer = false): bool
+        {
+            $GLOBALS['algq_marketplace_registered_scripts'][$handle] = compact('src', 'deps', 'ver', 'in_footer');
+            return true;
+        }
+    }
+
+    if (!function_exists('wp_style_is')) {
+        function wp_style_is($handle, $list = 'enqueued'): bool
+        {
+            return isset($GLOBALS['algq_marketplace_registered_styles'][$handle]);
+        }
+    }
+
+    if (!function_exists('wp_enqueue_style')) {
+        function wp_enqueue_style($handle, $src = '', $deps = [], $ver = false, $media = 'all'): void
+        {
+            $GLOBALS['algq_marketplace_enqueued_styles'][$handle] = true;
+        }
+    }
+
+    if (!function_exists('wp_enqueue_script')) {
+        function wp_enqueue_script($handle, $src = '', $deps = [], $ver = false, $in_footer = false): void
+        {
+            $GLOBALS['algq_marketplace_enqueued_scripts'][$handle] = true;
+        }
+    }
+
+    if (!function_exists('admin_url')) {
+        function admin_url($path = ''): string
+        {
+            return 'http://example.org/wp-admin/' . ltrim((string) $path, '/');
+        }
+    }
+
+    if (!function_exists('wp_nonce_field')) {
+        function wp_nonce_field($action = -1, $name = '_wpnonce', $referer = true, $display = true): string
+        {
+            $field = '<input type="hidden" name="' . htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8') . '" value="test-nonce" />';
+            if ($display) {
+                echo $field;
+            }
+            return $field;
+        }
+    }
+
+    if (!function_exists('wp_verify_nonce')) {
+        function wp_verify_nonce($nonce, $action = -1)
+        {
+            return 'test-nonce' === $nonce ? 1 : false;
+        }
+    }
+
+    if (!function_exists('esc_url')) {
+        function esc_url($value): string
+        {
+            return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    if (!function_exists('esc_attr')) {
+        function esc_attr($value): string
+        {
+            return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    if (!function_exists('absint')) {
+        function absint($value): int
+        {
+            return abs((int) $value);
+        }
+    }
+
+    if (!function_exists('add_menu_page')) {
+        function add_menu_page($page_title, $menu_title, $capability, $menu_slug, $callback = '', $icon_url = '', $position = null): string
+        {
+            $GLOBALS['algq_marketplace_admin_menus'][$menu_slug] = compact('page_title', 'menu_title', 'capability', 'callback');
+            return $menu_slug;
+        }
+    }
+
+    if (!function_exists('register_setting')) {
+        function register_setting($option_group, $option_name, $args = []): void
+        {
+            $GLOBALS['algq_marketplace_settings'][$option_name] = compact('option_group', 'args');
+        }
+    }
+
+    if (!function_exists('wp_cache_get')) {
+        function wp_cache_get($key, $group = '')
+        {
+            return false;
+        }
+    }
+
+    if (!function_exists('wp_cache_set')) {
+        function wp_cache_set($key, $value, $group = '', $expire = 0): bool
+        {
+            $GLOBALS['algq_marketplace_cache'][$group][$key] = $value;
+            return true;
+        }
+    }
+
+    if (!function_exists('wp_cache_delete')) {
+        function wp_cache_delete($key, $group = ''): bool
+        {
+            unset($GLOBALS['algq_marketplace_cache'][$group][$key]);
+            return true;
+        }
+    }
+
+    if (!function_exists('get_transient')) {
+        function get_transient($transient)
+        {
+            return false;
+        }
+    }
+
+    if (!function_exists('set_transient')) {
+        function set_transient($transient, $value, $expiration = 0): bool
+        {
+            $GLOBALS['algq_marketplace_transients'][$transient] = $value;
+            return true;
+        }
+    }
+
+    if (!function_exists('delete_transient')) {
+        function delete_transient($transient): bool
+        {
+            unset($GLOBALS['algq_marketplace_transients'][$transient]);
+            return true;
+        }
+    }
+
     if (!function_exists('__return_true')) {
         function __return_true(): bool
         {
@@ -142,6 +322,13 @@ function tests_add_wordpress_shims(): void
 
     if (!function_exists('esc_html__')) {
         function esc_html__($text, $domain = 'default'): string
+        {
+            return htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    if (!function_exists('esc_attr__')) {
+        function esc_attr__($text, $domain = 'default'): string
         {
             return htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8');
         }

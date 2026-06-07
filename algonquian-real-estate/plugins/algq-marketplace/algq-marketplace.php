@@ -2,8 +2,11 @@
 /**
  * Plugin Name: Algonquian Deal Marketplace
  * Description: Enterprise marketplace foundations for wholesale deals, investor access, syndication, buyer subscriptions, and premium listings.
+ * Description: Enterprise marketplace foundations for wholesale deals, investor access, syndication, buyer subscriptions, premium listings, NDA gating, and buyer interest capture.
  * Version: 1.0.1
  * Author: Algonquian Real Estate
+ * Requires at least: 6.2
+ * Requires PHP: 7.4
  * Requires Plugins: algq-core
  * Text Domain: algq-deal-marketplace
  */
@@ -35,14 +38,12 @@ if (!defined('ALGQ_DEAL_MARKETPLACE_BASENAME')) {
 if (!defined('ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN')) {
     define('ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN', 'algq-deal-marketplace');
 }
-defined('ALGQ_MARKETPLACE_VERSION') || define('ALGQ_MARKETPLACE_VERSION', '0.1.0');
+
+// Legacy constants retained for older marketplace integrations and tests.
+defined('ALGQ_MARKETPLACE_VERSION') || define('ALGQ_MARKETPLACE_VERSION', ALGQ_DEAL_MARKETPLACE_VERSION);
 defined('ALGQ_MARKETPLACE_FILE') || define('ALGQ_MARKETPLACE_FILE', __FILE__);
 defined('ALGQ_MARKETPLACE_DIR') || define('ALGQ_MARKETPLACE_DIR', plugin_dir_path(__FILE__));
 defined('ALGQ_MARKETPLACE_URL') || define('ALGQ_MARKETPLACE_URL', plugin_dir_url(__FILE__));
-
-require_once ALGQ_MARKETPLACE_DIR . 'includes/class-algq-marketplace-sanitizer.php';
-require_once ALGQ_MARKETPLACE_DIR . 'includes/class-algq-marketplace-activator.php';
-require_once ALGQ_MARKETPLACE_DIR . 'includes/class-algq-marketplace-plugin.php';
 
 /**
  * Safely require a marketplace plugin file if it exists.
@@ -76,6 +77,7 @@ $algq_deal_marketplace_files = [
     'includes/class-algq-deal-marketplace-activator.php',
     'includes/class-algq-deal-marketplace-deactivator.php',
     'includes/class-algq-deal-marketplace.php',
+    'includes/class-algq-marketplace-sanitizer.php',
 ];
 
 foreach ($algq_deal_marketplace_files as $algq_deal_marketplace_file) {
@@ -91,7 +93,6 @@ if (class_exists('ALGQ_Deal_Marketplace_Activator')) {
 if (class_exists('ALGQ_Deal_Marketplace_Deactivator')) {
     register_deactivation_hook(__FILE__, ['ALGQ_Deal_Marketplace_Deactivator', 'deactivate']);
 }
-
 
 /**
  * Backward-compatible module snapshot for legacy consumers.
@@ -149,26 +150,27 @@ if (!function_exists('algq_marketplace_core_available')) {
  */
 function algq_marketplace_generated_pages(): array
 {
-    return Algq_Marketplace_Activator::generated_pages();
+    return class_exists('ALGQ_Deal_Marketplace_Pages') ? ALGQ_Deal_Marketplace_Pages::generated_pages() : [];
 }
 
-register_activation_hook(__FILE__, ['Algq_Marketplace_Activator', 'activate']);
+/**
+ * Legacy plugin accessor now returns the production Deal Marketplace singleton.
+ */
+function algq_marketplace(): ?ALGQ_Deal_Marketplace
+{
+    return class_exists('ALGQ_Deal_Marketplace') ? ALGQ_Deal_Marketplace::instance() : null;
+}
 
-add_action('plugins_loaded', static function (): void {
-    if (!algq_marketplace_core_available()) {
+/**
+ * Boot the marketplace once WordPress and other plugins have loaded.
+ */
+function algq_deal_marketplace_bootstrap(): void
+{
+    if (!class_exists('ALGQ_Deal_Marketplace')) {
         return;
     }
 
-    algq_marketplace()->register();
-});
-
-function algq_marketplace(): Algq_Marketplace_Plugin
-{
-    static $plugin = null;
-
-    if (!$plugin instanceof Algq_Marketplace_Plugin) {
-        $plugin = new Algq_Marketplace_Plugin();
-    }
-
-    return $plugin;
+    ALGQ_Deal_Marketplace::instance()->run();
 }
+
+add_action('plugins_loaded', 'algq_deal_marketplace_bootstrap', 20);

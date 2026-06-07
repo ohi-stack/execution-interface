@@ -1,4 +1,7 @@
+import Link from 'next/link';
 import { Navigation } from '@/components/Navigation';
+import { footerSections, appFooterBoundary } from '@/lib/app-content';
+import { productionRelease } from '@/lib/production-docs';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -9,8 +12,29 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="mx-auto w-full max-w-7xl px-4 py-6 pb-28 sm:px-6 sm:py-8 md:pb-10 lg:px-8">
         {children}
       </div>
-      <footer className="border-t border-white/10 px-4 py-8 pb-28 text-center text-xs text-slate-500 md:pb-8">
-        <p>The OneGodian App · Public/member-facing ecosystem access.</p>
+      <footer className="border-t border-white/10 px-4 py-10 pb-28 md:pb-10">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.2fr_2fr]">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-gold-300">{productionRelease.name}</p>
+            <h2 className="mt-3 text-2xl font-black tracking-[-0.03em] text-white">The OneGodian App</h2>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">Public/member-facing ecosystem access with OMOS framework, algorithm, protocol, OHI pipeline, Belief Mapper, status, health, and manifest documentation.</p>
+            <p className="mt-4 text-xs leading-5 text-slate-500">{appFooterBoundary}</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {footerSections.map((section) => (
+              <section key={section.title}>
+                <h3 className="text-xs font-black uppercase tracking-[0.18em] text-gold-200">{section.title}</h3>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="text-slate-400 transition hover:text-gold-100">{link.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </div>
       </footer>
     </body>
   );

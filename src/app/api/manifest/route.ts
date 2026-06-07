@@ -5,9 +5,10 @@ import { jsonResponse } from '@/lib/api-json';
 import { getCapitalBridgeStatus } from '@/lib/bridges/capital';
 import { getMembersBridgeStatus } from '@/lib/bridges/members';
 import { getPlatformBridgeStatus } from '@/lib/bridges/platform';
+import { productionDashboardRows, productionDocPages, productionRelease } from '@/lib/production-docs';
 
-const productionRoutes = ['/dashboard', '/ecosystem', '/omos', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/docs'];
-const productionApis = ['/api/health', '/api/manifest', '/api/tools', '/api/stats'];
+const productionRoutes = productionDashboardRows.filter((row) => !row.href.startsWith('/api')).map((row) => row.href);
+const productionApis = productionDashboardRows.filter((row) => row.href.startsWith('/api')).map((row) => row.href);
 
 export async function GET(request: Request) {
   return jsonResponse(
@@ -17,9 +18,16 @@ export async function GET(request: Request) {
       ecosystem: ecosystemManifest,
       generated_at: new Date().toISOString(),
       app_profile: 'member-facing-app',
-      canonicalHost: 'https://app.onegodian.com',
+      release: productionRelease,
+      canonicalHost: productionRelease.canonicalHost,
       productionRoutes,
       productionApis,
+      documentation: {
+        hub: '/docs',
+        statusDashboard: '/status',
+        pages: productionDocPages.map(({ eyebrow, href, title, description }) => ({ eyebrow, href, title, description })),
+        surfaces: productionDashboardRows
+      },
       bridges: [getPlatformBridgeStatus(), getMembersBridgeStatus(), getCapitalBridgeStatus()],
       pluginSync: {
         endpoints: ['/api/plugin-consumers', '/api/plugin-shortcodes', '/api/plugin-sync'],

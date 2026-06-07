@@ -1,18 +1,43 @@
 {
   "name": "OneGodian App Runtime",
   "fullName": "OneGodian App Central Access Layer",
-  "version": "1.3.0-production-content",
+  "version": "1.0.0-production-docs",
   "status": "production",
   "canonical_domain": "app.onegodian.com",
   "canonicalHost": "https://app.onegodian.com",
   "classification": "Public/member app node, central dashboard, ecosystem access interface, and production offering gateway",
-  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, Belief Mapper™, operational interfaces, account systems, member infrastructure, services, memberships, courses, contributions, Capital, QRV, Zolfi, and OMOS access.",
-  "integrations": ["OneGodian App", "OMOS", "Capital", "QRV", "Zolfi", "WordPress Bridge", "Belief Mapper™"],
-  "wordpress_hosts": ["OneGodian.com", "OneGodian.org", "QuantumOHI.com"],
-  "compatibleHosts": ["https://onegodian.com", "https://onegodian.org", "https://omos.onegodian.com", "https://capital.onegodian.com", "https://qrv.network", "https://quantumohi.com"],
-  "appBridge": ["https://app.onegodian.com"],
-  "commerceBridge": ["https://onegodian.com"],
-  "capitalBridge": ["https://capital.onegodian.com"],
+  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, Belief Mapper\u2122, operational interfaces, account systems, member infrastructure, services, memberships, courses, contributions, Capital, QRV, Zolfi, and OMOS access.",
+  "integrations": [
+    "OneGodian App",
+    "OMOS",
+    "Capital",
+    "QRV",
+    "Zolfi",
+    "WordPress Bridge",
+    "Belief Mapper\u2122"
+  ],
+  "wordpress_hosts": [
+    "OneGodian.com",
+    "OneGodian.org",
+    "QuantumOHI.com"
+  ],
+  "compatibleHosts": [
+    "https://onegodian.com",
+    "https://onegodian.org",
+    "https://omos.onegodian.com",
+    "https://capital.onegodian.com",
+    "https://qrv.network",
+    "https://quantumohi.com"
+  ],
+  "appBridge": [
+    "https://app.onegodian.com"
+  ],
+  "commerceBridge": [
+    "https://onegodian.com"
+  ],
+  "capitalBridge": [
+    "https://capital.onegodian.com"
+  ],
   "routes": [
     "/",
     "/dashboard",
@@ -30,7 +55,12 @@
     "/ecosystem",
     "/overview",
     "/omos",
+    "/docs",
+    "/framework",
     "/algorithm",
+    "/protocol",
+    "/ohi",
+    "/pipeline",
     "/remember",
     "/time",
     "/commerce",
@@ -38,13 +68,6 @@
     "/identity",
     "/institutional",
     "/capital",
-    "/zolfi",
-    "/qrv",
-    "/security",
-    "/odc",
-    "/odc/smart-contract",
-    "/verify",
-    "/treasury",
     "/status",
     "/belief-mapper",
     "/belief-mapper/start",
@@ -63,36 +86,112 @@
     "/api/system-health"
   ],
   "currentOfferings": {
-    "onegodianOrg": ["OneGodian Membership", "Identity & Belief Resources", "Remember Campaign", "Contributor Program", "Community Projects", "Historical Archives", "Global Dialogue", "OneGodian Calendar & OTS-V4"],
-    "onegodianCom": ["Books", "Guides", "Downloads", "Templates", "Founder Collections", "Certificates", "Business Consulting", "Digital Strategy", "WordPress Development", "Marketing Assistance", "Translation Services", "Companion Services", "Homemaker Services", "Individual Memberships", "Family Memberships", "Business Memberships"],
-    "uOnegodian": ["Introduction to OneGodian", "OMOS Foundations", "OHI Foundations", "Community Development", "Economic Development", "Translation Certification", "Companion Certification", "Technology Training"],
-    "capitalOnegodian": ["Contribution Portal", "Opportunities Fund", "Workforce Development", "Service Network", "Economic Development Programs", "Capital Education", "Disclosure Center", "Verification Center"]
+    "onegodianOrg": [
+      "OneGodian Membership",
+      "Identity & Belief Resources",
+      "Remember Campaign",
+      "Contributor Program",
+      "Community Projects",
+      "Historical Archives",
+      "Global Dialogue",
+      "OneGodian Calendar & OTS-V4"
+    ],
+    "onegodianCom": [
+      "Books",
+      "Guides",
+      "Downloads",
+      "Templates",
+      "Founder Collections",
+      "Certificates",
+      "Business Consulting",
+      "Digital Strategy",
+      "WordPress Development",
+      "Marketing Assistance",
+      "Translation Services",
+      "Companion Services",
+      "Homemaker Services",
+      "Individual Memberships",
+      "Family Memberships",
+      "Business Memberships"
+    ],
+    "uOnegodian": [
+      "Introduction to OneGodian",
+      "OMOS Foundations",
+      "OHI Foundations",
+      "Community Development",
+      "Economic Development",
+      "Translation Certification",
+      "Companion Certification",
+      "Technology Training"
+    ],
+    "capitalOnegodian": [
+      "Contribution Portal",
+      "Opportunities Fund",
+      "Workforce Development",
+      "Service Network",
+      "Economic Development Programs",
+      "Capital Education",
+      "Disclosure Center",
+      "Verification Center"
+    ]
   },
-  "revenuePriority": ["Translation Services", "Companion Services", "Homemaker Services", "Business Consulting", "WordPress Development", "Digital Products", "Courses", "Memberships", "Contributions"],
+  "revenuePriority": [
+    "Translation Services",
+    "Companion Services",
+    "Homemaker Services",
+    "Business Consulting",
+    "WordPress Development",
+    "Digital Products",
+    "Courses",
+    "Memberships",
+    "Contributions"
+  ],
   "modules": [
     {
-      "name": "Belief Mapper™",
+      "name": "Belief Mapper\u2122",
       "route": "/belief-mapper",
       "status": "live",
-      "features": ["Mobile-first swipe/tap question UI", "Consent-first local profile handling", "Seeker, Believer, Onegodian, and Elder result routing", "Journal, certificate, timeline, and premium surfaces"]
+      "features": [
+        "Mobile-first swipe/tap question UI",
+        "Consent-first local profile handling",
+        "Seeker, Believer, Onegodian, and Elder result routing",
+        "Journal, certificate, timeline, and premium surfaces"
+      ]
     },
     {
       "name": "Capital Gateway",
       "route": "/capital",
       "status": "scaffolded",
-      "features": ["ODC access", "Treasury overview", "Investor onboarding", "Disclosure center", "Verification center"]
+      "features": [
+        "ODC access",
+        "Treasury overview",
+        "Investor onboarding",
+        "Disclosure center",
+        "Verification center"
+      ]
     },
     {
-      "name": "Zolfi™ Security Layer",
+      "name": "Zolfi\u2122 Security Layer",
       "route": "/zolfi",
       "status": "scaffolded",
-      "features": ["Smart contract intelligence", "Wallet safety", "Fraud/risk monitoring", "QRV bridge", "Post-quantum readiness"]
+      "features": [
+        "Smart contract intelligence",
+        "Wallet safety",
+        "Fraud/risk monitoring",
+        "QRV bridge",
+        "Post-quantum readiness"
+      ]
     },
     {
-      "name": "QRV™ Verification",
+      "name": "QRV\u2122 Verification",
       "route": "/qrv",
       "status": "active",
-      "features": ["Certificate verification", "Registry lookup", "Smart contract confirmation", "Trust-layer infrastructure"]
+      "features": [
+        "Certificate verification",
+        "Registry lookup",
+        "Smart contract confirmation",
+        "Trust-layer infrastructure"
+      ]
     }
   ],
   "publicSafety": {
@@ -104,5 +203,22 @@
   "commerceEngine": "https://onegodian.com",
   "interpretationPlatform": "https://onegodian.org",
   "capitalPlatform": "https://capital.onegodian.com",
-  "verificationNetwork": "https://qrv.network"
+  "verificationNetwork": "https://qrv.network",
+  "documentationRelease": {
+    "name": "OMOS Production Documentation Release 1.0",
+    "status": "production-documentation",
+    "pages": [
+      "/framework",
+      "/algorithm",
+      "/protocol",
+      "/ohi",
+      "/belief-mapper",
+      "/docs",
+      "/status"
+    ],
+    "endpoints": [
+      "/api/health",
+      "/api/manifest"
+    ]
+  }
 }

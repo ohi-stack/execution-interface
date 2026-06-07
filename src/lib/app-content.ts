@@ -71,7 +71,12 @@ export const coreRoutes = [
   '/ecosystem',
   '/overview',
   '/omos',
+  '/framework',
   '/algorithm',
+  '/protocol',
+  '/ohi',
+  '/pipeline',
+  '/docs',
   '/remember',
   '/time',
   '/commerce',
@@ -85,8 +90,12 @@ export const appNavigation: NavigationItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Dashboard', href: '/dashboard' },
   { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Framework', href: '/framework' },
   { label: 'OMOS', href: '/omos' },
   { label: 'Algorithm', href: '/algorithm' },
+  { label: 'Protocol', href: '/protocol' },
+  { label: 'OHI', href: '/ohi' },
   { label: 'Remember', href: '/remember' },
   { label: 'Time', href: '/time' },
   { label: 'Commerce', href: '/commerce' },
@@ -131,7 +140,7 @@ export const appFooterBoundary =
 export const footerSections = [
   { title: 'App', links: appNavigation },
   { title: 'Ecosystem', links: ecosystemLinks.slice(0, 4) },
-  { title: 'Operations', links: [{ label: 'Health API', href: '/api/health' }, { label: 'Manifest API', href: '/api/manifest' }, { label: 'Status', href: '/status' }] },
+  { title: 'Operations', links: [{ label: 'Docs Hub', href: '/docs' }, { label: 'Health API', href: '/api/health' }, { label: 'Manifest API', href: '/api/manifest' }, { label: 'Status', href: '/status' }] },
   { title: 'Records', links: [{ label: 'Certificates', href: '/certificates' }, { label: 'Registry', href: '/registry' }, { label: 'Support', href: '/support' }] }
 ];
 

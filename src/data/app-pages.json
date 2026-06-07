@@ -14,6 +14,26 @@
       "description": "Central member dashboard for updates, tools, profile access, records, and member actions."
     },
     {
+      "label": "Docs",
+      "path": "/docs",
+      "description": "Production documentation hub for OMOS Release 1.0."
+    },
+    {
+      "label": "Framework",
+      "path": "/framework",
+      "description": "OMOS operating framework layers and release acceptance model."
+    },
+    {
+      "label": "OHI",
+      "path": "/ohi",
+      "description": "OHI pipeline documentation for intake, normalization, interpretation, routing, and monitoring."
+    },
+    {
+      "label": "Status",
+      "path": "/status",
+      "description": "Production status dashboard for documentation and runtime endpoint surfaces."
+    },
+    {
       "label": "Ecosystem",
       "path": "/ecosystem",
       "description": "Map the role of Onegodian.org, Onegodian.com, u.Onegodian.org, and app.OneGodian.com."
@@ -326,6 +346,31 @@
         "Member Education",
         "Certificates",
         "Dashboard Access"
+      ]
+    },
+    "/framework": {
+      "title": "OMOS Framework",
+      "eyebrow": "Production Documentation",
+      "headline": "The operating framework for OneGodian systems.",
+      "body": "Framework documentation for interpretive, operational, interface, and compliance layers in OMOS Production Documentation Release 1.0.",
+      "sections": [
+        "Interpretive Layer",
+        "Operational Layer",
+        "Interface Layer",
+        "Compliance Layer"
+      ]
+    },
+    "/ohi": {
+      "title": "OHI Pipeline",
+      "eyebrow": "Production Documentation",
+      "headline": "From intake to monitored output.",
+      "body": "OHI pipeline documentation for intake, normalization, interpretation, routing, publication, and monitoring across OneGodian systems.",
+      "sections": [
+        "Intake",
+        "Normalize",
+        "Interpret",
+        "Route",
+        "Monitor"
       ]
     }
   }

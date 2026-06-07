@@ -1,7 +1,8 @@
-import runtimeManifest from '@/data/manifest.json';
-import appPages from '@/data/app-pages.json';
-import ecosystemManifest from '@/data/ecosystem-manifest.json';
 import { jsonResponse } from '@/lib/api-json';
+import { manifest } from '@/data/manifest';
+
+export async function GET(request: Request) {
+  return jsonResponse(manifest, request);
 import { getCapitalBridgeStatus } from '@/lib/bridges/capital';
 import { getMembersBridgeStatus } from '@/lib/bridges/members';
 import { getPlatformBridgeStatus } from '@/lib/bridges/platform';

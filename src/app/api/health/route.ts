@@ -7,8 +7,10 @@ const productionApis = productionDashboardRows.filter((row) => row.href.startsWi
 export async function GET(request: Request) {
   return jsonResponse(
     {
-      app: 'The OneGodian App',
       status: 'ok',
+      service: 'omos-site',
+      domain: 'OMOS.OneGodian.com',
+      version: '1.0.0'
       environment: process.env.NODE_ENV ?? 'development',
       release: productionRelease,
       version: productionRelease.version,

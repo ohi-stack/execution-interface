@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { OmosPageTemplate } from '@/components/omos/OmosPageTemplate';
+import { getOmosPage } from '@/data/omos-pages';
 import Link from 'next/link';
 import { BeliefMapperHero } from '@/components/belief-mapper/BeliefMapperHero';
 import { PremiumUpgradeCard } from '@/components/belief-mapper/PremiumUpgradeCard';
@@ -16,17 +18,14 @@ export const metadata: Metadata = {
   openGraph: { title: docPage.title, description: docPage.description, url: '/belief-mapper', type: 'website' }
 };
 
-const routes = [
-  ['/belief-mapper/start', 'Start'],
-  ['/belief-mapper/results', 'Results'],
-  ['/belief-mapper/profile', 'Profile'],
-  ['/belief-mapper/journal', 'Journal'],
-  ['/belief-mapper/certificate', 'Certificate'],
-  ['/belief-mapper/timeline', 'Timeline'],
-  ['/belief-mapper/premium', 'Premium']
-];
+export const metadata: Metadata = {
+  title: 'OneGodian Belief Mapper™',
+  description: 'Seeker, Believer, OneGodian, and Elder journey-stage model with Lite Version Coming Soon status.',
+  alternates: { canonical: '/belief-mapper' }
+};
 
 export default function BeliefMapperPage() {
+  return <OmosPageTemplate page={getOmosPage('belief-mapper')!} />;
   return (
     <main className="space-y-8">
       <BeliefMapperHero />

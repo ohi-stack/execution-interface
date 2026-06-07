@@ -2,15 +2,20 @@ import type { Metadata } from 'next';
 import { ProductionDocPageView } from '@/app/components/production-doc-page';
 import { getProductionDocPage, productionRelease } from '@/lib/production-docs';
 
-const page = getProductionDocPage('algorithm')!;
+const page = getProductionDocPage('framework')!;
 
 export const metadata: Metadata = {
-  title: `Algorithm | ${productionRelease.name}`,
+  title: `Framework | ${productionRelease.name}`,
   description: page.description,
-  alternates: { canonical: '/algorithm' },
-  openGraph: { title: page.title, description: page.description, url: '/algorithm', type: 'website' }
+  alternates: { canonical: '/framework' },
+  openGraph: {
+    title: page.title,
+    description: page.description,
+    url: '/framework',
+    type: 'website'
+  }
 };
 
-export default function AlgorithmPage() {
+export default function FrameworkPage() {
   return <ProductionDocPageView page={page} />;
 }

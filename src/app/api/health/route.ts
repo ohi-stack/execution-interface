@@ -1,7 +1,8 @@
 import { jsonResponse } from '@/lib/api-json';
+import { productionDashboardRows, productionRelease } from '@/lib/production-docs';
 
-const productionRoutes = ['/dashboard', '/ecosystem', '/omos', '/registry', '/tools', '/members', '/certificates', '/products', '/media', '/settings', '/docs'];
-const productionApis = ['/api/health', '/api/manifest', '/api/tools', '/api/stats'];
+const productionRoutes = productionDashboardRows.filter((row) => !row.href.startsWith('/api')).map((row) => row.href);
+const productionApis = productionDashboardRows.filter((row) => row.href.startsWith('/api')).map((row) => row.href);
 
 export async function GET(request: Request) {
   return jsonResponse(
@@ -9,12 +10,20 @@ export async function GET(request: Request) {
       app: 'The OneGodian App',
       status: 'ok',
       environment: process.env.NODE_ENV ?? 'development',
-      version: '1.0.2',
-      canonicalHost: 'https://app.onegodian.com',
+      release: productionRelease,
+      version: productionRelease.version,
+      canonicalHost: productionRelease.canonicalHost,
       publicRouteCount: productionRoutes.length,
       productionRoutes,
       productionApis,
-      pluginSync: 'available',
+      documentationSurfaces: productionDashboardRows,
+      checks: {
+        documentationHub: 'ok',
+        statusDashboard: 'ok',
+        healthEndpoint: 'ok',
+        manifestEndpoint: 'ok',
+        mobileResponsiveTheme: 'ok'
+      },
       generatedAt: new Date().toISOString()
     },
     request

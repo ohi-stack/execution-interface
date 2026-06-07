@@ -1,72 +1,78 @@
 {
   "app": {
-    "name": "The OneGodian App",
+    "name": "OneGodian App",
     "domain": "https://app.onegodian.com",
-    "purpose": "The unified public and member-facing application layer for the OneGodian ecosystem.",
-    "positioning": "Identity, systems, records, education, commerce, verification, media, and ecosystem navigation in one structured interface.",
+    "purpose": "Public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
+    "positioning": "The OneGodian App\u2122 \u2014 the public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
     "operator": "ONEGODIAN, LLC",
-    "version": "0.1.0-content-map"
+    "version": "1.4.0-real-ecosystem",
+    "domainRole": "public/member-facing app gateway"
   },
   "navigation": [
     {
       "label": "Dashboard",
       "path": "/dashboard",
-      "description": "Central member dashboard for updates, tools, profile access, records, and member actions."
+      "description": "Central member dashboard for real OneGodian modules and app access."
     },
     {
-      "label": "Ecosystem",
-      "path": "/ecosystem",
-      "description": "Map the role of Onegodian.org, Onegodian.com, u.Onegodian.org, and app.OneGodian.com."
+      "label": "Members",
+      "path": "/members",
+      "description": "Membership CTA, pricing, resources, member certificates, dashboard, and support."
     },
     {
-      "label": "Registry",
-      "path": "/registry",
-      "description": "Registry access for records, certificates, identifiers, ODIN references, and verification links."
+      "label": "Contributors",
+      "path": "/contributors",
+      "description": "Voluntary support tiers and contributor disclaimer for ONEGODIAN, LLC infrastructure."
     },
     {
-      "label": "ODIN",
-      "path": "/odin",
-      "description": "Open ODIN registry systems, canon references, platform records, and system interfaces."
+      "label": "Creator Network",
+      "path": "/creator-network",
+      "description": "Creator, affiliate, educator, and community voice intake."
     },
     {
-      "label": "Planets",
-      "path": "/odin/planetary-registry",
-      "description": "Access the planetary registry and canon-linked world records."
+      "label": "Affiliate Dashboard",
+      "path": "/affiliate-dashboard",
+      "description": "Referral links, campaign assets, contributor products, creator updates, compliance, and application status."
     },
     {
-      "label": "Learn",
-      "path": "/learn",
-      "description": "Bridge to learning paths, Onegodianese\u2122 resources, curriculum, and u.Onegodian.org courses."
+      "label": "Certificates",
+      "path": "/certificates",
+      "description": "Member certificates, completion records, certificate references, and verification-oriented access."
     },
     {
-      "label": "Identity",
-      "path": "/identity",
-      "description": "Member identity explanations, profile context, participation records, and access resources."
-    },
-    {
-      "label": "Verification",
-      "path": "/verification",
-      "description": "Certificate tools, record references, verification pathways, and document lookup."
+      "label": "Products",
+      "path": "/products",
+      "description": "Product discovery routed to OneGodian.com commerce and payments."
     },
     {
       "label": "Media",
       "path": "/media",
-      "description": "Media center for videos, campaigns, cultural assets, founder updates, and platform content."
+      "description": "Videos, campaign assets, education clips, creator updates, and public communication."
     },
     {
-      "label": "Store",
-      "path": "/store",
-      "description": "Bridge to Onegodian.com products, services, digital downloads, certificates, and branded goods."
+      "label": "Learning",
+      "path": "/learning",
+      "description": "Education, membership resources, certificates, and OneGodian.org documentation bridge."
     },
     {
-      "label": "Capital",
-      "path": "/capital",
-      "description": "Capital access tools, funding tracker modules, instruments, and business infrastructure."
+      "label": "Registry",
+      "path": "/registry",
+      "description": "Certificate, record, identifier, ODIN, and verification pathways."
     },
     {
-      "label": "Time",
-      "path": "/time",
-      "description": "OneGodian Time tools for internal/system chronology with Gregorian and UTC compatibility."
+      "label": "Tools",
+      "path": "/tools",
+      "description": "Member/public utilities for resources, referrals, lookup, and ecosystem navigation."
+    },
+    {
+      "label": "Settings",
+      "path": "/settings",
+      "description": "Profile, preferences, privacy, notifications, and connected services."
+    },
+    {
+      "label": "Ecosystem",
+      "path": "/ecosystem",
+      "description": "Current domain role map for app, console, capital, .org, and .com."
     }
   ],
   "pages": {
@@ -85,31 +91,36 @@
       }
     },
     "/dashboard": {
-      "title": "Dashboard",
-      "eyebrow": "Command Center",
-      "headline": "Central dashboard for OneGodian updates, tools, profile access, records, and member-only actions.",
-      "body": "Use the dashboard as the operational home for identity resources, certificates, platform links, education bridges, system status, ODIN access, and recommended next steps.",
+      "title": "OneGodian App Dashboard",
+      "eyebrow": "Member Dashboard",
+      "headline": "Open real OneGodian member, contributor, creator, affiliate, certificate, product, media, learning, registry, tools, and settings modules.",
+      "body": "The dashboard is the public/member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
       "sections": [
-        "Member Profile",
-        "Identity Access",
+        "Members",
+        "Contributors",
+        "Creator Network",
+        "Affiliate Dashboard",
         "Certificates",
-        "Education Bridge",
-        "ODIN Shortcuts",
-        "System Status"
+        "Products",
+        "Media",
+        "Learning",
+        "Registry",
+        "Tools",
+        "Settings",
+        "Ecosystem"
       ]
     },
     "/ecosystem": {
       "title": "Ecosystem",
-      "eyebrow": "Platform Separation",
-      "headline": "See how the OneGodian platform domains work together without replacing each other.",
-      "body": "Onegodian.org explains identity, belief, community, education, and public history. Onegodian.com powers commerce. u.Onegodian.org runs education. app.OneGodian.com connects dashboards, tools, registries, identity access, verification, and system infrastructure.",
+      "eyebrow": "Production Domain Structure",
+      "headline": "See how app.onegodian.com, console.onegodian.com, capital.onegodian.com, onegodian.org, and onegodian.com work together.",
+      "body": "The app keeps .org identity/education/community/docs separate from .com commerce/products/services/payments and does not process contributions directly without a payment backend.",
       "sections": [
-        "Onegodian.org",
-        "Onegodian.com",
-        "u.Onegodian.org",
-        "app.OneGodian.com",
-        "ODIN",
-        "Verification"
+        "app.onegodian.com",
+        "console.onegodian.com",
+        "capital.onegodian.com",
+        "onegodian.org",
+        "onegodian.com"
       ]
     },
     "/omos": {
@@ -157,16 +168,17 @@
       ]
     },
     "/members": {
-      "title": "Members",
-      "eyebrow": "Participation Pathways",
-      "headline": "Explore voluntary OneGodian membership and contributor pathways.",
-      "body": "The members area supports identity pathways, community participation, contributor onboarding, membership products, and profile infrastructure. Public language should remain voluntary, non-coercive, and institutionally clear.",
+      "title": "OneGodian Membership",
+      "eyebrow": "Membership",
+      "headline": "Membership CTA, pricing, resources, member certificates, member dashboard, and member support.",
+      "body": "Membership reflects the merged WordPress membership shortcodes for public and member-facing app access.",
       "sections": [
-        "Membership Options",
-        "Contributor Pathways",
-        "Profile Setup",
-        "Community Access",
-        "Member Resources"
+        "Membership CTA",
+        "Membership Pricing",
+        "Membership Resources",
+        "Member Certificates",
+        "Member Dashboard",
+        "Member Support"
       ]
     },
     "/certificates": {
@@ -326,6 +338,83 @@
         "Member Education",
         "Certificates",
         "Dashboard Access"
+      ]
+    },
+    "/contributors": {
+      "title": "Contributors",
+      "eyebrow": "Voluntary Support",
+      "headline": "Contributors support ONEGODIAN, LLC public-facing products, education, media, technology, membership, and community infrastructure.",
+      "body": "Contribution tiers include Supporter $11, Builder $33, Sustainer $77, Founder Circle $111, Infrastructure Partner $333+, and Custom Contribution any amount. Contributions are voluntary support payments, not equity, securities, loans, bonds, investment contracts, or promises of financial return.",
+      "sections": [
+        "Supporter \u2014 $11",
+        "Builder \u2014 $33",
+        "Sustainer \u2014 $77",
+        "Founder Circle \u2014 $111",
+        "Infrastructure Partner \u2014 $333+",
+        "Custom Contribution \u2014 Any amount"
+      ]
+    },
+    "/creator-network": {
+      "title": "Creator Network",
+      "eyebrow": "Creator Network",
+      "headline": "Creators, affiliates, educators, and community voices can help share OneGodian identity, education, public resources, products, and campaigns.",
+      "body": "The Creator Network provides a public application pathway and creator participation structure without activating payment, commission, or earnings logic in the app.",
+      "sections": [
+        "Apply to Creator Network",
+        "Campaign Sharing",
+        "Education Voices",
+        "Community Voices",
+        "Product Awareness"
+      ]
+    },
+    "/affiliate-dashboard": {
+      "title": "Affiliate Dashboard",
+      "eyebrow": "Affiliate Structure",
+      "headline": "Referral links, campaign assets, contributor products, creator updates, compliance notice, and application status.",
+      "body": "The affiliate dashboard is a real placeholder structure only; no payment, commission, or earnings logic is active unless an approved backend exists.",
+      "sections": [
+        "Referral Link",
+        "Campaign Assets",
+        "Contributor Products",
+        "Creator Updates",
+        "Compliance Notice",
+        "Application Status"
+      ]
+    },
+    "/referral-links": {
+      "title": "Referral Links",
+      "eyebrow": "Affiliate Bridge",
+      "headline": "Referral link surface for creators and affiliates.",
+      "body": "The app references [onegodian_referral_link] and can route approved users to future generated links without processing payments or commissions.",
+      "sections": [
+        "Referral Link",
+        "Creator Links",
+        "Affiliate Links",
+        "Compliance"
+      ]
+    },
+    "/contributor-wall": {
+      "title": "Contributor Wall",
+      "eyebrow": "Recognition",
+      "headline": "Recognition surface for approved voluntary supporters.",
+      "body": "The app references [onegodian_contributor_wall] and displays contributor recognition only when approved contributor data is available.",
+      "sections": [
+        "Contributor Wall",
+        "Supporter Recognition",
+        "Approval Status"
+      ]
+    },
+    "/learning": {
+      "title": "Learning",
+      "eyebrow": "Education",
+      "headline": "Education bridge for identity, membership resources, documentation, and certificates.",
+      "body": "Learning connects app users to OneGodian.org education, community documentation, membership resources, and member certificate context.",
+      "sections": [
+        "Identity Education",
+        "Membership Resources",
+        "Community Documentation",
+        "Member Certificates",
+        "Member Support"
       ]
     }
   }

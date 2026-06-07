@@ -1,4 +1,12 @@
 {
+  "name": "OneGodian App",
+  "fullName": "The OneGodian App\u2122",
+  "version": "1.4.0-real-ecosystem",
+  "status": "production",
+  "canonical_domain": "app.onegodian.com",
+  "canonicalHost": "https://app.onegodian.com",
+  "classification": "Public/member-facing app gateway",
+  "purpose": "The OneGodian App\u2122 \u2014 the public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
   "name": "OneGodian App Runtime",
   "fullName": "OneGodian App Central Access Layer",
   "version": "1.0.0-production-docs",
@@ -42,16 +50,18 @@
     "/",
     "/dashboard",
     "/members",
-    "/campaigns",
-    "/campaigns/remember",
+    "/contributors",
+    "/creator-network",
+    "/affiliate-dashboard",
+    "/referral-links",
+    "/contributor-wall",
+    "/certificates",
+    "/products",
+    "/media",
+    "/learning",
     "/registry",
     "/tools",
-    "/media",
-    "/learn",
-    "/certificates",
-    "/support",
     "/settings",
-    "/account",
     "/ecosystem",
     "/overview",
     "/omos",
@@ -79,11 +89,8 @@
     "/belief-mapper/premium",
     "/api/health",
     "/api/manifest",
-    "/api/modules",
-    "/api/pages",
     "/api/tools",
-    "/api/artifacts",
-    "/api/system-health"
+    "/api/stats"
   ],
   "currentOfferings": {
     "onegodianOrg": [
@@ -204,6 +211,35 @@
   "interpretationPlatform": "https://onegodian.org",
   "capitalPlatform": "https://capital.onegodian.com",
   "verificationNetwork": "https://qrv.network",
+  "domain_role": "public/member-facing app gateway",
+  "wordpress_plugin_bridge_shortcodes": [
+    "[onegodian_membership_cta]",
+    "[onegodian_members_pricing]",
+    "[onegodian_membership_resources]",
+    "[onegodian_member_certificates]",
+    "[onegodian_member_dashboard]",
+    "[onegodian_member_support]",
+    "[onegodian_contributors_page]",
+    "[onegodian_contributor_tiers]",
+    "[onegodian_creator_network]",
+    "[onegodian_affiliate_dashboard]",
+    "[onegodian_referral_link]",
+    "[onegodian_contributor_wall]",
+    "[onegodian_contributor_disclaimer]"
+  ],
+  "domainStructure": {
+    "app.onegodian.com": "public/member product surface",
+    "console.onegodian.com": "operator/admin runtime surface",
+    "capital.onegodian.com": "capital operations",
+    "onegodian.org": "identity, education, community, documentation",
+    "onegodian.com": "commerce, products, services, payments"
+  },
+  "compliance": {
+    "orgComSeparation": "app.onegodian.com links to OneGodian.org for education/community/docs and OneGodian.com for commerce/payments.",
+    "contributions": "The app must not process contributions directly unless payment backend exists.",
+    "contributorNotice": "Contributions are voluntary support payments. They are not equity, securities, loans, bonds, investment contracts, or promises of financial return."
+  }
+}
   "documentationRelease": {
     "name": "OMOS Production Documentation Release 1.0",
     "status": "production-documentation",

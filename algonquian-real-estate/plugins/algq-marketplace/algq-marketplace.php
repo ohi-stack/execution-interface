@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Algonquian Deal Marketplace
  * Description: Enterprise marketplace foundations for wholesale deals, investor access, syndication, buyer subscriptions, and premium listings.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Algonquian Real Estate
  * Requires Plugins: algq-core
  * Text Domain: algq-deal-marketplace
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('ALGQ_DEAL_MARKETPLACE_VERSION')) {
-    define('ALGQ_DEAL_MARKETPLACE_VERSION', '1.0.0');
+    define('ALGQ_DEAL_MARKETPLACE_VERSION', '1.0.1');
 }
 
 if (!defined('ALGQ_DEAL_MARKETPLACE_FILE')) {
@@ -134,18 +134,12 @@ add_action('plugins_loaded', 'algq_deal_marketplace_bootstrap', 20);
 
 if (!function_exists('algq_marketplace_core_available')) {
     /**
-     * Determine whether the optional Algonquian core runtime is available for legacy hooks.
+     * Determine whether optional Algonquian core services are available.
      */
     function algq_marketplace_core_available(): bool
     {
-        return function_exists('algq_core') || class_exists('ALGQ_Core_Plugin');
+        return function_exists('algq_core') || class_exists('ALGQ_Core_Plugin') || class_exists('ALGQ_Core');
     }
-/**
- * Determine whether optional Algonquian core services are available.
- */
-function algq_marketplace_core_available(): bool
-{
-    return function_exists('algq_core') || class_exists('ALGQ_Core');
 }
 
 /**

@@ -5,3 +5,8 @@ build/
 .env
 .env.local
 .DS_Store
+
+# Generated release archives and checksums are produced outside source control.
+algonquian-real-estate/releases/
+*.zip
+SHA256SUMS.txt

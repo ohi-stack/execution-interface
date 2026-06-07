@@ -33,13 +33,26 @@ export function CardGrid({ children, cols = 'lg:grid-cols-3' }: { children: Reac
   return <section className={`grid gap-4 sm:grid-cols-2 ${cols}`}>{children}</section>;
 }
 
-export function InfoCard({ title, children, accent = 'cyan' }: { title: string; children: ReactNode; accent?: 'cyan' | 'gold' | 'green' }) {
+export function InfoCard({ title, children, accent = 'cyan', meta }: { title: string; children: ReactNode; accent?: 'cyan' | 'gold' | 'green'; meta?: string }) {
   const color = accent === 'gold' ? 'text-gold-200 border-gold-300/30' : accent === 'green' ? 'text-emerald-200 border-emerald-300/30' : 'text-cyan-100 border-cyan-300/30';
   return (
-    <article className={`rounded-3xl border ${color} bg-white/[0.055] p-5 shadow-sovereign backdrop-blur-xl`}>
-      <h2 className="text-xl font-black text-white">{title}</h2>
+    <article className={`mobile-card border ${color}`}>
+      <div className="flex items-start justify-between gap-3">
+        <h2 className="text-xl font-black text-white">{title}</h2>
+        {meta ? <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.14em] text-gold-100">{meta}</span> : null}
+      </div>
       <div className="mt-3 text-sm leading-6 text-slate-300">{children}</div>
     </article>
+  );
+}
+
+export function ProductionDocCard({ title, body, status, meta }: { title: string; body: string; status?: string; meta?: string }) {
+  const active = status === 'Active' || status === 'Documented' || status === 'Monitored';
+  return (
+    <InfoCard title={title} meta={meta} accent={status === 'Monitored' ? 'green' : status === 'Documented' ? 'gold' : 'cyan'}>
+      {status ? <StatusPill active={active}>{status}</StatusPill> : null}
+      <p className={status ? 'mt-3' : undefined}>{body}</p>
+    </InfoCard>
   );
 }
 

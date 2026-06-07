@@ -1,5 +1,6 @@
 import { jsonResponse } from '@/lib/api-json';
 import { affiliateDashboardItems, dashboardModules, membershipShortcodeMap, pluginBridgeShortcodes } from '@/lib/onegodian-app-content';
+import { tools } from '@/data/tools';
 
 export async function GET(request: Request) {
   return jsonResponse(
@@ -10,6 +11,8 @@ export async function GET(request: Request) {
       affiliateDashboard: affiliateDashboardItems,
       wordpressPluginBridgeShortcodes: pluginBridgeShortcodes,
       compliance: 'Tools do not process contributions or payments directly unless a payment backend exists.'
+      service: 'omos-site',
+      tools
     },
     request
   );

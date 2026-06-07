@@ -7,6 +7,14 @@
   "canonicalHost": "https://app.onegodian.com",
   "classification": "Public/member-facing app gateway",
   "purpose": "The OneGodian App\u2122 \u2014 the public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
+  "name": "OneGodian App Runtime",
+  "fullName": "OneGodian App Central Access Layer",
+  "version": "1.0.0-production-docs",
+  "status": "production",
+  "canonical_domain": "app.onegodian.com",
+  "canonicalHost": "https://app.onegodian.com",
+  "classification": "Public/member app node, central dashboard, ecosystem access interface, and production offering gateway",
+  "purpose": "Unified ecosystem application for dashboards, identity systems, registries, ecosystem tools, Belief Mapper\u2122, operational interfaces, account systems, member infrastructure, services, memberships, courses, contributions, Capital, QRV, Zolfi, and OMOS access.",
   "integrations": [
     "OneGodian App",
     "OMOS",
@@ -55,6 +63,30 @@
     "/tools",
     "/settings",
     "/ecosystem",
+    "/overview",
+    "/omos",
+    "/docs",
+    "/framework",
+    "/algorithm",
+    "/protocol",
+    "/ohi",
+    "/pipeline",
+    "/remember",
+    "/time",
+    "/commerce",
+    "/products",
+    "/identity",
+    "/institutional",
+    "/capital",
+    "/status",
+    "/belief-mapper",
+    "/belief-mapper/start",
+    "/belief-mapper/results",
+    "/belief-mapper/profile",
+    "/belief-mapper/journal",
+    "/belief-mapper/certificate",
+    "/belief-mapper/timeline",
+    "/belief-mapper/premium",
     "/api/health",
     "/api/manifest",
     "/api/tools",
@@ -206,5 +238,23 @@
     "orgComSeparation": "app.onegodian.com links to OneGodian.org for education/community/docs and OneGodian.com for commerce/payments.",
     "contributions": "The app must not process contributions directly unless payment backend exists.",
     "contributorNotice": "Contributions are voluntary support payments. They are not equity, securities, loans, bonds, investment contracts, or promises of financial return."
+  }
+}
+  "documentationRelease": {
+    "name": "OMOS Production Documentation Release 1.0",
+    "status": "production-documentation",
+    "pages": [
+      "/framework",
+      "/algorithm",
+      "/protocol",
+      "/ohi",
+      "/belief-mapper",
+      "/docs",
+      "/status"
+    ],
+    "endpoints": [
+      "/api/health",
+      "/api/manifest"
+    ]
   }
 }

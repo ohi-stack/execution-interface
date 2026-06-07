@@ -1,4 +1,5 @@
 import { jsonResponse } from '@/lib/api-json';
+import { platformStatus, verificationStatus } from '@/data/onegodianContent';
 import { appName, appRoutes, appVersion, pluginBridgeShortcodes } from '@/lib/onegodian-app-content';
 
 const productionApis = ['/api/health', '/api/manifest', '/api/tools', '/api/stats'];
@@ -12,9 +13,8 @@ export async function GET(request: Request) {
     {
       app: appName,
       status: 'ok',
-      service: 'omos-site',
-      domain: 'OMOS.OneGodian.com',
-      version: '1.0.0'
+      app: 'OneGodian App',
+      version: 'production',
       environment: process.env.NODE_ENV ?? 'development',
       version: appVersion,
       canonicalHost: 'https://app.onegodian.com',
@@ -32,12 +32,15 @@ export async function GET(request: Request) {
       productionApis,
       documentationSurfaces: productionDashboardRows,
       checks: {
-        documentationHub: 'ok',
-        statusDashboard: 'ok',
-        healthEndpoint: 'ok',
         manifestEndpoint: 'ok',
-        mobileResponsiveTheme: 'ok'
+        healthEndpoint: 'ok',
+        coreContentRoutes: 'ok',
+        dashboardContent: 'ok',
+        ecosystemHierarchy: 'ok',
+        mobileResponsiveCards: 'ok'
       },
+      platformStatus,
+      verificationStatus,
       generatedAt: new Date().toISOString()
     },
     request

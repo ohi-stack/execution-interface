@@ -1,4 +1,5 @@
 import { jsonResponse } from '@/lib/api-json';
+import { capitalContent, learningContent, productionMetrics, registryContent, routeContent } from '@/data/onegodianContent';
 import tools from '@/data/tools.json';
 import { getCapitalBridgeStatus } from '@/lib/bridges/capital';
 import { getMembersBridgeStatus } from '@/lib/bridges/members';
@@ -30,11 +31,13 @@ export async function GET(request: Request) {
       apiStatus: Object.fromEntries(productionApis.map((route) => [route, 'active'])),
       bridgeStatus: [getPlatformBridgeStatus(), getMembersBridgeStatus(), getCapitalBridgeStatus()]
       status: 'ok',
-      service: 'omos-site',
-      moduleCount: statusSummary.active + statusSummary.ready + statusSummary.needsWork,
-      routeCount: omosRoutes.length,
-      toolCount: tools.length,
-      statusSummary
+      app: 'OneGodian App',
+      version: 'production',
+      routeCount: Object.keys(routeContent).length,
+      registryCards: registryContent.cards.length,
+      learningModules: learningContent.cards.length,
+      capitalReadinessCards: capitalContent.cards.length,
+      metrics: productionMetrics
     },
     request
   );

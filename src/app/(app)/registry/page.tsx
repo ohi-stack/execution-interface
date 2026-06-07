@@ -1,5 +1,6 @@
-import { PageRenderer } from '@/components/PageRenderer';
+import { ContentRoutePage } from '@/components/ContentRoutePage';
+import { registryContent } from '@/data/onegodianContent';
 
 export default function RegistryPage() {
-  return <PageRenderer path="/registry" />;
+  return <ContentRoutePage content={registryContent} />;
 }

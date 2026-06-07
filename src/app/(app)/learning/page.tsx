@@ -1,3 +1,8 @@
+import { ContentRoutePage } from '@/components/ContentRoutePage';
+import { learningContent } from '@/data/onegodianContent';
+
+export default function LearningPage() {
+  return <ContentRoutePage content={learningContent} />;
 import { PageHero, PluginBridgeGrid } from '@/components/OneGodianAppPages';
 
 export default function LearningPage() {

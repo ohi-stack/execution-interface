@@ -1,36 +1,13 @@
-import Link from 'next/link';
-import { BeliefMapperHero } from '@/components/belief-mapper/BeliefMapperHero';
-import { PremiumUpgradeCard } from '@/components/belief-mapper/PremiumUpgradeCard';
-import { ResultCard } from '@/components/belief-mapper/ResultCard';
-import { beliefMapperResults } from '@/lib/beliefMapper/scoring';
+import type { Metadata } from 'next';
+import { OmosPageTemplate } from '@/components/omos/OmosPageTemplate';
+import { getOmosPage } from '@/data/omos-pages';
 
-const routes = [
-  ['/belief-mapper/start', 'Start'],
-  ['/belief-mapper/results', 'Results'],
-  ['/belief-mapper/profile', 'Profile'],
-  ['/belief-mapper/journal', 'Journal'],
-  ['/belief-mapper/certificate', 'Certificate'],
-  ['/belief-mapper/timeline', 'Timeline'],
-  ['/belief-mapper/premium', 'Premium']
-];
+export const metadata: Metadata = {
+  title: 'OneGodian Belief Mapper™',
+  description: 'Seeker, Believer, OneGodian, and Elder journey-stage model with Lite Version Coming Soon status.',
+  alternates: { canonical: '/belief-mapper' }
+};
 
 export default function BeliefMapperPage() {
-  return (
-    <main className="space-y-8">
-      <BeliefMapperHero />
-      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {routes.map(([href, label]) => (
-          <Link key={href} href={href} className="rounded-2xl border border-slate-700 bg-slate-900/70 p-4 text-sm font-semibold text-slate-100 hover:border-cyan-300">
-            {label} <span className="block pt-1 font-mono text-xs text-cyan-300">{href}</span>
-          </Link>
-        ))}
-      </section>
-      <section className="grid gap-4 lg:grid-cols-[1fr_0.75fr]">
-        <div className="grid gap-4 sm:grid-cols-2">
-          {beliefMapperResults.map((result) => <ResultCard key={result.id} result={result} />)}
-        </div>
-        <PremiumUpgradeCard />
-      </section>
-    </main>
-  );
+  return <OmosPageTemplate page={getOmosPage('belief-mapper')!} />;
 }

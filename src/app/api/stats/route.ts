@@ -1,17 +1,17 @@
 import { jsonResponse } from '@/lib/api-json';
-import { omosRoutes } from '@/data/manifest';
-import { statusSummary } from '@/data/status';
-import { tools } from '@/data/tools';
+import { capitalContent, learningContent, productionMetrics, registryContent, routeContent } from '@/data/onegodianContent';
 
 export async function GET(request: Request) {
   return jsonResponse(
     {
       status: 'ok',
-      service: 'omos-site',
-      moduleCount: statusSummary.active + statusSummary.ready + statusSummary.needsWork,
-      routeCount: omosRoutes.length,
-      toolCount: tools.length,
-      statusSummary
+      app: 'OneGodian App',
+      version: 'production',
+      routeCount: Object.keys(routeContent).length,
+      registryCards: registryContent.cards.length,
+      learningModules: learningContent.cards.length,
+      capitalReadinessCards: capitalContent.cards.length,
+      metrics: productionMetrics
     },
     request
   );

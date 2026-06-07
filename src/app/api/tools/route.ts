@@ -1,11 +1,16 @@
 import { jsonResponse } from '@/lib/api-json';
-import { tools } from '@/data/tools';
+import { registryContent, learningContent, omosContent, capitalContent } from '@/data/onegodianContent';
 
 export async function GET(request: Request) {
+  const tools = [registryContent, learningContent, omosContent, capitalContent].flatMap((route) =>
+    route.cards.map((card) => ({ name: card.title, description: card.description, status: card.status, href: card.href }))
+  );
+
   return jsonResponse(
     {
       status: 'ok',
-      service: 'omos-site',
+      app: 'OneGodian App',
+      toolCount: tools.length,
       tools
     },
     request

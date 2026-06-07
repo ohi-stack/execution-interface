@@ -40,6 +40,13 @@ register_activation_hook(
 );
 
 add_action(
+	'wp_enqueue_scripts',
+	static function () {
+		wp_enqueue_style( 'ogc-capital-portal', OGC_URL . 'assets/capital-portal.css', array(), OGC_VERSION );
+	}
+);
+
+add_action(
 	'plugins_loaded',
 	static function () {
 		OGC_Product_Sync::instance();

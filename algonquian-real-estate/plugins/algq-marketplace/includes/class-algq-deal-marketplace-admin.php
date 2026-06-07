@@ -96,12 +96,12 @@ final class ALGQ_Deal_Marketplace_Admin
     public function handle_clear_cache(): void
     {
         if (!$this->security->can_manage()) {
-            wp_die(esc_html__('You do not have permission to clear marketplace cache.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN));
+            wp_die(esc_html__('You do not have permission to clear marketplace cache.', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN), '', ['response' => 403]);
         }
 
         check_admin_referer(ALGQ_Deal_Marketplace_Security::NONCE_ACTION, ALGQ_Deal_Marketplace_Security::NONCE_NAME);
 
-        $this->cache->flush_marketplace();
+        $this->cache->flush_group();
 
         wp_safe_redirect(add_query_arg(
             [
@@ -179,7 +179,7 @@ final class ALGQ_Deal_Marketplace_Admin
             </form>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="algq_deal_marketplace_clear_cache" />
-                <?php wp_nonce_field('algq_deal_marketplace_clear_cache'); ?>
+                <?php wp_nonce_field(ALGQ_Deal_Marketplace_Security::NONCE_ACTION, ALGQ_Deal_Marketplace_Security::NONCE_NAME); ?>
                 <?php submit_button(__('Clear Marketplace Cache', ALGQ_DEAL_MARKETPLACE_TEXT_DOMAIN), 'secondary'); ?>
             </form>
         </div>

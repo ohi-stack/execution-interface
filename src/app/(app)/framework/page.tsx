@@ -2,15 +2,20 @@ import type { Metadata } from 'next';
 import { ProductionDocPageView } from '@/app/components/production-doc-page';
 import { getProductionDocPage, productionRelease } from '@/lib/production-docs';
 
-const page = getProductionDocPage('pipeline')!;
+const page = getProductionDocPage('framework')!;
 
 export const metadata: Metadata = {
-  title: `OHI Pipeline | ${productionRelease.name}`,
+  title: `Framework | ${productionRelease.name}`,
   description: page.description,
-  alternates: { canonical: '/ohi' },
-  openGraph: { title: page.title, description: page.description, url: '/ohi', type: 'website' }
+  alternates: { canonical: '/framework' },
+  openGraph: {
+    title: page.title,
+    description: page.description,
+    url: '/framework',
+    type: 'website'
+  }
 };
 
-export default function OhiPage() {
+export default function FrameworkPage() {
   return <ProductionDocPageView page={page} />;
 }

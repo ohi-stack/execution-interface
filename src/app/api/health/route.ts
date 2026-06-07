@@ -1,31 +1,23 @@
 import { jsonResponse } from '@/lib/api-json';
-import { productionDashboardRows, productionRelease } from '@/lib/production-docs';
-
-const productionRoutes = productionDashboardRows.filter((row) => !row.href.startsWith('/api')).map((row) => row.href);
-const productionApis = productionDashboardRows.filter((row) => row.href.startsWith('/api')).map((row) => row.href);
+import { platformStatus, verificationStatus } from '@/data/onegodianContent';
 
 export async function GET(request: Request) {
   return jsonResponse(
     {
       status: 'ok',
-      service: 'omos-site',
-      domain: 'OMOS.OneGodian.com',
-      version: '1.0.0'
+      app: 'OneGodian App',
+      version: 'production',
       environment: process.env.NODE_ENV ?? 'development',
-      release: productionRelease,
-      version: productionRelease.version,
-      canonicalHost: productionRelease.canonicalHost,
-      publicRouteCount: productionRoutes.length,
-      productionRoutes,
-      productionApis,
-      documentationSurfaces: productionDashboardRows,
       checks: {
-        documentationHub: 'ok',
-        statusDashboard: 'ok',
-        healthEndpoint: 'ok',
         manifestEndpoint: 'ok',
-        mobileResponsiveTheme: 'ok'
+        healthEndpoint: 'ok',
+        coreContentRoutes: 'ok',
+        dashboardContent: 'ok',
+        ecosystemHierarchy: 'ok',
+        mobileResponsiveCards: 'ok'
       },
+      platformStatus,
+      verificationStatus,
       generatedAt: new Date().toISOString()
     },
     request

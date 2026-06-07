@@ -1,5 +1,6 @@
-import { AppShell } from '@/components/app-shell';
+import { ContentRoutePage } from '@/components/ContentRoutePage';
+import { learningContent } from '@/data/onegodianContent';
 
-export default function Page() {
-  return <AppShell title="Learning" modules={[{ title: 'Learning Placeholder', description: 'Foundation placeholder for learning module.' }]} />;
+export default function LearningPage() {
+  return <ContentRoutePage content={learningContent} />;
 }

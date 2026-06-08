@@ -723,6 +723,8 @@ final class Onegodian_Members_Plugin
     public function shortcode_contributor_disclaimer(): string
     {
         return '<p class="ogm-front ogm-contributor-disclaimer">' . esc_html($this->get_setting('default_disclaimer_text')) . '</p>';
+    }
+
     public function render_programs_page(): void
     {
         $this->render_admin_shell('onegodian-members-programs', function (): void {
@@ -916,6 +918,8 @@ final class Onegodian_Members_Plugin
             $created++;
         }
         return $created;
+    }
+
     /** @return array<int, array{title:string, slug:string, shortcode:string}> */
     private function generated_page_definitions(): array
     {

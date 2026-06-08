@@ -1,2 +1,0 @@
-import { ChecklistCard, ModuleHeader } from '@/components/module-ui';
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Experience Layer' description='Belief Mapper and personalization controls designed for consent-first user journeys.'/><ChecklistCard items={['Enable mapper-driven personalization','Require explicit consent before data persistence','Route users by journey stage']} /></main>}

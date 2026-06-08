@@ -1,2 +1,0 @@
-import { ChecklistCard, ModuleHeader } from '@/components/module-ui';
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Community Layer' description='Community intelligence and matching standards for safe, aligned, and constructive member interactions.'/><ChecklistCard items={['Define matching criteria','Add moderation visibility','Create opt-in community routing']} /></main>}

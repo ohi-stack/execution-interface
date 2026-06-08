@@ -1,14 +1,7 @@
-import { NextResponse } from 'next/server';
+import { accJson } from '@/lib/api';
 
-const APP_NAME = 'OneGodian App';
-const APP_VERSION = process.env.npm_package_version ?? '0.1.0';
-const BUILD_MARKER = process.env.BUILD_MARKER ?? process.env.VERCEL_GIT_COMMIT_SHA ?? 'unknown';
+export const dynamic = 'force-dynamic';
 
-export async function GET() {
-  return NextResponse.json({
-    app: APP_NAME,
-    version: APP_VERSION,
-    buildMarker: BUILD_MARKER,
-    timestamp: new Date().toISOString()
-  });
+export function GET() {
+  return accJson({ version: process.env.NEXT_PUBLIC_ACC_VERSION ?? '1.0.0' });
 }

@@ -1,9 +1,0 @@
-{
-  "widgets": [
-    "runtime",
-    "manifest-version",
-    "plugin-sync",
-    "system-health"
-  ],
-  "canonicalHost": "https://omos.onegodian.com"
-}

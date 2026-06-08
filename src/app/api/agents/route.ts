@@ -1,2 +1,7 @@
-import { NextResponse } from 'next/server';
-export async function GET() { return NextResponse.json({ service: 'agents', surface: 'console', status: 'ok' }); }
+import { accJson } from '@/lib/api';
+
+export const dynamic = 'force-dynamic';
+
+export function GET() {
+  return accJson({ resource: 'agents', authoritative: false, note: 'ACC exposes operator-facing read models only; authority remains with external services.' });
+}

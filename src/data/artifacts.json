@@ -1,8 +1,0 @@
-{
-  "artifacts": [
-    "manifest",
-    "runtime-status",
-    "plugin-sync-contract",
-    "live-production-checklist"
-  ]
-}

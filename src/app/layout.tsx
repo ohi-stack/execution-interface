@@ -1,21 +1,27 @@
-import './globals.css';
 import type { Metadata } from 'next';
+import './globals.css';
 import { AppShell } from '@/components/AppShell';
+import { accPositioning, accRepository } from '@/lib/acc-content';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://app.onegodian.com'),
+  metadataBase: new URL(accRepository.deployTarget),
   title: {
-    default: 'The OneGodian App',
-    template: '%s | The OneGodian App'
+    default: accPositioning.name,
+    template: `%s | ${accPositioning.shortName}`
   },
-  description: 'Unified access for identity, systems, records, education, commerce, media, verification, and OMOS Production Documentation Release 1.0.',
-  applicationName: 'The OneGodian App',
+  description: accPositioning.summary,
+  applicationName: accPositioning.name,
   alternates: { canonical: '/' },
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true
+  },
   openGraph: {
-    title: 'The OneGodian App',
-    description: 'Public/member-facing access for OneGodian systems and OMOS Production Documentation Release 1.0.',
-    url: '/',
-    siteName: 'The OneGodian App',
+    title: accPositioning.name,
+    description: accPositioning.summary,
+    url: accRepository.deployTarget,
+    siteName: accPositioning.name,
     type: 'website'
   }
 };

@@ -1,102 +1,78 @@
 <?php
 /**
- * Plugin Name: Algonquian Marketplace
- * Description: Marketplace foundations for wholesale deals, investor access, syndication, buyer subscriptions, and premium listings.
- * Version: 0.1.0
+ * Plugin Name: Algonquian Deal Marketplace
+ * Plugin URI: https://algonquianrealestate.com/
+ * Description: Production-hardened buyer-facing deal marketplace with NDA gates, buyer interest workflows, audit logging, and institutional real estate admin controls.
+ * Version: 1.0.0
  * Author: Algonquian Real Estate
- * Requires Plugins: algq-core
+ * Author URI: https://algonquianrealestate.com/
+ * Text Domain: algq-marketplace
+ * Domain Path: /languages
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
  */
+
+declare(strict_types=1);
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-
-function algq_marketplace_core_available(): bool
-{
-    if (function_exists('algq_core')) {
-        return true;
-    }
-
-    add_action('admin_notices', static function (): void {
-        echo '<div class="notice notice-error"><p>' . esc_html__('Algonquian Marketplace requires the Algonquian Core plugin to be active.', 'algq-marketplace') . '</p></div>';
-    });
-
-    return false;
-}
+define('ALGQ_MARKETPLACE_VERSION', '1.0.0');
+define('ALGQ_MARKETPLACE_FILE', __FILE__);
+define('ALGQ_MARKETPLACE_PATH', plugin_dir_path(__FILE__));
+define('ALGQ_MARKETPLACE_URL', plugin_dir_url(__FILE__));
+define('ALGQ_MARKETPLACE_BASENAME', plugin_basename(__FILE__));
+define('ALGQ_MARKETPLACE_TEXT_DOMAIN', 'algq-marketplace');
+define('ALGQ_MARKETPLACE_OPTION_SETTINGS', 'algq_marketplace_settings');
+define('ALGQ_MARKETPLACE_OPTION_PAGES', 'algq_marketplace_generated_pages');
+define('ALGQ_MARKETPLACE_OPTION_DB_VERSION', 'algq_marketplace_db_version');
+define('ALGQ_MARKETPLACE_OPTION_CLEANUP', 'algq_marketplace_cleanup_settings');
 
 /**
- * Return the marketplace module definitions used by the public shortcode and REST snapshot.
- *
- * @return array<int, array{label: string, description: string, status: string}>
+ * Safely load a plugin include without fataling when an optional file is absent.
  */
-function algq_marketplace_modules(): array
+function algq_marketplace_safe_require(string $relative_path, bool $required = true): bool
 {
-    return [
-        [
-            'label' => 'Wholesale deals',
-            'description' => 'Curated off-market assignment opportunities with deal highlights, pricing guidance, and diligence checkpoints.',
-            'status' => 'Deal room ready',
-        ],
-        [
-            'label' => 'Investor access',
-            'description' => 'Permissioned access tiers for vetted investors, capital partners, and acquisition collaborators.',
-            'status' => 'Access gated',
-        ],
-        [
-            'label' => 'Deal syndication',
-            'description' => 'Distribution workflows for sending qualified listings to buyer lists, investor circles, and private partner channels.',
-            'status' => 'Distribution mapped',
-        ],
-        [
-            'label' => 'Buyer subscriptions',
-            'description' => 'Recurring buyer membership tiers for priority deal alerts, downloads, market preferences, and saved buy boxes.',
-            'status' => 'Subscription-ready',
-        ],
-        [
-            'label' => 'Premium listings',
-            'description' => 'Featured placement for high-value opportunities with enhanced media, underwriting summaries, and urgency indicators.',
-            'status' => 'Featured inventory',
-        ],
-    ];
+    $file = ALGQ_MARKETPLACE_PATH . ltrim($relative_path, '/');
+
+    if (!is_readable($file)) {
+        if ($required && is_admin()) {
+            add_action('admin_notices', static function () use ($relative_path): void {
+                printf(
+                    '<div class="notice notice-error"><p>%s</p></div>',
+                    esc_html(sprintf(__('Algonquian Deal Marketplace could not load required file: %s', 'algq-marketplace'), $relative_path))
+                );
+            });
+        }
+
+        return false;
+    }
+
+    require_once $file;
+    return true;
+}
+
+algq_marketplace_safe_require('includes/helpers.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-roles.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-db.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-pages.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-activator.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-shortcodes.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-admin.php');
+algq_marketplace_safe_require('includes/class-algq-marketplace-plugin.php');
+
+if (class_exists('ALGQ_Marketplace_Activator')) {
+    register_activation_hook(__FILE__, ['ALGQ_Marketplace_Activator', 'activate']);
+    register_deactivation_hook(__FILE__, ['ALGQ_Marketplace_Activator', 'deactivate']);
 }
 
 add_action('plugins_loaded', static function (): void {
-    if (!algq_marketplace_core_available()) {
+    load_plugin_textdomain('algq-marketplace', false, dirname(ALGQ_MARKETPLACE_BASENAME) . '/languages');
+
+    if (!class_exists('ALGQ_Marketplace_Plugin')) {
         return;
     }
 
-    add_shortcode('algq_marketplace', function (): string {
-        ob_start();
-        ?>
-        <section class="algq-marketplace" aria-labelledby="algq-marketplace-title">
-            <h2 id="algq-marketplace-title">ARE Marketplace</h2>
-            <p>Wholesale deal distribution, investor access, buyer subscriptions, and premium listing controls for the Algonquian Real Estate platform.</p>
-            <div class="algq-marketplace-grid">
-                <?php foreach (algq_marketplace_modules() as $module) : ?>
-                    <article class="algq-marketplace-card">
-                        <h3><?php echo esc_html($module['label']); ?></h3>
-                        <p><?php echo esc_html($module['description']); ?></p>
-                        <span><?php echo esc_html($module['status']); ?></span>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </section>
-        <?php
-        return (string) ob_get_clean();
-    });
-
-    add_action('rest_api_init', function (): void {
-        register_rest_route('algq/v1', '/marketplace', [
-            'methods' => 'GET',
-            'permission_callback' => '__return_true',
-            'callback' => function (): WP_REST_Response {
-                return new WP_REST_Response([
-                    'name' => 'ARE Marketplace',
-                    'shortcode' => '[algq_marketplace]',
-                    'modules' => algq_marketplace_modules(),
-                ]);
-            },
-        ]);
-    });
+    ALGQ_Marketplace_Plugin::instance()->init();
 });

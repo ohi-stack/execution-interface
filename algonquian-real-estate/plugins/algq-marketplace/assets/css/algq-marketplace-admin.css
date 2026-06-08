@@ -1,0 +1,7 @@
+.algq-marketplace-admin { --algq-black:#050505; --algq-gold:#c8a24a; --algq-white:#fff; }
+.algq-marketplace-admin h1 { color: var(--algq-black); border-left: 5px solid var(--algq-gold); padding-left: 12px; }
+.algq-admin-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin:20px 0; }
+.algq-admin-card { background:var(--algq-black); color:var(--algq-white); border-top:4px solid var(--algq-gold); padding:18px; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+.algq-admin-card strong, .algq-admin-card span { display:block; }
+.algq-admin-card span { color:var(--algq-gold); margin-top:8px; }
+.algq-bulk-actions { margin:16px 0; display:flex; gap:8px; align-items:center; }

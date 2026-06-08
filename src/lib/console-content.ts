@@ -28,6 +28,7 @@ export const consoleNavigation = [
   { label: 'Settings', href: '/settings' }
 ];
 
+
 export const consoleDashboardCards = [
   { title: 'Apps', description: 'Manage OneGodian apps, modules, route structures, deployment status, and app configuration.', href: '/apps', status: 'Active' },
   { title: 'Plugins', description: 'Manage platform plugins, WordPress bridges, app bridges, commerce tools, LMS tools, and registry extensions.', href: '/plugins', status: 'Active' },

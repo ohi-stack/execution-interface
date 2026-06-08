@@ -3,7 +3,7 @@ set -euo pipefail
 
 APP_DIR="${APP_DIR:-$(pwd)}"
 BRANCH="${BRANCH:-main}"
-REPO_URL="${REPO_URL:-https://github.com/ohi-stack/execution-interface.git}"
+REPO_URL="${REPO_URL:-https://github.com/ohi-stack/onegodian-app-deploy.git}"
 RESTART_MODE="${RESTART_MODE:-none}" # none | pm2 | node
 PM2_APP_NAME="${PM2_APP_NAME:-onegodian-app}"
 VERIFY_BASE_URL="${VERIFY_BASE_URL:-https://app.onegodian.com}"
@@ -19,7 +19,15 @@ cd "$APP_DIR"
 echo "== Git remote check =="
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   if git remote get-url origin >/dev/null 2>&1; then
-    echo "origin exists: $(git remote get-url origin)"
+    ORIGIN_URL="$(git remote get-url origin)"
+    echo "origin exists: $ORIGIN_URL"
+
+    case "$ORIGIN_URL" in
+      *ohi-stack/execution-interface.git|*ohi-stack/execution-interface)
+        echo "origin points at legacy execution-interface repo; updating origin to production deploy repo: $REPO_URL"
+        git remote set-url origin "$REPO_URL"
+        ;;
+    esac
   else
     echo "origin missing; adding origin: $REPO_URL"
     git remote add origin "$REPO_URL"

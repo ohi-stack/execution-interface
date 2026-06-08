@@ -19,9 +19,9 @@ export const domainMap = {
   console: {
     domain: 'console.onegodian.com',
     title: 'OneGodian Console',
-    role: 'Administrative command console and operational control plane',
+    role: 'Administrative command console and operational governance',
     description:
-      'The OneGodian Console manages internal operations, app deployment status, plugin management, system health, APIs, registries, admin workflows, and developer controls.',
+      'The OneGodian Console manages internal operations, app deployment status, plugin management, system health, APIs, registries, admin workflows, and developer tools.',
     primaryAudience: [
       'Founder',
       'Admins',

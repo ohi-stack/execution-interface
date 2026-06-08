@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 
 const port = 4010;
 const base = `http://127.0.0.1:${port}`;
-const routes = ['/', '/dashboard', '/members', '/campaigns', '/campaigns/remember', '/registry', '/tools', '/media', '/learn', '/certificates', '/support', '/settings', '/account', '/ecosystem', '/overview', '/omos', '/algorithm', '/remember', '/time', '/commerce', '/identity', '/institutional', '/status', '/belief-mapper', '/belief-mapper/start', '/belief-mapper/results', '/belief-mapper/profile', '/belief-mapper/journal', '/belief-mapper/certificate', '/belief-mapper/timeline', '/belief-mapper/premium', '/api/health', '/api/manifest', '/api/modules'];
+const routes = ['/', '/dashboard', '/members', '/campaigns', '/campaigns/remember', '/registry', '/tools', '/media', '/learn', '/certificates', '/support', '/settings', '/account', '/ecosystem', '/overview', '/omos', '/docs', '/framework', '/algorithm', '/protocol', '/ohi', '/pipeline', '/remember', '/time', '/commerce', '/products', '/identity', '/institutional', '/capital', '/status', '/belief-mapper', '/belief-mapper/start', '/belief-mapper/results', '/belief-mapper/profile', '/belief-mapper/journal', '/belief-mapper/certificate', '/belief-mapper/timeline', '/belief-mapper/premium', '/api/health', '/api/manifest', '/api/modules', '/api/pages', '/api/tools', '/api/artifacts', '/api/system-health'];
 
 const server = spawn('npx', ['next', 'dev', '-p', String(port)], { stdio: 'pipe', detached: true });
 

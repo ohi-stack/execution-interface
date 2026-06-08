@@ -5,3 +5,16 @@ build/
 .env
 .env.local
 .DS_Store
+
+# Generated release archives and checksums are produced outside source control.
+algonquian-real-estate/releases/
+*.zip
+SHA256SUMS.txt
+*.zip
+algonquian-real-estate/dist/
+
+# Generated WordPress release archives
+onegodian-members-v*.zip
+# Generated WordPress plugin packages
+onegodian-platform-plugin-v*.zip
+onegodian-capital-plugin-v*.zip

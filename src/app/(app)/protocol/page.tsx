@@ -1,3 +1,16 @@
+import type { Metadata } from 'next';
+import { ProductionDocPageView } from '@/app/components/production-doc-page';
+import { getProductionDocPage, productionRelease } from '@/lib/production-docs';
+
+const page = getProductionDocPage('protocol')!;
+
+export const metadata: Metadata = {
+  title: `Protocol | ${productionRelease.name}`,
+  description: page.description,
+  alternates: { canonical: '/protocol' },
+  openGraph: { title: page.title, description: page.description, url: '/protocol', type: 'website' }
+};
+
 export default function ProtocolPage() {
-  return <main className="p-6 text-slate-100"><h1 className="text-3xl font-semibold">Protocol</h1><p className="mt-3 text-slate-300">Protocol references define system expectations, governance boundaries, and staged implementation rules.</p></main>;
+  return <ProductionDocPageView page={page} />;
 }

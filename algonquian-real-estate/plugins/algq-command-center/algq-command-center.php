@@ -190,6 +190,11 @@ final class ALGQ_Command_Center
      * @param array<int,array{label:string,value:string}> $rows
      */
     private function render_financial_snapshot(array $rows): void
+    {
+        $this->render_panel('Financial Snapshot', $rows);
+    }
+
+    /**
      * @param array<string,mixed> $metrics
      */
     private function render_metrics_dashboard(array $metrics): void

@@ -1,3 +1,16 @@
+import type { Metadata } from 'next';
+import { ProductionDocPageView } from '@/app/components/production-doc-page';
+import { getProductionDocPage, productionRelease } from '@/lib/production-docs';
+
+const page = getProductionDocPage('pipeline')!;
+
+export const metadata: Metadata = {
+  title: `OHI Pipeline | ${productionRelease.name}`,
+  description: page.description,
+  alternates: { canonical: '/ohi' },
+  openGraph: { title: page.title, description: page.description, url: '/ohi', type: 'website' }
+};
+
 export default function OhiPage() {
-  return <main className="p-6 text-slate-100"><h1 className="text-3xl font-semibold">OHI</h1><p className="mt-3 text-slate-300">Operational interface for OHI™ and Quantum OHI™ systems.</p></main>;
+  return <ProductionDocPageView page={page} />;
 }

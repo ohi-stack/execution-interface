@@ -1,11 +1,12 @@
-export default function Page() {
+import { CapitalCard, CapitalCardGrid, CapitalPage, NoticePanel } from '../components/CapitalPage';
+
+const cards = ['Contributor Profile', 'Disclosure Acknowledgements', 'Instrument Records', 'Certificate References', 'Payment / Checkout History', 'Verification History', 'Support Requests'];
+
+export default function InvestorPortalPage() {
   return (
-    <main className="onegodian-surface mx-auto max-w-6xl px-4 py-10 text-slate-100">
-      <section className="glass-panel p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-300">Administrative Records</p>
-        <h1 className="mt-3 text-3xl font-black tracking-[-0.035em] text-white">Investor Portal</h1>
-        <p className="mt-3 leading-7 text-slate-300">Administrative record workspace for investor portal with disclosure review and acknowledgement workflow support.</p>
-      </section>
-    </main>
+    <CapitalPage title="Investor Portal" subtitle="The Investor Portal is used to review contributor records, disclosure status, certificate references, verification history, and document access.">
+      <NoticePanel>Access should require authentication before showing private records.</NoticePanel>
+      <CapitalCardGrid>{cards.map((card) => <CapitalCard key={card} title={card}><p>Authenticated capital portal workspace for controlled review and record access.</p></CapitalCard>)}</CapitalCardGrid>
+    </CapitalPage>
   );
 }

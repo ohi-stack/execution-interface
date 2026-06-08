@@ -5,6 +5,19 @@
     "[omos_bridge_builder]",
     "[omos_tool_grid]",
     "[omos_docs_grid]",
-    "[algq_offer_generator]"
+    "[algq_offer_generator]",
+    "[onegodian_membership_cta]",
+    "[onegodian_members_pricing]",
+    "[onegodian_membership_resources]",
+    "[onegodian_member_certificates]",
+    "[onegodian_member_dashboard]",
+    "[onegodian_member_support]",
+    "[onegodian_contributors_page]",
+    "[onegodian_contributor_tiers]",
+    "[onegodian_creator_network]",
+    "[onegodian_affiliate_dashboard]",
+    "[onegodian_referral_link]",
+    "[onegodian_contributor_wall]",
+    "[onegodian_contributor_disclaimer]"
   ]
 }

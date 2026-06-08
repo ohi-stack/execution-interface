@@ -1,10 +1,29 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { CapitalNavigation } from './components/CapitalNavigation';
-import { CapitalFooter } from './components/CapitalFooter';
+import { AppShell } from '@/components/AppShell';
 
-export const metadata: Metadata = { title: 'OneGodian Domain Surfaces', description: 'Separated app.onegodian.com member app and console.onegodian.com operator console.' };
+export const metadata: Metadata = {
+  metadataBase: new URL('https://app.onegodian.com'),
+  title: {
+    default: 'The OneGodian App',
+    template: '%s | The OneGodian App'
+  },
+  description: 'Unified access for identity, systems, records, education, commerce, media, verification, and OMOS Production Documentation Release 1.0.',
+  applicationName: 'The OneGodian App',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'The OneGodian App',
+    description: 'Public/member-facing access for OneGodian systems and OMOS Production Documentation Release 1.0.',
+    url: '/',
+    siteName: 'The OneGodian App',
+    type: 'website'
+  }
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body><CapitalNavigation />{children}<CapitalFooter /></body></html>;
+  return (
+    <html lang="en">
+      <AppShell>{children}</AppShell>
+    </html>
+  );
 }

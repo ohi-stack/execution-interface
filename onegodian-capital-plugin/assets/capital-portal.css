@@ -1,0 +1,82 @@
+/* ONEGODIAN Capital Portal — Mobile Navigation Fix */
+.onegodian-capital-header,
+.capital-header,
+.site-header {
+  width: 100%;
+  padding: 18px 24px;
+  box-sizing: border-box;
+}
+
+.onegodian-capital-brand,
+.capital-brand,
+.site-branding {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  color: #071b33;
+}
+
+.onegodian-capital-nav,
+.capital-nav,
+.site-navigation,
+.main-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.onegodian-capital-nav a,
+.capital-nav a,
+.site-navigation a,
+.main-navigation a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #071b33;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .onegodian-capital-header,
+  .capital-header,
+  .site-header {
+    padding: 18px 22px;
+  }
+
+  .onegodian-capital-brand,
+  .capital-brand,
+  .site-branding {
+    font-size: 16px;
+    letter-spacing: 0.06em;
+  }
+
+  .onegodian-capital-nav,
+  .capital-nav,
+  .site-navigation,
+  .main-navigation {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .onegodian-capital-nav a,
+  .capital-nav a,
+  .site-navigation a,
+  .main-navigation a {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 14px;
+    border: 1px solid rgba(7, 27, 51, 0.12);
+    border-radius: 12px;
+    background: #f7f8fb;
+    box-sizing: border-box;
+  }
+}

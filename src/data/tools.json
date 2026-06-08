@@ -1,12 +1,18 @@
 {
   "tools": [
-    "dashboard",
-    "ecosystem",
-    "registry",
     "members",
+    "contributors",
+    "creator-network",
+    "affiliate-dashboard",
+    "referral-links",
+    "contributor-wall",
     "certificates",
-    "campaigns",
+    "products",
     "media",
-    "offer-generator"
+    "learning",
+    "registry",
+    "tools",
+    "settings",
+    "ecosystem"
   ]
 }

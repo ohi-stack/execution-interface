@@ -1,2 +1,0 @@
-import { ChecklistCard, ModuleHeader } from '@/components/module-ui';
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Orientation Layer' description='Behavior standards for AI, software agents, and robotics interacting with OneGodian identity systems.'/><ChecklistCard items={['Define behavior constraints','Create escalation policy hooks','Publish machine-readable orientation rules']} /></main>}

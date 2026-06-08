@@ -1,2 +1,0 @@
-import { ModuleHeader } from '@/components/module-ui';
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Divine 9 Covers' description='Companion cover gallery for Divine 9 assets, aligned with Visual Cover Standards.'/><section className='rounded-xl border border-slate-700 bg-slate-900/60 p-5 text-sm text-slate-300'>Gallery placeholder: add finalized cover renders and metadata references for each Divine 9 title.</section></main>}

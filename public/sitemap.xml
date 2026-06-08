@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://app.onegodian.com/</loc></url>
-  <url><loc>https://app.onegodian.com/docs</loc></url>
-  <url><loc>https://app.onegodian.com/framework</loc></url>
-  <url><loc>https://app.onegodian.com/algorithm</loc></url>
-  <url><loc>https://app.onegodian.com/protocol</loc></url>
-  <url><loc>https://app.onegodian.com/ohi</loc></url>
-  <url><loc>https://app.onegodian.com/pipeline</loc></url>
-  <url><loc>https://app.onegodian.com/belief-mapper</loc></url>
-  <url><loc>https://app.onegodian.com/status</loc></url>
-  <url><loc>https://app.onegodian.com/api/health</loc></url>
-  <url><loc>https://app.onegodian.com/api/manifest</loc></url>
-  <url><loc>https://app.onegodian.com/dashboard</loc></url>
-  <url><loc>https://app.onegodian.com/ecosystem</loc></url>
-  <url><loc>https://app.onegodian.com/registry</loc></url>
-  <url><loc>https://app.onegodian.com/identity</loc></url>
-  <url><loc>https://app.onegodian.com/verification</loc></url>
+  <url><loc>https://acc.onegodian.com/</loc></url>
 </urlset>

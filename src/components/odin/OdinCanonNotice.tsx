@@ -1,1 +1,0 @@
-export { OdinCanonNotice } from './OdinWidgets';

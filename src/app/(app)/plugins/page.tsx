@@ -1,2 +1,0 @@
-import { pluginCategories } from '@/lib/onegodian-content';
-export default function PluginsPage(){return <main className="space-y-6"><h1 className="text-3xl font-bold">OneGodian Plugin Directory</h1>{pluginCategories.map((c)=><section key={c.title} className="rounded-xl border border-slate-700 bg-slate-900/60 p-5"><h2 className="font-semibold">{c.title}</h2><ul className="mt-2 list-disc pl-5 text-sm">{c.plugins.map((p)=><li key={p}>{p}</li>)}</ul></section>)}</main>}

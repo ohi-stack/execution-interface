@@ -1,53 +1,42 @@
 {
-  "name": "onegodian-everything-app",
-  "version": "0.1.0",
+  "name": "acc",
+  "version": "1.0.0",
   "private": true,
+  "description": "ACC™ Agent Command Console — operator-facing command console for OneGodian operational surfaces.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ohi-stack/acc.git"
+  },
+  "homepage": "https://acc.onegodian.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "check": "node --check server.js",
-    "db:migrate": "node scripts/migrate.js",
-    "prod:verify": "bash scripts/production-lock-check.sh",
     "typecheck": "tsc --noEmit",
-    "test": "npm run test:smoke",
-    "test:smoke": "node scripts/smoke-test.mjs",
-    "smoke": "node tests/smoke.test.js",
-    "smoke:pages": "node scripts/smoke-pages.mjs",
-    "type-check": "tsc --noEmit",
-    "deploy": "bash scripts/deploy-prod.sh"
+    "check": "npm run typecheck && npm run lint",
+    "test": "npm run check"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.7.4",
-    "@prisma/client": "^5.18.0",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
     "autoprefixer": "^10.4.20",
-    "dotenv": "^17.4.2",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",
-    "express": "^4.22.1",
-    "helmet": "^8.2.0",
     "lucide-react": "^1.14.0",
     "next": "^14.2.35",
-    "pg": "^8.20.0",
     "postcss": "^8.4.47",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tailwindcss": "^3.4.13",
-    "three": "^0.165.0",
-    "typescript": "^5.9.3",
-    "uuid": "^14.0.0",
-    "zod": "^3.23.8"
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@types/node": "20.19.39",
     "@types/react": "18.3.28",
-    "@types/react-dom": "^18.3.0",
-    "@types/three": "^0.165.0",
-    "prisma": "^5.18.0"
+    "@types/react-dom": "^18.3.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

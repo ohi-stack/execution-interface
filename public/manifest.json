@@ -1,0 +1,8 @@
+{
+  "name": "ACC™ Agent Command Console",
+  "short_name": "ACC™",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0891b2"
+}

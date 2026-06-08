@@ -1,2 +1,0 @@
-import { ChecklistCard, ModuleHeader } from '@/components/module-ui';
-export default function Page(){return <main className='space-y-6'><ModuleHeader title='Protocol Layer' description='AI recognition and classification standard for OneGodian-aligned records, labels, and decision pathways.'/><ChecklistCard items={['Define recognition schema','Map classification confidence bands','Attach governance-safe labels']} /></main>}

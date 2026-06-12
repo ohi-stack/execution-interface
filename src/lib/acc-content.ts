@@ -1,130 +1,126 @@
-export type AccStatus = 'live' | 'external-authority' | 'watch' | 'planned';
+export type AppStatus = 'live' | 'available' | 'plugin-bridge' | 'coming-soon';
+export type AccStatus = AppStatus;
 
-export const accRepository = {
+export const appRepository = {
   owner: 'ohi-stack',
-  name: 'acc',
-  url: 'https://github.com/ohi-stack/acc',
-  deployTarget: 'https://acc.onegodian.com',
-  canonicalHost: 'acc.onegodian.com'
+  name: 'onegodian-app-deploy',
+  url: 'https://github.com/ohi-stack/onegodian-app-deploy',
+  deployTarget: 'https://app.onegodian.com',
+  canonicalHost: 'app.onegodian.com'
 };
 
-export const accPositioning = {
-  name: 'ACC™ Agent Command Console',
-  shortName: 'ACC™',
-  eyebrow: 'OPERATOR-FACING COMMAND CONSOLE',
+export const domainStructure = [
+  { host: 'app.onegodian.com', role: 'Public/member-facing gateway for identity, education, membership, tools, certificates, products, media, and ecosystem access.' },
+  { host: 'console.onegodian.com', role: 'Operator/admin runtime surface.' },
+  { host: 'capital.onegodian.com', role: 'Capital operations.' },
+  { host: 'onegodian.org', role: 'Identity, education, community, and documentation.' },
+  { host: 'onegodian.com', role: 'Commerce, products, services, and payments.' }
+];
+
+export const appPositioning = {
+  name: 'OneGodian App',
+  shortName: 'OneGodian App™',
+  version: '1.1.0',
+  eyebrow: 'PUBLIC & MEMBER-FACING GATEWAY',
   summary:
-    'ACC™ is the dedicated operator interface for observing agents, coordinating workflows, opening approvals, and viewing operational telemetry across OneGodian systems.',
+    'The OneGodian App™ — the public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.',
   boundary:
-    'ACC is an interface only. Authority remains with OSCC, OCP, OEG, identity, registry, and audit services. ACC does not self-authorize agents, mint identity, write registry truth, or replace audit systems.'
+    'The app presents public and member-facing experiences. It links to OneGodian.org for identity, education, community, and documentation, and to OneGodian.com for commerce, products, services, and payments. Contributions are not processed directly in this app unless a payment backend is connected.'
 };
 
-export const authorityServices = [
-  {
-    key: 'oscc',
-    name: 'OSCC',
-    role: 'Source-of-control coordination and command authority.',
-    ownership: 'external-authority' as AccStatus
-  },
-  {
-    key: 'ocp',
-    name: 'OCP',
-    role: 'Policy authorization, privileged-action decisions, and approval gates.',
-    ownership: 'external-authority' as AccStatus
-  },
-  {
-    key: 'oeg',
-    name: 'OEG',
-    role: 'Execution gateway for authorized operational tasks and routes.',
-    ownership: 'external-authority' as AccStatus
-  },
-  {
-    key: 'identity',
-    name: 'Identity Service',
-    role: 'Operator identity, roles, sessions, and access claims.',
-    ownership: 'external-authority' as AccStatus
-  },
-  {
-    key: 'registry',
-    name: 'Registry Service',
-    role: 'Canonical records, entity references, agent registrations, and route metadata.',
-    ownership: 'external-authority' as AccStatus
-  },
-  {
-    key: 'audit',
-    name: 'Audit Service',
-    role: 'Immutable evidence, event trails, decision logs, and compliance records.',
-    ownership: 'external-authority' as AccStatus
-  }
+export const pluginShortcodes = [
+  '[onegodian_membership_cta]',
+  '[onegodian_members_pricing]',
+  '[onegodian_membership_resources]',
+  '[onegodian_member_certificates]',
+  '[onegodian_member_dashboard]',
+  '[onegodian_member_support]',
+  '[onegodian_contributors_page]',
+  '[onegodian_contributor_tiers]',
+  '[onegodian_creator_network]',
+  '[onegodian_affiliate_dashboard]',
+  '[onegodian_referral_link]',
+  '[onegodian_contributor_wall]',
+  '[onegodian_contributor_disclaimer]'
 ];
 
-export const consoleModules = [
-  {
-    title: 'Operator Dashboard',
-    href: '/dashboard',
-    status: 'live' as AccStatus,
-    description: 'At-a-glance operational posture, pending approvals, agent health, route readiness, and external authority status.'
-  },
-  {
-    title: 'Agents',
-    href: '/agents',
-    status: 'live' as AccStatus,
-    description: 'Operator registry view for agent records, health states, assigned capabilities, and control-plane bindings.'
-  },
-  {
-    title: 'Tasks',
-    href: '/tasks',
-    status: 'live' as AccStatus,
-    description: 'Queue-facing task triage for work items awaiting authorization, assignment, execution, verification, or audit closeout.'
-  },
-  {
-    title: 'Workflows',
-    href: '/workflows',
-    status: 'watch' as AccStatus,
-    description: 'Workflow run visibility, policy checkpoints, delegated steps, and handoffs between OSCC, OCP, and OEG.'
-  },
-  {
-    title: 'OCP Decisions',
-    href: '/ocp',
-    status: 'external-authority' as AccStatus,
-    description: 'Read-only policy and decision surface. OCP remains the authoritative system for approvals.'
-  },
-  {
-    title: 'OEG Routes',
-    href: '/oeg',
-    status: 'external-authority' as AccStatus,
-    description: 'Execution gateway route state, enabled tools, and authorized command paths. OEG remains the execution authority.'
-  },
-  {
-    title: 'Adapters',
-    href: '/adapters',
-    status: 'watch' as AccStatus,
-    description: 'Connector readiness for supported services without merging ACC into any downstream application or plugin repository.'
-  },
-  {
-    title: 'Approvals',
-    href: '/approvals',
-    status: 'live' as AccStatus,
-    description: 'Human operator review queues for privileged actions, policy exceptions, and deployment gates.'
-  },
-  {
-    title: 'Audit',
-    href: '/audit',
-    status: 'external-authority' as AccStatus,
-    description: 'Evidence and event viewer backed by the external audit service; ACC never becomes the audit source of truth.'
-  },
-  {
-    title: 'Deployments',
-    href: '/deployments',
-    status: 'live' as AccStatus,
-    description: 'Deployment posture for acc.onegodian.com, release markers, environment checks, and repository separation.'
-  }
+export const homepageSections = [
+  { title: 'OneGodian Identity', href: '/members', description: 'Member identity entry points, certificates, resources, and ecosystem access aligned with OneGodian.org.' },
+  { title: 'Membership', href: '/members', description: 'Membership calls to action, pricing references, member resources, dashboard access, certificates, and support.' },
+  { title: 'Contributors', href: '/contributors', description: 'Voluntary public support for products, education, media, technology, membership, and community infrastructure.' },
+  { title: 'Creator Network', href: '/creator-network', description: 'A home for creators, affiliates, educators, and community voices who share OneGodian resources and campaigns.' },
+  { title: 'Affiliate Program', href: '/affiliate-dashboard', description: 'Application-aware affiliate structure with referral links, campaign assets, updates, and compliance notices.' },
+  { title: 'Certificates', href: '/certificates', description: 'Member certificate references and recognition pathways connected to the plugin bridge.' },
+  { title: 'Products', href: '/products', description: 'Product discovery and commerce pathways that keep purchases on OneGodian.com.' },
+  { title: 'Media', href: '/media', description: 'Public videos, updates, education media, campaigns, and creator-ready materials.' },
+  { title: 'Tools', href: '/tools', description: 'Member and public utilities, resource links, and operational helpers exposed through the app surface.' },
+  { title: 'Education', href: '/learning', description: 'Learning paths, community education, resources, and documentation linked to OneGodian.org.' },
+  { title: 'Ecosystem', href: '/ecosystem', description: 'A domain-aware map of OneGodian public, commerce, operator, capital, and community surfaces.' }
 ];
 
+export const dashboardModules = [
+  { title: 'Members', href: '/members', status: 'plugin-bridge' as AppStatus, description: 'Membership CTA, pricing references, resources, certificates, member dashboard, and support entry points.' },
+  { title: 'Contributors', href: '/contributors', status: 'available' as AppStatus, description: 'Voluntary support tiers and contributor information for public-facing OneGodian infrastructure.' },
+  { title: 'Creator Network', href: '/creator-network', status: 'available' as AppStatus, description: 'Application gateway for creators, affiliates, educators, and community voices.' },
+  { title: 'Affiliate Dashboard', href: '/affiliate-dashboard', status: 'coming-soon' as AppStatus, description: 'Structured affiliate workspace for referral links, campaign assets, updates, notices, and application status.' },
+  { title: 'Referral Links', href: '/referral-links', status: 'coming-soon' as AppStatus, description: 'Reserved referral-link workspace connected to the WordPress plugin bridge; no earnings logic is active here.' },
+  { title: 'Contributor Wall', href: '/contributor-wall', status: 'plugin-bridge' as AppStatus, description: 'Recognition surface for contributor acknowledgements when published by the plugin bridge.' },
+  { title: 'Certificates', href: '/certificates', status: 'plugin-bridge' as AppStatus, description: 'Member certificate access and verification references powered by current membership shortcode work.' },
+  { title: 'Products', href: '/products', status: 'available' as AppStatus, description: 'Product discovery with commerce and payment paths kept on OneGodian.com.' },
+  { title: 'Media', href: '/media', status: 'available' as AppStatus, description: 'Media hub for education, campaigns, creator updates, community stories, and ecosystem announcements.' },
+  { title: 'Learning', href: '/learning', status: 'available' as AppStatus, description: 'Education resources, learning paths, documentation, and community links aligned with OneGodian.org.' },
+  { title: 'Registry', href: '/registry', status: 'available' as AppStatus, description: 'Public registry references for identity, certificates, modules, tools, and ecosystem records.' },
+  { title: 'Tools', href: '/tools', status: 'live' as AppStatus, description: 'Member and public utility catalog returned by the app tools API and exposed through this gateway.' },
+  { title: 'Settings', href: '/settings', status: 'live' as AppStatus, description: 'Member-facing app preferences, account links, domain guidance, and support routing.' }
+];
+
+export const contributorTiers = [
+  { name: 'Supporter', amount: '$11' },
+  { name: 'Builder', amount: '$33' },
+  { name: 'Sustainer', amount: '$77' },
+  { name: 'Founder Circle', amount: '$111' },
+  { name: 'Infrastructure Partner', amount: '$333+' },
+  { name: 'Custom Contribution', amount: 'Any amount' }
+];
+
+export const contributorNotice = 'Contributions are voluntary support payments. They are not equity, securities, loans, bonds, investment contracts, or promises of financial return.';
+
+export const membershipShortcodeMap = [
+  { label: 'Membership CTA', shortcode: '[onegodian_membership_cta]' },
+  { label: 'Membership Pricing', shortcode: '[onegodian_members_pricing]' },
+  { label: 'Membership Resources', shortcode: '[onegodian_membership_resources]' },
+  { label: 'Member Certificates', shortcode: '[onegodian_member_certificates]' },
+  { label: 'Member Dashboard', shortcode: '[onegodian_member_dashboard]' },
+  { label: 'Member Support', shortcode: '[onegodian_member_support]' }
+];
+
+export const affiliateDashboardItems = [
+  'Referral Link',
+  'Campaign Assets',
+  'Contributor Products',
+  'Creator Updates',
+  'Compliance Notice',
+  'Application Status'
+];
+
+export const tools = [
+  { name: 'Membership Bridge', href: '/members', description: 'Connects app visitors to membership CTA, pricing, resources, certificates, dashboard, and support.' },
+  { name: 'Contributor Tiers', href: '/contributors', description: 'Displays voluntary support tiers and the required non-investment contributor notice.' },
+  { name: 'Creator Network Application', href: '/creator-network', description: 'Routes creators, affiliates, educators, and community voices toward the Creator Network application.' },
+  { name: 'Affiliate Structure', href: '/affiliate-dashboard', description: 'Shows referral, campaign, product, update, compliance, and application-status sections without payment logic.' },
+  { name: 'Ecosystem Map', href: '/ecosystem', description: 'Clarifies the production roles for app, console, capital, .org, and .com domains.' }
+];
+
+// Backwards-compatible names used by existing components/pages during the app transition.
+export const accRepository = appRepository;
+export const accPositioning = appPositioning;
+export const consoleModules = dashboardModules;
+export const authorityServices = domainStructure.map((item) => ({ key: item.host, name: item.host, role: item.role, ownership: 'available' as AppStatus }));
 export const separationRules = [
-  'Do not merge ACC into QRV repositories.',
-  'Do not merge ACC into the OneGodian App repository.',
-  'Do not merge ACC into Capital repositories.',
-  'Do not merge ACC into OMOS repositories.',
-  'Do not merge ACC into WordPress plugin repositories.',
-  'Keep ACC operator-facing, noindex, and separate from public/member-facing products.'
+  'Use app.onegodian.com for public and member-facing access.',
+  'Use console.onegodian.com for operator and admin runtime work.',
+  'Use capital.onegodian.com for capital operations.',
+  'Use OneGodian.org for identity, education, community, and documentation.',
+  'Use OneGodian.com for commerce, products, services, and payments.',
+  'Keep contributor language voluntary, non-investment, and non-securities.'
 ];

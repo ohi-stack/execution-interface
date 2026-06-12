@@ -1,5 +1,5 @@
 import { ConsolePage } from '@/components/ConsolePage';
 
 export default function Page() {
-  return <ConsolePage href="/registry">Registry records are displayed through ACC only when backed by the external registry authority. ACC does not become the source of registry truth.</ConsolePage>;
+  return <ConsolePage href="/registry">Registry references organize identity, member certificates, module records, tools, and ecosystem entries without making the app a payment or securities system.</ConsolePage>;
 }

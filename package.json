@@ -1,13 +1,13 @@
 {
-  "name": "acc",
-  "version": "1.0.0",
+  "name": "onegodian-app-deploy",
+  "version": "1.1.0",
   "private": true,
-  "description": "ACC™ Agent Command Console — operator-facing command console for OneGodian operational surfaces.",
+  "description": "OneGodian App™ — public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ohi-stack/acc.git"
+    "url": "https://github.com/ohi-stack/onegodian-app-deploy.git"
   },
-  "homepage": "https://acc.onegodian.com",
+  "homepage": "https://app.onegodian.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

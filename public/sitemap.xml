@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://acc.onegodian.com/</loc></url>
+  <url><loc>https://app.onegodian.com/</loc></url>
+  <url><loc>https://app.onegodian.com/dashboard</loc></url>
+  <url><loc>https://app.onegodian.com/members</loc></url>
+  <url><loc>https://app.onegodian.com/contributors</loc></url>
+  <url><loc>https://app.onegodian.com/creator-network</loc></url>
+  <url><loc>https://app.onegodian.com/affiliate-dashboard</loc></url>
+  <url><loc>https://app.onegodian.com/referral-links</loc></url>
+  <url><loc>https://app.onegodian.com/contributor-wall</loc></url>
+  <url><loc>https://app.onegodian.com/certificates</loc></url>
+  <url><loc>https://app.onegodian.com/products</loc></url>
+  <url><loc>https://app.onegodian.com/media</loc></url>
+  <url><loc>https://app.onegodian.com/learning</loc></url>
+  <url><loc>https://app.onegodian.com/registry</loc></url>
+  <url><loc>https://app.onegodian.com/tools</loc></url>
+  <url><loc>https://app.onegodian.com/settings</loc></url>
+  <url><loc>https://app.onegodian.com/ecosystem</loc></url>
 </urlset>

@@ -4,8 +4,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      disallow: '/'
+      allow: '/'
     },
-    host: 'https://acc.onegodian.com'
+    host: 'https://app.onegodian.com',
+    sitemap: 'https://app.onegodian.com/sitemap.xml'
   };
 }

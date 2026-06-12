@@ -1,32 +1,40 @@
 import { NextResponse } from 'next/server';
-import { accPositioning, accRepository, authorityServices, consoleModules } from '@/lib/acc-content';
+import { appPositioning, appRepository, dashboardModules, domainStructure, pluginShortcodes, tools } from '@/lib/acc-content';
 
-export function accJson(body: Record<string, unknown>, init?: ResponseInit) {
+export function appJson(body: Record<string, unknown>, init?: ResponseInit) {
   const response = NextResponse.json(
     {
-      service: accPositioning.name,
-      repository: `${accRepository.owner}/${accRepository.name}`,
-      deployTarget: accRepository.deployTarget,
-      authorityBoundary: accPositioning.boundary,
+      service: appPositioning.name,
+      repository: `${appRepository.owner}/${appRepository.name}`,
+      deployTarget: appRepository.deployTarget,
+      domainRole: 'public/member-facing app gateway',
       ...body
     },
     init
   );
   response.headers.set('Cache-Control', 'no-store');
-  response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
-  response.headers.set('x-onegodian-surface', 'acc');
+  response.headers.set('x-onegodian-surface', 'app');
   return response;
 }
 
+export const accJson = appJson;
+
 export function manifestPayload() {
   return {
-    name: accPositioning.name,
-    shortName: accPositioning.shortName,
-    url: accRepository.deployTarget,
-    repository: accRepository.url,
-    interfaceOnly: true,
-    noPublicSignup: true,
-    modules: consoleModules,
-    authorities: authorityServices
+    name: appPositioning.name,
+    appName: 'OneGodian App',
+    shortName: appPositioning.shortName,
+    version: appPositioning.version,
+    url: appRepository.deployTarget,
+    repository: appRepository.url,
+    domainRole: 'public/member-facing app gateway',
+    modules: dashboardModules,
+    routes: ['/', ...dashboardModules.map((module) => module.href), '/ecosystem'],
+    wordpressPluginBridgeShortcodes: pluginShortcodes,
+    domains: domainStructure
   };
+}
+
+export function toolsPayload() {
+  return { tools };
 }

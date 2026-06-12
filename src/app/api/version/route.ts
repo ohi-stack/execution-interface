@@ -1,7 +1,8 @@
-import { accJson } from '@/lib/api';
+import { appJson } from '@/lib/api';
+import { appPositioning } from '@/lib/acc-content';
 
 export const dynamic = 'force-dynamic';
 
 export function GET() {
-  return accJson({ version: process.env.NEXT_PUBLIC_ACC_VERSION ?? '1.0.0' });
+  return appJson({ version: process.env.NEXT_PUBLIC_APP_VERSION ?? appPositioning.version });
 }

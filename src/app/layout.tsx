@@ -1,27 +1,26 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AppShell } from '@/components/AppShell';
-import { accPositioning, accRepository } from '@/lib/acc-content';
+import { appPositioning, appRepository } from '@/lib/acc-content';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(accRepository.deployTarget),
+  metadataBase: new URL(appRepository.deployTarget),
   title: {
-    default: accPositioning.name,
-    template: `%s | ${accPositioning.shortName}`
+    default: appPositioning.name,
+    template: `%s | ${appPositioning.shortName}`
   },
-  description: accPositioning.summary,
-  applicationName: accPositioning.name,
+  description: appPositioning.summary,
+  applicationName: appPositioning.name,
   alternates: { canonical: '/' },
   robots: {
-    index: false,
-    follow: false,
-    nocache: true
+    index: true,
+    follow: true
   },
   openGraph: {
-    title: accPositioning.name,
-    description: accPositioning.summary,
-    url: accRepository.deployTarget,
-    siteName: accPositioning.name,
+    title: appPositioning.name,
+    description: appPositioning.summary,
+    url: appRepository.deployTarget,
+    siteName: appPositioning.name,
     type: 'website'
   }
 };

@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import { navigation, openAppUrl } from '@/data/navigation';
+
+export function GlobalNavigation() {
+  return <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070607]/75 backdrop-blur-2xl"><div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between"><Link href="/" className="flex items-center gap-3"><span className="grid h-12 w-12 place-items-center rounded-2xl border border-[#D8B35A]/60 bg-[#D8B35A]/10 font-black text-[#F0D98A] shadow-gold">OM</span><span><strong className="block tracking-[0.24em] text-[#F0D98A]">OMOS™</strong><small className="text-slate-400">OMOS.OneGodian.com</small></span></Link><nav className="flex gap-2 overflow-x-auto pb-1"><>{navigation.map((item) => <Link key={item.href} href={item.href} className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-slate-200 transition hover:border-[#D8B35A]/60 hover:text-[#F0D98A]">{item.label}</Link>)}</><a href={openAppUrl} className="shrink-0 rounded-full bg-[#D8B35A] px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-black shadow-gold">Open App</a></nav></div></header>;
+}

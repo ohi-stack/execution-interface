@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export function CTASection({ title, href, label }: { title: string; href: string; label: string }) { return <section className="rounded-[2rem] border border-[#D8B35A]/30 bg-[#D8B35A]/10 p-6 md:p-8"><h2 className="text-3xl font-black text-white">{title}</h2><Link href={href} className="mt-5 inline-flex rounded-full bg-[#D8B35A] px-6 py-4 font-black text-black shadow-gold">{label}</Link></section>; }

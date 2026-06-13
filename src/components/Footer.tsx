@@ -1,0 +1,3 @@
+export function Footer() {
+  return <footer className="border-t border-white/10 px-4 py-10"><div className="mx-auto max-w-7xl text-sm leading-7 text-slate-400"><strong className="text-[#F0D98A]">Classification Notice: </strong>OMOS™ is a private framework for organizing OneGodian intellectual property, software architecture, identity systems, educational materials, and AI-era interaction standards. It does not replace civil law, does not assert governmental authority over non-participants, and does not create financial, legal, religious, or institutional obligations by itself.</div></footer>;
+}

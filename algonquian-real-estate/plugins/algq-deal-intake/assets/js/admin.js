@@ -1,0 +1,1 @@
+(function(){document.addEventListener('click',function(event){var trigger=event.target.closest('[data-algq-view]');if(!trigger){return;}var row=document.getElementById('algq-detail-'+trigger.getAttribute('data-algq-view'));if(row){row.classList.toggle('is-open');}});})();

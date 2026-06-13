@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export function FrameworkCard({ title, description, href }: { title: string; description: string; href: string }) { return <Link href={href} className="group rounded-3xl border border-white/10 bg-white/[0.055] p-6 backdrop-blur transition hover:-translate-y-1 hover:border-[#D8B35A]/60 hover:shadow-gold"><h3 className="text-2xl font-black text-white">{title}</h3><p className="mt-3 min-h-24 leading-7 text-slate-300">{description}</p><span className="mt-5 inline-block font-black text-[#F0D98A]">Open →</span></Link>; }

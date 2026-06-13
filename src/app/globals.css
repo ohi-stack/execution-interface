@@ -1,44 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  color-scheme: dark;
-}
-
+:root { color-scheme: dark; }
 * { box-sizing: border-box; }
-
-html { background: #020617; }
-
-body {
-  min-height: 100vh;
-  margin: 0;
-  background:
-    radial-gradient(circle at 12% 0%, rgba(251, 191, 36, 0.20), transparent 32rem),
-    radial-gradient(circle at 90% 4%, rgba(147, 51, 234, 0.20), transparent 30rem),
-    linear-gradient(135deg, #020617 0%, #0f172a 52%, #020617 100%);
-  color: #f8fafc;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(103, 232, 249, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(129, 140, 248, 0.05) 1px, transparent 1px);
-  background-size: 42px 42px;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent 80%);
-}
-
+html { background: #070607; scroll-behavior: smooth; }
+body { min-height: 100vh; margin: 0; background: radial-gradient(circle at 12% 0%, rgba(216,179,90,.20), transparent 32rem), radial-gradient(circle at 86% 8%, rgba(111,60,255,.24), transparent 34rem), linear-gradient(135deg, #070607 0%, #071827 45%, #0B1E2E 100%); color: #F5F7FA; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(240,217,138,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(111,60,255,.06) 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 82%); }
 a { text-decoration: none; }
-
-::selection { background: rgba(103, 232, 249, 0.28); color: white; }
-
-@layer utilities {
-  .shadow-cyan { box-shadow: 0 18px 60px rgba(34, 211, 238, 0.16); }
-  .shadow-gold { box-shadow: 0 18px 60px rgba(251, 191, 36, 0.18); }
-}
+::selection { background: rgba(216,179,90,.35); color: white; }
+@layer utilities { .shadow-gold { box-shadow: 0 18px 70px rgba(216,179,90,.22); } }

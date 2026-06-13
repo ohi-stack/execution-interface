@@ -1,7 +1,3 @@
-import { accJson, manifestPayload } from '@/lib/api';
-
-export const dynamic = 'force-dynamic';
-
-export function GET() {
-  return accJson({ manifest: manifestPayload() });
-}
+import { NextResponse } from 'next/server';
+import { manifest } from '@/data/manifest';
+export function GET() { return NextResponse.json(manifest); }

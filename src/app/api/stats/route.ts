@@ -1,16 +1,8 @@
-import { appJson } from '@/lib/api';
-import { dashboardModules, domainStructure, pluginShortcodes, tools } from '@/lib/acc-content';
-
-export const dynamic = 'force-dynamic';
-
+import { NextResponse } from 'next/server';
+import { routes } from '@/data/omos-pages';
+import { tools } from '@/data/tools';
+import { statusModules } from '@/data/status';
 export function GET() {
-  return appJson({
-    stats: {
-      modules: dashboardModules.length,
-      routes: dashboardModules.length + 2,
-      domains: domainStructure.length,
-      pluginBridgeShortcodes: pluginShortcodes.length,
-      tools: tools.length
-    }
-  });
+  const counts = statusModules.reduce<Record<string, number>>((acc, module) => { acc[module.status] = (acc[module.status] ?? 0) + 1; return acc; }, {});
+  return NextResponse.json({ routeCount: routes.length, toolCount: tools.length, moduleCount: statusModules.length, statusCounts: counts });
 }

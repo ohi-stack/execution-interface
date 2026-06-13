@@ -1,0 +1,2 @@
+import { statusModules } from '@/data/status';
+export function StatusGrid() { return <div className="grid gap-4 md:grid-cols-3">{statusModules.map((module) => <article key={module.name} className="rounded-3xl border border-white/10 bg-white/[0.055] p-5"><h3 className="font-black text-white">{module.name}</h3><p className="mt-4 inline-flex rounded-full border border-[#D8B35A]/40 px-3 py-1 text-sm font-bold text-[#F0D98A]">{module.status}</p></article>)}</div>; }

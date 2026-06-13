@@ -1,0 +1,3 @@
+import type { Metadata } from 'next'; import { FrameworkCard } from '@/components/FrameworkCard'; import { tools } from '@/data/tools'; import { omosDefinition } from '@/data/omos-pages';
+export const metadata: Metadata = { title: 'Framework', description: 'OMOS framework cards and operating-system definition.' };
+export default function Page(){return <main className="space-y-8"><h1 className="text-5xl font-black text-white">OMOS Framework</h1><p className="max-w-4xl text-lg leading-8 text-slate-300">{omosDefinition}</p><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{tools.slice(0,6).map(t=><FrameworkCard key={t.href} {...t}/>)}</div></main>}

@@ -76,3 +76,10 @@ Command Center Reporting
 - Contract Reporting
 - Acquisition Metrics
 - Funding Metrics
+
+## Algonquian Tenant Management
+
+- Dedicated plugin: `algonquian-real-estate/plugins/algq-tenant-management/algq-tenant-management.php`.
+- Platform bridge: `algonquian-real-estate/plugins/algq-platform/includes/tenant-management-integration.php`.
+- When the dedicated plugin is active, the platform tenant module links to `/tenants`.
+- When it is inactive, the platform bridge preserves fallback tenant-module shortcode behavior with `[algq_platform_tenant_fallback]`.

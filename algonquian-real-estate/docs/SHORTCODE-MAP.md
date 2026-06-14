@@ -32,3 +32,26 @@ Always use:
 Content
 [/vc_column_text]
 ```
+
+## Algonquian Tenant Management
+
+Dedicated plugin folder: `algonquian-real-estate/plugins/algq-tenant-management/`.
+
+Public and operations shortcodes:
+
+[algq_tenant_center]
+[algq_tenant_application]
+[algq_rent_payment]
+[algq_maintenance_request]
+[algq_tenant_forms]
+[algq_tenant_portal]
+[algq_tenant_dashboard]
+[algq_lease_management]
+[algq_rent_ledger]
+[algq_maintenance_tickets]
+[algq_tenant_documents]
+[algq_move_in_out_inspection]
+
+Platform bridge shortcode:
+
+[algq_platform_tenant_module]

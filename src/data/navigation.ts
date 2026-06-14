@@ -7,6 +7,7 @@ export const navigation = [
   { label: 'Belief Mapper', href: '/belief-mapper' },
   { label: 'System Prompt', href: '/system-prompt' },
   { label: 'Docs', href: '/docs' },
+  { label: 'Calendar', href: '/calendar' },
   { label: 'Status', href: '/status' }
 ];
 export const openAppUrl = 'https://app.onegodian.com/omos';

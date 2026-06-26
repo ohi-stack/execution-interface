@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.3",
+  "Category": "Game",
+  "Description": "OneGodian Rise V1 prototype foundation",
+  "Modules": [
+    {
+      "Name": "OneGodianRiseV1",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}

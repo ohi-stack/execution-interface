@@ -1,0 +1,17 @@
+.onegodian-members-admin .onegodian-members-panel {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-top: 0;
+    padding: 20px;
+}
+
+.onegodian-members-admin pre {
+    background: #f6f7f7;
+    border: 1px solid #dcdcde;
+    overflow: auto;
+    padding: 12px;
+}
+
+.onegodian-members-checklist li {
+    margin: 8px 0;
+}

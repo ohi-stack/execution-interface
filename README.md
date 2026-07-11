@@ -86,3 +86,21 @@ https://acc.onegodian.com
 ```
 
 The app ships noindex headers and `robots.txt` disallow rules because it is operator-facing only.
+
+## OneGodian Members v2.1.0 package artifact
+
+Generate the WordPress production-candidate package with:
+
+```bash
+scripts/package-onegodian-members.sh
+```
+
+The generated ZIP is written to:
+
+```text
+dist/onegodian-members-v2.1.0-platform-services-edition.zip
+```
+
+The ZIP is intentionally ignored by Git so pushes do not include generated binary artifacts. The build source lives in `wordpress-plugins/onegodian-members-v2.1.0-platform-services-edition/` and consolidates the requested OneGodian Members functionality into v2.1.0 Platform Services Edition, including tabbed admin UI, BuddyPress/community hooks, auto pages, certificates/PDFs/digital IDs, WooCommerce and Stripe boundaries, app bridge, protected content, REST endpoints, and platform service boundaries for LMS, Belief Mapper, Media, Galaxy, Registry, Certificate, Dashboard, Auth, and RBAC.
+
+The package README contains the requested feature inventory for the historical source packages, and the production checklist captures packaging and runtime validation status.

@@ -104,3 +104,26 @@ dist/onegodian-members-v2.1.0-platform-services-edition.zip
 The ZIP is intentionally ignored by Git so pushes do not include generated binary artifacts. The build source lives in `wordpress-plugins/onegodian-members-v2.1.0-platform-services-edition/` and consolidates the requested OneGodian Members functionality into v2.1.0 Platform Services Edition, including tabbed admin UI, BuddyPress/community hooks, auto pages, certificates/PDFs/digital IDs, WooCommerce and Stripe boundaries, app bridge, protected content, REST endpoints, and platform service boundaries for LMS, Belief Mapper, Media, Galaxy, Registry, Certificate, Dashboard, Auth, and RBAC.
 
 The package README contains the requested feature inventory for the historical source packages, and the production checklist captures packaging and runtime validation status.
+
+## ONEGODIAN Capital production architecture notes
+
+This app now exposes public routing and positioning for the ONEGODIAN Capital product lines while keeping QRV Network as the infrastructure layer:
+
+- `/zolfi` presents Zolfi as ONEGODIAN Capital’s blockchain security, smart contract intelligence, and post-quantum readiness product line. Source reference: `ohi-stack/zolfi-platform`.
+- `/instryx` presents INSTRYX as ONEGODIAN Capital’s infrastructure intelligence, investment readiness, financial workflow, and execution analytics product line. Source reference: `ohi-stack/instryx-financial-interface`.
+- `/verify` and `/registry` point verification and proof workflows to QRV Network.
+
+Infrastructure mapping:
+
+- `capital.onegodian.com/zolfi` — public Zolfi page
+- `capital.onegodian.com/instryx` — public INSTRYX page
+- `api.zolfi.qrv.network` — Zolfi API/backend
+- `dev.zolfi.qrv.network` — Zolfi developer docs
+- `status.zolfi.qrv.network` — Zolfi monitoring
+- `verify.qrv.network` — verification
+- `registry.qrv.network` — registry/proof layer
+
+Release checklist:
+
+- Confirm navigation, footer, metadata, CTAs, disclosure references, verification references, product cards, sitemap data, and manifest data are aligned.
+- Run `npm install`, `npm run lint`, and `npm run build` before deployment.

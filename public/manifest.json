@@ -1,10 +1,32 @@
 {
   "name": "OneGodian App",
   "short_name": "OneGodian App",
-  "description": "Public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
+  "description": "OneGodian gateway with OMOS operations plus ONEGODIAN Capital Zolfi and INSTRYX product-line access backed by QRV Network verification and registry infrastructure.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#020617",
-  "theme_color": "#fbbf24"
+  "theme_color": "#fbbf24",
+  "shortcuts": [
+    {
+      "name": "Zolfi",
+      "url": "/zolfi",
+      "description": "Blockchain security, smart contract intelligence, and post-quantum readiness."
+    },
+    {
+      "name": "INSTRYX",
+      "url": "/instryx",
+      "description": "Infrastructure intelligence, investment readiness, financial workflow, and execution analytics."
+    },
+    {
+      "name": "Verify",
+      "url": "/verify",
+      "description": "QRV Network verification layer."
+    },
+    {
+      "name": "Registry",
+      "url": "/registry",
+      "description": "QRV Network registry and proof layer."
+    }
+  ]
 }

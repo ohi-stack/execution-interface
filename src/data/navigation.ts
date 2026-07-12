@@ -6,6 +6,10 @@ export const navigation = [
   { label: 'OHI Pipeline', href: '/ohi-pipeline' },
   { label: 'Belief Mapper', href: '/belief-mapper' },
   { label: 'System Prompt', href: '/system-prompt' },
+  { label: 'Zolfi', href: '/zolfi' },
+  { label: 'INSTRYX', href: '/instryx' },
+  { label: 'Verify', href: '/verify' },
+  { label: 'Registry', href: '/registry' },
   { label: 'Docs', href: '/docs' },
   { label: 'Calendar', href: '/calendar' },
   { label: 'Status', href: '/status' }

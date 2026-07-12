@@ -12,8 +12,22 @@
   <url><loc>https://app.onegodian.com/products</loc></url>
   <url><loc>https://app.onegodian.com/media</loc></url>
   <url><loc>https://app.onegodian.com/learning</loc></url>
+  <url><loc>https://app.onegodian.com/zolfi</loc></url>
+  <url><loc>https://app.onegodian.com/zolfi/security</loc></url>
+  <url><loc>https://app.onegodian.com/zolfi/contracts</loc></url>
+  <url><loc>https://app.onegodian.com/zolfi/verification</loc></url>
+  <url><loc>https://app.onegodian.com/zolfi/research</loc></url>
+  <url><loc>https://app.onegodian.com/instryx</loc></url>
+  <url><loc>https://app.onegodian.com/instryx/requests</loc></url>
+  <url><loc>https://app.onegodian.com/instryx/approvals</loc></url>
+  <url><loc>https://app.onegodian.com/instryx/issuance</loc></url>
+  <url><loc>https://app.onegodian.com/instryx/audit</loc></url>
+  <url><loc>https://app.onegodian.com/instryx/trace</loc></url>
+  <url><loc>https://app.onegodian.com/verify</loc></url>
   <url><loc>https://app.onegodian.com/registry</loc></url>
   <url><loc>https://app.onegodian.com/tools</loc></url>
   <url><loc>https://app.onegodian.com/settings</loc></url>
+  <url><loc>https://app.onegodian.com/docs</loc></url>
+  <url><loc>https://app.onegodian.com/status</loc></url>
   <url><loc>https://app.onegodian.com/ecosystem</loc></url>
 </urlset>

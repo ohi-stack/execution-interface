@@ -14,3 +14,6 @@ a { text-decoration: none; }
 .ohi-lane { animation: ohi-lane-scan 3.2s ease-in-out infinite; }
 .ohi-pulse { animation: ohi-prompt-pulse 2.8s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .ohi-lane, .ohi-pulse { animation: none; } }
+@keyframes ohi-cycle-transfer { 0% { transform: translateX(-3%); opacity: .72; } 50% { transform: translateX(3%); opacity: 1; } 100% { transform: translateX(-3%); opacity: .72; } }
+.ohi-cycle-motion { animation: ohi-cycle-transfer 2.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ohi-cycle-motion { animation: none; } }

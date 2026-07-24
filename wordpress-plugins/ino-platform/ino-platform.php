@@ -2,8 +2,8 @@
 /**
  * Plugin Name: INO Platform
  * Plugin URI: https://onegodian.com
- * Description: Foundation plugin for INO membership, identity, genealogy, governance, treasury, housing, certificates, volunteers, forms, REST endpoints, and BuddyPress/BuddyBoss compatibility.
- * Version: 0.1.0
+ * Description: Digital operating system for the Indigenous Nation of Onegodia integrating public website, membership, governance, programs, records, housing, grants, volunteers, communications, administration, REST endpoints, and WordPress ecosystem compatibility.
+ * Version: 0.2.0
  * Requires at least: 6.3
  * Requires PHP: 7.4
  * Author: OHI Stack
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('INO_PLATFORM_VERSION', '0.1.0');
+define('INO_PLATFORM_VERSION', '0.2.0');
 define('INO_PLATFORM_FILE', __FILE__);
 define('INO_PLATFORM_DIR', plugin_dir_path(__FILE__));
 define('INO_PLATFORM_URL', plugin_dir_url(__FILE__));

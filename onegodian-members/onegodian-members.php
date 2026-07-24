@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: OneGodian Members
- * Description: Modern WooCommerce-powered membership, contributor, creator network, and affiliate widgets for ONEGODIAN.
- * Version: 1.7.1
+ * Plugin Name: INO Platform
+ * Description: Digital operating system for the Indigenous Nation of Onegodia: public website, membership, governance, records, programs, housing, grants, volunteers, communications, certificates, and administration.
+ * Version: 1.8.0
  * Author: ONEGODIAN, LLC
  * Text Domain: onegodian-members
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('OGM_VERSION', '1.7.1');
+define('OGM_VERSION', '1.8.0');
 define('OGM_PLUGIN_FILE', __FILE__);
 define('OGM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('OGM_PLUGIN_URL', plugin_dir_url(__FILE__));

@@ -20,7 +20,9 @@ class INO_Platform_Identity extends INO_Platform_Module {
         return array(
             'module' => 'identity',
             'label' => 'Identity',
-            'description' => 'Identity verification with ancestry safeguard gates before privileged access.',
+            'description' => 'Identity declarations with self-declared, family-attested, document-supported, institutionally reviewed, and unverified evidence levels while separating ancestry, INO membership, and external governmental or tribal recognition.',
+            'evidence_levels' => array('self_declared', 'family_attested', 'document_supported', 'institutionally_reviewed', 'unverified'),
+            'recognition_boundaries' => array('ancestry', 'ino_membership', 'external_governmental_or_tribal_recognition'),
             'post_type' => 'ino_record',
             'capability' => $this->capability(),
         );

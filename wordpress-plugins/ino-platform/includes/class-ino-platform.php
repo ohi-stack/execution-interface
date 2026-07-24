@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) {
 }
 
 require_once INO_PLATFORM_DIR . 'includes/class-ino-platform-module.php';
+require_once INO_PLATFORM_DIR . 'includes/class-ino-platform-generic-module.php';
 require_once INO_PLATFORM_DIR . 'includes/class-ino-platform-security.php';
 require_once INO_PLATFORM_DIR . 'includes/class-ino-platform-membership.php';
 require_once INO_PLATFORM_DIR . 'includes/class-ino-platform-identity.php';
@@ -41,6 +42,19 @@ final class INO_Platform {
             'certificates' => new INO_Platform_Certificates($this),
             'volunteers' => new INO_Platform_Volunteers($this),
             'forms' => new INO_Platform_Forms($this),
+            'public_website' => new INO_Platform_Generic_Module($this, 'public_website', 'Public Website', 'Public information portal for INO identity, governance documents, programs, housing initiatives, economic development, news, videos, downloads, search, contact, subscriptions, support, volunteering, applications, and certificate verification.', array('learn_about_ino', 'onegodian_identity', 'governance_documents', 'program_directory', 'housing_initiatives', 'economic_development', 'news_articles', 'videos', 'public_documents', 'site_search', 'contact', 'subscribe', 'support_mission', 'volunteer', 'apply_membership', 'verify_certificates'), 'read', '/public-website', 'page'),
+            'programs' => new INO_Platform_Generic_Module($this, 'programs', 'Programs', 'Program catalog, online applications, document upload requirements, status tracking, notifications, and completion certificates.', array('browse_programs', 'apply_online', 'upload_documents', 'track_status', 'complete_requirements', 'notifications', 'completion_certificates')),
+            'documents' => new INO_Platform_Generic_Module($this, 'documents', 'Document Center', 'Secure uploads, searchable files, download permissions, version history, shared folders, and document requests.', array('secure_uploads', 'searchable_files', 'download_permissions', 'version_history', 'shared_folders', 'document_requests'), 'ino_manage_records', '/documents', 'ino_record'),
+            'communications' => new INO_Platform_Generic_Module($this, 'communications', 'Communications', 'Direct messages, group messaging, email notifications, SMS provider boundary, announcements, notification center, and contact preferences.', array('direct_messages', 'group_messaging', 'email_notifications', 'sms_integration', 'announcements', 'notification_center')),
+            'learning' => new INO_Platform_Generic_Module($this, 'learning', 'Learning Center', 'Courses, lessons, quizzes, certificates, progress tracking, downloads, live classes, and webinars.', array('courses', 'lessons', 'quizzes', 'certificates', 'progress_tracking', 'downloads', 'live_classes', 'webinars')),
+            'events' => new INO_Platform_Generic_Module($this, 'events', 'Events', 'Event registration, RSVP, reminders, check-in, and member event history.', array('register', 'rsvp', 'reminders', 'check_in', 'event_history')),
+            'marketplace' => new INO_Platform_Generic_Module($this, 'marketplace', 'Marketplace', 'Optional WooCommerce-compatible products, digital resources, service registrations, orders, and purchase history.', array('products', 'digital_resources', 'services', 'orders', 'purchase_history'), 'ino_read_member_area', '/marketplace', 'product', 'optional_boundary'),
+            'media_center' => new INO_Platform_Generic_Module($this, 'media_center', 'Media Center', 'Member photo, video, audio, album, comment, and sharing workflows.', array('photos', 'videos', 'audio', 'albums', 'comments', 'sharing')),
+            'maps' => new INO_Platform_Generic_Module($this, 'maps', 'Interactive Maps', 'Google Maps-compatible display boundary for communities, housing developments, events, offices, cultural sites, and service areas.', array('communities', 'housing_developments', 'events', 'offices', 'cultural_sites', 'service_areas')),
+            'reporting' => new INO_Platform_Generic_Module($this, 'reporting', 'Reporting & Analytics', 'Reports for membership, programs, volunteers, housing, treasury, grants, documents, certificates, engagement, compliance, and website activity.', array('membership_reports', 'program_reports', 'volunteer_reports', 'housing_reports', 'treasury_reports', 'grant_reports', 'document_reports', 'certificate_reports', 'engagement_reports', 'compliance_reports', 'website_activity'), 'ino_manage_records'),
+            'admin_tools' => new INO_Platform_Generic_Module($this, 'admin_tools', 'Administrative Portal', 'Unified administrative control panel for members, identity, citizenship, programs, volunteers, housing, grants, documents, certificates, events, communications, reports, forms, content, settings, checklist, documentation, and system status.', array('members', 'identity_heritage', 'citizenship', 'programs', 'volunteers', 'housing', 'treasury_grants', 'documents', 'certificates', 'events', 'communications', 'reports', 'forms', 'website_content', 'settings', 'production_checklist', 'documentation', 'system_status'), 'ino_manage_records'),
+            'integrations' => new INO_Platform_Generic_Module($this, 'integrations', 'Integrations', 'Integration boundaries for WordPress, WooCommerce, BuddyPress/BuddyBoss, Google Workspace, Google Maps, email, SMS, PDF generation, REST APIs, and calendars.', array('wordpress', 'woocommerce', 'buddypress_buddyboss', 'google_workspace', 'google_maps', 'email_providers', 'sms_providers', 'pdf_generation', 'rest_apis', 'calendar_systems'), 'ino_manage_records'),
+            'mobile' => new INO_Platform_Generic_Module($this, 'mobile', 'Mobile Experience', 'Responsive/PWA boundary for push notifications, QR-code scanning, and digital membership cards.', array('responsive_interface', 'pwa', 'push_notifications', 'qr_scanning', 'digital_membership_card')),
         );
         add_action('init', array($this, 'register_post_types'));
         add_action('init', array($this, 'register_shortcodes'));
@@ -77,7 +91,7 @@ final class INO_Platform {
     }
 
     public static function create_pages() {
-        $pages = array('ino-dashboard' => 'INO Dashboard', 'ino-member-intake' => 'INO Member Intake', 'ino-governance' => 'INO Governance');
+        $pages = array('ino-dashboard' => 'INO Dashboard', 'ino-member-intake' => 'INO Member Intake', 'ino-governance' => 'INO Governance', 'ino-programs' => 'INO Programs', 'ino-housing' => 'INO Housing', 'ino-volunteer' => 'INO Volunteer Portal', 'ino-documents' => 'INO Document Center', 'ino-certificates' => 'INO Certificate Verification');
         foreach ($pages as $slug => $title) {
             if (!get_page_by_path($slug)) {
                 wp_insert_post(array('post_title' => $title, 'post_name' => $slug, 'post_status' => 'publish', 'post_type' => 'page', 'post_content' => '[ino_platform module="' . esc_attr(str_replace('ino-', '', $slug)) . '"]'));
@@ -110,7 +124,18 @@ final class INO_Platform {
 
     public function render_shortcode($atts) {
         $atts = shortcode_atts(array('module' => 'dashboard'), $atts, 'ino_platform');
-        return '<div class="ino-platform-card"><h2>' . esc_html__('INO Platform', 'ino-platform') . '</h2><p>' . esc_html(sprintf(__('Module: %s', 'ino-platform'), sanitize_key($atts['module']))) . '</p></div>';
+        $module_key = sanitize_key($atts['module']);
+        $module = $this->module($module_key);
+        if (!$module && 'dashboard' === $module_key) {
+            $items = '';
+            foreach ($this->modules() as $item) {
+                $schema = $item->schema();
+                $status = isset($schema['operational_status']) ? $schema['operational_status'] : 'active_boundary';
+                $items .= '<li><strong>' . esc_html($item->label()) . '</strong> — ' . esc_html($schema['description']) . ' <em>(' . esc_html($status) . ')</em></li>';
+            }
+            return '<div class="ino-platform-card"><h2>' . esc_html__('INO Platform Digital Operating System', 'ino-platform') . '</h2><p>' . esc_html__('Unified public, member, governance, program, records, housing, grants, volunteer, communications, and administrative platform boundary. Features are marked as operational only when implemented, documented, tested, permission-controlled, and repeatable.', 'ino-platform') . '</p><ul>' . $items . '</ul></div>';
+        }
+        return '<div class="ino-platform-card"><h2>' . esc_html__('INO Platform', 'ino-platform') . '</h2><p>' . esc_html(sprintf(__('Module: %s', 'ino-platform'), $module_key)) . '</p></div>';
     }
 
     public function enqueue_assets() {

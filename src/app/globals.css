@@ -3,10 +3,12 @@
 @tailwind utilities;
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
-html { background: #070607; scroll-behavior: smooth; }
-body { min-height: 100vh; margin: 0; background: radial-gradient(circle at 12% 0%, rgba(216,179,90,.20), transparent 32rem), radial-gradient(circle at 86% 8%, rgba(111,60,255,.24), transparent 34rem), linear-gradient(135deg, #070607 0%, #071827 45%, #0B1E2E 100%); color: #F5F7FA; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+html { background: #071827; scroll-behavior: smooth; }
+body { min-height: 100vh; margin: 0; background: radial-gradient(circle at 12% 0%, rgba(216,179,90,.20), transparent 32rem), radial-gradient(circle at 86% 8%, rgba(111,60,255,.20), transparent 34rem), linear-gradient(135deg, #05070b 0%, #071827 48%, #0B1E2E 100%); color: #F5F1E8; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(240,217,138,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(111,60,255,.06) 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 82%); }
 a { text-decoration: none; }
+button, a, input, summary { min-height: 44px; }
+:focus-visible { outline: 2px solid #F0D98A; outline-offset: 3px; }
 ::selection { background: rgba(216,179,90,.35); color: white; }
 @layer utilities { .shadow-gold { box-shadow: 0 18px 70px rgba(216,179,90,.22); } }
 @keyframes ohi-lane-scan { 0%, 100% { transform: translateY(0); border-color: rgba(111,60,255,.35); } 50% { transform: translateY(-6px); border-color: rgba(216,179,90,.65); } }
@@ -17,3 +19,4 @@ a { text-decoration: none; }
 @keyframes ohi-cycle-transfer { 0% { transform: translateX(-3%); opacity: .72; } 50% { transform: translateX(3%); opacity: 1; } 100% { transform: translateX(-3%); opacity: .72; } }
 .ohi-cycle-motion { animation: ohi-cycle-transfer 2.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .ohi-cycle-motion { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } .ohi-lane, .ohi-pulse { animation: none; } }

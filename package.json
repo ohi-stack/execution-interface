@@ -15,7 +15,9 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint",
-    "test": "npm run check"
+    "test": "npm run check && node scripts/test-platform.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "smoke:pages": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.59.2",

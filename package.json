@@ -1,13 +1,13 @@
 {
-  "name": "onegodian-app-deploy",
+  "name": "ino-platform-app",
   "version": "1.1.0",
   "private": true,
-  "description": "OneGodian App™ — public and member-facing gateway for OneGodian identity, education, membership, tools, certificates, products, media, and ecosystem access.",
+  "description": "INO Platform Sync Node for authenticated workflows, synchronization, APIs, background jobs, and administration.",
   "repository": {
     "type": "git",
     "url": "https://github.com/ohi-stack/onegodian-app-deploy.git"
   },
-  "homepage": "https://app.onegodian.com",
+  "homepage": "https://app.indigenousnations.org",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,7 +17,9 @@
     "check": "npm run typecheck && npm run lint",
     "test": "npm run check && node scripts/test-platform.mjs",
     "smoke": "node scripts/smoke.mjs",
-    "smoke:pages": "node scripts/smoke.mjs"
+    "smoke:pages": "node scripts/smoke.mjs",
+    "prisma": "prisma",
+    "docker:build": "docker build -t ino-platform-app ."
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.59.2",
@@ -31,14 +33,24 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tailwindcss": "^3.4.13",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@auth/prisma-adapter": "latest",
+    "@prisma/client": "latest",
+    "@upstash/ratelimit": "latest",
+    "bullmq": "latest",
+    "ioredis": "latest",
+    "jose": "latest",
+    "next-auth": "latest",
+    "prisma": "latest",
+    "zod": "latest"
   },
   "devDependencies": {
     "@types/node": "20.19.39",
     "@types/react": "18.3.28",
-    "@types/react-dom": "^18.3.0"
+    "@types/react-dom": "^18.3.0",
+    "prettier": "latest"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   }
 }

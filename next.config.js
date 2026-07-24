@@ -1,34 +1,3 @@
 /** @type {import('next').NextConfig} */
-const securityHeaders = [
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy', value: 'no-referrer' },
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
-  { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }
-];
-
-const nextConfig = {
-  poweredByHeader: false,
-  async redirects() {
-    return [
-      {
-        source: '/academy',
-        destination: '/learning',
-        permanent: true
-      },
-      {
-        source: '/university',
-        destination: '/learning',
-        permanent: true
-      }
-    ];
-  },
-  async headers() {
-    return [
-      { source: '/:path*', headers: securityHeaders },
-      { source: '/api/:path*', headers: [...securityHeaders, { key: 'Cache-Control', value: 'no-store' }] }
-    ];
-  }
-};
-
+const nextConfig = { output: 'standalone', poweredByHeader: false };
 module.exports = nextConfig;

@@ -1,6 +1,6 @@
 import { capitalRoutes } from './capital-products';
 
-export const routes = ['/', '/framework', '/algorithm', '/protocol', '/ohi-pipeline', '/belief-mapper', '/system-prompt', '/implementation', '/docs', '/status', '/ecosystem', ...capitalRoutes];
+export const routes = ['/', '/framework', '/algorithm', '/protocol', '/ohi-output-pipeline', '/ohi-pipeline', '/belief-mapper', '/system-prompt', '/implementation', '/docs', '/status', '/ecosystem', ...capitalRoutes];
 export const omosDefinition = 'OMOS™ — the OneGodian Metaphysical Operating System™ — is the operational intelligence framework that organizes the OneGodian Algorithm™, the OneGodian Protocol™, OHI™ synthesis methods, identity and belief mapping, institutional classification, and implementation logic into one coherent system.';
 export const orbitNodes = ['Identity', 'Algorithm', 'Protocol', 'OHI', 'Belief Mapper', 'Implementation', 'Documentation'];
 export const decisionRule = 'Prefer the path that increases truth, clarity, coherence, dignity, and constructive unity while reducing distortion, fragmentation, needless conflict, and manipulation.';

@@ -15,4 +15,8 @@ button, a, input, summary { min-height: 44px; }
 @keyframes ohi-prompt-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(216,179,90,0); } 50% { box-shadow: 0 0 46px rgba(216,179,90,.22); } }
 .ohi-lane { animation: ohi-lane-scan 3.2s ease-in-out infinite; }
 .ohi-pulse { animation: ohi-prompt-pulse 2.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ohi-lane, .ohi-pulse { animation: none; } }
+@keyframes ohi-cycle-transfer { 0% { transform: translateX(-3%); opacity: .72; } 50% { transform: translateX(3%); opacity: 1; } 100% { transform: translateX(-3%); opacity: .72; } }
+.ohi-cycle-motion { animation: ohi-cycle-transfer 2.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ohi-cycle-motion { animation: none; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } .ohi-lane, .ohi-pulse { animation: none; } }

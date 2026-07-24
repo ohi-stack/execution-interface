@@ -1,0 +1,16 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+model SyncObject {
+  id String @id @default(cuid())
+  localId String @map("local_id")
+  wordpressId String? @map("wordpress_id")
+  resourceType String @map("resource_type")
+  sourceSystem String @map("source_system")
+  version String
+  checksum String
+  status String
+  updatedAt DateTime @map("updated_at")
+  lastSynced DateTime? @map("last_synced")
+  @@unique([resourceType, sourceSystem, localId])
+}
+model AuditLog { id String @id @default(cuid()) actor String? action String resource String? createdAt DateTime @default(now()) }

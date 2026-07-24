@@ -1,3 +1,3 @@
 import { NextResponse } from 'next/server';
-import { manifest } from '@/data/manifest';
-export function GET() { return NextResponse.json(manifest); }
+import { publicManifest } from '@/lib/platform';
+export function GET() { return NextResponse.json(publicManifest()); }

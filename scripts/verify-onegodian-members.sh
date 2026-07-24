@@ -2,10 +2,26 @@
 set -euo pipefail
 
 PLUGIN_SLUG="onegodian-members"
-PLUGIN_DIR="plugins/${PLUGIN_SLUG}"
+PLUGIN_DIR="${PLUGIN_SLUG}"
 MAIN_FILE="$PLUGIN_DIR/onegodian-members.php"
-OUTPUT_ZIP="onegodian-members-v1.7.1-woocommerce-sync.zip"
+OUTPUT_ZIP="onegodian-members-v1.8.0-ino-platform.zip"
 REQUIRED_SHORTCODES=(
+  ino_platform_overview
+  ino_public_portal
+  ino_identity_heritage
+  ino_programs_portal
+  ino_volunteer_portal
+  ino_housing_portal
+  ino_treasury_grants
+  ino_learning_center
+  ino_document_center
+  ino_communications
+  ino_media_center
+  ino_interactive_maps
+  ino_admin_portal
+  ino_security_compliance
+  ino_reporting_analytics
+  ino_certificate_verify
   onegodian_membership_cta
   onegodian_members_pricing
   onegodian_membership_resources
@@ -36,10 +52,10 @@ fail() {
 [ -d "$PLUGIN_DIR" ] || fail "Plugin directory missing: $PLUGIN_DIR"
 [ -f "$MAIN_FILE" ] || fail "Main plugin file missing: $MAIN_FILE"
 
-grep -q "Plugin Name: OneGodian Members" "$MAIN_FILE" || fail "Plugin Name header missing or incorrect"
-grep -q "Version: 1.7.1" "$MAIN_FILE" || fail "Plugin header version is not 1.7.1"
-if ! grep -Eq "(OGM_VERSION|const VERSION)[[:space:]=']+.*1\.7\.1" "$MAIN_FILE"; then
-  fail "Runtime version constant/equivalent is not 1.7.1"
+grep -Eq "Plugin Name: (INO Platform|OneGodian Members)" "$MAIN_FILE" || fail "Plugin Name header missing or incorrect"
+grep -q "Version: 1.8.0" "$MAIN_FILE" || fail "Plugin header version is not 1.8.0"
+if ! grep -Eq "(OGM_VERSION|const VERSION)[[:space:]=']+.*1\.8\.0" "$MAIN_FILE"; then
+  fail "Runtime version constant/equivalent is not 1.8.0"
 fi
 
 if command -v php >/dev/null 2>&1; then
@@ -49,20 +65,20 @@ else
   echo "php not available; skipping PHP syntax check."
 fi
 
-if grep -R "Stripe is not configured" "$PLUGIN_DIR" >/dev/null 2>&1; then
+if rg -q "Stripe is not configured" "$PLUGIN_DIR"; then
   fail "Public Stripe not-configured error still exists"
 fi
 
 for shortcode in "${REQUIRED_SHORTCODES[@]}"; do
-  grep -R "$shortcode" "$PLUGIN_DIR" >/dev/null 2>&1 || fail "Missing shortcode: $shortcode"
+  rg -q "$shortcode" "$PLUGIN_DIR" || fail "Missing shortcode: $shortcode"
 done
 
 for key in "${REQUIRED_PRODUCT_KEYS[@]}"; do
-  grep -R "$key" "$PLUGIN_DIR" >/dev/null 2>&1 || fail "Missing WooCommerce product mapping key: $key"
+  rg -q "$key" "$PLUGIN_DIR" || fail "Missing WooCommerce product mapping key: $key"
 done
 
-grep -R "add-to-cart" "$PLUGIN_DIR" >/dev/null 2>&1 || fail "WooCommerce add-to-cart routing not found"
-grep -R "Payments are handled through WooCommerce checkout" "$PLUGIN_DIR" >/dev/null 2>&1 || fail "WooCommerce admin notice not found"
+rg -q "add-to-cart" "$PLUGIN_DIR" || fail "WooCommerce add-to-cart routing not found"
+rg -q "Payments are handled through WooCommerce checkout" "$PLUGIN_DIR" || fail "WooCommerce admin notice not found"
 
 if [ -f "$OUTPUT_ZIP" ]; then
   unzip -t "$OUTPUT_ZIP" >/dev/null
@@ -74,4 +90,4 @@ else
   echo "ZIP not found yet; source verification passed."
 fi
 
-echo "OneGodian Members verification passed."
+echo "INO Platform verification passed."

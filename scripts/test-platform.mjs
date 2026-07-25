@@ -1,8 +1,10 @@
 import { readFileSync, existsSync } from 'node:fs';
 const odc=readFileSync('src/lib/odc.ts','utf8');
-for(const value of ['OneGodian Digital Coin','0x9eee1e3615efe0374a7588d2760db5ffb2d5ce98','777000000000','Ethereum Mainnet']) if(!odc.includes(value)) throw new Error(`missing canonical value: ${value}`);
-for(const route of ['health','manifest','token','contract','supply','status','ecosystem','announcements','docs']) if(!existsSync(`src/app/api/${route}/route.ts`)) throw new Error(`missing API: ${route}`);
-for(const status of ['Production','In Development','Private Beta','Under Review','Planned','Deprecated']) if(!odc.includes(status)) throw new Error(`missing feature status: ${status}`);
+for(const value of ['OneGodian Digital Coin','Onegodian DiFi Coin','0x9eee1e3615efe0374a7588d2760db5ffb2d5ce98','777000000000','Ethereum Mainnet']) if(!odc.includes(value)) throw new Error(`missing canonical value: ${value}`);
+for(const route of ['health','manifest','token','contract','status','features']) if(!existsSync(`src/app/api/${route}/route.ts`)) throw new Error(`missing API: ${route}`);
+for(const state of ['operational','degraded','partial-outage','major-outage','maintenance','in-development','planned','under-review','discontinued']) if(!odc.includes(state)) throw new Error(`missing service state: ${state}`);
+const explorer=readFileSync('src/lib/explorer.ts','utf8');
+for(const validation of ['{40}','{64}','ProviderUnavailableError','EXPLORER_API_KEY']) if(!explorer.includes(validation)) throw new Error(`missing explorer behavior: ${validation}`);
 const middleware=readFileSync('src/middleware.ts','utf8'); for(const control of ['Content-Security-Policy','Strict-Transport-Security','rate_limited','X-Request-ID']) if(!middleware.includes(control)) throw new Error(`missing security control: ${control}`);
-const wallet=readFileSync('src/app/dashboard/wallet-status/page.tsx','utf8'); if(!wallet.includes('Not Released')||!wallet.includes('seed-phrase')) throw new Error('wallet release boundary missing');
-console.log('ODC platform tests ok');
+const contract=readFileSync('src/app/api/contract/route.ts','utf8'); if(!contract.includes('verification-pending')||!contract.includes('null')) throw new Error('unknown contract controls must remain pending');
+console.log('ODC Sprint 2 platform tests ok');

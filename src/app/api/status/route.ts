@@ -1,2 +1,2 @@
-import { NextResponse } from 'next/server'; import { ODC, apiPayload, cacheHeaders, features } from '@/lib/odc';
-export function GET(){return NextResponse.json(apiPayload({ platform: 'operational', network: 'Ethereum Mainnet', features }),{headers:cacheHeaders})}
+import { NextResponse } from 'next/server'; import { apiSuccess, overallStatus, services } from '@/lib/odc';
+export function GET(){return NextResponse.json(apiSuccess({overall:overallStatus(),services,productionServices:services.filter(x=>x.production).length}))}

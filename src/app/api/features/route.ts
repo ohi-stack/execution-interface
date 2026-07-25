@@ -1,0 +1,1 @@
+import { NextResponse } from 'next/server'; import { apiSuccess, services } from '@/lib/odc'; export function GET(){return NextResponse.json(apiSuccess(services.map(({name,description,state,href})=>({name,description,status:state,href}))))}

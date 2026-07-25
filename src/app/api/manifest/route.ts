@@ -1,2 +1,4 @@
-import { NextResponse } from 'next/server'; import { ODC, apiPayload, cacheHeaders, featureStatuses } from '@/lib/odc';
-export function GET(){return NextResponse.json(apiPayload({platform:'ODC Production Platform',canonicalUrl:ODC.canonicalUrl,token:ODC,endpoints:['/api/health','/api/manifest','/api/token','/api/contract','/api/supply','/api/status','/api/ecosystem','/api/announcements','/api/docs'],featureStatuses,custody:false}),{headers:cacheHeaders})}
+import { NextResponse } from 'next/server'; import { ODC_TOKEN, apiSuccess } from '@/lib/odc';
+const publicRoutes=['/','/about','/token','/contract','/explorer','/docs','/docs/getting-started','/docs/token','/docs/contract','/docs/wallets','/docs/security','/docs/developers','/status','/roadmap','/disclosures','/api'];
+const apiRoutes=['/api/health','/api/manifest','/api/token','/api/contract','/api/network/status','/api/features','/api/status','/api/explorer/address/[address]','/api/explorer/transaction/[hash]'];
+export function GET(){return NextResponse.json(apiSuccess({platformName:'ODC Public Platform',version:'0.2.0',environment:process.env.NODE_ENV,canonicalUrl:ODC_TOKEN.primaryNode,publicRoutes,apiRoutes,token:ODC_TOKEN,buildCommit:process.env.VERCEL_GIT_COMMIT_SHA??null,deploymentTimestamp:process.env.DEPLOYMENT_TIMESTAMP??null}))}

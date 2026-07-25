@@ -1,13 +1,13 @@
 {
-  "name": "ino-platform-app",
-  "version": "1.1.0",
+  "name": "odc-production-platform",
+  "version": "1.0.0",
   "private": true,
-  "description": "INO Platform Sync Node for authenticated workflows, synchronization, APIs, background jobs, and administration.",
+  "description": "Production platform for OneGodian Digital Coin on Ethereum Mainnet.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ohi-stack/onegodian-app-deploy.git"
+    "url": "https://github.com/ohi-stack/onegodian-digital-coin.git"
   },
-  "homepage": "https://app.indigenousnations.org",
+  "homepage": "https://odc.onegodian.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

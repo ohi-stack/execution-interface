@@ -1,0 +1,2 @@
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Canonical contract" intro="One address on one canonical network."/><div className="grid three"><Card title="Overview"><p>The ODC contract is 0x9eee1e3615efe0374a7588d2760db5ffb2d5ce98.</p></Card><Card title="Current record"><p>The canonical network is Ethereum Mainnet (Chain ID 1).</p></Card><Card title="Important"><p>This site does not request transaction signatures, private keys, or seed phrases.</p></Card></div><CTA/></>}

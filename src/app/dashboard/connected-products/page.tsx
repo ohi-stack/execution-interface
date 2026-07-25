@@ -1,0 +1,1 @@
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="Connected Products"><Card title="Connected Products"><p>No products are connected. Product connections are planned.</p></Card></DashboardShell>}

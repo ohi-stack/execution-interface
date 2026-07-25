@@ -1,0 +1,2 @@
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Utility" intro="Current capabilities separated from future concepts."/><div className="grid three"><Card title="Overview"><p>The canonical token record and public data API are in Production.</p></Card><Card title="Current record"><p>Wallet custody and staking are Planned. Purchases, swaps, and rewards are Under Review.</p></Card><Card title="Important"><p>A registry status is descriptive, not a promise or delivery date.</p></Card></div><CTA/></>}

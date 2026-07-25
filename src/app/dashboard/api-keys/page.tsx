@@ -1,0 +1,1 @@
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="API Keys"><Card title="API Keys"><p>Private API keys are not required for the public read-only endpoints.</p></Card></DashboardShell>}

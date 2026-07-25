@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Contract Record"><Card title="Contract Record"><p>0x9eee1e3615efe0374a7588d2760db5ffb2d5ce98 · Chain ID 1.</p></Card></AdminShell>}

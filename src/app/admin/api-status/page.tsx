@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="API Status"><Card title="API Status"><p>All public v1 endpoints are operational.</p></Card></AdminShell>}

@@ -1,3 +1,2 @@
-import { NextResponse } from 'next/server';
-import { publicManifest } from '@/lib/platform';
-export function GET() { return NextResponse.json(publicManifest()); }
+import { NextResponse } from 'next/server'; import { ODC, apiPayload, cacheHeaders, featureStatuses } from '@/lib/odc';
+export function GET(){return NextResponse.json(apiPayload({platform:'ODC Production Platform',canonicalUrl:ODC.canonicalUrl,token:ODC,endpoints:['/api/health','/api/manifest','/api/token','/api/contract','/api/supply','/api/status','/api/ecosystem','/api/announcements','/api/docs'],featureStatuses,custody:false}),{headers:cacheHeaders})}

@@ -1,0 +1,2 @@
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Token overview" intro="The definitive public metadata for OneGodian Digital Coin."/><div className="grid three"><Card title="Overview"><p>ODC uses the ERC-20 standard on Ethereum Mainnet, Chain ID 1.</p></Card><Card title="Current record"><p>Maximum supply is 777,000,000,000 ODC and the token uses 18 decimals.</p></Card><Card title="Important"><p>Always verify the full contract address before interacting.</p></Card></div><CTA/></>}

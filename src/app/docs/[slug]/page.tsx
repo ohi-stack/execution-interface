@@ -1,18 +1,11 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { DocsEngine } from '@/components/docs/DocsEngine';
-import { docsBySlug, protocolDocs } from '@/data/protocol-docs';
-
-export function generateStaticParams() { return protocolDocs.map((doc) => ({ slug: doc.slug })); }
-
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const doc = docsBySlug.get(params.slug);
-  if (!doc) return { title: 'Protocol Documentation' };
-  return { title: doc.title, description: doc.summary };
-}
-
-export default function Page({ params }: { params: { slug: string } }) {
-  const doc = docsBySlug.get(params.slug);
-  if (!doc) notFound();
-  return <DocsEngine doc={doc} />;
-}
+import { notFound } from 'next/navigation'; import { PageHero } from '@/components/ODC';
+const content:Record<string,{title:string;sections:[string,string][]}>={
+'architecture':{title:'Architecture',sections:[['System design','Next.js serves the responsive public platform and read-only JSON APIs. Ethereum Mainnet is the authoritative token ledger; the platform publishes canonical metadata without signing transactions.'],['Trust boundary','Clients and the WordPress bridge consume public endpoints. No wallet private key, seed phrase, or custody data enters the platform.']]},
+'api':{title:'API',sections:[['Response contract','Every endpoint returns version, ISO-8601 timestamp, status, and data. Responses include public cache directives.'],['Endpoints','GET /api/health, /api/manifest, /api/token, /api/contract, /api/supply, /api/status, /api/ecosystem, /api/announcements, and /api/docs.']]},
+'deployment':{title:'Deployment',sections:[['Target','The main branch deploys to https://odc.onegodian.com using the standalone Next.js build.'],['Release flow','Install locked dependencies, run typecheck, lint, tests, and build; deploy immutable output; verify health and status; retain the prior release for rollback.']]},
+'security':{title:'Security',sections:[['Controls','CSP, HSTS, anti-framing, content-type, permissions-policy, referrer-policy, request IDs, input validation, and rate limiting protect the public surface.'],['Secret rotation','Keep versioned secrets in the deployment secret manager. Add the next version, deploy, validate, revoke the old version, and record the change. Never commit secrets.']]},
+'wordpress-bridge':{title:'WordPress Bridge',sections:[['Compatibility','The OneGodian ODC Plugin may read health, manifest, token, contract, supply, and status endpoints.'],['Safety','Treat responses as public, cached metadata. Do not transmit private keys, seed phrases, signing requests, or custody information.']]},
+'disclosures':{title:'Disclosures',sections:[['Scope','The platform provides public technical information, not financial, legal, or tax advice. Features not marked Production are unavailable.'],['Risk','Blockchain and digital assets involve smart-contract, network, regulatory, liquidity, and market risks. Independently verify the full contract.']]},
+'version-history':{title:'Version History',sections:[['v1.0.0 — 2026-07-25','Initial public platform, dashboard status surface, administration modules, API suite, security controls, SEO assets, and production documentation.']]},
+'production-checklist':{title:'Production Checklist',sections:[['Automated validation','Node boots; typecheck, lint, tests, and build pass; APIs return valid envelopes; health returns OK; manifest parses.'],['Release validation','Confirm status accuracy, responsive layouts, accessibility, security headers, documentation, production environment, monitoring, and rollback readiness.']]}}
+export function generateStaticParams(){return Object.keys(content).map(slug=>({slug}))} export default function Doc({params}:{params:{slug:string}}){const d=content[params.slug];if(!d)notFound();return <><PageHero eyebrow="Documentation" title={d.title} intro="ODC production platform operating guide."/><article className="prose-section">{d.sections.map(([h,p])=><section key={h}><h2>{h}</h2><p>{p}</p></section>)}</article></>}

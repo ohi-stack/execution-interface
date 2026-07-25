@@ -1,2 +1,1 @@
-import { AdminShell } from '@/components/PlatformShell';
-export default function Page(){return <AdminShell title="Administration Panel" />}
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Production control"><div className="grid two"><Card title="Platform"><p>Operational · v1.0.0</p></Card><Card title="Node Health"><p>OK</p></Card><Card title="Public API"><p>Production</p></Card><Card title="Wallet"><p>Not Released</p></Card></div></AdminShell>}

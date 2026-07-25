@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /admin
-Disallow: /dashboard
-Disallow: /api/auth
-Sitemap: https://OMOS.OneGodian.com/sitemap.xml

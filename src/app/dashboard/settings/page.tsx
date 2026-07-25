@@ -1,2 +1,1 @@
-import { DashboardShell } from '@/components/PlatformShell';
-export default function Page(){return <DashboardShell title="Settings" />}
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="Settings"><Card title="Settings"><p>Account preferences are in development.</p></Card></DashboardShell>}

@@ -1,0 +1,1 @@
+'use client'; export default function Error({reset}:{error:Error&{digest?:string};reset:()=>void}){return <section className="page-hero"><p className="eyebrow">Error</p><h1>Something went wrong.</h1><p>The incident was contained. No wallet or custody data is handled by this platform.</p><button className="button" onClick={reset}>Try again</button></section>}

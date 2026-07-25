@@ -1,0 +1,1 @@
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="Wallet Status"><Card title="Wallet Status"><p>Not Released. ODC provides no balances, wallet custody, private-key storage, or seed-phrase handling.</p></Card></DashboardShell>}

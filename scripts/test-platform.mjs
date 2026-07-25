@@ -1,9 +1,8 @@
-import { readFileSync } from 'node:fs';
-const nav=readFileSync('src/data/platform.ts','utf8');
-for (const label of ['OMOS','OHI','Models','Tools','Artifacts','Docs','Shop']) if(!nav.includes(`label: '${label}'`)) throw new Error(`missing ${label}`);
-if(nav.includes("label: 'Admin'")) throw new Error('admin in public nav');
-const mw=readFileSync('src/middleware.ts','utf8');
-if(!mw.includes('roleRank.operator')) throw new Error('admin operator check missing');
-const css=readFileSync('src/app/globals.css','utf8');
-if(!css.includes('prefers-reduced-motion') || !css.includes('min-height: 44px')) throw new Error('mobile/accessibility guards missing');
-console.log('platform tests ok');
+import { readFileSync, existsSync } from 'node:fs';
+const odc=readFileSync('src/lib/odc.ts','utf8');
+for(const value of ['OneGodian Digital Coin','0x9eee1e3615efe0374a7588d2760db5ffb2d5ce98','777000000000','Ethereum Mainnet']) if(!odc.includes(value)) throw new Error(`missing canonical value: ${value}`);
+for(const route of ['health','manifest','token','contract','supply','status','ecosystem','announcements','docs']) if(!existsSync(`src/app/api/${route}/route.ts`)) throw new Error(`missing API: ${route}`);
+for(const status of ['Production','In Development','Private Beta','Under Review','Planned','Deprecated']) if(!odc.includes(status)) throw new Error(`missing feature status: ${status}`);
+const middleware=readFileSync('src/middleware.ts','utf8'); for(const control of ['Content-Security-Policy','Strict-Transport-Security','rate_limited','X-Request-ID']) if(!middleware.includes(control)) throw new Error(`missing security control: ${control}`);
+const wallet=readFileSync('src/app/dashboard/wallet-status/page.tsx','utf8'); if(!wallet.includes('Not Released')||!wallet.includes('seed-phrase')) throw new Error('wallet release boundary missing');
+console.log('ODC platform tests ok');

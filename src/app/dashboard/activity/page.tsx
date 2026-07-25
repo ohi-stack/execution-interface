@@ -1,2 +1,1 @@
-import { DashboardShell } from '@/components/PlatformShell';
-export default function Page(){return <DashboardShell title="Activity" />}
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="Activity"><Card title="Activity"><p>No recent account activity.</p></Card></DashboardShell>}

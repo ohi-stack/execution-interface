@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Environment"><Card title="Environment"><p>Production target: odc.onegodian.com. Secrets are externally managed and rotation-ready.</p></Card></AdminShell>}

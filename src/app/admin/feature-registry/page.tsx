@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Feature Registry"><Card title="Feature Registry"><p>Production, In Development, Private Beta, Under Review, Planned, and Deprecated are the only platform statuses.</p></Card></AdminShell>}

@@ -1,3 +1,2 @@
-import type { Metadata } from 'next'; import { EcosystemMap } from '@/components/EcosystemMap';
-export const metadata: Metadata = { title: 'Ecosystem Map', description: 'OneGodian ecosystem connection map for OMOS implementation.' };
-export default function Page(){return <main className="space-y-8"><h1 className="text-5xl font-black text-white">Ecosystem Map</h1><EcosystemMap /></main>}
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Ecosystem" intro="Production integrations and clearly labeled future capabilities."/><div className="grid three"><Card title="Overview"><p>The public platform, read-only APIs, documentation, and WordPress bridge comprise the current production ecosystem.</p></Card><Card title="Current record"><p>The bridge consumes public token and status endpoints and never receives wallet secrets.</p></Card><Card title="Important"><p>Commerce, governance, treasury, and settlement capabilities are not live.</p></Card></div><CTA/></>}

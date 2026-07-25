@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Disclosures"><Card title="Disclosures"><p>Published disclosures are current for platform v1.</p></Card></AdminShell>}

@@ -1,0 +1,1 @@
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="Notifications"><Card title="Notifications"><p>No new notifications.</p></Card></DashboardShell>}

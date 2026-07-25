@@ -1,28 +1,5 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { roleRank, type Role } from '@/data/platform';
-
-const PUBLIC_API_PATHS = new Set([
-  '/api/health', '/api/ready', '/api/readiness', '/api/manifest', '/api/version', '/api/tools', '/api/stats',
-  '/api/sync/status', '/api/webhooks/wordpress', '/api/webhooks/plugin', '/api/integrations', '/api/auth/login',
-]);
-
-function withAppHeaders(response: NextResponse) {
-  response.headers.set('x-ino-surface', 'ino-platform-sync-node');
-  response.headers.set('strict-transport-security', 'max-age=31536000; includeSubDomains; preload');
-  response.headers.set('x-content-type-options', 'nosniff');
-  response.headers.set('x-frame-options', 'DENY');
-  response.headers.set('referrer-policy', 'strict-origin-when-cross-origin');
-  return response;
-}
-function sessionRole(req: NextRequest): Role | null { const token=req.cookies.get('omos_session')?.value; if(!token) return null; try { const [payload]=token.split('.'); const session=JSON.parse(Buffer.from(payload,'base64url').toString()) as {role:Role;expiresAt:number}; return session.expiresAt>Date.now()?session.role:null } catch { return null } }
-function redirectLogin(req: NextRequest){return NextResponse.redirect(new URL('/login', req.url));}
-export function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  if (process.env.NODE_ENV === 'production' && req.nextUrl.protocol !== 'https:') return withAppHeaders(NextResponse.redirect(new URL(`https://${req.headers.get('host')}${path}`, req.url)));
-  if (path.startsWith('/dashboard')) { const role=sessionRole(req); if(!role || roleRank[role]<roleRank.member) return withAppHeaders(redirectLogin(req)); }
-  if (path.startsWith('/admin')) { const role=sessionRole(req); if(!role || roleRank[role]<roleRank.operator) return withAppHeaders(NextResponse.redirect(new URL('/login?required=operator', req.url))); }
-  if (PUBLIC_API_PATHS.has(path) || path.startsWith('/api/jobs/') || !path.startsWith('/api/')) return withAppHeaders(NextResponse.next());
-  return withAppHeaders(NextResponse.json({ error: 'api_route_not_public', surface: 'ino-platform-sync-node' }, { status: 404 }));
-}
-export const config = { matcher: ['/((?!_next|favicon.ico).*)'] };
+import { NextResponse } from 'next/server'; import type { NextRequest } from 'next/server';
+const buckets=new Map<string,{count:number;reset:number}>(); const LIMIT=120; const WINDOW=60_000;
+function secure(res:NextResponse,requestId:string){res.headers.set('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://ethereum.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests");res.headers.set('Strict-Transport-Security','max-age=63072000; includeSubDomains; preload');res.headers.set('X-Content-Type-Options','nosniff');res.headers.set('X-Frame-Options','DENY');res.headers.set('Referrer-Policy','strict-origin-when-cross-origin');res.headers.set('Permissions-Policy','camera=(), microphone=(), geolocation=(), payment=()');res.headers.set('X-Request-ID',requestId);return res}
+export function middleware(req:NextRequest){const requestId=req.headers.get('x-request-id')?.slice(0,64)??crypto.randomUUID();const key=(req.ip??req.headers.get('x-forwarded-for')?.split(',')[0]??'unknown').slice(0,64);const now=Date.now();const current=buckets.get(key);const bucket=!current||current.reset<now?{count:1,reset:now+WINDOW}:{count:current.count+1,reset:current.reset};buckets.set(key,bucket);if(req.nextUrl.pathname.startsWith('/api/')&&bucket.count>LIMIT)return secure(NextResponse.json({version:'1.0.0',timestamp:new Date().toISOString(),status:'rate_limited',data:null},{status:429,headers:{'Retry-After':String(Math.ceil((bucket.reset-now)/1000))}}),requestId);console.info(JSON.stringify({level:'info',event:'http_request',requestId,method:req.method,path:req.nextUrl.pathname,timestamp:new Date().toISOString()}));return secure(NextResponse.next(),requestId)}
+export const config={matcher:['/((?!_next/static|_next/image|favicon.ico).*)']};

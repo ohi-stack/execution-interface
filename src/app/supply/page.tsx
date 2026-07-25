@@ -1,0 +1,2 @@
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Supply" intro="Transparent maximum-supply information."/><div className="grid three"><Card title="Overview"><p>The maximum token supply is 777,000,000,000 ODC.</p></Card><Card title="Current record"><p>ODC uses 18 decimal places. On-chain state remains authoritative for current circulating data.</p></Card><Card title="Important"><p>Maximum supply is not a statement of market value, availability, or circulation.</p></Card></div><CTA/></>}

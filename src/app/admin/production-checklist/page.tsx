@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Production Checklist"><Card title="Production Checklist"><p>Node, build, CI, APIs, health, status, manifest, mobile, headers, and documentation require verification on every release.</p></Card></AdminShell>}

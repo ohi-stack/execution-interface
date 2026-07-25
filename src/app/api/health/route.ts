@@ -1,3 +1,2 @@
-import { NextResponse } from 'next/server';
-import { APP_VERSION, PLATFORM_NAME, PRODUCTION_DOMAIN } from '@/lib/platform';
-export function GET() { return NextResponse.json({ status: 'ok', service: PLATFORM_NAME, domain: PRODUCTION_DOMAIN, version: APP_VERSION }); }
+import { NextResponse } from 'next/server'; import { apiPayload, cacheHeaders } from '@/lib/odc';
+export function GET(){return NextResponse.json(apiPayload({service:'odc-platform',health:'OK'}),{headers:cacheHeaders})}

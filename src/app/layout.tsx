@@ -1,15 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AppShell } from '@/components/AppShell';
-
-export const metadata: Metadata = {
-  metadataBase: new URL('https://OMOS.OneGodian.com'),
-  title: { default: 'OMOS.OneGodian.com | OneGodian Metaphysical Operating System™', template: '%s | OMOS™' },
-  description: 'The systems-architecture layer of the OneGodian ecosystem for protocol governance, alignment logic, AI interaction standards, and operational intelligence.',
-  applicationName: 'OMOS.OneGodian.com',
-  alternates: { canonical: '/' },
-  robots: { index: true, follow: true },
-  openGraph: { title: 'OMOS.OneGodian.com', description: 'OneGodian Metaphysical Operating System™ architecture node.', url: 'https://OMOS.OneGodian.com', siteName: 'OMOS.OneGodian.com', type: 'website' }
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) { return <html lang="en"><AppShell>{children}</AppShell></html>; }
+export const viewport: Viewport={width:'device-width',initialScale:1,themeColor:'#08111f'};
+export const metadata: Metadata={metadataBase:new URL('https://odc.onegodian.com'),title:{default:'OneGodian Digital Coin (ODC)',template:'%s | ODC'},description:'Canonical production platform for OneGodian Digital Coin on Ethereum Mainnet.',applicationName:'ODC Platform',alternates:{canonical:'/'},manifest:'/manifest.webmanifest',openGraph:{title:'OneGodian Digital Coin',description:'Canonical ODC token information and production status.',url:'https://odc.onegodian.com',siteName:'ODC',type:'website'},twitter:{card:'summary_large_image',title:'OneGodian Digital Coin',description:'Canonical ODC platform on Ethereum Mainnet.'}};
+export default function RootLayout({children}:{children:React.ReactNode}){const jsonLd={"@context":"https://schema.org","@type":"WebSite",name:'OneGodian Digital Coin',url:'https://odc.onegodian.com',publisher:{"@type":"Organization",name:'ONEGODIAN, LLC'}};return <html lang="en"><head><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(jsonLd)}}/></head><AppShell>{children}</AppShell></html>}

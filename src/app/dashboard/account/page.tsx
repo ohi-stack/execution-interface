@@ -1,0 +1,1 @@
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC'; export default function Page(){return <DashboardShell title="Account"><Card title="Account"><p>Account profile management is in development.</p></Card></DashboardShell>}

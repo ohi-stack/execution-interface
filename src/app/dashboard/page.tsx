@@ -1,2 +1,2 @@
-import { DashboardShell } from '@/components/PlatformShell';
-export default function Page(){return <DashboardShell title="Dashboard Overview" />}
+import { DashboardShell } from '@/components/DashboardShell'; import { Card } from '@/components/ODC';
+export default function Page(){return <DashboardShell title="Dashboard"><div className="grid two"><Card title="Wallet status"><p className="metric" style={{fontSize:'2rem'}}>Not Released</p><p>No balances, custody, or transaction controls are available.</p></Card><Card title="Connected products"><p>No products connected.</p></Card><Card title="Activity"><p>No recent account activity.</p></Card><Card title="Platform"><p>Public ODC information services are operational.</p></Card></div></DashboardShell>}

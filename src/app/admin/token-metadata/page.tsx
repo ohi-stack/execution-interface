@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Token Metadata"><Card title="Token Metadata"><p>ODC · OneGodian Digital Coin · ERC-20 · 18 decimals · Ethereum Mainnet.</p></Card></AdminShell>}

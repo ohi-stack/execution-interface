@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Node Health"><Card title="Node Health"><p>Application node status is OK. Use /api/health for monitoring.</p></Card></AdminShell>}

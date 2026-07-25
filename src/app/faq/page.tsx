@@ -1,0 +1,2 @@
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Frequently asked questions" intro="Direct answers about ODC and this platform."/><div className="grid three"><Card title="Overview"><p>ODC is an ERC-20 token on Ethereum Mainnet. Its symbol is ODC.</p></Card><Card title="Current record"><p>The platform does not hold funds or provide wallets. Never send anyone a seed phrase.</p></Card><Card title="Important"><p>Feature statuses describe current readiness; they are not financial guidance.</p></Card></div><CTA/></>}

@@ -1,3 +1,2 @@
-import type { Metadata } from 'next'; import { StatusGrid } from '@/components/StatusGrid';
-export const metadata: Metadata = { title: 'Status Dashboard', description: 'Operational status for OMOS modules and APIs.' };
-export default function Page(){return <main className="space-y-8"><h1 className="text-5xl font-black text-white">Status Dashboard</h1><StatusGrid /></main>}
+import { PageHero, Card, CTA } from '@/components/ODC';
+export default function Page(){return <><PageHero title="Platform status" intro="Current availability and feature readiness."/><div className="grid three"><Card title="Overview"><p>Public platform and API status: Operational.</p></Card><Card title="Current record"><p>Canonical record, public API, and WordPress bridge are Production.</p></Card><Card title="Important"><p>Wallet, purchases, swaps, staking, voting, rewards, and treasury execution are not released.</p></Card></div><CTA/></>}

@@ -1,0 +1,3 @@
+import Link from 'next/link';
+export const dashboardLinks=[['Home','/dashboard'],['Account','/dashboard/account'],['Wallet Status','/dashboard/wallet-status'],['Connected Products','/dashboard/connected-products'],['Activity','/dashboard/activity'],['Notifications','/dashboard/notifications'],['API Keys','/dashboard/api-keys'],['Settings','/dashboard/settings']];
+export function DashboardShell({title,children}:{title:string;children:React.ReactNode}){return <><header className="page-hero"><p className="eyebrow">User console</p><h1>{title}</h1></header><div className="dashboard-layout"><nav className="dashboard-nav" aria-label="Dashboard">{dashboardLinks.map(([l,h])=><Link href={h} key={h}>{l}</Link>)}</nav><div>{children}</div></div></>}

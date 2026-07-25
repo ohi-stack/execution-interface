@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Bridge Status"><Card title="Bridge Status"><p>OneGodian ODC Plugin bridge compatibility is Production. Read-only and non-custodial.</p></Card></AdminShell>}

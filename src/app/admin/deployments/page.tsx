@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Deployments"><Card title="Deployments"><p>Deployments are immutable, health checked, and rollback capable.</p></Card></AdminShell>}

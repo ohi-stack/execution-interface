@@ -1,0 +1,1 @@
+import { AdminShell } from '@/components/AdminShell'; import { Card } from '@/components/ODC'; export default function Page(){return <AdminShell title="Audit Logs"><Card title="Audit Logs"><p>Structured request logs use request IDs and do not record wallet secrets.</p></Card></AdminShell>}

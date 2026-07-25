@@ -1,0 +1,1 @@
+import { NextResponse } from 'next/server'; import { apiError } from '@/lib/odc'; export function GET(){return NextResponse.json(apiError('PROVIDER_UNAVAILABLE','Data provider not configured'),{status:503})}

@@ -1,0 +1,1 @@
+import{NextResponse}from'next/server';import{authenticated}from'@/lib/odc-api';import{db}from'@/lib/db';export async function GET(){const a=authenticated();if('response'in a)return a.response;return NextResponse.json(await db.disclosureAcceptance.findMany({where:{userId:a.session.id},include:{document:{select:{documentType:true,version:true}}},orderBy:{acceptedAt:'desc'}}))}

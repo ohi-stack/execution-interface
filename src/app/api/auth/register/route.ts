@@ -1,0 +1,8 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { db } from '@/lib/db';
+import { createSessionToken, hashPassword, SESSION_COOKIE } from '@/lib/auth';
+import { jsonBody, passwordSchema, safeError } from '@/lib/odc-api';
+import { auditIntegrity, hashOpaque } from '@/lib/odc-wallet';
+const input=z.object({email:z.string().email().transform(v=>v.toLowerCase()),password:passwordSchema,passwordConfirmation:z.string(),displayName:z.string().min(2).max(80),termsAccepted:z.literal(true),privacyAccepted:z.literal(true),odcDisclaimerAccepted:z.literal(true),nonCustodialAccepted:z.literal(true)}).refine(v=>v.password===v.passwordConfirmation);
+export async function POST(req:NextRequest){try{const body=await jsonBody(req,input);const now=new Date();const user=await db.user.create({data:{email:body.email,passwordHash:await hashPassword(body.password),termsAcceptedAt:now,privacyAcceptedAt:now,odcDisclaimerAcceptedAt:now,walletDisclosureAcceptedAt:now,profile:{create:{displayName:body.displayName}}}});const event={userId:user.id,eventType:'REGISTRATION',outcome:'SUCCESS'};await db.securityEvent.create({data:event});await db.auditLog.create({data:{userId:user.id,actorType:'USER',action:'REGISTER',resourceType:'User',resourceId:user.id,integrityHash:auditIntegrity(event)}});const response=NextResponse.json({id:user.id,email:user.email,accountStatus:user.accountStatus,emailVerificationRequired:true},{status:201});response.cookies.set(SESSION_COOKIE,createSessionToken({id:user.id,email:user.email,role:'member'}),{httpOnly:true,sameSite:'strict',secure:process.env.NODE_ENV==='production',path:'/',maxAge:28800});return response}catch{return safeError(400,'registration_failed')}}

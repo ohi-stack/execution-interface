@@ -1,0 +1,9 @@
+parameters:
+  level: 5
+  paths:
+    - includes
+  scanFiles:
+    - tests/phpstan-wordpress-stubs.php
+  ignoreErrors:
+    - '#Function .* not found#'
+    - '#Constant .* not found#'

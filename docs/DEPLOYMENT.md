@@ -1,5 +1,5 @@
-# OMOS Deployment
+# Sprint 2 Deployment
 
-OMOS runs as one Next.js application with three modes: public website, authenticated developer console, and restricted administration panel. Set `OMOS_SESSION_SECRET`, `OMOS_SESSION_TTL_SECONDS`, and `OMOS_AUTH_USERS` as production environment variables only. Checkout remains on OneGodian.com; this app does not become a store.
+Install locked dependencies, typecheck, lint, test, and run the production build. Configure server-only secrets in the deployment platform, deploy, verify `/api/health`, inspect status, and retain a rollback artifact.
 
-Use UTC for system records. Gregorian/civil dates are legally controlling; OTS-V5 may be rendered only as supplemental derived display.
+Canonical production URL: https://odc.onegodian.com. The canonical contract is `0x9eee1e3615efe0374a7588d2760db5ffb2d5ce98` on Ethereum Mainnet (chain ID 1).

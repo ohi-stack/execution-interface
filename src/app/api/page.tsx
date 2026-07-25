@@ -1,0 +1,3 @@
+import { PageHero } from '@/components/ODC';
+const endpoints=['/api/health','/api/manifest','/api/token','/api/contract','/api/network/status','/api/features','/api/status','/api/explorer/address/[address]','/api/explorer/transaction/[hash]'];
+export default function Api(){return <><PageHero title="Public API" intro="Versioned, read-only ODC identity, operational status, and explorer endpoints."/><div className="feature-list">{endpoints.map(x=><div key={x}><code>GET {x}</code><span className="muted">JSON envelope · v0.2.0</span></div>)}</div><p className="warning">Explorer endpoints are rate-limit ready and return a provider-unavailable response until server-side credentials are configured. Provider keys are never sent to browsers.</p></>}

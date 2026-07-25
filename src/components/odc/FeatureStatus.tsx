@@ -1,0 +1,5 @@
+import Link from 'next/link';
+import { statusLabels, type ServiceState } from '@/lib/odc';
+const icons:Record<ServiceState,string>={operational:'✓',degraded:'!', 'partial-outage':'!', 'major-outage':'×',maintenance:'◆','in-development':'◌',planned:'○','under-review':'?',discontinued:'—'};
+export function StatusBadge({status}:{status:ServiceState}){return <span className={`status-badge status-${status}`}><span aria-hidden="true">{icons[status]}</span> {statusLabels[status]}</span>}
+export function FeatureStatus({name,status,description,lastUpdated,href,variant='card'}:{name:string;status:ServiceState;description?:string;lastUpdated?:string;href?:string;variant?:'compact'|'card'|'row'|'tile'|'callout'|'detailed'}){const body=<><div className="status-title"><strong>{name}</strong><StatusBadge status={status}/></div>{description&&<p>{description}</p>}{lastUpdated&&<small>Last updated <time dateTime={lastUpdated}>{new Date(lastUpdated).toLocaleString('en-US',{timeZone:'UTC'})} UTC</time></small>}</>;return href?<Link className={`feature-status variant-${variant}`} href={href}>{body}</Link>:<div className={`feature-status variant-${variant}`}>{body}</div>}

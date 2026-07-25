@@ -1,1 +1,2 @@
 import{NextResponse}from'next/server';import{blockchainProviders,CHAIN_ID,ODC_CONTRACT}from'@/lib/odc-wallet';export async function GET(){return NextResponse.json({network:'ethereum-mainnet',chainId:CHAIN_ID,odcContractAddress:ODC_CONTRACT,status:blockchainProviders().length?'configured':'unavailable',authoritativeSource:'Ethereum',checkedAt:new Date().toISOString()})}
+import { NextResponse } from 'next/server'; import { apiError } from '@/lib/odc'; export function GET(){return NextResponse.json(apiError('PROVIDER_UNAVAILABLE','Data provider not configured'),{status:503})}

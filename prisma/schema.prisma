@@ -1,16 +1,297 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
-model SyncObject {
-  id String @id @default(cuid())
-  localId String @map("local_id")
-  wordpressId String? @map("wordpress_id")
-  resourceType String @map("resource_type")
-  sourceSystem String @map("source_system")
-  version String
-  checksum String
-  status String
-  updatedAt DateTime @map("updated_at")
-  lastSynced DateTime? @map("last_synced")
-  @@unique([resourceType, sourceSystem, localId])
+generator client {
+  provider = "prisma-client-js"
 }
-model AuditLog { id String @id @default(cuid()) actor String? action String resource String? createdAt DateTime @default(now()) }
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+enum AccountStatus {
+ PENDING_VERIFICATION
+ ACTIVE
+ RESTRICTED
+ SUSPENDED
+ CLOSED
+}
+enum SyncStatus {
+ PENDING
+ SYNCING
+ CURRENT
+ DELAYED
+ FAILED
+}
+enum AssetType {
+ NATIVE
+ ERC20
+}
+enum TransactionStatus {
+ PENDING
+ CONFIRMED
+ FAILED
+ REPLACED
+ UNKNOWN
+}
+enum TransactionDirection {
+ INCOMING
+ OUTGOING
+ SELF
+ CONTRACT_INTERACTION
+}
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  emailVerifiedAt DateTime?
+  passwordHash String
+  accountStatus AccountStatus @default(PENDING_VERIFICATION)
+  termsAcceptedAt DateTime
+  privacyAcceptedAt DateTime
+  odcDisclaimerAcceptedAt DateTime
+  walletDisclosureAcceptedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLoginAt DateTime?
+  profile UserProfile?
+  accounts Account[]
+  sessions Session[]
+  wallets Wallet[]
+  disclosureAcceptances DisclosureAcceptance[]
+  securityEvents SecurityEvent[]
+  auditLogs AuditLog[]
+  @@index([email])
+}
+
+model UserProfile {
+  id String @id @default(cuid())
+  userId String @unique
+  displayName String
+  firstName String?
+  lastName String?
+  username String? @unique
+  avatarUrl String?
+  countryCode String?
+  timezone String?
+  profileVisibility String @default("PRIVATE")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([username])
+}
+
+model Account {
+  id String @id @default(cuid())
+  userId String
+  type String
+  provider String
+  providerAccountId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id String @id @default(cuid())
+  sessionTokenHash String @unique
+  userId String
+  expires DateTime
+  rememberMe Boolean @default(false)
+  revokedAt DateTime?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expires])
+}
+
+model VerificationToken {
+ id String @id @default(cuid())
+ userId String
+ tokenHash String @unique
+ expires DateTime
+ usedAt DateTime?
+ createdAt DateTime @default(now())
+ @@index([userId])
+}
+model PasswordResetToken {
+ id String @id @default(cuid())
+ userId String
+ tokenHash String @unique
+ expires DateTime
+ usedAt DateTime?
+ createdAt DateTime @default(now())
+ @@index([userId])
+}
+
+model Wallet {
+  id String @id @default(cuid())
+  userId String
+  address String
+  normalizedAddress String
+  chainId Int
+  network String
+  walletType String?
+  label String?
+  isPrimary Boolean @default(false)
+  verificationMethod String @default("SIWE")
+  verifiedAt DateTime
+  lastSyncedAt DateTime?
+  syncStatus SyncStatus @default(PENDING)
+  syncError String?
+  disconnectedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id])
+  balances WalletBalance[]
+  transactions BlockchainTransaction[]
+  syncState WalletSyncState?
+  challenges WalletChallenge[]
+  disclosures DisclosureAcceptance[]
+  @@index([userId])
+  @@index([normalizedAddress])
+  @@unique([normalizedAddress, chainId, disconnectedAt])
+}
+
+model WalletChallenge {
+  id String @id @default(cuid())
+  userId String
+  walletId String?
+  address String
+  nonceHash String @unique
+  message String
+  domain String
+  chainId Int
+  issuedAt DateTime
+  expiresAt DateTime
+  usedAt DateTime?
+  wallet Wallet? @relation(fields: [walletId], references: [id])
+  @@index([userId, expiresAt])
+}
+
+model WalletBalance {
+  id String @id @default(cuid())
+  walletId String
+  assetType AssetType
+  contractAddress String?
+  symbol String
+  decimals Int
+  rawBalance String
+  formattedBalance String
+  blockNumber BigInt
+  sourceProvider String
+  retrievedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  wallet Wallet @relation(fields: [walletId], references: [id])
+  @@unique([walletId, assetType, contractAddress])
+  @@index([contractAddress])
+}
+
+model BlockchainTransaction {
+  id String @id @default(cuid())
+  walletId String
+  chainId Int
+  network String
+  transactionHash String
+  logIndex Int @default(-1)
+  blockNumber BigInt?
+  blockTimestamp DateTime?
+  transactionIndex Int?
+  assetType AssetType
+  contractAddress String?
+  eventType String
+  direction TransactionDirection
+  fromAddress String
+  toAddress String?
+  rawAmount String?
+  formattedAmount String?
+  symbol String?
+  decimals Int?
+  status TransactionStatus
+  gasUsed String?
+  gasPrice String?
+  transactionFee String?
+  confirmationCount Int @default(0)
+  sourceProvider String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  wallet Wallet @relation(fields: [walletId], references: [id])
+  @@unique([chainId, transactionHash, logIndex, walletId])
+  @@index([transactionHash])
+  @@index([walletId, blockNumber])
+  @@index([walletId, blockTimestamp])
+  @@index([contractAddress])
+}
+
+model WalletSyncState {
+ id String @id @default(cuid())
+ walletId String @unique
+ lastBalanceBlock BigInt?
+ lastTransactionBlock BigInt?
+ lastFinalizedBlock BigInt?
+ retryCount Int @default(0)
+ lastError String?
+ updatedAt DateTime @updatedAt
+ wallet Wallet @relation(fields: [walletId], references: [id])
+}
+model DisclosureDocument {
+ id String @id @default(cuid())
+ documentType String
+ version String
+ documentHash String
+ content String
+ active Boolean @default(true)
+ createdAt DateTime @default(now())
+ acceptances DisclosureAcceptance[]
+ @@unique([documentType, version])
+}
+model DisclosureAcceptance {
+ id String @id @default(cuid())
+ userId String
+ walletId String?
+ documentId String
+ documentVersion String
+ documentHash String
+ acceptedAt DateTime @default(now())
+ ipAddressHash String?
+ userAgentHash String?
+ source String
+ user User @relation(fields: [userId], references: [id])
+ wallet Wallet? @relation(fields: [walletId], references: [id])
+ document DisclosureDocument @relation(fields: [documentId], references: [id])
+ @@unique([userId, documentId, documentVersion])
+ @@index([userId, documentVersion])
+}
+model SecurityEvent {
+ id String @id @default(cuid())
+ userId String?
+ eventType String
+ outcome String
+ ipAddressHash String?
+ userAgentHash String?
+ metadata Json?
+ createdAt DateTime @default(now())
+ user User? @relation(fields: [userId], references: [id])
+ @@index([userId, createdAt])
+}
+model AuditLog {
+ id String @id @default(cuid())
+ userId String?
+ actorType String
+ action String
+ resourceType String?
+ resourceId String?
+ metadata Json?
+ integrityHash String
+ createdAt DateTime @default(now())
+ user User? @relation(fields: [userId], references: [id])
+ @@index([createdAt])
+}
+model SyncObject {
+ id String @id @default(cuid())
+ localId String @map("local_id")
+ wordpressId String? @map("wordpress_id")
+ resourceType String @map("resource_type")
+ sourceSystem String @map("source_system")
+ version String
+ checksum String
+ status String
+ updatedAt DateTime @map("updated_at")
+ lastSynced DateTime? @map("last_synced")
+ @@unique([resourceType, sourceSystem, localId])
+}

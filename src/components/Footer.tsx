@@ -1,2 +1,7 @@
 import Link from 'next/link';
-export function Footer(){return <footer><div className="footer-grid"><div><strong>OneGodian Digital Coin</strong><p>Canonical public information for ODC on Ethereum Mainnet.</p></div><div><strong>Explore</strong><Link href="/about">About</Link><Link href="/roadmap">Roadmap</Link><Link href="/faq">FAQ</Link></div><div><strong>Trust</strong><Link href="/security">Security</Link><Link href="/disclosures">Disclosures</Link><Link href="/status">Status</Link></div></div><p className="fineprint">© 2026 ONEGODIAN, LLC. ODC does not provide custody. Never share private keys or seed phrases.</p></footer>}
+const groups = [
+  ['Platform', [['About', '/about'], ['Token', '/token'], ['Utility', '/utility'], ['Ecosystem', '/ecosystem']]],
+  ['Resources', [['Developers', '/developers'], ['Documentation', '/docs'], ['Platform status', '/status'], ['Contract', '/contract']]],
+  ['Trust', [['Disclosures', '/disclosures'], ['Security', '/security'], ['API manifest', '/api/manifest'], ['Accessibility', '/docs#accessibility']]],
+] as const;
+export function Footer(){return <footer><div className="footer-grid"><div className="footer-brand"><strong>ODC</strong><p>Canonical public information for OneGodian Digital Coin on Ethereum Mainnet.</p><p>odc.onegodian.com</p></div>{groups.map(([title, links]) => <div key={title}><strong>{title}</strong>{links.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}</div>)}</div><div className="fineprint"><span>© 2026 ONEGODIAN, LLC. All rights reserved.</span><span>ODC provides no custody and makes no guarantee of value or liquidity.</span><Link href="/disclosures">Risk disclosures</Link></div></footer>}

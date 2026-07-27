@@ -5,8 +5,9 @@ final class ALGQ_TPC_Notification_Service {
         $subjects = array('visit_complete' => __('Property visit completed', 'algq-platform'), 'approval_required' => __('Your approval is required', 'algq-platform'), 'emergency' => __('Urgent property alert', 'algq-platform'), 'authorization_expiring' => __('Service authorization expiring', 'algq-platform'));
         $subject = $subjects[$template] ?? __('Property stewardship update', 'algq-platform');
         $message = isset($tokens['message']) ? sanitize_textarea_field($tokens['message']) : $subject;
-        $sent = wp_mail(sanitize_email($to), $subject, $message);
-        ALGQ_TPC_Database::log($sent ? 'notification_delivered' : 'notification_failed', 'communication', null, array('template' => $template)); return $sent;
+        $sent = function_exists('algq_send_mail') ? algq_send_mail(array('module'=>'trusted_property_contact','event'=>$template,'recipient'=>sanitize_email($to),'subject'=>$subject,'body'=>$message,'template'=>$template,'confidentiality'=>'private')) : false;
+        $delivered = !is_wp_error($sent) && (bool) $sent;
+        ALGQ_TPC_Database::log($delivered ? 'notification_delivered' : 'notification_failed', 'communication', null, array('template' => $template)); return $delivered;
     }
     public static function run_scheduled_rules() {
         global $wpdb; $now = current_time('mysql'); $in_thirty = gmdate('Y-m-d H:i:s', current_time('timestamp', true) + DAY_IN_SECONDS * 30);

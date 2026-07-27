@@ -4,7 +4,13 @@
  * Description: Seller lead intake and admin dashboard for Algonquian Real Estate, LLC.
  * Version: 1.1.0
  * Author: Algonquian Real Estate, LLC
+ * Author URI: https://algonquianrealestate.com/
+ * Plugin URI: https://algonquianrealestate.com/platform/deal-intake/
  * Text Domain: algq-deal-intake
+ * Requires at least: 6.4
+ * Requires PHP: 7.4
+ * License: Proprietary
+ * Network: true
  */
 
 if (!defined('ABSPATH')) {
@@ -31,7 +37,14 @@ final class ALGQ_Deal_Intake {
         add_shortcode('algq_seller_financing_inquiry', array(__CLASS__, 'public_form_shortcode'));
         add_shortcode('algq_inherited_property_form', array(__CLASS__, 'public_form_shortcode'));
         add_shortcode('algq_vacant_property_form', array(__CLASS__, 'public_form_shortcode'));
+        add_action('plugins_loaded', array(__CLASS__, 'register_with_platform'));
     }
+
+    public static function register_with_platform() {
+        if (function_exists('algq_register_plugin')) { algq_register_plugin(array('slug'=>'algq-deal-intake','version'=>self::VERSION,'platform_version'=>'1.1.0','required_plugins'=>array('algq-platform','algq-pipeline-crm'),'schema_version'=>'1.1.0','health_check'=>array(__CLASS__,'health'),'admin_route'=>'admin.php?page=algq-deal-intake','public_routes'=>array('algq_deal_intake_public_submit'),'capabilities'=>array('manage_algq_deals'))); }
+    }
+
+    public static function health() { return array('status'=>function_exists('algq_pipeline_create_deal')?'healthy':'degraded','schema_version'=>'1.1.0'); }
 
     public static function table_name() {
         global $wpdb;
@@ -63,10 +76,16 @@ final class ALGQ_Deal_Intake {
             motivation text NOT NULL,
             notes longtext NOT NULL,
             source varchar(120) NOT NULL DEFAULT '',
+            submission_uuid char(36) NULL,
+            canonical_deal_id bigint(20) unsigned NULL,
+            consent_captured_at datetime NULL,
+            duplicate_of bigint(20) unsigned NULL,
             created_at datetime NOT NULL,
             updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
             KEY status (status),
+            UNIQUE KEY submission_uuid (submission_uuid),
+            KEY canonical_deal_id (canonical_deal_id),
             KEY created_at (created_at)
         ) {$charset_collate};";
         dbDelta($sql);
@@ -167,12 +186,38 @@ final class ALGQ_Deal_Intake {
 
     public static function handle_public_submit() {
         check_admin_referer('algq_deal_intake_public_submit', 'algq_nonce');
+        if (!empty($_POST['company_website'])) { self::public_redirect(); }
+        $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+        $rate_key = 'algq_intake_rate_' . hash_hmac('sha256', $ip, wp_salt('nonce'));
+        $attempts = (int) get_transient($rate_key);
+        if ($attempts >= 5) { wp_die(esc_html__('Please wait before submitting again.', 'algq-deal-intake'), '', array('response'=>429)); }
+        set_transient($rate_key, $attempts + 1, HOUR_IN_SECONDS);
         global $wpdb;
         $data = self::sanitize_lead(wp_unslash($_POST));
+        if (!$data['seller_name'] || !$data['property_address'] || !is_email($data['seller_email']) || empty($_POST['communication_consent'])) { wp_die(esc_html__('Required contact, property, and consent information is missing.', 'algq-deal-intake'), '', array('response'=>400)); }
+        $submission_uuid = sanitize_text_field(wp_unslash($_POST['submission_uuid'] ?? ''));
+        if (!wp_is_uuid($submission_uuid)) { $submission_uuid = wp_generate_uuid4(); }
+        $existing_submission = $wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table_name().' WHERE submission_uuid=%s',$submission_uuid));
+        if ($existing_submission) { self::public_redirect(); }
+        $duplicate = $wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table_name()." WHERE status NOT IN ('archived') AND (seller_email=%s OR (seller_phone<>'' AND seller_phone=%s)) AND property_zip=%s ORDER BY created_at DESC LIMIT 1",$data['seller_email'],$data['seller_phone'],$data['property_zip']));
         $data['status'] = 'new';
+        if ($duplicate) { $data['status']='reviewing'; $data['duplicate_of']=absint($duplicate); }
+        $data['submission_uuid']=$submission_uuid;
+        $data['consent_captured_at']=current_time('mysql');
         $data['created_at'] = current_time('mysql');
         $data['updated_at'] = current_time('mysql');
-        $wpdb->insert(self::table_name(), $data);
+        if (!$wpdb->insert(self::table_name(), $data)) { wp_die(esc_html__('The submission could not be saved.', 'algq-deal-intake'),'',array('response'=>500)); }
+        $lead_id=(int)$wpdb->insert_id;
+        if (!$duplicate && function_exists('algq_pipeline_create_deal')) {
+            $deal=algq_pipeline_create_deal(array('property'=>array('address'=>$data['property_address'],'city'=>$data['property_city'],'state'=>$data['property_state'],'zip'=>$data['property_zip']),'source'=>$data['source'],'asking_price'=>$data['asking_price']),$submission_uuid);
+            if (!is_wp_error($deal)) { $wpdb->update(self::table_name(),array('canonical_deal_id'=>$deal->id,'status'=>'converted'),array('id'=>$lead_id),array('%d','%s'),array('%d')); }
+        }
+        if (function_exists('algq_log_event')) { algq_log_event(array('event_name'=>'deal_intake_submission_received','plugin'=>'algq-deal-intake','related_deal_id'=>isset($deal)&&!is_wp_error($deal)?$deal->id:null,'new_value'=>array('lead_id'=>$lead_id,'duplicate'=>(bool)$duplicate))); }
+        if (function_exists('algq_send_mail')) { algq_send_mail(array('module'=>'deal_intake','event'=>'submission_received','recipient'=>$data['seller_email'],'subject'=>__('We received your property submission','algq-deal-intake'),'body'=>__('Thank you. Our acquisitions team will review your property information.','algq-deal-intake'),'related_record'=>(string)$lead_id,'template'=>'intake_acknowledgment','confidentiality'=>'private')); }
+        self::public_redirect();
+    }
+
+    private static function public_redirect() {
         wp_safe_redirect(esc_url_raw(add_query_arg('algq_submitted', '1', wp_get_referer() ?: home_url('/'))));
         exit;
     }
@@ -308,7 +353,7 @@ final class ALGQ_Deal_Intake {
     public static function public_form_shortcode() {
         ob_start();
         ?>
-        <div class="algq-public-intake algq-admin-wrap"><?php if (isset($_GET['algq_submitted'])) : ?><div class="algq-empty-state"><strong><?php echo esc_html__('Thank you. Your property information has been received.', 'algq-deal-intake'); ?></strong></div><?php endif; ?><form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="algq-intake-form"><input type="hidden" name="action" value="algq_deal_intake_public_submit"><?php wp_nonce_field('algq_deal_intake_public_submit', 'algq_nonce'); ?><fieldset><legend><?php echo esc_html__('Tell us about your property', 'algq-deal-intake'); ?></legend><div class="algq-grid"><label><?php echo esc_html__('Name', 'algq-deal-intake'); ?><input name="seller_name" required></label><label><?php echo esc_html__('Email', 'algq-deal-intake'); ?><input name="seller_email" type="email"></label><label><?php echo esc_html__('Phone', 'algq-deal-intake'); ?><input name="seller_phone"></label><label class="algq-span-2"><?php echo esc_html__('Property Address', 'algq-deal-intake'); ?><textarea name="property_address" rows="2" required></textarea></label><label><?php echo esc_html__('City', 'algq-deal-intake'); ?><input name="property_city"></label><label><?php echo esc_html__('State', 'algq-deal-intake'); ?><input name="property_state"></label><label><?php echo esc_html__('ZIP', 'algq-deal-intake'); ?><input name="property_zip"></label><label><?php echo esc_html__('Timeline', 'algq-deal-intake'); ?><input name="timeline"></label><label class="algq-span-2"><?php echo esc_html__('How can we help?', 'algq-deal-intake'); ?><textarea name="motivation" rows="4"></textarea></label></div></fieldset><button class="algq-button algq-button-gold" type="submit"><?php echo esc_html__('Submit Property', 'algq-deal-intake'); ?></button></form></div>
+        <div class="algq-public-intake algq-admin-wrap"><?php if (isset($_GET['algq_submitted'])) : ?><div class="algq-empty-state"><strong><?php echo esc_html__('Thank you. Your property information has been received.', 'algq-deal-intake'); ?></strong></div><?php endif; ?><form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="algq-intake-form"><input type="hidden" name="action" value="algq_deal_intake_public_submit"><input type="hidden" name="submission_uuid" value="<?php echo esc_attr(wp_generate_uuid4()); ?>"><label style="position:absolute;left:-9999px" aria-hidden="true">Website<input name="company_website" tabindex="-1" autocomplete="off"></label><?php wp_nonce_field('algq_deal_intake_public_submit', 'algq_nonce'); ?><fieldset><legend><?php echo esc_html__('Tell us about your property', 'algq-deal-intake'); ?></legend><div class="algq-grid"><label><?php echo esc_html__('Name', 'algq-deal-intake'); ?><input name="seller_name" required></label><label><?php echo esc_html__('Email', 'algq-deal-intake'); ?><input name="seller_email" type="email" required></label><label><?php echo esc_html__('Phone', 'algq-deal-intake'); ?><input name="seller_phone"></label><label class="algq-span-2"><?php echo esc_html__('Property Address', 'algq-deal-intake'); ?><textarea name="property_address" rows="2" required></textarea></label><label><?php echo esc_html__('City', 'algq-deal-intake'); ?><input name="property_city"></label><label><?php echo esc_html__('State', 'algq-deal-intake'); ?><input name="property_state"></label><label><?php echo esc_html__('ZIP', 'algq-deal-intake'); ?><input name="property_zip"></label><label><?php echo esc_html__('Timeline', 'algq-deal-intake'); ?><input name="timeline"></label><label class="algq-span-2"><?php echo esc_html__('How can we help?', 'algq-deal-intake'); ?><textarea name="motivation" rows="4"></textarea></label><label class="algq-span-2"><input name="communication_consent" type="checkbox" value="1" required> <?php echo esc_html__('I consent to being contacted about this property and acknowledge the privacy notice.', 'algq-deal-intake'); ?></label></div></fieldset><button class="algq-button algq-button-gold" type="submit"><?php echo esc_html__('Submit Property', 'algq-deal-intake'); ?></button></form></div>
         <?php
         return ob_get_clean();
     }

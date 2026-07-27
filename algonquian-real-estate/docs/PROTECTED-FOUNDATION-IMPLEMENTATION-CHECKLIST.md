@@ -18,19 +18,19 @@ The review used these package rules:
 
 ## 2. Package reconciliation
 
-No ZIP archives for the protected foundation are committed. Only two of the nine protected plugin entry files are present.
+No ZIP archives for the protected foundation are committed. Source-package candidates now exist for all nine protected plugins; installable ZIP build and live acceptance evidence remain release work.
 
 | Load order | Protected plugin | Expected slug/package | Artifact found | Status |
 |---:|---|---|---|---|
 | 1 | Real Estate Platform | `algq-platform` | `plugins/algq-platform/algq-platform.php` | Source candidate; incomplete |
-| 2 | Pipeline CRM | `algq-pipeline-crm` | None | **BLOCKER — package missing** |
+| 2 | Pipeline CRM | `algq-pipeline-crm` | `plugins/algq-pipeline-crm/algq-pipeline-crm.php` | Source candidate; acceptance pending |
 | 3 | Deal Intake | `algq-deal-intake` | `plugins/algq-deal-intake/algq-deal-intake.php` | Source candidate; incomplete |
-| 4 | MAO Engine | `algq-mao-engine` | None | **BLOCKER — package missing** |
-| 5 | Document Library | `algq-document-library` | None | **BLOCKER — package missing** |
-| 6 | Offer Generator | `algq-offer-generator` | None | **BLOCKER — package missing** |
-| 7 | PDF & Signature Engine | `algq-pdf-signature` | None | **BLOCKER — package missing** |
-| 8 | Automation Engine | `algq-automation-engine` | None | **BLOCKER — package missing** |
-| 9 | Admin Command Center | `algq-admin-command-center` | None | **BLOCKER — package missing** |
+| 4 | MAO Engine | `algq-mao-engine` | `plugins/algq-mao-engine/algq-mao-engine.php` | Source candidate; acceptance pending |
+| 5 | Document Library | `algq-document-library` | `plugins/algq-document-library/algq-document-library.php` | Source candidate; acceptance pending |
+| 6 | Offer Generator | `algq-offer-generator` | `plugins/algq-offer-generator/algq-offer-generator.php` | Source candidate; acceptance pending |
+| 7 | PDF & Signature Engine | `algq-pdf-signature` | `plugins/algq-pdf-signature/algq-pdf-signature.php` | Source candidate; acceptance pending |
+| 8 | Automation Engine | `algq-automation-engine` | `plugins/algq-automation-engine/algq-automation-engine.php` | Source candidate; acceptance pending |
+| 9 | Admin Command Center | `algq-admin-command-center` | `plugins/algq-admin-command-center/algq-admin-command-center.php` | Source candidate; acceptance pending |
 
 > Path shorthand in this document is relative to `algonquian-real-estate/`.
 
@@ -173,9 +173,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 3 — Algonquian Pipeline CRM
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-pipeline-crm/algq-pipeline-crm.php` (foundation implementation; live acceptance pending)
 
-- [ ] Create entry file, metadata, dependency declaration, bootstrap, services, repositories, REST/admin layers, assets, translations, migrations, lifecycle handlers, README, and tests.
+- [x] Create the entry file, institutional metadata, protected dependency declaration, activation bootstrap, health callback, README, and initial schema.
+- [ ] Add repositories, REST/admin layers, assets, migration history, lifecycle documentation, and tests.
 - [ ] Create the eight specified `wp_algq_deal*` tables with canonical UUID/deal number and concurrency versioning.
 - [ ] Implement stable stage keys, configurable labels/order, transition policy, loss reasons, archive/reopen audit, assignments, notes, tasks, relationships, and activity.
 - [ ] Publish idempotent canonical-deal creation/read/update/transition services and events.
@@ -185,9 +186,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 4 — Algonquian MAO Engine
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-mao-engine/algq-mao-engine.php` (foundation implementation; calculation workflows and live acceptance pending)
 
-- [ ] Create the package and declare Platform and Pipeline CRM dependencies.
+- [x] Create the source package and declare Platform and Pipeline CRM dependencies.
+- [ ] Add calculation services, repositories, admin/REST layers, migrations, lifecycle handlers, and tests.
 - [ ] Create all six versioned underwriting tables.
 - [ ] Implement seven strategy modes and validated currency/decimal handling.
 - [ ] Version and freeze formula and assumption definitions once used.
@@ -198,9 +200,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 5 — Algonquian Offer Generator
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-offer-generator/algq-offer-generator.php` (foundation implementation; offer workflows and live acceptance pending)
 
-- [ ] Create the package and declare Platform, Pipeline CRM, and MAO dependencies; make Document/PDF integrations explicit.
+- [x] Create the source package and declare Platform, Pipeline CRM, and MAO dependencies.
+- [ ] Add offer services, repositories, admin/REST layers, migrations, lifecycle handlers, tests, and explicit Document/PDF integrations.
 - [ ] Create all six offer tables and immutable version/approval records.
 - [ ] Implement ten offer types, jurisdiction metadata, template approval, safe merge rendering, and missing-field validation.
 - [ ] Implement the full draft-to-withdrawn state machine with authorized approval and immutable approved versions.
@@ -211,9 +214,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 6 — Algonquian Document Library
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-document-library/algq-document-library.php` (foundation implementation; document workflows and live acceptance pending)
 
-- [ ] Create the package and declare Platform as required; define optional producer/consumer integrations.
+- [x] Create the source package and declare Platform as required.
+- [ ] Add document services, repositories, admin/REST layers, migrations, lifecycle handlers, tests, and optional integration declarations.
 - [ ] Create all eight document metadata/version/category/relationship/permission/package/request tables.
 - [ ] Seed and govern the specified entity, financing, acquisition, financial-control, risk/compliance, and property-management categories.
 - [ ] Implement required metadata, unique file hashes/version IDs, relationships, classifications, secure search, preview, and download authorization.
@@ -224,9 +228,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 7 — Algonquian PDF & Signature Engine
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-pdf-signature/algq-pdf-signature.php` (provider-neutral interface and schema foundation; provider/render acceptance pending)
 
-- [ ] Create the package, dependencies, `ALGQ_Signature_Provider_Interface`, and at least one approved provider adapter.
+- [x] Create the source package, protected dependencies, and `ALGQ_Signature_Provider_Interface`.
+- [ ] Add rendering/signature services, repositories, admin/REST layers, migrations, lifecycle handlers, tests, and an approved provider adapter.
 - [ ] Create all six PDF/signature tables without duplicating Offer or Document Library metadata.
 - [ ] Implement queued rendering, status/error reporting, safe CSS/templates, numbering, headers/footers, watermarks, IDs, timestamps, hashes, and immutable generated versions.
 - [ ] Implement all required signature states, ordered signers, minimal provider references, and audit-certificate references.
@@ -237,9 +242,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 8 — Algonquian Automation Engine
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-automation-engine/algq-automation-engine.php` (schema and idempotent enqueue foundation; worker acceptance pending)
 
-- [ ] Create the package and register supported event/action contracts without private-table access.
+- [x] Create the source package, dependency manifest, initial schema, health callback, and idempotent enqueue contract.
+- [ ] Add rule/worker services, repositories, admin/REST layers, migrations, lifecycle handlers, tests, and registered event/action contracts.
 - [ ] Create the five rule/version/job/attempt/dead-letter tables.
 - [ ] Implement all specified trigger categories and actions through public services/hooks.
 - [ ] Implement versioned rules, approval, dry/test modes, delays, priority, retry policy, attempts, recipients, and run scheduling.
@@ -250,9 +256,10 @@ The module creates 15 out-of-scope stewardship tables: `wp_algq_stewardship_clie
 
 ## Plugin 9 — Algonquian Admin Command Center
 
-**Artifact:** none. **BLOCKER**
+**Artifact:** `plugins/algq-admin-command-center/algq-admin-command-center.php` (schema/registry foundation; dashboard acceptance pending)
 
-- [ ] Create the package with a hard Platform dependency and optional/tolerant readers for every operational plugin.
+- [x] Create the source package with a hard Platform dependency, isolated schema, and health callback.
+- [ ] Add dashboard/report services, admin/REST layers, migrations, lifecycle handlers, tests, and tolerant readers for every operational plugin.
 - [ ] Create only dashboard preferences, saved reports, report jobs, and admin alerts storage.
 - [ ] Define source, formula, included/excluded statuses, range, refresh, permissions, and timestamp for every KPI.
 - [ ] Implement the specified executive, operational, health, and report panels with capability-aware query services.

@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export function DisclosureBanner() { return <aside className="disclosure-banner" aria-labelledby="risk-title"><div><p className="eyebrow">Important notice</p><h2 id="risk-title">Utility does not remove risk.</h2></div><p>ODC is not legal tender, equity, a bank product, or a guaranteed investment. Digital assets involve technical, regulatory, liquidity, and market risk. Planned capabilities may change or never launch.</p><Link className="text-link" href="/disclosures">Review all disclosures →</Link></aside>; }

@@ -18,12 +18,13 @@ class OneGodian_Members_Services {
             'registry' => array('status' => 'active', 'description' => 'Canonical member registry adapter boundary.'),
             'certificate' => array('status' => 'active', 'description' => 'Certificate, PDF, and digital credential issuance boundary.'),
             'digital_id' => array('status' => 'active', 'description' => 'Digital ID verification and presentation boundary.'),
-            'woocommerce' => array('status' => 'active', 'description' => 'WooCommerce entitlement and order synchronization boundary.'),
-            'stripe' => array('status' => 'active', 'description' => 'Stripe checkout and subscription reference boundary; secrets are stored only in WordPress options.'),
+            'woocommerce' => array('status' => 'active', 'description' => 'WooCommerce entitlement, order synchronization, affiliate attribution, refund, and commission lifecycle authority.'),
+            'affiliate' => array('status' => 'active', 'description' => 'First-party referral tracking, deterministic WooCommerce attribution, commission ledger, reversal handling, payout-status workflow, audit trail, and affiliate dashboard boundary.'),
+            'stripe' => array('status' => 'conditional', 'description' => 'Optional WooCommerce payment gateway boundary only. The plugin does not use direct frontend Stripe checkout.'),
             'app_bridge' => array('status' => 'active', 'description' => 'Mobile/app bridge safe JSON contract boundary.'),
             'protected_content' => array('status' => 'active', 'description' => 'Protected content gates and shortcode rendering boundary.'),
             'buddypress' => array('status' => 'conditional', 'description' => 'BuddyPress profile, activity, group, and member navigation integration when BuddyPress is active.'),
-            'auto_pages' => array('status' => 'active', 'description' => 'Activation-created dashboard, auth, certificate, digital ID, and community pages.'),
+            'auto_pages' => array('status' => 'active', 'description' => 'Activation-created dashboard, auth, certificate, digital ID, community, and affiliate pages.'),
         );
     }
 
@@ -39,6 +40,7 @@ class OneGodian_Members_Services {
             'rest_namespace' => ONEGODIAN_MEMBERS_REST_NAMESPACE,
             'buddypress_active' => $this->is_buddypress_active(),
             'woocommerce_active' => class_exists('WooCommerce'),
+            'affiliate_schema_version' => get_option('onegodian_affiliate_schema_version', ''),
             'service_boundaries' => $this->get_boundaries(),
         );
     }
@@ -74,6 +76,7 @@ class OneGodian_Members_Services {
                 array('key' => 'media', 'label' => 'Media Library', 'state' => 'ready'),
                 array('key' => 'galaxy', 'label' => 'Galaxy', 'state' => 'ready'),
                 array('key' => 'registry', 'label' => 'Registry', 'state' => 'ready'),
+                array('key' => 'affiliate', 'label' => 'Affiliate Program', 'state' => 'ready'),
             ),
         );
     }
@@ -94,7 +97,8 @@ class OneGodian_Members_Services {
     public function entitlement_payload() {
         return array(
             'woocommerce' => array('active' => class_exists('WooCommerce'), 'sync' => 'available'),
-            'stripe' => array('configured' => (bool) get_option('onegodian_members_stripe_mode', ''), 'mode' => sanitize_key(get_option('onegodian_members_stripe_mode', 'not_configured'))),
+            'stripe' => array('configured' => class_exists('WooCommerce') && class_exists('WC_Payment_Gateway'), 'mode' => 'woocommerce_gateway_only'),
+            'affiliate' => array('active' => class_exists('OneGodian_Members_Affiliates'), 'schema_version' => get_option('onegodian_affiliate_schema_version', '')),
             'protected_content' => array('active' => true, 'policy' => 'authenticated_member_or_capability'),
         );
     }

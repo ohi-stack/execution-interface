@@ -9,10 +9,12 @@ require_once ONEGODIAN_MEMBERS_DIR . 'includes/class-onegodian-members-rest.php'
 require_once ONEGODIAN_MEMBERS_DIR . 'includes/class-onegodian-members-community.php';
 require_once ONEGODIAN_MEMBERS_DIR . 'includes/class-onegodian-members-shortcodes.php';
 require_once ONEGODIAN_MEMBERS_DIR . 'includes/class-onegodian-members-protection.php';
+require_once ONEGODIAN_MEMBERS_DIR . 'includes/class-onegodian-members-affiliates.php';
 
 final class OneGodian_Members {
     private static $instance = null;
     private $services;
+    private $affiliates;
 
     public static function instance() {
         if (null === self::$instance) {
@@ -25,6 +27,7 @@ final class OneGodian_Members {
     public static function activate() {
         self::ensure_roles();
         self::ensure_pages();
+        OneGodian_Members_Affiliates::activate();
         update_option('onegodian_members_version', ONEGODIAN_MEMBERS_VERSION, false);
         flush_rewrite_rules();
     }
@@ -35,9 +38,11 @@ final class OneGodian_Members {
 
     private function __construct() {
         $this->services = new OneGodian_Members_Services();
+        $this->affiliates = new OneGodian_Members_Affiliates();
 
         add_action('init', array($this, 'register_assets'));
         add_action('init', array($this, 'register_member_post_types'));
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
         add_filter('plugin_action_links_' . plugin_basename(ONEGODIAN_MEMBERS_FILE), array($this, 'settings_link'));
 
         new OneGodian_Members_Admin($this->services);
@@ -54,6 +59,16 @@ final class OneGodian_Members {
             array(),
             ONEGODIAN_MEMBERS_VERSION
         );
+        wp_register_style(
+            'onegodian-members-affiliate-ui',
+            ONEGODIAN_MEMBERS_URL . 'assets/css/affiliate.css',
+            array(),
+            ONEGODIAN_MEMBERS_VERSION
+        );
+    }
+
+    public function enqueue_frontend_assets() {
+        wp_enqueue_style('onegodian-members-affiliate-ui');
     }
 
     public function register_member_post_types() {
@@ -114,6 +129,8 @@ final class OneGodian_Members {
             'onegodian-certificate' => array('OneGodian Certificate', '[onegodian_member_certificate]'),
             'onegodian-digital-id' => array('OneGodian Digital ID', '[onegodian_member_digital_id]'),
             'onegodian-community' => array('OneGodian Community', '[onegodian_member_community]'),
+            'affiliate-dashboard' => array('Affiliate Dashboard', '[onegodian_affiliate_dashboard]'),
+            'affiliate-links' => array('Affiliate Referral Link', '[onegodian_referral_link]'),
         );
 
         $created = get_option('onegodian_members_auto_pages', array());

@@ -29,6 +29,20 @@ export const appPositioning = {
 };
 
 export const pluginShortcodes = [
+  '[onegodian_membership_hub]',
+  '[onegodian_login]',
+  '[onegodian_my_account]',
+  '[onegodian_member_dashboard_shell]',
+  '[onegodian_member_navigation]',
+  '[onegodian_member_profile]',
+  '[onegodian_profile_completion]',
+  '[onegodian_community_hub]',
+  '[onegodian_members_directory]',
+  '[onegodian_groups]',
+  '[onegodian_activity]',
+  '[onegodian_messages]',
+  '[onegodian_notifications]',
+  '[onegodian_members_status]',
   '[onegodian_membership_cta]',
   '[onegodian_members_pricing]',
   '[onegodian_membership_resources]',
@@ -45,8 +59,8 @@ export const pluginShortcodes = [
 ];
 
 export const homepageSections = [
-  { title: 'OneGodian Identity', href: '/members', description: 'Member identity entry points, certificates, resources, and ecosystem access aligned with OneGodian.org.' },
-  { title: 'Membership', href: '/members', description: 'Membership calls to action, pricing references, member resources, dashboard access, certificates, and support.' },
+  { title: 'OneGodian Identity', href: '/members', description: 'Member identity entry points, profiles, certificates, resources, and ecosystem access aligned with OneGodian.org.' },
+  { title: 'Membership', href: '/members', description: 'Membership home, login/account access, pricing, member resources, dashboard, certificates, profile, community, and support.' },
   { title: 'Contributors', href: '/contributors', description: 'Voluntary public support for products, education, media, technology, membership, and community infrastructure.' },
   { title: 'Creator Network', href: '/creator-network', description: 'A home for creators, affiliates, educators, and community voices who share OneGodian resources and campaigns.' },
   { title: 'Affiliate Program', href: '/affiliate-dashboard', description: 'Application-aware affiliate structure with referral links, campaign assets, updates, and compliance notices.' },
@@ -59,7 +73,7 @@ export const homepageSections = [
 ];
 
 export const dashboardModules = [
-  { title: 'Members', href: '/members', status: 'plugin-bridge' as AppStatus, description: 'Membership CTA, pricing references, resources, certificates, member dashboard, and support entry points.' },
+  { title: 'Members', href: '/members', status: 'plugin-bridge' as AppStatus, description: 'Production member bridge for login/account, profile, community, BuddyPress/BuddyBoss compatibility, certificates, resources, managed pages, and WordPress API sync.' },
   { title: 'Contributors', href: '/contributors', status: 'available' as AppStatus, description: 'Voluntary support tiers and contributor information for public-facing OneGodian infrastructure.' },
   { title: 'Creator Network', href: '/creator-network', status: 'available' as AppStatus, description: 'Application gateway for creators, affiliates, educators, and community voices.' },
   { title: 'Affiliate Dashboard', href: '/affiliate-dashboard', status: 'coming-soon' as AppStatus, description: 'Structured affiliate workspace for referral links, campaign assets, updates, notices, and application status.' },
@@ -86,11 +100,25 @@ export const contributorTiers = [
 export const contributorNotice = 'Contributions are voluntary support payments. They are not equity, securities, loans, bonds, investment contracts, or promises of financial return.';
 
 export const membershipShortcodeMap = [
+  { label: 'Membership Home', shortcode: '[onegodian_membership_hub]' },
+  { label: 'Member Login', shortcode: '[onegodian_login]' },
+  { label: 'My Account', shortcode: '[onegodian_my_account]' },
+  { label: 'Member Dashboard', shortcode: '[onegodian_member_dashboard_shell]' },
+  { label: 'Member Navigation', shortcode: '[onegodian_member_navigation]' },
+  { label: 'Member Profile', shortcode: '[onegodian_member_profile]' },
+  { label: 'Profile Completion', shortcode: '[onegodian_profile_completion]' },
+  { label: 'Community Hub', shortcode: '[onegodian_community_hub]' },
+  { label: 'Members Directory', shortcode: '[onegodian_members_directory]' },
+  { label: 'Groups', shortcode: '[onegodian_groups]' },
+  { label: 'Activity', shortcode: '[onegodian_activity]' },
+  { label: 'Messages', shortcode: '[onegodian_messages]' },
+  { label: 'Notifications', shortcode: '[onegodian_notifications]' },
+  { label: 'Members Status', shortcode: '[onegodian_members_status]' },
   { label: 'Membership CTA', shortcode: '[onegodian_membership_cta]' },
   { label: 'Membership Pricing', shortcode: '[onegodian_members_pricing]' },
   { label: 'Membership Resources', shortcode: '[onegodian_membership_resources]' },
   { label: 'Member Certificates', shortcode: '[onegodian_member_certificates]' },
-  { label: 'Member Dashboard', shortcode: '[onegodian_member_dashboard]' },
+  { label: 'Legacy Member Dashboard', shortcode: '[onegodian_member_dashboard]' },
   { label: 'Member Support', shortcode: '[onegodian_member_support]' }
 ];
 
@@ -104,7 +132,7 @@ export const affiliateDashboardItems = [
 ];
 
 export const tools = [
-  { name: 'Membership Bridge', href: '/members', description: 'Connects app visitors to membership CTA, pricing, resources, certificates, dashboard, and support.' },
+  { name: 'Membership Bridge', href: '/members', description: 'Connects app visitors to WordPress member health, manifest, page sync, login/account, profile, community, certificates, and resources.' },
   { name: 'Contributor Tiers', href: '/contributors', description: 'Displays voluntary support tiers and the required non-investment contributor notice.' },
   { name: 'Creator Network Application', href: '/creator-network', description: 'Routes creators, affiliates, educators, and community voices toward the Creator Network application.' },
   { name: 'Affiliate Structure', href: '/affiliate-dashboard', description: 'Shows referral, campaign, product, update, compliance, and application-status sections without payment logic.' },

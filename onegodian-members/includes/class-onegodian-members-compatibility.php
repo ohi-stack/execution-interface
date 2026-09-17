@@ -21,6 +21,7 @@ class OneGodian_Members_Compatibility {
 
     private function __construct() {
         add_action('init', array($this, 'register_aliases'), 40);
+        add_action('admin_menu', array($this, 'brand_admin_menu'), 99);
     }
 
     public function register_aliases() {
@@ -31,6 +32,29 @@ class OneGodian_Members_Compatibility {
 
         // Member certificates are account records and should never render as a signed-out member surface.
         add_shortcode('onegodian_member_certificates', array($this, 'certificates_shortcode'));
+    }
+
+    public function brand_admin_menu() {
+        global $menu, $submenu;
+
+        if (is_array($menu)) {
+            foreach ($menu as &$item) {
+                if (isset($item[2]) && 'ogm-members' === $item[2]) {
+                    $item[0] = __('OneGodian Members', 'onegodian-members');
+                    break;
+                }
+            }
+            unset($item);
+        }
+
+        if (isset($submenu['ogm-members']) && is_array($submenu['ogm-members'])) {
+            foreach ($submenu['ogm-members'] as &$item) {
+                if (isset($item[2]) && 'ogm-members' === $item[2]) {
+                    $item[0] = __('Overview & Settings', 'onegodian-members');
+                }
+            }
+            unset($item);
+        }
     }
 
     public function certificates_shortcode() {

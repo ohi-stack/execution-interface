@@ -7,6 +7,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - name: Validate OneGodian Members PHP syntax
+        run: find onegodian-members -name '*.php' -print0 | xargs -0 -n1 php -l
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck

@@ -3,19 +3,30 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      APP_CANONICAL_URL: https://app.onegodian.com
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
       - run: npm run build
-      - run: docker build -t ino-platform-app .
-      - name: Security scan placeholder
+      - run: docker build -t onegodian-app .
+      - name: Security scan
         run: npm audit --audit-level=high
-      - name: Deploy placeholder
-        run: echo "Deploy image to app.indigenousnations.org container runtime"
-      - name: Post-deployment health check
-        run: curl --fail --retry 5 https://app.indigenousnations.org/api/health
+      - name: Deployment handoff
+        run: |
+          echo "Build is ready for the configured production provider."
+          echo "Canonical target: ${APP_CANONICAL_URL}"
+          echo "This workflow does not claim provider deployment unless a real deployment action is configured."
+      - name: Canonical live health check
+        continue-on-error: true
+        run: |
+          curl --fail --retry 5 --max-time 20 "${APP_CANONICAL_URL}/api/health"
